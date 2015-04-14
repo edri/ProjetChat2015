@@ -19,7 +19,10 @@ class ModelChator
 		void modifyMessage(const int idRoom, const int idMessage, const QString& contents);
 		void deleteMessage(const int idRoom, const int idMessage);	
 		
+		ModeleUser addUser(const int idRoom, const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);		
 		ModeleUser getUser(const int idRoom, const int idUser) const;
+		
+		ModeleUser addAdmin(const int idRoom, const int idUser);
 }
 
 
@@ -36,11 +39,16 @@ class ModelRoom
 		ModelRoom(const int idRoom, const Qstring& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const Qstring& picture, list<ModelUser>* admins);	
 		ModelRoom(const int idRoom, const Qstring& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const Qstring& picture, list<ModelUser>* admins, list<ModelUser>* users)
 		~ModelRoom();
-	
+		
+		int getIdRoom();
 		void modifyRoom(const Qstring& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const Qstring& picture);
+		
 		void addMessage(const int idMessage, const int idUser, const QDate& date, const QString& contents);
 		void modifyMessage(const int idMessage, const QString& contents);
 		void deleteMessage(const int idMessage);
+		
+		void addUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);
+		void addAdmin(const int idUser);
 }
 
 class ModelMessage
@@ -55,7 +63,8 @@ class ModelMessage
 		ModelMessage(const int idMessage, const int idUser, const QDate& date, const QString& contents);
 		~ModelMessage();
 		
-		void modify(const int idMessage, const QString& contents);
+		int getIdMessage();	
+		void modify(const QString& contents);
 }
 
 class ModelUser
@@ -70,7 +79,9 @@ class ModelUser
 		QString image;
 	
 	public :
-		ModelUser(int idUser, QString userName, QString lastName, bool isConnected, QDate lastConnection, QString image);
+		ModelUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);
 		~ModeleUser();
 		
+		int getIdUser();		
+		void modify(const Qstring& firstName, const QString& lastName, const QString& image);
 }
