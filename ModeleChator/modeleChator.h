@@ -1,10 +1,8 @@
-//Envoyer tous les infos relatives à un user quand il rejoint une salle aux autres utilisateurs, également si ils conaissent déjà l'utilisateur en question
-
 //Contain any informations related to the chat
 class ModelChator
 {
 	private :
-		list<ModelRoom>* rooms;
+		list<ModelRoom*> rooms;
 	
 	public :
 		ModelChator();
@@ -15,11 +13,11 @@ class ModelChator
 		void deleteRoom(const int idRoom);
 		
 		ModeleMessage getMessage(const idRoom, const idMessage) const;
-		void addMessage(const int idRoom, const int idMessage, const int idUser, const QDate& date, const QString& contents);
+		void addMessage(const int idRoom, const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
 		void modifyMessage(const int idRoom, const int idMessage, const QString& contents);
 		void deleteMessage(const int idRoom, const int idMessage);	
 		
-		ModeleUser addUser(const int idRoom, const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);		
+		ModeleUser addUser(const int idRoom, const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);		
 		ModeleUser getUser(const int idRoom, const int idUser) const;
 		
 		ModeleUser addAdmin(const int idRoom, const int idUser);
@@ -29,6 +27,7 @@ class ModelChator
 class ModelRoom
 {
 	private :
+		quint32 idRoom;
 		bool isPrivate;
 		bool isVisible;
 		list<ModelUser>* admins;
@@ -43,24 +42,24 @@ class ModelRoom
 		int getIdRoom();
 		void modifyRoom(const Qstring& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const Qstring& picture);
 		
-		void addMessage(const int idMessage, const int idUser, const QDate& date, const QString& contents);
+		void addMessage(const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
 		void modifyMessage(const int idMessage, const QString& contents);
 		void deleteMessage(const int idMessage);
 		
-		void addUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);
+		void addUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		void addAdmin(const int idUser);
 }
 
 class ModelMessage
 {
 	private :
-		int idMessage;
-		int idUser;
-		QDate date;
+		quint32 idMessage;
+		quint32 idUser;
+		QDateTime date;
 		QString contents;
 	
 	public :
-		ModelMessage(const int idMessage, const int idUser, const QDate& date, const QString& contents);
+		ModelMessage(const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
 		~ModelMessage();
 		
 		int getIdMessage();	
@@ -70,16 +69,16 @@ class ModelMessage
 class ModelUser
 {
 	private :
-		int idUser;
+		quint32 idUser;
 		QString userName;
 		QString firstName;
 		QString lastName;
 		bool isConnected;
-		QDate lastConnection;
+		QDateTime lastConnection;
 		QString image;
 	
 	public :
-		ModelUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDate& lastConnection, const QString& image);
+		ModelUser(const int idUser, const QString userName, const Qstring& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		~ModeleUser();
 		
 		int getIdUser();		
