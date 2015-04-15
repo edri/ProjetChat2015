@@ -48,8 +48,8 @@ class ModelRoom
 		QList<ModelUser*> users;
 	
 	public :
-		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins);	
-		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins, QMap<ModelUser>* users);
+		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser>* admins);	
+		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser>* admins, QMap<quint32, ModelUser>* users);
 		~ModelRoom();
 		
 		int getIdRoom();
@@ -61,7 +61,7 @@ class ModelRoom
 		
 		void addUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		void addAdmin(const quint32 idUser);
-		QMap* getUsers();
+		QMap<quint32, ModelUser>* getUsers();
 };
 
 class ModelMessage
