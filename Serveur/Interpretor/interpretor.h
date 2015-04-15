@@ -2,8 +2,10 @@
 #define INTERPRETOR_H
 
 #include "modelChator.h"
+#include "packet.h"
 //#include <QObject>
 #include <QByteArray>
+#include <array>
 
 //class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
 class Interpretor
@@ -20,8 +22,12 @@ class Interpretor
     
     void processData(const QByteArray& data);
     
-    //private:
+    private:
     // Pointeur sur l'objet réseau
+    
+    // test
+    void test(std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> fs);
+    std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> bridge;
 };
 
 #endif

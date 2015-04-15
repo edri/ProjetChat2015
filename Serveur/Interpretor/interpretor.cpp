@@ -1,5 +1,4 @@
 #include "interpretor.h"
-#include "packet.h"
 #include <QByteArray>
 #include <QDataStream>
 
@@ -158,4 +157,9 @@ void Interpretor::processData(const QByteArray& data)
         default:
         break;
     }
+}
+
+void Interpretor::test(std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> fs)
+{
+    bridge = fs;
 }
