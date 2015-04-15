@@ -15,4 +15,4 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += interpretor.h packet.h modelChator.h
-SOURCES += interpretor.cpp main.cpp modelChator.cpp
+SOURCES += interpretor.cpp main.cpp modelChator.cpp packet.cpp

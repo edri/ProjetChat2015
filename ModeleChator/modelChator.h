@@ -79,6 +79,7 @@ class ModelMessage
 		QString content;
 	
 	public :
+        ModelMessage();
 		ModelMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
 		~ModelMessage();
 		
@@ -101,6 +102,7 @@ class ModelUser
 		QImage image;
 	
 	public :
+        ModelUser();
 		ModelUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
 		~ModelUser();
 		
