@@ -2,7 +2,7 @@
 
 #include <QtWidgets>
 #include <QString>
-#include <list>
+#include <QMap>
 
 using namespace std;
 
@@ -13,7 +13,8 @@ class ModelRoom;
 class ModelChator
 {
 	private :
-		list<ModelRoom*> rooms;
+		QMap<ModelRoom*> rooms;
+		QMap<ModelUser*> users;
 	
 	public :
 		ModelChator();
@@ -41,13 +42,13 @@ class ModelRoom
 		quint32 idRoom;
 		bool isPrivate;
 		bool isVisible;
-		list<ModelUser>* admins;
-		list<ModelMessage>* messages;
-		list<ModelUser>* users;
+		QMap<ModelUser>* admins;
+		QMap<ModelMessage>* messages;
+		QMap<ModelUser>* users;
 	
 	public :
-		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, list<ModelUser>* admins);	
-		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, list<ModelUser>* admins, list<ModelUser>* users);
+		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins);	
+		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins, QMap<ModelUser>* users);
 		~ModelRoom();
 		
 		int getIdRoom();
@@ -59,6 +60,7 @@ class ModelRoom
 		
 		void addUser(const int idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		void addAdmin(const int idUser);
+		QMap* getUsers();
 };
 
 class ModelMessage
