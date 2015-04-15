@@ -46,9 +46,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = interpretor.cpp \
-		main.cpp 
+		main.cpp \
+		modelChator.cpp 
 OBJECTS       = interpretor.o \
-		main.o
+		main.o \
+		modelChator.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -108,7 +110,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		Interpretor.pro interpretor.cpp \
-		main.cpp
+		main.cpp \
+		modelChator.cpp
 QMAKE_TARGET  = interpretor
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = interpretor
@@ -273,7 +276,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/interpretor1.0.0 || mkdir -p .tmp/interpretor1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.h packet.h modelChator.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.cpp main.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.h packet.h modelChator.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.cpp main.cpp modelChator.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
 
 
 clean:compiler_clean 
@@ -313,13 +316,16 @@ compiler_clean:
 ####### Compile
 
 interpretor.o: interpretor.cpp interpretor.h \
-		../../ModeleChator/modeleChator.h \
+		modelChator.h \
 		packet.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpretor.o interpretor.cpp
 
 main.o: main.cpp interpretor.h \
-		../../ModeleChator/modeleChator.h
+		modelChator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+modelChator.o: modelChator.cpp modelChator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o modelChator.o modelChator.cpp
 
 ####### Install
 

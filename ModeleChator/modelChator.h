@@ -39,6 +39,9 @@ class ModelChator
 
 class ModelRoom
 {
+    friend QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);
+    friend QDataStream& operator>> (QDataStream& ds, ModelRoom& r);
+    
 	private :
 		quint32 idRoom;
 		bool isPrivate;
@@ -66,6 +69,9 @@ class ModelRoom
 
 class ModelMessage
 {
+    friend QDataStream& operator<< (QDataStream& ds, const ModelMessage& m);
+    friend QDataStream& operator>> (QDataStream& ds, ModelMessage& m);
+
 	private :
 		quint32 idMessage;
 		quint32 idUser;
@@ -82,6 +88,9 @@ class ModelMessage
 
 class ModelUser
 {
+    friend QDataStream& operator<< (QDataStream& ds, const ModelUser& u);
+    friend QDataStream& operator>> (QDataStream& ds, ModelUser& u);
+    
 	private :
 		quint32 idUser;
 		QString userName;

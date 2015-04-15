@@ -8,5 +8,5 @@ void Interpretor::sendMessage(const ModelMessage& message)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::SENDMESSAGE;
+    stream << (quint32) MessageType::SENDMESSAGE << message;
 }
