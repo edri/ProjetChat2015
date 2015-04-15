@@ -14,6 +14,9 @@ class Interpretor
     void createAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
     void sendError(const QString& text);
+    void join(const quint32 idUser, const quint32 idRoom);
+    void leave(const quint32 idUser, const quint32 idRoom);
+    void disconnect(const quint32 idUser);
     
     void processData(const QByteArray& data);
     
