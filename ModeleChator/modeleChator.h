@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <QString>
 #include <QMap>
+#include <QList>
 
 using namespace std;
 
@@ -13,26 +14,26 @@ class ModelRoom;
 class ModelChator
 {
 	private :
-		QMap<ModelRoom*> rooms;
-		QMap<ModelUser*> users;
+		QMap<quint32, ModelRoom> rooms;
+		QMap<quint32, ModelUser> users;
 	
 	public :
 		ModelChator();
 	
-		ModelRoom getRoom(const int idRoom) const;
-		void addRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
-		void modifyRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
-		void deleteRoom(const int idRoom);
+		ModelRoom getRoom(const quint32 idRoom) const;
+		void addRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
+		void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
+		void deleteRoom(const quint32 idRoom);
 		
 		ModelMessage getMessage(const quint32 idRoom, const quint32 idMessage) const;
-		void addMessage(const int idRoom, const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
-		void modifyMessage(const int idRoom, const int idMessage, const QString& contents);
-		void deleteMessage(const int idRoom, const int idMessage);	
+		void addMessage(const quint32 idRoom, const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
+		void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents);
+		void deleteMessage(const quint32 idRoom, const quint32 idMessage);	
 		
-		ModelUser addUser(const int idRoom, const int idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);		
-		ModelUser getUser(const int idRoom, const int idUser) const;
+		ModelUser addUser(const quint32 idRoom, const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);		
+		ModelUser getUser(const quint32 idRoom, const quint32 idUser) const;
 		
-		ModelUser addAdmin(const int idRoom, const int idUser);
+		ModelUser addAdmin(const quint32 idRoom, const quint32 idUser);
 };
 
 
@@ -42,24 +43,24 @@ class ModelRoom
 		quint32 idRoom;
 		bool isPrivate;
 		bool isVisible;
-		QMap<ModelUser>* admins;
-		QMap<ModelMessage>* messages;
-		QMap<ModelUser>* users;
+		QList<ModelUser*> admins;
+		QList<ModelMessage> messages;
+		QList<ModelUser*> users;
 	
 	public :
-		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins);	
-		ModelRoom(const int idRoom, const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins, QMap<ModelUser>* users);
+		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins);	
+		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<ModelUser>* admins, QMap<ModelUser>* users);
 		~ModelRoom();
 		
 		int getIdRoom();
-		void modifyRoom(const QString& name, const int limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
+		void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
 		
-		void addMessage(const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
-		void modifyMessage(const int idMessage, const QString& contents);
-		void deleteMessage(const int idMessage);
+		void addMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
+		void modifyMessage(const quint32 idMessage, const QString& contents);
+		void deleteMessage(const quint32 idMessage);
 		
-		void addUser(const int idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
-		void addAdmin(const int idUser);
+		void addUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
+		void addAdmin(const quint32 idUser);
 		QMap* getUsers();
 };
 
@@ -69,10 +70,10 @@ class ModelMessage
 		quint32 idMessage;
 		quint32 idUser;
 		QDateTime date;
-		QString contents;
+		QString content;
 	
 	public :
-		ModelMessage(const int idMessage, const int idUser, const QDateTime& date, const QString& contents);
+		ModelMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
 		~ModelMessage();
 		
 		int getIdMessage();	
@@ -88,12 +89,19 @@ class ModelUser
 		QString lastName;
 		bool isConnected;
 		QDateTime lastConnection;
-		QString image;
+		QImage image;
 	
 	public :
-		ModelUser(const int idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
+		ModelUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
 		~ModelUser();
 		
 		int getIdUser();		
-		void modify(const QString& firstName, const QString& lastName, const QString& image);
+		void modify(const QString& firstName, const QString& lastName, const QImage& image);
 };
+
+QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);
+QDataStream& operator>> (QDataStream& ds, ModelRoom& r);
+QDataStream& operator<< (QDataStream& ds, const ModelMessage& m);
+QDataStream& operator>> (QDataStream& ds, ModelMessage& m);
+QDataStream& operator<< (QDataStream& ds, const ModelUser& u);
+QDataStream& operator>> (QDataStream& ds, ModelUser& u);
