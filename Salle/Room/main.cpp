@@ -1,10 +1,10 @@
 #include <QApplication>
-#include "room.h"
+#include "roomController.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Room w;
+    RoomController w;
     w.show();
     
     return a.exec();

@@ -1,11 +1,12 @@
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QStandardItem>
-#include <QFont>
-#include "room.h"
+#include <QtWidgets>
 
-Room::Room()
+#include "room.h"
+#include "roomController.h"
+
+Room::Room(RoomController* rc)
 {
+    
+    roomController = rc;
     
     lbl_title = new QLabel(tr("Nouvelle Salle"));
     lbl_title->setFont(QFont(this->font().family(), 
@@ -100,6 +101,7 @@ Room::~Room()
 {
     
 }
+
 
 void Room::toggleVisibility()
 {

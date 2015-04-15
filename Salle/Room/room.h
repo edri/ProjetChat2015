@@ -1,24 +1,19 @@
 #ifndef CHAT_ROOM_H
 #define CHAT_ROOM_H
 
-#include <QWidget>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
-#include <QSpinBox>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QListView>
-#include <QStandardItemModel>
-#include <QButtonGroup>
+#include <QtWidgets>
+
+class RoomController;
 
 class Room : public QWidget
 {
     Q_OBJECT
     
+    friend RoomController;
+    
 public:
 
-    Room(); 
+    Room(RoomController* rc); 
     ~Room();
     
 public slots:
@@ -27,7 +22,10 @@ public slots:
     void addMember();
 
 private:
-
+    
+    // Core elements
+    const RoomController* roomController;
+    
     // GUI elements
     QLabel* lbl_title;
     QLabel* lbl_name;
