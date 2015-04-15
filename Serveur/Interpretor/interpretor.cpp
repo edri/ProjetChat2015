@@ -22,13 +22,32 @@ void Interpretor::login(const QString& pseudo, const QString& pass)
     // Envoyer les données quelque part
 }
 
-void Interpretor::createAccount(ModelUser& user)
+void Interpretor::createAccount(const ModelUser& user)
 {
-    // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques chiffrées et de la masterkey chiffrée)
+    // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::NEW_ACCOUNT << user;
+    // Envoyer les données quelque part
+}
+
+void Interpretor::sendInfoUser(const ModelUser& user)
+{
+    // Il y aura aussi les clés à gérer ici (envoi de la clé publique et éventuellement de la masterkey chiffrée)
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::INFO_USER << user;
+    // Envoyer les données quelque part
+}
+
+void Interpretor::sendError(const QString& text)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::ERROR << text;
     // Envoyer les données quelque part
 }
 
@@ -44,7 +63,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             stream >> user;
-            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques chiffrées et de la masterkey chiffrée)
+            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
             // Envoyer cet objet quelque part
         }
         break;

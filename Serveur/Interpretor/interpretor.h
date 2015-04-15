@@ -11,7 +11,9 @@ class Interpretor
     public:
     void sendMessage(const ModelMessage& message);
     void login(const QString& pseudo, const QString& pass);
-    void createAccount(ModelUser& user);
+    void createAccount(const ModelUser& user);
+    void sendInfoUser(const ModelUser& user);
+    void sendError(const QString& text);
     
     void processData(const QByteArray& data);
     
