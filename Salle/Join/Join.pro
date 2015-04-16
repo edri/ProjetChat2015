@@ -13,6 +13,6 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        join.cpp
+        viewJoin.cpp
 
-HEADERS  += join.h
+HEADERS  += viewJoin.h

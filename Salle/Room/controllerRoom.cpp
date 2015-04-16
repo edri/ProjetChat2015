@@ -1,21 +1,21 @@
-#include "roomController.h"
+#include "controllerRoom.h"
 
-RoomController::RoomController()
+ControllerRoom::ControllerRoom()
 {
-    room = new Room(this);
+    view = new ViewRoom();
 }
 
-RoomController::~RoomController()
+ControllerRoom::~ControllerRoom()
 {
-    delete room;
+    delete view;
 }
 
-void RoomController::show()
+void ControllerRoom::show()
 {
-    room->show();
+    view->show();
 }
 
-void RoomController::loadMembers(const int idRoom)
+void ControllerRoom::loadMembers(const int idRoom)
 {
     ModelRoom room = model->getRoom(idRoom);
     
@@ -23,14 +23,14 @@ void RoomController::loadMembers(const int idRoom)
 }
 
 /*
-void RoomController::addMember(const QString name)
+void ControllerRoom::addMember(const QString name)
 {
     sim_members->appendRow(new QStandardItem("Franz"));
     sim_members->appendRow(new QStandardItem("Garry"));
     sim_members->appendRow(new QStandardItem("Georges"));
 }
 
-void Room::addMember()
+void ViewRoom::addMember()
 {
     if (!ldt_membre->text().isEmpty())
     {

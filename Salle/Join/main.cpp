@@ -1,10 +1,10 @@
 #include <QApplication>
-#include "join.h"
+#include "viewJoin.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Join w;
+    ViewJoin w;
     w.show();
     
     return a.exec();

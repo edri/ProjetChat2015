@@ -3,19 +3,19 @@
 
 #include <QString>
 
-#include "room.h"
-#include "../../ModeleChator/modeleChator.h"
+#include "viewRoom.h"
+#include "../../ModeleChator/modelChator.h"
 
-class RoomController : public QObject
+class ControllerRoom : public QObject
 {
     Q_OBJECT
 private:
-    Room* room;
+    ViewRoom* view;
     ModelChator* model;
     
 public:
-    RoomController();
-    ~RoomController();
+    ControllerRoom();
+    ~ControllerRoom();
     
     void show();
     

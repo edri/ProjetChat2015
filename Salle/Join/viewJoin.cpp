@@ -1,9 +1,9 @@
 #include <QVBoxLayout>
 #include <QStandardItem>
 #include <QFont>
-#include "join.h"
+#include "viewJoin.h"
 
-Join::Join()
+ViewJoin::ViewJoin()
 {    
     label_title = new QLabel("Rejoindre une salle");
     label_title->setFont(QFont(this->font().family(), 
@@ -36,7 +36,7 @@ Join::Join()
     setLayout(vblay_main);
 }
 
-Join::~Join()
+ViewJoin::~ViewJoin()
 {
     
 }

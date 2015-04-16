@@ -1,12 +1,10 @@
 #include <QtWidgets>
 
-#include "room.h"
-#include "roomController.h"
+#include "viewRoom.h"
+#include "controllerRoom.h"
 
-Room::Room(RoomController* rc)
+ ViewRoom:: ViewRoom()
 {
-    
-    roomController = rc;
     
     lbl_title = new QLabel(tr("Nouvelle Salle"));
     lbl_title->setFont(QFont(this->font().family(), 
@@ -97,13 +95,13 @@ Room::Room(RoomController* rc)
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addMember()));
 }
 
-Room::~Room()
+ ViewRoom::~ ViewRoom()
 {
     
 }
 
 
-void Room::toggleVisibility()
+void ViewRoom::toggleVisibility()
 {
     rbt_visible->setEnabled(chk_private->isChecked());
     rbt_onInvitation->setEnabled(chk_private->isChecked());
@@ -113,14 +111,14 @@ void Room::toggleVisibility()
     }
 }
 
-void Room::loadMembers()
+void ViewRoom::loadMembers()
 {
     sim_members->appendRow(new QStandardItem("Franz"));
     sim_members->appendRow(new QStandardItem("Garry"));
     sim_members->appendRow(new QStandardItem("Georges"));
 }
 
-void Room::addMember()
+void ViewRoom::addMember()
 {
     if (!ldt_membre->text().isEmpty())
     {

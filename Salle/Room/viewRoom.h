@@ -3,18 +3,18 @@
 
 #include <QtWidgets>
 
-class RoomController;
+class ControllerRoom;
 
-class Room : public QWidget
+class ViewRoom : public QWidget
 {
     Q_OBJECT
     
-    friend RoomController;
+    friend ControllerRoom;
     
 public:
 
-    Room(RoomController* rc); 
-    ~Room();
+    ViewRoom(); 
+    ~ViewRoom();
     
 public slots:
     void toggleVisibility();
@@ -22,9 +22,6 @@ public slots:
     void addMember();
 
 private:
-    
-    // Core elements
-    const RoomController* roomController;
     
     // GUI elements
     QLabel* lbl_title;

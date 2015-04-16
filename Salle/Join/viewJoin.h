@@ -8,14 +8,14 @@
 #include <QListView>
 #include <QStandardItemModel>
 
-class Join : public QWidget
+class ViewJoin : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    Join(); 
-    ~Join();
+    ViewJoin(); 
+    ~ViewJoin();
     
 public slots:
 
