@@ -13,6 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+        roomController.cpp\
         room.cpp
+        
 
-HEADERS  += room.h
+HEADERS  += roomController.h\
+         room.h\
+         ../../ModeleChator/modeleChator.h
+         

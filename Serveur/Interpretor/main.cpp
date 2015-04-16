@@ -1,11 +1,11 @@
 #include <QApplication>
-#include "roomController.h"
+#include "interpretor.h"
 
 int main(int argc, char *argv[])
 {
+    
     QApplication a(argc, argv);
-    RoomController w;
-    w.show();
+    Interpretor i;
     
     return a.exec();
 }
