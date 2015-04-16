@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-03-31T16:04:18
+# Project created by QtCreator 2015-04-16T08:57:29
 #
 #-------------------------------------------------
 
@@ -13,8 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        viewChat.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += viewChat.h
 
-FORMS    += mainwindow.ui
+FORMS    += viewChat.ui
+
+RESOURCES += \
+    icons.qrc

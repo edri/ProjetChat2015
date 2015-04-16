@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/rooms">
+        <file>img/aboutShoe.png</file>
+        <file>img/delete.png</file>
+        <file>img/edit.png</file>
+    </qresource>
+</RCC>
