@@ -5,8 +5,8 @@
 
  ViewRoom:: ViewRoom()
 {
-    
-    lbl_title = new QLabel(tr("Nouvelle Salle"));
+    // Initialization of the GUI elements.
+    lbl_title = new QLabel("");
     lbl_title->setFont(QFont(this->font().family(), 
                          this->font().pointSize() * 2, QFont::DemiBold));
     lbl_title->setAlignment(Qt::AlignCenter);
@@ -45,12 +45,14 @@
     btn_browse = new QPushButton(tr("Parcourir..."));
     btn_add = new QPushButton(tr("Ajouter"));
     btn_cancel = new QPushButton(tr("Annuler"));
-    btn_create = new QPushButton(tr("Créer"));
+    btn_create = new QPushButton("");
     
     lst_members = new QListView();
     
     sim_members = new QStandardItemModel();
     lst_members->setModel(sim_members);
+    
+    // Placine the elements inside layouts.
     
     QHBoxLayout* hblay_browse = new QHBoxLayout();
     hblay_browse->addWidget(ldt_logo);
@@ -72,6 +74,7 @@
     hblay_visibilityOptions->addWidget(chk_private);
     hblay_visibilityOptions->addLayout(vblay_visibilityButtons);
     
+    // Main layout.
     QVBoxLayout* vblay_main = new QVBoxLayout();
     vblay_main->addWidget(lbl_title);
     vblay_main->addSpacing(3);
@@ -89,10 +92,8 @@
     
     setLayout(vblay_main);
     
-    loadMembers();
-    
+    // Connect signals with public slots.
     connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
-    connect(btn_add, SIGNAL(clicked()), this, SLOT(addMember()));
 }
 
  ViewRoom::~ ViewRoom()
@@ -100,6 +101,17 @@
     
 }
 
+void ViewRoom::clear()
+{
+    ldt_logo->clear();
+    ldt_membre->clear();
+    ldt_name->clear();
+    sim_members->clear();
+    chk_private->setChecked(false);
+    rbt_onInvitation->setChecked(false);
+    rbt_visible->setChecked(false);
+    sbx_number->setValue(50);
+}
 
 void ViewRoom::toggleVisibility()
 {
@@ -108,22 +120,5 @@ void ViewRoom::toggleVisibility()
     if (!bgp_visibility->checkedButton() && chk_private->isChecked())
     {
         rbt_visible->setChecked(true);
-    }
-}
-
-void ViewRoom::loadMembers()
-{
-    sim_members->appendRow(new QStandardItem("Franz"));
-    sim_members->appendRow(new QStandardItem("Garry"));
-    sim_members->appendRow(new QStandardItem("Georges"));
-}
-
-void ViewRoom::addMember()
-{
-    if (!ldt_membre->text().isEmpty())
-    {
-        QStandardItem* item = new QStandardItem(ldt_membre->text());
-        item->setEditable(false);
-        sim_members->appendRow(item);
     }
 }

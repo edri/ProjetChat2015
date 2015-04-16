@@ -2,40 +2,73 @@
 
 ControllerRoom::ControllerRoom()
 {
-    view = new ViewRoom();
+    viewRoom = new ViewRoom();
+    
+    // Connect signals with public slots.
+    connect(viewRoom->btn_add, SIGNAL(clicked()), this, SLOT(addMember()));
 }
 
 ControllerRoom::~ControllerRoom()
 {
-    delete view;
+    delete viewRoom;
 }
 
-void ControllerRoom::show()
+void ControllerRoom::showRoom()
 {
-    view->show();
+    // Set the label and button to have the texts corresponding to creation
+    viewRoom->lbl_title->setText(tr("Nouvelle Salle"));
+    viewRoom->btn_create->setText(tr("Créer"));
+    
+    viewRoom->clear();
+    
+    viewRoom->show();
 }
 
-void ControllerRoom::loadMembers(const int idRoom)
+void ControllerRoom::showRoom(const quint32 idRoom)
 {
+    // Set the label and button to have the texts corresponding to edition
+    viewRoom->lbl_title->setText(tr("Edition Salle"));
+    viewRoom->btn_create->setText(tr("Editer"));
+    
+    viewRoom->clear();
+    
+    // Retrieve the room from the id
     ModelRoom room = model->getRoom(idRoom);
     
-    //for(ModelUser user : room.
+    // Initialize the fields with the values of the room.
+    loadMembers(room);
+    viewRoom->ldt_name->setText(room.getName());
+    viewRoom->sbx_number->setValue(room.getLimit());
+    viewRoom->ldt_logo->setText(room.getPicture());
+    viewRoom->chk_private->setChecked(room.isPrivate());
+    if(room.isPrivate())
+    {
+        viewRoom->rbt_visible->setChecked(room.isVisible());
+        viewRoom->rbt_onInvitation->setChecked(!room.isVisible());
+    }
+    
+    viewRoom->show();
 }
 
-/*
+void ControllerRoom::loadMembers(const ModelRoom& room)
+{    
+    for(ModelUser* user : room.getUsers())
+    {
+        addMember(user->getUserName());
+    }
+}
+
 void ControllerRoom::addMember(const QString name)
 {
-    sim_members->appendRow(new QStandardItem("Franz"));
-    sim_members->appendRow(new QStandardItem("Garry"));
-    sim_members->appendRow(new QStandardItem("Georges"));
+    QStandardItem* item = new QStandardItem(name);
+    item->setEditable(false);
+    viewRoom->sim_members->appendRow(item);
 }
 
-void ViewRoom::addMember()
+void ControllerRoom::addMember()
 {
-    if (!ldt_membre->text().isEmpty())
+    if (!(viewRoom->ldt_membre->text().trimmed().isEmpty()))
     {
-        QStandardItem* item = new QStandardItem(ldt_membre->text());
-        item->setEditable(false);
-        sim_members->appendRow(item);
+        addMember(viewRoom->ldt_membre->text().trimmed());
     }
-}*/
+}

@@ -1,3 +1,5 @@
+// Controller of the room module.
+
 #ifndef CHAT_ROOM_CONTROLLER
 #define CHAT_ROOM_CONTROLLER
 
@@ -10,18 +12,31 @@ class ControllerRoom : public QObject
 {
     Q_OBJECT
 private:
-    ViewRoom* view;
+
+    // Pointers on the view(s) and the model.
+    ViewRoom* viewRoom;
     ModelChator* model;
     
+    // Load members of a room into the model of the list view.
+    void loadMembers(const ModelRoom& room);
+    // Add a member into the model of the list view.
+    void addMember(const QString name);
+    
 public:
+
     ControllerRoom();
     ~ControllerRoom();
     
-    void show();
+    // Open the room's creation window.
+    void showRoom();
+    
+    // Open the room's edition window, loading informations from the passed room.
+    void showRoom(const quint32 idRoom);
     
 public slots :
-    void loadMembers(const int idRoom);
-    //void addMember(const QString name);
+
+    // Add the current name entered into the members list. 
+    void addMember();
 
 };
 

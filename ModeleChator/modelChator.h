@@ -44,13 +44,17 @@ class ModelRoom
     
 	private :
 		quint32 idRoom;
-		bool isPrivate;
-		bool isVisible;
+        QString name;
+		bool _private;
+		bool visible;
+        QString picture;
+        quint32 limitOfStoredMessage;
 		QList<ModelUser*> admins;
 		QList<ModelMessage> messages;
-		QList<ModelUser*> users;
+		QMap<quint32, ModelUser*> users;
 	
 	public :
+        ModelRoom();
 		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser>* admins);	
 		ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser>* admins, QMap<quint32, ModelUser>* users);
 		~ModelRoom();
@@ -64,7 +68,12 @@ class ModelRoom
 		
 		void addUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		void addAdmin(const quint32 idUser);
-		QMap<quint32, ModelUser>* getUsers();
+		QMap<quint32, ModelUser*> getUsers() const;
+        QString getName() const;
+        QString getPicture() const;
+        quint32 getLimit() const;
+        bool isPrivate() const ;
+        bool isVisible() const;
 };
 
 class ModelMessage
@@ -106,7 +115,8 @@ class ModelUser
 		ModelUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
 		~ModelUser();
 		
-		int getIdUser();		
+		int getIdUser() const;
+        QString getUserName()const;		
 		void modify(const QString& firstName, const QString& lastName, const QImage& image);
 };
 
