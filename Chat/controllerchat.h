@@ -1,0 +1,5 @@
+#ifndef CONTROLLERCHAT
+#define CONTROLLERCHAT
+
+#endif // CONTROLLERCHAT
+

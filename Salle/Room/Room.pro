@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 
+CONFIG += c++11
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -11,13 +12,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = room
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         controllerRoom.cpp\
-        viewRoom.cpp
+        viewRoom.cpp\
+        ../../ModeleChator/modelChator.cpp
         
 
 HEADERS  += controllerRoom.h\
-         viewRoom.h\
-         ../../ModeleChator/modelChator.h
+         viewRoom.h
          
