@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     ControllerRoom w;
-    w.show();
+    w.showRoom();
     
     return a.exec();
 }

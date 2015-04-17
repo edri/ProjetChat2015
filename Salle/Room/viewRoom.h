@@ -1,3 +1,5 @@
+// View for the creation of new rooms or edition of already existing ones.
+
 #ifndef CHAT_ROOM_H
 #define CHAT_ROOM_H
 
@@ -12,14 +14,15 @@ class ViewRoom : public QWidget
     friend ControllerRoom;
     
 public:
+    
+    // Clear all the fields in the widget.
+    void clear();
 
     ViewRoom(); 
     ~ViewRoom();
     
 public slots:
     void toggleVisibility();
-    void loadMembers();
-    void addMember();
 
 private:
     
