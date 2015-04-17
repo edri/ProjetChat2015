@@ -13,9 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        viewChat.cpp
+        viewChat.cpp \
+    controllerChat.cpp \
+    "../ModeleChator/modelChator.cpp"
 
-HEADERS  += viewChat.h
+HEADERS  += viewChat.h \
+    controllerChat.h \
+    "../ModeleChator/modelChator.h"
 
 FORMS    += viewChat.ui
 

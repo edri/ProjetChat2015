@@ -20,7 +20,8 @@ class ModelChator
 	public :
 		ModelChator();
 	
-		ModelRoom getRoom(const quint32 idRoom) const;
+		ModelRoom getRoom(const quint32 idRoom) const;        
+        QList<ModelRoom*> getUserRooms(const quint32 idUser) const;
 		void addRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
 		void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
 		void deleteRoom(const quint32 idRoom);
@@ -115,7 +116,7 @@ class ModelUser
 		ModelUser(const quint32 idUser, const QString userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
 		~ModelUser();
 		
-		int getIdUser() const;
+        quint32 getIdUser() const;
         QString getUserName()const;		
 		void modify(const QString& firstName, const QString& lastName, const QImage& image);
 };

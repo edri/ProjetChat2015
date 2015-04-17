@@ -168,7 +168,7 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QTreeWidget" name="tre_room">
+   <widget class="QTreeWidget" name="tre_rooms">
     <property name="geometry">
      <rect>
       <x>10</x>
