@@ -6,6 +6,9 @@ ControllerRoom::ControllerRoom()
     
     // Connect signals with public slots.
     connect(viewRoom->btn_add, SIGNAL(clicked()), this, SLOT(addMember()));
+    connect(viewRoom->ldt_member, SIGNAL(returnPressed()), this, SLOT(addMember()));
+    connect(viewRoom->btn_remove, SIGNAL(clicked()), this, SLOT(removeMember()));
+    connect(viewRoom->btn_clear, SIGNAL(clicked()), this, SLOT(removeMembers()));
 }
 
 ControllerRoom::~ControllerRoom()
@@ -20,6 +23,8 @@ void ControllerRoom::showRoom()
     viewRoom->btn_create->setText(tr("Créer"));
     
     viewRoom->clear();
+    
+    viewRoom->editing = false;
     
     viewRoom->show();
 }
@@ -47,6 +52,8 @@ void ControllerRoom::showRoom(const quint32 idRoom)
         viewRoom->rbt_onInvitation->setChecked(!room.isVisible());
     }
     
+    viewRoom->editing = true;
+    
     viewRoom->show();
 }
 
@@ -67,8 +74,46 @@ void ControllerRoom::addMember(const QString name)
 
 void ControllerRoom::addMember()
 {
-    if (!(viewRoom->ldt_membre->text().trimmed().isEmpty()))
+    QString memberName = viewRoom->ldt_member->text().trimmed();
+    // Check that the name isn't an empty string and that it isn't already in the members list.
+    if (!memberName.isEmpty())
     {
-        addMember(viewRoom->ldt_membre->text().trimmed());
+        if(viewRoom->sim_members->findItems(memberName).isEmpty())
+        {
+            addMember(memberName);
+        }
+        
+        else
+        {
+            QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cet utilisateur est déjà membre de cette salle"));
+        }
     }
+    viewRoom->ldt_member->clear();
+}
+
+void ControllerRoom::removeMember()
+{
+    if (viewRoom->editing)
+    {
+        
+    }
+    
+    else
+    {
+        viewRoom->sim_members->removeRow(viewRoom->lst_members->currentIndex().row());
+    }
+}
+
+void ControllerRoom::removeMembers()
+{
+    if (viewRoom->editing)
+    {
+        
+    }
+    
+    else
+    {
+        viewRoom->sim_members->clear();
+    }
+    
 }

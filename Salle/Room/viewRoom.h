@@ -23,19 +23,23 @@ public:
     
 public slots:
     void toggleVisibility();
+    void cancel();
 
 private:
+
+    // Core elements
+    bool editing;
     
     // GUI elements
     QLabel* lbl_title;
     QLabel* lbl_name;
     QLabel* lbl_number;
     QLabel* lbl_logo;
-    QLabel* lbl_membre;
+    QLabel* lbl_member;
     
     QLineEdit* ldt_name;
     QLineEdit* ldt_logo;
-    QLineEdit* ldt_membre;
+    QLineEdit* ldt_member;
     
     QSpinBox* sbx_number;
     
@@ -47,11 +51,12 @@ private:
     
     QPushButton* btn_browse;
     QPushButton* btn_add;
+    QPushButton* btn_remove;
+    QPushButton* btn_clear;
     QPushButton* btn_cancel;
     QPushButton* btn_create;
     
     QListView* lst_members;
-    
     QStandardItemModel* sim_members;
 };
 
