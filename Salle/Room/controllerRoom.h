@@ -37,6 +37,10 @@ public slots :
 
     // Add the current name entered into the members list. 
     void addMember();
+    
+    // Remove the selected member, or all of them.
+    void removeMember();
+    void removeMembers();
 
 };
 

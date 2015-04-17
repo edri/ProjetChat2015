@@ -5,6 +5,10 @@
 
  ViewRoom:: ViewRoom()
 {
+    // Initializazion of core elements
+    
+    editing = false;
+    
     // Initialization of the GUI elements.
     lbl_title = new QLabel("");
     lbl_title->setFont(QFont(this->font().family(), 
@@ -14,12 +18,12 @@
     lbl_name = new QLabel(tr("* Nom de la salle"));
     lbl_number = new QLabel(tr("Nombre maximal de messages stockés"));
     lbl_logo = new QLabel(tr("Logo"));
-    lbl_membre = new QLabel(tr("Membres"));
+    lbl_member = new QLabel(tr("Membres"));
     
     ldt_name = new QLineEdit("");
     ldt_logo = new QLineEdit("");
-    ldt_membre = new QLineEdit("");
-    ldt_membre->setPlaceholderText(tr("Entrez le nom du nouveau membre"));
+    ldt_member = new QLineEdit("");
+    ldt_member->setPlaceholderText(tr("Entrez le nom du nouveau member"));
     
     sbx_number = new QSpinBox();
     sbx_number->setRange(0, 10000);
@@ -44,6 +48,8 @@
     
     btn_browse = new QPushButton(tr("Parcourir..."));
     btn_add = new QPushButton(tr("Ajouter"));
+    btn_remove = new QPushButton(tr("Enlever"));
+    btn_clear = new QPushButton(tr("Vider"));
     btn_cancel = new QPushButton(tr("Annuler"));
     btn_create = new QPushButton("");
     
@@ -52,59 +58,84 @@
     sim_members = new QStandardItemModel();
     lst_members->setModel(sim_members);
     
-    // Placine the elements inside layouts.
+    // Placing the elements inside layouts.
     
-    QHBoxLayout* hblay_browse = new QHBoxLayout();
-    hblay_browse->addWidget(ldt_logo);
-    hblay_browse->addWidget(btn_browse);
+    QHBoxLayout* hbl_browse = new QHBoxLayout();
+    hbl_browse->addWidget(ldt_logo);
+    hbl_browse->addWidget(btn_browse);
     
-    QHBoxLayout* hblay_membre = new QHBoxLayout();
-    hblay_membre->addWidget(ldt_membre);
-    hblay_membre->addWidget(btn_add);
+    QHBoxLayout* hbl_member = new QHBoxLayout();
+    hbl_member->addWidget(ldt_member);
+    hbl_member->addWidget(btn_add);
     
-    QHBoxLayout* hblay_down = new QHBoxLayout();
-    hblay_down->addWidget(btn_cancel);
-    hblay_down->addWidget(btn_create);
+    QHBoxLayout* hbl_remove = new QHBoxLayout();
+    hbl_remove->addWidget(btn_remove);
+    hbl_remove->addWidget(btn_clear);
     
-    QVBoxLayout* vblay_visibilityButtons = new QVBoxLayout();
-    vblay_visibilityButtons->addWidget(rbt_visible);
-    vblay_visibilityButtons->addWidget(rbt_onInvitation);
+    QHBoxLayout* hbl_down = new QHBoxLayout();
+    hbl_down->addWidget(btn_cancel);
+    hbl_down->addWidget(btn_create);
     
-    QHBoxLayout* hblay_visibilityOptions = new QHBoxLayout();
-    hblay_visibilityOptions->addWidget(chk_private);
-    hblay_visibilityOptions->addLayout(vblay_visibilityButtons);
+    QVBoxLayout* vbl_visibilityButtons = new QVBoxLayout();
+    vbl_visibilityButtons->addWidget(rbt_visible);
+    vbl_visibilityButtons->addWidget(rbt_onInvitation);
+    
+    QHBoxLayout* hbl_visibilityOptions = new QHBoxLayout();
+    hbl_visibilityOptions->addWidget(chk_private);
+    hbl_visibilityOptions->addLayout(vbl_visibilityButtons);
     
     // Main layout.
-    QVBoxLayout* vblay_main = new QVBoxLayout();
-    vblay_main->addWidget(lbl_title);
-    vblay_main->addSpacing(3);
-    vblay_main->addWidget(lbl_name);
-    vblay_main->addWidget(ldt_name);
-    vblay_main->addWidget(lbl_number);
-    vblay_main->addWidget(sbx_number);
-    vblay_main->addWidget(lbl_logo);
-    vblay_main->addLayout(hblay_browse);
-    vblay_main->addWidget(lbl_membre);
-    vblay_main->addLayout(hblay_membre);
-    vblay_main->addWidget(lst_members);
-    vblay_main->addLayout(hblay_visibilityOptions);
-    vblay_main->addLayout(hblay_down);
+    QVBoxLayout* vbl_main = new QVBoxLayout();
+    vbl_main->addWidget(lbl_title);
+    vbl_main->addSpacing(3);
+    vbl_main->addWidget(lbl_name);
+    vbl_main->addWidget(ldt_name);
+    vbl_main->addWidget(lbl_number);
+    vbl_main->addWidget(sbx_number);
+    vbl_main->addWidget(lbl_logo);
+    vbl_main->addLayout(hbl_browse);
+    vbl_main->addWidget(lbl_member);
+    vbl_main->addLayout(hbl_member);
+    vbl_main->addWidget(lst_members);
+    vbl_main->addLayout(hbl_remove);
+    vbl_main->addLayout(hbl_visibilityOptions);
+    vbl_main->addLayout(hbl_down);
     
-    setLayout(vblay_main);
+    setLayout(vbl_main);
     
     // Connect signals with public slots.
     connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
+    connect(btn_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
  ViewRoom::~ ViewRoom()
 {
-    
+    // Delete GUI elements
+    delete lbl_title;
+    delete lbl_name;
+    delete lbl_number;
+    delete lbl_logo;
+    delete lbl_member;
+    delete ldt_name;
+    delete ldt_logo;
+    delete ldt_member;
+    delete sbx_number;
+    delete chk_private;
+    delete rbt_visible;
+    delete rbt_onInvitation;
+    delete bgp_visibility;
+    delete btn_browse;
+    delete btn_add;
+    delete btn_cancel;
+    delete btn_create;
+    delete lst_members;
+    delete sim_members;    
 }
 
 void ViewRoom::clear()
 {
     ldt_logo->clear();
-    ldt_membre->clear();
+    ldt_member->clear();
     ldt_name->clear();
     sim_members->clear();
     chk_private->setChecked(false);
@@ -121,4 +152,9 @@ void ViewRoom::toggleVisibility()
     {
         rbt_visible->setChecked(true);
     }
+}
+
+void ViewRoom::cancel()
+{
+    clear();
 }

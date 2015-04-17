@@ -8,4 +8,6 @@ Tree :	tre_maListe
 RadioButton : rbt_blab
 ButtonGroup : bgp_balb
 SpinBox : sbx_blab
-StandardItemModel :sim_blab
+StandardItemModel : sim_blab
+VBoxLayout : vbl_bla 
+HBoxLayout : hbl_bla
