@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>794</width>
-    <height>608</height>
+    <height>585</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -490,14 +490,6 @@
    <addaction name="menuFichier"/>
    <addaction name="menuEdition"/>
    <addaction name="menu"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionQuitter">

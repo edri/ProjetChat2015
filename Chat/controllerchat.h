@@ -14,7 +14,7 @@ private:
     ModelChator* model;
 
 public:
-    ControllerChat();
+    ControllerChat(ModelChator* model);
     ~ControllerChat();
 
     void showView();

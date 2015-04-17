@@ -8,8 +8,6 @@ ViewChat::ViewChat(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    addRoom();
-
     ui->ldt_message->setFocus();
     //ui->tbl_messages->header()->close();
 }
@@ -19,11 +17,11 @@ ViewChat::~ViewChat()
     delete ui;
 }
 
-void ViewChat::addRoom()
+void ViewChat::addRoom(const QString roomName, const quint32 roomId)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(ui->tre_rooms);
-    item->setText(0, "blablabla");
-    item->setData(0, 0, 32);
+    item->setText(0, roomName);
+    item->setData(0, Qt::UserRole, roomId);
 }
 
 void ViewChat::on_btn_send_clicked()
@@ -49,8 +47,8 @@ void ViewChat::on_ldt_message_returnPressed()
 
 void ViewChat::on_btn_leaveRoom_clicked()
 {
-    QString d = ui->tre_rooms->selectedItems().at(0)->text(0);
-    ui->ldt_message->setText(d);
+    quint32 d = ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt();
+    ui->ldt_message->setText(QString::number(d));
 }
 
 void ViewChat::on_btn_joinRoom_clicked()
