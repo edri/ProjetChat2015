@@ -17,6 +17,7 @@ class Connector : public QObject
     
     private slots:
     void connected();
+    void sslError(const QList<QSslError>& errors);
     
     private:
     QWebSocket _socket;
