@@ -19,7 +19,7 @@ public:
     explicit ViewChat(QWidget *parent = 0);
     ~ViewChat();
 
-    void addRoom(const QString roomName, const quint32 roomId);
+    void addRoom(const quint32 roomId, const QString& roomName, const QString& roomPicture);
 
 private slots:
     void on_btn_send_clicked();

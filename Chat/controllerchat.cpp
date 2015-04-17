@@ -22,7 +22,7 @@ void ControllerChat::loadRooms(const quint32 idUser)
     QMap<quint32, ModelRoom*> userRooms = model->getUserRooms(idUser);
 
     for (ModelRoom* r : userRooms)
-        view->addRoom(r->getName(), r->getIdRoom());
+        view->addRoom(r->getIdRoom(), r->getName(), r->getPicture());
 }
 
 void ControllerChat::addMessage(const quint32 idUser, const quint32 idRoom, const QString message)

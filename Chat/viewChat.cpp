@@ -17,11 +17,12 @@ ViewChat::~ViewChat()
     delete ui;
 }
 
-void ViewChat::addRoom(const QString roomName, const quint32 roomId)
+void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QString& roomPicture)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(ui->tre_rooms);
-    item->setText(0, roomName);
     item->setData(0, Qt::UserRole, roomId);
+    item->setText(0, roomName);
+    item->setIcon(0, QIcon("img/" + roomPicture));
 }
 
 void ViewChat::on_btn_send_clicked()
