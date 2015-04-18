@@ -18,7 +18,7 @@ private:
     ModelChator* model;
     
     // Load members of a room into the model of the list view.
-    void loadMembers(const ModelRoom& room);
+    void loadMembers(const ModelRoom* room);
     // Add a member into the model of the list view.
     void addMember(const QString name);
     

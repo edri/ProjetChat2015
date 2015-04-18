@@ -38,18 +38,18 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     viewRoom->clear();
     
     // Retrieve the room from the id
-    ModelRoom room = model->getRoom(idRoom);
+    ModelRoom* room = model->getRoom(idRoom);
     
     // Initialize the fields with the values of the room.
     loadMembers(room);
-    viewRoom->ldt_name->setText(room.getName());
-    viewRoom->sbx_number->setValue(room.getLimit());
-    viewRoom->ldt_logo->setText(room.getPicture());
-    viewRoom->chk_private->setChecked(room.isPrivate());
-    if(room.isPrivate())
+    viewRoom->ldt_name->setText(room->getName());
+    viewRoom->sbx_number->setValue(room->getLimit());
+    viewRoom->ldt_logo->setText(room->getPicture());
+    viewRoom->chk_private->setChecked(room->isPrivate());
+    if(room->isPrivate())
     {
-        viewRoom->rbt_visible->setChecked(room.isVisible());
-        viewRoom->rbt_onInvitation->setChecked(!room.isVisible());
+        viewRoom->rbt_visible->setChecked(room->isVisible());
+        viewRoom->rbt_onInvitation->setChecked(!room->isVisible());
     }
     
     viewRoom->editing = true;
@@ -57,9 +57,9 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     viewRoom->show();
 }
 
-void ControllerRoom::loadMembers(const ModelRoom& room)
+void ControllerRoom::loadMembers(const ModelRoom* room)
 {    
-    for(ModelUser* user : room.getUsers())
+    for(ModelUser* user : room->getUsers())
     {
         addMember(user->getUserName());
     }
