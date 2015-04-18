@@ -1,7 +1,7 @@
 // View for the creation of new rooms or edition of already existing ones.
 
-#ifndef CHAT_ROOM_H
-#define CHAT_ROOM_H
+#ifndef CHAT_VIEW_ROOM_H
+#define CHAT_VIEW_ROOM_H
 
 #include <QtWidgets>
 
@@ -23,12 +23,12 @@ public:
     
 public slots:
     void toggleVisibility();
-    void cancel();
-
+    
 private:
 
     // Core elements
     bool editing;
+    QList<QLayout*>* layouts;
     
     // GUI elements
     QLabel* lbl_title;
@@ -60,4 +60,4 @@ private:
     QStandardItemModel* sim_members;
 };
 
-#endif //CHAT_ROOM_H
+#endif //CHAT_VIEW_ROOM_H

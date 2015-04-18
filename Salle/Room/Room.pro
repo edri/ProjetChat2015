@@ -15,9 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         controllerRoom.cpp\
         viewRoom.cpp\
+        ../Join/viewJoin.cpp\
         ../../ModeleChator/modelChator.cpp
         
 
 HEADERS  += controllerRoom.h\
-         viewRoom.h
+         viewRoom.h\
+         ../Join/viewJoin.h\
+         ../../ModeleChator/modelChator.h
          

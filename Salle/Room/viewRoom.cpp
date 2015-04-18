@@ -5,9 +5,12 @@
 
  ViewRoom:: ViewRoom()
 {
-    // Initializazion of core elements
+    // Setting attributes
+    setAttribute(Qt::WA_DeleteOnClose, true);
     
+    // Initializazion of core elements
     editing = false;
+    layouts = new QList<QLayout*>();
     
     // Initialization of the GUI elements.
     lbl_title = new QLabel("");
@@ -61,31 +64,38 @@
     // Placing the elements inside layouts.
     
     QHBoxLayout* hbl_browse = new QHBoxLayout();
+    layouts->append(hbl_browse);
     hbl_browse->addWidget(ldt_logo);
     hbl_browse->addWidget(btn_browse);
     
     QHBoxLayout* hbl_member = new QHBoxLayout();
+    layouts->append(hbl_member);
     hbl_member->addWidget(ldt_member);
     hbl_member->addWidget(btn_add);
     
     QHBoxLayout* hbl_remove = new QHBoxLayout();
+    layouts->append(hbl_remove);
     hbl_remove->addWidget(btn_remove);
     hbl_remove->addWidget(btn_clear);
     
     QHBoxLayout* hbl_down = new QHBoxLayout();
+    layouts->append(hbl_down);
     hbl_down->addWidget(btn_cancel);
     hbl_down->addWidget(btn_create);
     
     QVBoxLayout* vbl_visibilityButtons = new QVBoxLayout();
+    layouts->append(vbl_visibilityButtons);
     vbl_visibilityButtons->addWidget(rbt_visible);
     vbl_visibilityButtons->addWidget(rbt_onInvitation);
     
     QHBoxLayout* hbl_visibilityOptions = new QHBoxLayout();
+    layouts->append(hbl_visibilityOptions);
     hbl_visibilityOptions->addWidget(chk_private);
     hbl_visibilityOptions->addLayout(vbl_visibilityButtons);
     
     // Main layout.
     QVBoxLayout* vbl_main = new QVBoxLayout();
+    layouts->append(vbl_main);
     vbl_main->addWidget(lbl_title);
     vbl_main->addSpacing(3);
     vbl_main->addWidget(lbl_name);
@@ -105,10 +115,9 @@
     
     // Connect signals with public slots.
     connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
-    connect(btn_cancel, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
- ViewRoom::~ ViewRoom()
+ViewRoom::~ ViewRoom()
 {
     // Delete GUI elements
     delete lbl_title;
@@ -129,7 +138,14 @@
     delete btn_cancel;
     delete btn_create;
     delete lst_members;
-    delete sim_members;    
+    delete sim_members;
+    
+    // Delete layouts.
+    for (QLayout* l : *layouts)
+    {
+        delete l;
+    }
+    delete layouts;
 }
 
 void ViewRoom::clear()
@@ -152,9 +168,4 @@ void ViewRoom::toggleVisibility()
     {
         rbt_visible->setChecked(true);
     }
-}
-
-void ViewRoom::cancel()
-{
-    clear();
 }

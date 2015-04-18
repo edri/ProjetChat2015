@@ -5,6 +5,13 @@
 
 ViewJoin::ViewJoin()
 {    
+    // Setting attributes
+    setAttribute(Qt::WA_DeleteOnClose, true);
+    
+    // Initializazion of core elements
+    layouts = new QList<QLayout*>();
+    
+    // Initialization of the GUI elements.
     label_title = new QLabel("Rejoindre une salle");
     label_title->setFont(QFont(this->font().family(), 
                          this->font().pointSize() * 2, QFont::DemiBold));
@@ -23,20 +30,36 @@ ViewJoin::ViewJoin()
     model_rooms = new QStandardItemModel();
     list_rooms->setModel(model_rooms);
     
-    QVBoxLayout* vblay_main = new QVBoxLayout();
-    vblay_main->addWidget(label_title);
-    vblay_main->addSpacing(3);
-    vblay_main->addWidget(label_name);
-    vblay_main->addWidget(ledit_name);
-    vblay_main->addWidget(label_rooms);
-    vblay_main->addWidget(list_rooms);
-    vblay_main->addWidget(btn_join);
-    vblay_main->addWidget(btn_cancel);
+    // Main Layout
+    QVBoxLayout* vbl_main = new QVBoxLayout();
+    layouts->append(vbl_main);
+    vbl_main->addWidget(label_title);
+    vbl_main->addSpacing(3);
+    vbl_main->addWidget(label_name);
+    vbl_main->addWidget(ledit_name);
+    vbl_main->addWidget(label_rooms);
+    vbl_main->addWidget(list_rooms);
+    vbl_main->addWidget(btn_join);
+    vbl_main->addWidget(btn_cancel);
     
-    setLayout(vblay_main);
+    setLayout(vbl_main);
 }
 
 ViewJoin::~ViewJoin()
 {
+    delete label_title;
+    delete label_name;
+    delete label_rooms;
+    delete ledit_name;
+    delete btn_join;
+    delete btn_cancel;
+    delete list_rooms;
+    delete model_rooms;
     
+    // Delete layouts.
+    for (QLayout* l : *layouts)
+    {
+        delete l;
+    }
+    delete layouts;
 }
