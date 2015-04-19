@@ -8,9 +8,13 @@
 #include <QListView>
 #include <QStandardItemModel>
 
+class ControllerRoom;
+
 class ViewJoin : public QWidget
 {
     Q_OBJECT
+    
+    friend ControllerRoom;
     
 public:
 
@@ -20,7 +24,10 @@ public:
 public slots:
 
 private:
-
+    
+    // Core elements
+    QList<QLayout*>* layouts;
+    
     // GUI elements
     QLabel* label_title;
     QLabel* label_name;
