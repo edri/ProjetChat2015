@@ -1,31 +1,39 @@
 #include "controllerChat.h"
 
-ControllerChat::ControllerChat(ModelChator* model)
+ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser)
 {
-    view = new ViewChat();
-    this->model = model;
+    _view = new ViewChat();
+    _model = model;
+    _currentUser = currentUser;
 }
 
 ControllerChat::~ControllerChat()
 {
-    delete view;
-    delete model;
+    delete _view;
+    delete _model;
 }
 
 void ControllerChat::showView()
 {
-    view->show();
+    _view->show();
+
+    _view->setConnectedAsText(_currentUser->getUserName());
+    loadRooms(_currentUser->getIdUser());
 }
 
 void ControllerChat::loadRooms(const quint32 idUser)
 {
-    QMap<quint32, ModelRoom*> userRooms = model->getUserRooms(idUser);
+    QMap<quint32, ModelRoom*> userRooms = _model->getUserRooms(idUser);
 
-    for (ModelRoom* r : userRooms)
-        view->addRoom(r->getIdRoom(), r->getName(), r->getPicture());
-}
+    for (ModelRoom* room : userRooms)
+    {
+        _view->addRoom(room->getIdRoom(), room->getName(), room->getPicture());
 
-void ControllerChat::addMessage(const quint32 idUser, const quint32 idRoom, const QString message)
-{
-    printf("SENT");
+        for (ModelUser* user : room->getUsers())
+        {
+            _view->addUserToRoom(room->getIdRoom(), user->getIdUser(), user->getUserName(), user->getImage(), user->isConnected());
+        }
+    }
+
+    _view->selectFirstRoom();
 }

@@ -38,7 +38,7 @@ class ModelChator
          *
          * Last edited by Miguel Santamaria, on 17.04.2015 21:59
         */
-        void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
+        void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
         void addUser(ModelUser* user);
 
         /*
@@ -143,18 +143,20 @@ class ModelUser
         QString _lastName;
         bool _isConnected;
         QDateTime _lastConnection;
-        QImage _image;
+        QString _image;
 	
 	public :
         ModelUser();
-        ModelUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
+        ModelUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
 		~ModelUser();
 		
-        void modify(const QString& firstName, const QString& lastName, const QImage& image);
+        void modify(const QString& firstName, const QString& lastName, const QString& image);
 
         // Getters
         quint32 getIdUser() const;
-        QString getUserName()const;
+        QString getUserName() const;
+        bool isConnected() const;
+        QString getImage() const;
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

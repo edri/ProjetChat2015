@@ -9,7 +9,7 @@ ModelUser::ModelUser() {}
 
 ModelUser::ModelUser(const quint32 idUser, const QString& userName, const QString& firstName,
                      const QString& lastName, const bool isConnected, const QDateTime& lastConnection,
-                     const QImage& image) :
+                     const QString& image) :
     _idUser(idUser), _userName(userName), _firstName(firstName),_lastName(lastName), _isConnected(isConnected),
     _lastConnection(lastConnection), _image(image) {}
 
@@ -67,7 +67,7 @@ ModelRoom* ModelChator::getRoom(const quint32 idRoom) const
     return _rooms[idRoom];
 }
 
-void ModelChator::addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image)
+void ModelChator::addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image)
 {
     ModelUser* user = new ModelUser(idUser, userName, firstName, lastName, isConnected, lastConnection, image);
     _users.insert(idUser, user);
@@ -116,6 +116,16 @@ quint32 ModelUser::getIdUser() const
 QString ModelUser::getUserName() const
 {
     return _userName;
+}
+
+bool ModelUser::isConnected() const
+{
+    return _isConnected;
+}
+
+QString ModelUser::getImage() const
+{
+    return _image;
 }
 
 QString ModelRoom::getName() const 
