@@ -68,8 +68,8 @@ QDataStream& operator >> (QDataStream& ds, ModelUser& u)
 
 ModelRoom::ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
           const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users) :
-    _idRoom(idRoom), _name(name), _limitOfStoredMessage(limitOfStoredMessage), _private(isPrivate), _visible(isVisible),
-    _picture(picture), _admins(admins), _users(users) {}
+    _idRoom(idRoom), _name(name), _private(isPrivate), _visible(isVisible),
+    _picture(picture), _limitOfStoredMessage(limitOfStoredMessage), _admins(admins), _users(users) {}
 
 ModelRoom::~ModelRoom(){}
 

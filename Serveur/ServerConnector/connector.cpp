@@ -1,18 +1,18 @@
 #include "connector.h"
 #include <QUrl>
 
-Connector::Connector() : _isConnected(false)
+ClientConnector::ClientConnector() : _isConnected(false)
 {
     connect(&_socket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(&_socket, SIGNAL(sslErrors(const QList<QSslError>& errors)), this, SLOT(sslError(const QList<QSslError>& errors)));
+    connect(&_socket, SIGNAL(sslErrors(const QList<QSslError>&)), this, SLOT(sslErrors(const QList<QSslError>&)));
 }
 
-void Connector::connectToServer(QString url)
+void ClientConnector::connectToServer(QString url)
 {
     _socket.open(QUrl("wss://" + url));
 }
 
-void Connector::send(const QByteArray& data)
+void ClientConnector::send(const QByteArray& data)
 {
     if (_isConnected)
     {
@@ -20,12 +20,12 @@ void Connector::send(const QByteArray& data)
     }
 }
 
-bool Connector::connected()
+void ClientConnector::connected()
 {
-    return _isConnected;
+    _isConnected = true;
 }
 
-void Connector::sslError(const QList<QSslError>& errors)
+void ClientConnector::sslErrors(const QList<QSslError>& errors)
 {
-    
+    _socket.ignoreSslErrors();
 }

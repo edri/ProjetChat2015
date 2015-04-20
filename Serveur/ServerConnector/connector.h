@@ -11,13 +11,21 @@ class Connector : public QObject
     Q_OBJECT
     
     public:
-    Connector();
+    virtual void send(const QByteArray& data) = 0;
+};
+
+class ClientConnector : public Connector
+{
+    Q_OBJECT
+    
+    public:
+    ClientConnector();
     void connectToServer(QString url);
     void send(const QByteArray& data);
-    bool connected();
     
     private slots:
-    void sslError(const QList<QSslError>& errors);
+    void sslErrors(const QList<QSslError>& errors);
+    void connected();
     
     private:
     QWebSocket _socket;
