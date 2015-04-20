@@ -5,6 +5,10 @@ ModelChator::ModelChator() {}
 ModelMessage::ModelMessage() {}
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& content) : _idMessage(idMessage), _idUser(idUser), _date(date), _content(content) {}
 ModelMessage::~ModelMessage(){}
+QString ModelMessage::getContent()
+{
+    return _content;
+}
 
 ModelUser::ModelUser() {}
 

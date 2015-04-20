@@ -128,7 +128,10 @@ class ModelMessage
         void modify(const QString& content);
 
         // Getters
-        int getIdMessage();
+        quint32 getIdMessage();
+        quint32 getIdUser();
+        QDateTime getDate();
+        QString getContent();
 };
 
 class ModelUser
