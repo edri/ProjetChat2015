@@ -2,79 +2,80 @@
 #include <QByteArray>
 #include <QDataStream>
 
-void Interpretor::sendMessage(const ModelMessage& message)
+Interpretor::Interpretor(ControllerInput* dispatcher) : _dispatcher(dispatcher){};
+
+QByteArray Interpretor::sendMessage(const ModelMessage& message)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::MESSAGE << message;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::login(const QString& pseudo, const QString& pass)
+QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
-    // Le mot de passe est déjà hâché????????????????????
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::LOGIN << pseudo << pass;
-    // Envoyer les données quelque part
+    stream << (quint32) MessageType::LOGIN << pseudo << hashedPwd;
+    return data;
 }
 
-void Interpretor::createAccount(const ModelUser& user)
+QByteArray Interpretor::createAccount(const ModelUser& user)
 {
     // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::NEW_ACCOUNT << user;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::sendInfoUser(const ModelUser& user)
+QByteArray Interpretor::sendInfoUser(const ModelUser& user)
 {
     // Il y aura aussi les clés à gérer ici (envoi de la clé publique et éventuellement de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::INFO_USER << user;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::sendError(const QString& text)
+QByteArray Interpretor::sendError(const QString& text)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::ERROR << text;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::join(const quint32 idUser, const quint32 idRoom)
+QByteArray Interpretor::join(const quint32 idUser, const quint32 idRoom)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::JOIN << idUser << idRoom;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::leave(const quint32 idUser, const quint32 idRoom)
+QByteArray Interpretor::leave(const quint32 idUser, const quint32 idRoom)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::LEAVE << idUser << idRoom;
-    // Envoyer les données quelque part
+    return data;
 }
 
-void Interpretor::disconnect(const quint32 idUser)
+QByteArray Interpretor::disconnect(const quint32 idUser)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::DISCONNECT << idUser;
-    // Envoyer les données quelque part
+    return data;
 }
 
 void Interpretor::processData(const QByteArray& data)
@@ -107,7 +108,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelMessage message;
             stream >> message;
-            // Envoyer cet objet quelque part
+            _dispatcher->receiveMessage(message);
         }
         break;
         
@@ -148,7 +149,7 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::ERROR:
         {
-            Error error;
+            ModelError error;
             stream >> error;
             // Envoyer cet objet quelque part
         }
@@ -157,9 +158,4 @@ void Interpretor::processData(const QByteArray& data)
         default:
         break;
     }
-}
-
-void Interpretor::test(std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> fs)
-{
-    bridge = fs;
 }

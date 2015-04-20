@@ -148,6 +148,9 @@ class ModelMessage
 
         // Getters
         quint32 getIdMessage() const;
+        quint32 getIdUser() const;
+        QDateTime getDate() const;
+        QString getContent() const;
 };
 
 class ModelUser
