@@ -1,3 +1,4 @@
+#include <QtCore/QDebug>
 #include "connector.h"
 #include <QUrl>
 
@@ -9,6 +10,7 @@ ClientConnector::ClientConnector() : _isConnected(false)
 
 void ClientConnector::connectToServer(QString url)
 {
+    qDebug() << "trying to connect to " << url;
     _socket.open(QUrl("wss://" + url));
 }
 
@@ -23,6 +25,8 @@ void ClientConnector::send(const QByteArray& data)
 void ClientConnector::connected()
 {
     _isConnected = true;
+    qDebug() << "connected";
+    emit connectionSuccessful();
 }
 
 void ClientConnector::sslErrors(const QList<QSslError>& errors)

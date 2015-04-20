@@ -23,6 +23,9 @@ class ClientConnector : public Connector
     void connectToServer(QString url);
     void send(const QByteArray& data);
     
+    signals:
+    void connectionSuccessful();
+    
     private slots:
     void sslErrors(const QList<QSslError>& errors);
     void connected();

@@ -2,7 +2,7 @@
 #include <QByteArray>
 #include <QDataStream>
 
-Interpretor::Interpretor(ControllerInput* dispatcher) : _dispatcher(dispatcher){};
+Interpretor::Interpretor(ControllerInput& dispatcher) : _dispatcher(dispatcher){};
 
 QByteArray Interpretor::sendMessage(const ModelMessage& message)
 {
@@ -108,7 +108,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelMessage message;
             stream >> message;
-            _dispatcher->receiveMessage(message);
+            _dispatcher.receiveMessage(message);
         }
         break;
         
@@ -117,7 +117,7 @@ void Interpretor::processData(const QByteArray& data)
             QString pseudo;
             QString hashedPwd;
             stream >> pseudo >> hashedPwd;
-            // Envoyer ces objets quelque part
+            _dispatcher.login(pseudo, hashedPwd);
         }
         break;
         

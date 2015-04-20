@@ -12,7 +12,7 @@
 class Interpretor
 {
     public:
-    Interpretor(ControllerInput* dispatcher);
+    Interpretor(ControllerInput& dispatcher);
     
     QByteArray sendMessage(const ModelMessage& message);
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
@@ -28,7 +28,7 @@ class Interpretor
     
     private:
     // Pointeur sur l'objet réseau
-    ControllerInput* _dispatcher;
+    ControllerInput& _dispatcher;
 };
 
 #endif

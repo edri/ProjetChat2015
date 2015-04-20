@@ -10,6 +10,7 @@ class ControllerInput : public QObject
     
     public:
     virtual void receiveMessage(const ModelMessage& message) = 0;
+    virtual void login(const QString& pseudo, const QString& hashedPWD) {};
 };
 
 class ClientControllerInput : public ControllerInput
@@ -18,6 +19,15 @@ class ClientControllerInput : public ControllerInput
     
     public:
     virtual void receiveMessage(const ModelMessage& message);
+};
+
+class ServerControllerInput : public ControllerInput
+{
+    Q_OBJECT
+    
+    public:
+    virtual void receiveMessage(const ModelMessage& message);
+    virtual void login(const QString& pseudo, const QString& hashedPWD);
 };
 
 #endif

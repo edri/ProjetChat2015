@@ -2,6 +2,8 @@
 #include <QFile>
 #include <QWebSocket>
 #include <QSslKey>
+#include "controllerInput.h"
+#include "interpretor.h"
 
 Listener::Listener(quint16 port) : _server("Chator", QWebSocketServer::SecureMode, this)
 {
@@ -50,6 +52,11 @@ void Listener::receive(QByteArray message)
 {
     Q_UNUSED(message)
     qDebug() << "New message";
+    
+    // TEST
+    ServerControllerInput sci;
+    Interpretor i(sci);
+    i.processData(message);
 }
 
 void Listener::disconnected()
