@@ -294,7 +294,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/interpretor1.0.0 || mkdir -p .tmp/interpretor1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.h interpretor.h packet.h modelChator.h controllerInput.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.h interpretor.h packet.h modelChator.h controllerInput.h abstractOutputInterface.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
 
 
 clean:compiler_clean 
@@ -348,14 +348,16 @@ interpretor.o: interpretor.cpp interpretor.h \
 		../../ModeleChator/modelChator.h \
 		packet.h \
 		../controllerInput/controllerInput.h \
-		../ServerConnector/connector.h
+		../ServerConnector/connector.h \
+		abstractOutputInterface.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpretor.o interpretor.cpp
 
 main.o: main.cpp interpretor.h \
 		../../ModeleChator/modelChator.h \
 		packet.h \
 		../controllerInput/controllerInput.h \
-		../ServerConnector/connector.h
+		../ServerConnector/connector.h \
+		abstractOutputInterface.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 modelChator.o: modelChator.cpp ../../ModeleChator/modelChator.h

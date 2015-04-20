@@ -2,6 +2,8 @@
 
 ModelChator::ModelChator() {}
 
+ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _content("") {}
+
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
                            const QDateTime& date, const QString& content) :
     _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _content(content) {}
