@@ -1,1 +1,1 @@
-../ServerConnector/connector.cpp
+../Interpretor/connector.cpp

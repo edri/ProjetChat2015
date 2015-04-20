@@ -1,6 +1,6 @@
-CONFIG += c++11
+CONFIG += c++11 console
 
-QT += core websockets
+QT += core websockets sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,5 +10,6 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += listener.h connector.h
-SOURCES += main.cpp listener.cpp connector.cpp
+
+HEADERS += connector.h interpretor.h packet.h modelChator.h controllerInput.h listener.h controllerDB.h controllerUser.h controllerRoom.h
+SOURCES += connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp listener.cpp controllerDB.cpp controllerUser.cpp controllerRoom.cpp
