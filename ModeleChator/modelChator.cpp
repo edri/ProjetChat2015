@@ -2,7 +2,9 @@
 
 ModelChator::ModelChator() {}
 
-ModelMessage::ModelMessage() {}
+ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
+                           const QDateTime& date, const QString& content) :
+    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _content(content) {}
 ModelMessage::~ModelMessage(){}
 
 ModelUser::ModelUser() {}
@@ -12,7 +14,6 @@ ModelUser::ModelUser(const quint32 idUser, const QString& userName, const QStrin
                      const QString& image) :
     _idUser(idUser), _userName(userName), _firstName(firstName),_lastName(lastName), _isConnected(isConnected),
     _lastConnection(lastConnection), _image(image) {}
-
 ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
@@ -89,6 +90,17 @@ void ModelChator::addRoom(ModelRoom *room)
     _rooms.insert(room->getIdRoom(), room);
 }
 
+void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QString &content)
+{
+    ModelMessage* message = new ModelMessage(idMessage, idRoom, idUser, date, content);
+    _messages.insert(idMessage, message);
+}
+
+void ModelRoom::addMessage(ModelMessage *message)
+{
+    _messages.insert(message->getIdMessage(), message);
+}
+
 QMap<quint32, ModelRoom*> ModelChator::getUserRooms(const quint32 idUser) const
 {
     QMap<quint32, ModelRoom*> userRooms;
@@ -152,3 +164,7 @@ bool ModelRoom::isVisible() const
     return _visible;
 }
 
+quint32 ModelMessage::getIdMessage() const
+{
+    return _idMessage;
+}

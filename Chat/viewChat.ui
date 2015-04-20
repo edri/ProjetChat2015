@@ -366,27 +366,6 @@
       <string>message</string>
      </property>
     </column>
-    <item>
-     <property name="text">
-      <string>26.03.2015</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>[09:19] &lt;jan&gt;</string>
-      </property>
-      <property name="text">
-       <string>Hey !</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>[09:54] &lt;ben&gt;</string>
-      </property>
-      <property name="text">
-       <string>Salut</string>
-      </property>
-     </item>
-    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

@@ -52,14 +52,21 @@ class ModelChator
         void addRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users);
         void addRoom(ModelRoom* room);
 
+        /*
+         * Created by Miguel Santamaria, on 20.04.2015 12:22
+         *
+         * Get the room identified by the given id.
+         * Used anytime we need to get a room in the application.
+         *
+         * Last edited by Miguel Santamaria, on 20.04.2015 12:22
+        */
         ModelRoom* getRoom(const quint32 idRoom) const;
 
         void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture);
 		void deleteRoom(const quint32 idRoom);
 		
-		ModelMessage getMessage(const quint32 idRoom, const quint32 idMessage) const;
-		void addMessage(const quint32 idRoom, const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
-		void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents);
+        ModelMessage getMessage(const quint32 idRoom, const quint32 idMessage) const;
+        void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents);
 		void deleteMessage(const quint32 idRoom, const quint32 idMessage);	
 		
         ModelUser getUser(const quint32 idRoom, const quint32 idUser) const;
@@ -88,8 +95,18 @@ class ModelRoom
         ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins);
         ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users);
 		~ModelRoom();
-		        
-		void addMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& contents);
+
+        /*
+         * Created by Miguel Santamaria, on 19.04.2015 21:20
+         *
+         * Add a message to the messages list.
+         * Used anytime we need to store a message in the application.
+         *
+         * Last edited by Miguel Santamaria, on 1+.04.2015 21:20
+        */
+        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
+        void addMessage(ModelMessage* message);
+
 		void modifyMessage(const quint32 idMessage, const QString& contents);
 		void deleteMessage(const quint32 idMessage);
 		
@@ -98,6 +115,7 @@ class ModelRoom
 
         // Getters
         quint32 getIdRoom() const;
+        QMap<quint32, ModelMessage*> getMessages() const;
         QMap<quint32, ModelUser*> getUsers() const;
         QString getName() const;
         QString getPicture() const;
@@ -116,19 +134,20 @@ class ModelMessage
 
 	private :
         quint32 _idMessage;
+        quint32 _idRoom;
         quint32 _idUser;
         QDateTime _date;
         QString _content;
 	
 	public :
         ModelMessage();
-        ModelMessage(const quint32 idMessage, const quint32 idUser, const QDateTime& date, const QString& content);
+        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
 		~ModelMessage();
 		
         void modify(const QString& content);
 
         // Getters
-        int getIdMessage();
+        quint32 getIdMessage() const;
 };
 
 class ModelUser

@@ -18,10 +18,11 @@ public:
     ControllerChat(ModelChator* model, ModelUser* currentUser);
     ~ControllerChat();
 
-    void showView();
+    void showView() const;
 
 public slots :
-    void loadRooms(const quint32 idUser);
+    void loadRooms(const quint32 idUser) const;
+    void loadRoomMessages(const quint32 idRoom) const;
 
 };
 
