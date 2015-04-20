@@ -9,6 +9,8 @@ void Interpretor::sendMessage(const ModelMessage& message)
     
     stream << (quint32) MessageType::MESSAGE << message;
     // Envoyer les données quelque part
+    //test
+    out = data;
 }
 
 void Interpretor::login(const QString& pseudo, const QString& pass)
@@ -157,9 +159,4 @@ void Interpretor::processData(const QByteArray& data)
         default:
         break;
     }
-}
-
-void Interpretor::test(std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> fs)
-{
-    bridge = fs;
 }

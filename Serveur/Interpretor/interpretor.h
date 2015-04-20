@@ -21,13 +21,9 @@ class Interpretor
     void disconnect(const quint32 idUser);
     
     void processData(const QByteArray& data);
-    
+QByteArray out;    
     private:
     // Pointeur sur l'objet réseau
-    
-    // test
-    void test(std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> fs);
-    std::array<void (*) (const QByteArray&), (quint32) MessageType::ERROR> bridge;
 };
 
 #endif

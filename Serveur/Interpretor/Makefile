@@ -319,15 +319,16 @@ compiler_clean:
 ####### Compile
 
 interpretor.o: interpretor.cpp interpretor.h \
-		modelChator.h \
+		../../ModeleChator/modelChator.h \
 		packet.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpretor.o interpretor.cpp
 
 main.o: main.cpp interpretor.h \
-		modelChator.h
+		../../ModeleChator/modelChator.h \
+		packet.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-modelChator.o: modelChator.cpp modelChator.h
+modelChator.o: modelChator.cpp ../../ModeleChator/modelChator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o modelChator.o modelChator.cpp
 
 packet.o: packet.cpp packet.h
