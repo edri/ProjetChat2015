@@ -14,14 +14,14 @@ class Connector : public QObject
     Connector();
     void connectToServer(QString url);
     void send(const QByteArray& data);
+    bool connected();
     
     private slots:
-    void connected();
     void sslError(const QList<QSslError>& errors);
     
     private:
     QWebSocket _socket;
-    bool isConnected;
+    bool _isConnected;
 };
 
 #endif

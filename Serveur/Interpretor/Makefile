@@ -12,13 +12,13 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_NO_DEBUG -DQT_WEBSOCKETS_LIB -DQT_WIDGETS_LIB -DQT_SQL_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -m64 -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I.
+INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWebSockets -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtSql -isystem /usr/include/x86_64-linux-gnu/qt5/QtNetwork -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I.
 LINK          = g++
 LFLAGS        = -m64 -Wl,-O1
-LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5WebSockets -lQt5Widgets -lQt5Sql -lQt5Network -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
@@ -45,14 +45,21 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = interpretor.cpp \
+SOURCES       = connector.cpp \
+		interpretor.cpp \
 		main.cpp \
 		modelChator.cpp \
-		packet.cpp 
-OBJECTS       = interpretor.o \
+		packet.cpp \
+		controllerInput.cpp moc_connector.cpp \
+		moc_controllerInput.cpp
+OBJECTS       = connector.o \
+		interpretor.o \
 		main.o \
 		modelChator.o \
-		packet.o
+		packet.o \
+		controllerInput.o \
+		moc_connector.o \
+		moc_controllerInput.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -111,10 +118,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Interpretor.pro interpretor.cpp \
+		Interpretor.pro connector.cpp \
+		interpretor.cpp \
 		main.cpp \
 		modelChator.cpp \
-		packet.cpp
+		packet.cpp \
+		controllerInput.cpp
 QMAKE_TARGET  = interpretor
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = interpretor
@@ -206,9 +215,12 @@ Makefile: Interpretor.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		Interpretor.pro \
+		/usr/lib/x86_64-linux-gnu/libQt5WebSockets.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Sql.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Core.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5Network.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
-		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
+		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl
 	$(QMAKE) -o Makefile Interpretor.pro
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf:
@@ -269,9 +281,12 @@ Makefile: Interpretor.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 Interpretor.pro:
+/usr/lib/x86_64-linux-gnu/libQt5WebSockets.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Sql.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Core.prl:
+/usr/lib/x86_64-linux-gnu/libQt5Network.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
-/usr/lib/x86_64-linux-gnu/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile Interpretor.pro
 
@@ -279,7 +294,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/interpretor1.0.0 || mkdir -p .tmp/interpretor1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.h packet.h modelChator.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents interpretor.cpp main.cpp modelChator.cpp packet.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.h interpretor.h packet.h modelChator.h controllerInput.h .tmp/interpretor1.0.0/ && $(COPY_FILE) --parents connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp .tmp/interpretor1.0.0/ && (cd `dirname .tmp/interpretor1.0.0` && $(TAR) interpretor1.0.0.tar interpretor1.0.0 && $(COMPRESS) interpretor1.0.0.tar) && $(MOVE) `dirname .tmp/interpretor1.0.0`/interpretor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/interpretor1.0.0
 
 
 clean:compiler_clean 
@@ -302,8 +317,16 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_connector.cpp moc_controllerInput.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_connector.cpp moc_controllerInput.cpp
+moc_connector.cpp: connector.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/lyuyhn/Documents/HEIG/Semestre 4/Projet/GIT/ProjetChat2015/Serveur/Interpretor' -I'/home/lyuyhn/Documents/HEIG/Semestre 4/Projet/GIT/ProjetChat2015/Serveur/Interpretor' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWebSockets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include connector.h -o moc_connector.cpp
+
+moc_controllerInput.cpp: ../../ModeleChator/modelChator.h \
+		controllerInput.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/lyuyhn/Documents/HEIG/Semestre 4/Projet/GIT/ProjetChat2015/Serveur/Interpretor' -I'/home/lyuyhn/Documents/HEIG/Semestre 4/Projet/GIT/ProjetChat2015/Serveur/Interpretor' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWebSockets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include controllerInput.h -o moc_controllerInput.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -314,18 +337,25 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_moc_header_clean 
 
 ####### Compile
 
+connector.o: connector.cpp ../ServerConnector/connector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o connector.o connector.cpp
+
 interpretor.o: interpretor.cpp interpretor.h \
 		../../ModeleChator/modelChator.h \
-		packet.h
+		packet.h \
+		../controllerInput/controllerInput.h \
+		../ServerConnector/connector.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpretor.o interpretor.cpp
 
 main.o: main.cpp interpretor.h \
 		../../ModeleChator/modelChator.h \
-		packet.h
+		packet.h \
+		../controllerInput/controllerInput.h \
+		../ServerConnector/connector.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 modelChator.o: modelChator.cpp ../../ModeleChator/modelChator.h
@@ -333,6 +363,16 @@ modelChator.o: modelChator.cpp ../../ModeleChator/modelChator.h
 
 packet.o: packet.cpp packet.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o packet.o packet.cpp
+
+controllerInput.o: controllerInput.cpp ../controllerInput/controllerInput.h \
+		../../ModeleChator/modelChator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o controllerInput.o controllerInput.cpp
+
+moc_connector.o: moc_connector.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_connector.o moc_connector.cpp
+
+moc_controllerInput.o: moc_controllerInput.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_controllerInput.o moc_controllerInput.cpp
 
 ####### Install
 

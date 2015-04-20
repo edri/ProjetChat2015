@@ -2,6 +2,8 @@
 #include <QByteArray>
 #include <QDataStream>
 
+Interpretor::Interpretor(ControllerInput* dispatcher) : _dispatcher(dispatcher){};
+
 void Interpretor::sendMessage(const ModelMessage& message)
 {
     QByteArray data;
@@ -11,13 +13,12 @@ void Interpretor::sendMessage(const ModelMessage& message)
     // Envoyer les données quelque part
 }
 
-void Interpretor::login(const QString& pseudo, const QString& pass)
+void Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
-    // Le mot de passe est déjà hâché????????????????????
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::LOGIN << pseudo << pass;
+    stream << (quint32) MessageType::LOGIN << pseudo << hashedPwd;
     // Envoyer les données quelque part
 }
 
@@ -148,7 +149,7 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::ERROR:
         {
-            Error error;
+            ModelError error;
             stream >> error;
             // Envoyer cet objet quelque part
         }

@@ -4,7 +4,7 @@
 
 CONFIG += c++11
 
-QT += core gui
+QT += core gui websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,5 +14,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += interpretor.h packet.h modelChator.h
-SOURCES += interpretor.cpp main.cpp modelChator.cpp packet.cpp
+HEADERS += connector.h interpretor.h packet.h modelChator.h controllerInput.h
+SOURCES += connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp

@@ -1,5 +1,5 @@
-#ifndef CONNECTOR_H
-#define CONNECTOR_H
+#ifndef CONTROLLER_INPUT_H
+#define CONTROLLER_INPUT_H
 
 #include <QtCore/QObject>
 #include "modelChator.h"

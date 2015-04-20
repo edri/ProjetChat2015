@@ -6,13 +6,17 @@
 //#include <QObject>
 #include <QByteArray>
 #include <array>
+#include "controllerInput.h"
+#include "connector.h"
 
 //class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
 class Interpretor
 {
     public:
+    Interpretor(ControllerInput* dispatcher);
+    
     void sendMessage(const ModelMessage& message);
-    void login(const QString& pseudo, const QString& pass);
+    void login(const QString& pseudo, const QString& hashedPwd);
     void createAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
     void sendError(const QString& text);
@@ -24,6 +28,8 @@ class Interpretor
     
     private:
     // Pointeur sur l'objet réseau
+    ControllerInput* _dispatcher;
+    Connector _netConnector;
 };
 
 #endif
