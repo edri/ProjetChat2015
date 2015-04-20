@@ -1,9 +1,6 @@
 #include "interpretor.h"
 #include <QByteArray>
-
-// Test
 #include <QDataStream>
-#include <iostream>
 
 void Interpretor::sendMessage(const ModelMessage& message)
 {
@@ -12,9 +9,6 @@ void Interpretor::sendMessage(const ModelMessage& message)
     
     stream << (quint32) MessageType::MESSAGE << message;
     // Envoyer les données quelque part
-    //test
-    out = data;
-    std::cout << "Envoi de message" << std::endl;
 }
 
 void Interpretor::login(const QString& pseudo, const QString& pass)
@@ -114,7 +108,6 @@ void Interpretor::processData(const QByteArray& data)
             ModelMessage message;
             stream >> message;
             // Envoyer cet objet quelque part
-            std::cout << "Reception de message" << std::endl;
         }
         break;
         

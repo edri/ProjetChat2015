@@ -21,7 +21,7 @@ class Interpretor
     void disconnect(const quint32 idUser);
     
     void processData(const QByteArray& data);
-QByteArray out;    
+    
     private:
     // Pointeur sur l'objet réseau
 };
