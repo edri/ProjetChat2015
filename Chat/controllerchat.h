@@ -10,19 +10,19 @@ class ControllerChat : public QObject
 {
     Q_OBJECT
 private:
-    ViewChat* view;
-    ModelChator* model;
+    ViewChat* _view;
+    ModelChator* _model;
+    ModelUser* _currentUser;
 
 public:
-    ControllerChat(ModelChator* model);
+    ControllerChat(ModelChator* model, ModelUser* currentUser);
     ~ControllerChat();
 
-    void showView();
+    void showView() const;
 
 public slots :
-    void loadRooms(const quint32 idUser);
-    //void loadMessages(const quint32 idRoom);
-    void addMessage(const quint32 idUser, const quint32 idRoom, const QString message);
+    void loadRooms(const quint32 idUser) const;
+    void loadRoomMessages(const quint32 idRoom) const;
 
 };
 

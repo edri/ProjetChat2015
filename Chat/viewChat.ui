@@ -188,76 +188,6 @@
       <string>Liste des salles de discussion</string>
      </property>
     </column>
-    <item>
-     <property name="text">
-      <string>Abcdef</string>
-     </property>
-     <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/rooms/img/delete.png</normaloff>:/rooms/img/delete.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>HEIG-VD</string>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/rooms/img/aboutShoe.png</normaloff>:/rooms/img/aboutShoe.png</iconset>
-     </property>
-     <item>
-      <property name="text">
-       <string>benoist</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>miguel</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>bastien</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>mel</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>jan</string>
-      </property>
-     </item>
-    </item>
-    <item>
-     <property name="text">
-      <string>Test</string>
-     </property>
-     <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/rooms/img/edit.png</normaloff>:/rooms/img/edit.png</iconset>
-     </property>
-    </item>
    </widget>
    <widget class="QScrollArea" name="scrollArea_2">
     <property name="geometry">
@@ -436,27 +366,6 @@
       <string>message</string>
      </property>
     </column>
-    <item>
-     <property name="text">
-      <string>26.03.2015</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>[09:19] &lt;jan&gt;</string>
-      </property>
-      <property name="text">
-       <string>Hey !</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>[09:54] &lt;ben&gt;</string>
-      </property>
-      <property name="text">
-       <string>Salut</string>
-      </property>
-     </item>
-    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -514,8 +423,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

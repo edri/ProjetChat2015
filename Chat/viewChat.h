@@ -15,11 +15,18 @@ class ViewChat : public QMainWindow
 
     friend ControllerChat;
 
+private:
+    Ui::viewChat* _ui;
+
 public:
     explicit ViewChat(QWidget *parent = 0);
     ~ViewChat();
 
+    void setConnectedAsText(const QString& user);
     void addRoom(const quint32 roomId, const QString& roomName, const QString& roomPicture);
+    void addUserToRoom(const quint32 roomId, const quint32 userId, const QString& userName, const QString& image, const bool isConnected);
+    void selectFirstRoom() const;
+    void loadRoomMessage(const quint32 messageId, const QString& userName, const QString& content, const QDateTime& date);
 
 private slots:
     void on_btn_send_clicked();
@@ -27,9 +34,10 @@ private slots:
     void on_btn_newRoom_clicked();
     void on_btn_joinRoom_clicked();
     void on_btn_leaveRoom_clicked();
+    void on_tre_rooms_itemSelectionChanged();
 
-private:
-    Ui::viewChat *ui;
+signals:
+    void requestLoadRoomMessages(const quint32 roomId);
 };
 
 #endif // VIEWCHAT_H
