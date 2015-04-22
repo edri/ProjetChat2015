@@ -1,6 +1,6 @@
 #include <QtCore/QDebug>
 #include "controllerInput.h"
-#include "modelChator.h"
+#include "../../ModeleChator/modelChator.h"
 
 void ClientControllerInput::receiveMessage(const ModelMessage& message)
 {

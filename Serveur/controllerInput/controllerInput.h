@@ -2,7 +2,7 @@
 #define CONTROLLER_INPUT_H
 
 #include <QtCore/QObject>
-#include "modelChator.h"
+#include "../../ModeleChator/modelChator.h"
 
 class ControllerInput : public QObject
 {
