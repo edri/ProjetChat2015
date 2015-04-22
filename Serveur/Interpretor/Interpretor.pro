@@ -14,5 +14,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += connector.h interpretor.h packet.h modelChator.h controllerInput.h
-SOURCES += connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp
+HEADERS += ../ServerConnector/connector.h interpretor.h packet.h ../../ModeleChator/modelChator.h ../controllerInput/controllerInput.h
+SOURCES += ../ServerConnector/connector.cpp interpretor.cpp main.cpp ../../ModeleChator/modelChator.cpp packet.cpp ../controllerInput/controllerInput.cpp

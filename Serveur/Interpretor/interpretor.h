@@ -1,12 +1,12 @@
 #ifndef INTERPRETOR_H
 #define INTERPRETOR_H
 
-#include "modelChator.h"
+#include "../../ModeleChator/modelChator.h"
 #include "packet.h"
 //#include <QObject>
 #include <QByteArray>
-#include "controllerInput.h"
-#include "connector.h"
+#include "../controllerInput/controllerInput.h"
+#include "../ServerConnector/connector.h"
 
 //class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
 class Interpretor
