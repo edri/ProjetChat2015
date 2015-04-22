@@ -2,7 +2,7 @@
 #include <QString>
 #include "listener.h"
 #include "controllerDB.h"
-#include "interpretor.h"
+#include "../Interpretor/interpretor.h"
 #include "serverControllerInput.h"
 #include "controllerRoom.h"
 #include "controllerUser.h"

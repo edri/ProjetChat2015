@@ -2,8 +2,8 @@
 #include <QFile>
 #include <QWebSocket>
 #include <QSslKey>
-#include "controllerInput.h"
-#include "interpretor.h"
+#include "../controllerInput/controllerInput.h"
+#include "../Interpretor/interpretor.h"
 
 Listener::Listener(quint16 port) : _server("Chator", QWebSocketServer::SecureMode, this)
 {

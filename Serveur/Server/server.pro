@@ -11,5 +11,5 @@ INCLUDEPATH += .
 
 # Input
 
-HEADERS += connector.h interpretor.h packet.h modelChator.h controllerInput.h listener.h controllerDB.h controllerUser.h controllerRoom.h serverControllerInput.h
-SOURCES += connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp listener.cpp controllerDB.cpp controllerUser.cpp controllerRoom.cpp serverControllerInput.cpp
+HEADERS += ../Interpretor/interpretor.h ../Interpretor/packet.h ../../ModeleChator/modelChator.h ../controllerInput/controllerInput.h listener.h controllerDB.h controllerUser.h controllerRoom.h serverControllerInput.h
+SOURCES += ../Interpretor/interpretor.cpp main.cpp ../../ModeleChator/modelChator.cpp ../Interpretor/packet.cpp ../controllerInput/controllerInput.cpp listener.cpp controllerDB.cpp controllerUser.cpp controllerRoom.cpp serverControllerInput.cpp
