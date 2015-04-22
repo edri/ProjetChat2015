@@ -10,5 +10,5 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-HEADERS += test.h connector.h interpretor.h packet.h modelChator.h controllerInput.h controllerOutput.h
-SOURCES += test.cpp connector.cpp interpretor.cpp main.cpp modelChator.cpp packet.cpp controllerInput.cpp controllerOutput.cpp
+HEADERS += test.h ../ServerConnector/connector.h ../Interpretor/interpretor.h ../Interpretor/packet.h ../../ModeleChator/modelChator.h ../controllerInput/controllerInput.h controllerOutput.h
+SOURCES += test.cpp ../ServerConnector/connector.cpp ../Interpretor/interpretor.cpp main.cpp ../../ModeleChator/modelChator.cpp ../Interpretor/packet.cpp ../controllerInput/controllerInput.cpp controllerOutput.cpp

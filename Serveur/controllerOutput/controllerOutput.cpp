@@ -1,5 +1,5 @@
 #include "controllerOutput.h"
-#include "modelChator.h"
+#include "../../ModeleChator/modelChator.h"
 
 ControllerOutput::ControllerOutput(Connector& connector, Interpretor& interpretor) : _connector(connector), _interpretor(interpretor) {};
 

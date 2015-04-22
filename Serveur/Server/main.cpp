@@ -3,7 +3,9 @@
 #include "listener.h"
 #include "controllerDB.h"
 #include "interpretor.h"
-#include "controllerInput.h"
+#include "serverControllerInput.h"
+#include "controllerRoom.h"
+#include "controllerUser.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,9 +16,11 @@ int main(int argc, char *argv[])
     
     ControllerDB cdb("db.sqlite");
     
+    ControllerRoom cr(cdb);
+    ControllerUser cu(cdb);
+    
     ServerControllerInput sci;
     Interpretor i(sci);
-    
     
     return a.exec();
 }

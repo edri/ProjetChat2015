@@ -1,9 +1,9 @@
 #include <QtCore/QCoreApplication>
 #include <QThread>
 #include "controllerOutput.h"
-#include "interpretor.h"
-#include "controllerInput.h"
-#include "connector.h"
+#include "../Interpretor/interpretor.h"
+#include "../controllerInput/controllerInput.h"
+#include "../ServerConnector/connector.h"
 #include <iostream>
 #include "test.h"
 

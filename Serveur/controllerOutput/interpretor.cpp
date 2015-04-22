@@ -1,1 +1,0 @@
-../Interpretor/interpretor.cpp

@@ -2,7 +2,7 @@
 #define CONTROLLER_OUTPUT_H
 
 #include <QtCore/QObject>
-#include "interpretor.h"
+#include "../Interpretor/interpretor.h"
 
 class ControllerOutput
 {

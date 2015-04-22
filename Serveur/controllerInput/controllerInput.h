@@ -21,13 +21,4 @@ class ClientControllerInput : public ControllerInput
     virtual void receiveMessage(const ModelMessage& message);
 };
 
-class ServerControllerInput : public ControllerInput
-{
-    Q_OBJECT
-    
-    public:
-    virtual void receiveMessage(const ModelMessage& message);
-    virtual void login(const QString& pseudo, const QString& hashedPWD);
-};
-
 #endif

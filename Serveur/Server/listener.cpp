@@ -24,7 +24,7 @@ Listener::Listener(quint16 port) : _server("Chator", QWebSocketServer::SecureMod
 
     if (_server.listen(QHostAddress::AnyIPv4, port))
     {
-        qDebug() << "SSL Echo Server listening on port" << port;
+        qDebug() << "Chator listening on port" << port;
         connect(&_server, &QWebSocketServer::newConnection, this, &Listener::newConnection);
         connect(&_server, &QWebSocketServer::sslErrors, this, &Listener::SSLErrors);
     }
@@ -53,10 +53,10 @@ void Listener::receive(QByteArray message)
     Q_UNUSED(message)
     qDebug() << "New message";
     
-    // TEST
-    ServerControllerInput sci;
+    // TEST____________________________________________________________________________________________
+    /*ServerControllerInput sci;
     Interpretor i(sci);
-    i.processData(message);
+    i.processData(message);*/
 }
 
 void Listener::disconnected()
