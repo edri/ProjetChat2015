@@ -40,6 +40,16 @@ class ModelChator
         */
         void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QString& image);
         void addUser(ModelUser* user);
+        /*
+         * Created by Miguel Santamaria, on 21.04.2015 09:12
+         *
+         * Get the user identified by the given id.
+         * Used anytime we need to get an user in the application.
+         *
+         * Last edited by Miguel Santamaria, on 21.04.2015 09:12
+        */
+        ModelUser* getUser(const quint32 idUser) const;
+
 
         /*
          * Created by Miguel Santamaria, on 18.04.2015 00:18
@@ -51,7 +61,6 @@ class ModelChator
         */
         void addRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users);
         void addRoom(ModelRoom* room);
-
         /*
          * Created by Miguel Santamaria, on 20.04.2015 12:22
          *
@@ -69,8 +78,7 @@ class ModelChator
         void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents);
 		void deleteMessage(const quint32 idRoom, const quint32 idMessage);	
 		
-        ModelUser getUser(const quint32 idRoom, const quint32 idUser) const;
-		ModelUser addAdmin(const quint32 idRoom, const quint32 idUser);
+        ModelUser addAdmin(const quint32 idRoom, const quint32 idUser);
 };
 
 

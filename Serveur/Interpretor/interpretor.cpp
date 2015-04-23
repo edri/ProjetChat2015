@@ -47,7 +47,7 @@ QByteArray Interpretor::sendError(const QString& text)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::ERROR << text;
+    stream << (quint32) MessageType::SERVER_ERROR << text;
     return data;
 }
 
@@ -147,7 +147,7 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
-        case MessageType::ERROR:
+        case MessageType::SERVER_ERROR:
         {
             ModelError error;
             stream >> error;

@@ -8,10 +8,10 @@ int main(int argc, char *argv[])
 
     ModelChator* model = new ModelChator();
     // Cinq utilisateurs de test.
-    ModelUser* user1 = new ModelUser(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), "541c2d4081e22.jpg");
-    ModelUser* user2 = new ModelUser(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), "5470a45364910.jpg");
+    ModelUser* user1 = new ModelUser(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), "54226b6d8bfa4.jpg");
+    ModelUser* user2 = new ModelUser(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), "5470a45364910.png");
     ModelUser* user3 = new ModelUser(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), "54226b6cd2c4b.jpg");
-    ModelUser* user4 = new ModelUser(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), "54226b6d8bfa4.jpg");
+    ModelUser* user4 = new ModelUser(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), "541c2d4081e22.jpg");
     ModelUser* user5 = new ModelUser(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), "54226b6e4cffe.jpg");
     model->addUser(user1);
     model->addUser(user2);
