@@ -10,6 +10,7 @@ class ControllerDB
     ControllerDB(const QString& dbName = "db.sqlite");
     bool connect();
     bool init();
+    bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
     
     private :
     QSqlDatabase _db;

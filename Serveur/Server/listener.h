@@ -6,23 +6,25 @@
 #include <QtCore/QByteArray>
 #include <QtNetwork/QSslError>
 #include <QWebSocketServer>
+#include "../Interpretor/interpretor.h"
+#include "serverModel.h"
 
 class Listener : public QObject
 {
     Q_OBJECT
 public:
-    Listener(quint16 port);
+    Listener(quint16 port, Interpretor& interpretor);
     ~Listener();
 
 public slots:
     void newConnection();
-    void receive(QByteArray message);
     void disconnected();
     void SSLErrors(const QList<QSslError> &errors);
 
 private:
     QWebSocketServer _server;
-    QList<QWebSocket *> _clients;
+    QList<ChatorClient*> _clients;
+    Interpretor& _interpretor;
 };
 
 #endif

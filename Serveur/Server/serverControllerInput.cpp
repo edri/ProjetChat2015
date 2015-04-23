@@ -1,13 +1,15 @@
 #include "serverControllerInput.h"
 
-void ServerControllerInput::receiveMessage(const ModelMessage& message)
+ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom) : _controllerUser(controllerUser), _controllerRoom(controllerRoom) {}
+
+void ServerControllerInput::receiveMessage(const ModelMessage& message, QObject* sender)
 {
     Q_UNUSED(message);
+    Q_UNUSED(sender);
 }
 
-void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD)
+void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
 {
-    Q_UNUSED(pseudo);
-    Q_UNUSED(hashedPWD);
-    qDebug() << "login from: " << pseudo << hashedPWD;
+    ChatorClient* client = (ChatorClient*) sender;
+    _controllerUser.login(pseudo, hashedPWD, client);
 }

@@ -42,12 +42,12 @@ QByteArray Interpretor::sendInfoUser(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::sendError(const QString& text)
+QByteArray Interpretor::sendError(const ModelError& error)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::SERVER_ERROR << text;
+    stream << (quint32) MessageType::SERVER_ERROR << error;
     return data;
 }
 
@@ -108,7 +108,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelMessage message;
             stream >> message;
-            _dispatcher.receiveMessage(message);
+            _dispatcher.receiveMessage(message, sender());
         }
         break;
         
@@ -117,7 +117,7 @@ void Interpretor::processData(const QByteArray& data)
             QString pseudo;
             QString hashedPwd;
             stream >> pseudo >> hashedPwd;
-            _dispatcher.login(pseudo, hashedPwd);
+            _dispatcher.login(pseudo, hashedPwd, sender());
         }
         break;
         
