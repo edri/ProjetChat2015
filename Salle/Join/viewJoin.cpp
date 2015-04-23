@@ -12,18 +12,18 @@ ViewJoin::ViewJoin()
     layouts = new QList<QLayout*>();
     
     // Initialization of the GUI elements.
-    label_title = new QLabel("Rejoindre une salle");
+    label_title = new QLabel(tr("Rejoindre une salle"));
     label_title->setFont(QFont(this->font().family(), 
                          this->font().pointSize() * 2, QFont::DemiBold));
     label_title->setAlignment(Qt::AlignCenter);
     
-    label_name = new QLabel("Nom de la salle");
-    label_rooms = new QLabel("Résultat(s)");
+    label_name = new QLabel(tr("Nom de la salle"));
+    label_rooms = new QLabel(tr("Résultat(s)"));
     
     ledit_name = new QLineEdit("");
     
-    btn_join = new QPushButton("Rejoindre");
-    btn_cancel = new QPushButton("Annuler");
+    btn_join = new QPushButton(tr("Rejoindre"));
+    btn_cancel = new QPushButton(tr("Annuler"));
     
     list_rooms = new QListView();
     

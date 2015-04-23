@@ -3,6 +3,8 @@
 #include "viewRoom.h"
 #include "controllerRoom.h"
 
+#include <iostream>
+
  ViewRoom:: ViewRoom()
 {
     // Setting attributes
@@ -51,15 +53,12 @@
     
     btn_browse = new QPushButton(tr("Parcourir..."));
     btn_add = new QPushButton(tr("Ajouter"));
-    btn_remove = new QPushButton(tr("Enlever"));
-    btn_clear = new QPushButton(tr("Vider"));
+    btn_remove = new QPushButton(tr(""));
+    btn_admin = new QPushButton(tr("Admin"));
     btn_cancel = new QPushButton(tr("Annuler"));
     btn_create = new QPushButton("");
     
-    lst_members = new QListView();
-    
-    sim_members = new QStandardItemModel();
-    lst_members->setModel(sim_members);
+    lsw_members = new QListWidget();
     
     // Placing the elements inside layouts.
     
@@ -76,7 +75,7 @@
     QHBoxLayout* hbl_remove = new QHBoxLayout();
     layouts->append(hbl_remove);
     hbl_remove->addWidget(btn_remove);
-    hbl_remove->addWidget(btn_clear);
+    hbl_remove->addWidget(btn_admin);
     
     QHBoxLayout* hbl_down = new QHBoxLayout();
     layouts->append(hbl_down);
@@ -106,15 +105,19 @@
     vbl_main->addLayout(hbl_browse);
     vbl_main->addWidget(lbl_member);
     vbl_main->addLayout(hbl_member);
-    vbl_main->addWidget(lst_members);
+    vbl_main->addWidget(lsw_members);
     vbl_main->addLayout(hbl_remove);
     vbl_main->addLayout(hbl_visibilityOptions);
     vbl_main->addLayout(hbl_down);
     
     setLayout(vbl_main);
-    
     // Connect signals with public slots.
-    connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
+    /*connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
+    connect(btn_add, SIGNAL(clicked()), this, SIGNAL(add()));
+    connect(ldt_member, SIGNAL(returnPressed()), this, SIGNAL(add()));
+    connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
+    connect(btn_remove, SIGNAL(clicked()), this, SIGNAL(remove()));
+    connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));*/
 }
 
 ViewRoom::~ ViewRoom()
@@ -137,8 +140,7 @@ ViewRoom::~ ViewRoom()
     delete btn_add;
     delete btn_cancel;
     delete btn_create;
-    delete lst_members;
-    delete sim_members;
+    delete lsw_members;
     
     // Delete layouts.
     for (QLayout* l : *layouts)
@@ -153,7 +155,7 @@ void ViewRoom::clear()
     ldt_logo->clear();
     ldt_member->clear();
     ldt_name->clear();
-    sim_members->clear();
+    lsw_members->clear();
     chk_private->setChecked(false);
     rbt_onInvitation->setChecked(false);
     rbt_visible->setChecked(false);
@@ -168,4 +170,127 @@ void ViewRoom::toggleVisibility()
     {
         rbt_visible->setChecked(true);
     }
+}
+
+void ViewRoom::setTitle(const QString& title)
+{
+    lbl_title->setText(title);
+}
+
+void ViewRoom::setAction(const QString& action)
+{
+    btn_create->setText(action);
+}
+
+
+void ViewRoom::setRemove(const QString& remove)
+{
+    btn_remove->setText(remove);
+}
+
+void ViewRoom::action()
+{
+    if(editing)
+    {
+        emit(edit());
+    }
+    
+    else
+    {
+        emit(create());
+    }
+}
+
+void ViewRoom::loadMembers(const ModelRoom* room)
+{    
+    for(ModelUser* user : room->getUsers())
+    {
+        addMember(user->getUserName());
+    }
+}
+
+void ViewRoom::addMember(const QString name)
+{
+    lsw_members->addItem(name);
+}
+
+void ViewRoom::addMember()
+{
+    QString memberName = ldt_member->text().trimmed();
+    // Check that the name isn't an empty string and that it isn't already in the members list.
+    if (!memberName.isEmpty())
+    {
+        if(lsw_members->findItems(memberName, Qt::MatchExactly).isEmpty())
+        {
+            // TO DO : Check that the user exists.
+            addMember(memberName);
+        }
+        
+        else
+        {
+            QMessageBox::information(this, tr("Opération impossible") ,tr("Cet utilisateur est déjà membre de cette salle"));
+        }
+    }
+    ldt_member->clear();
+}
+
+void ViewRoom::removeMember()
+{
+    // The room already exists so we check the user really wants to remove members
+    // from it. We also must send a command to the server.
+    if (editing)
+    {
+        // Stand in code.
+        lsw_members->removeItemWidget(lsw_members->selectedItems().at(0));
+    }
+    
+    // The room isn't created yet, so we don't care if the members are removed and
+    // it just need to be removed locally.
+    else
+    {
+        lsw_members->removeItemWidget(lsw_members->selectedItems().at(0));
+    }
+}
+
+/*void ViewRoom::loadRoom(const ModelRoom* room)
+{
+    ldt_name->setText(room->getName());
+    sbx_number->setValue(room->getLimit());
+    ldt_logo->setText(room->getPicture());
+    chk_private->setChecked(room->isPrivate());
+    if(room->isPrivate())
+    {
+        rbt_visible->setChecked(room->isVisible());
+        rbt_onInvitation->setChecked(!room->isVisible());
+    }
+}*/
+
+void ViewRoom::setRoomName(const QString& name)
+{
+    ldt_name->setText(name);
+}
+
+void ViewRoom::setNbMessage(const quint32 limit)
+{
+    sbx_number->setValue(limit);
+}
+
+void ViewRoom::setRoomLogo(const QString& picture)
+{
+    ldt_logo->setText(picture);
+}
+
+void ViewRoom::setPrivate(const bool b)
+{
+    chk_private->setChecked(b);
+}
+
+void ViewRoom::setVisible(const bool b)
+{
+    rbt_visible->setChecked(b);
+}
+
+void ViewRoom::setInvitation(const bool b)
+{
+    rbt_onInvitation->setChecked(b);
 }
