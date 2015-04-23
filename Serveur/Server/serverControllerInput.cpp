@@ -2,7 +2,7 @@
 
 ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom) : _controllerUser(controllerUser), _controllerRoom(controllerRoom) {}
 
-void ServerControllerInput::receiveMessage(const ModelMessage& message, QObject* sender)
+void ServerControllerInput::receiveMessage(ModelMessage& message, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
     _controllerRoom.storeMessage(message, client);

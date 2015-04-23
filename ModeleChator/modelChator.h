@@ -161,6 +161,10 @@ class ModelMessage
         quint32 getIdRoom() const;
         QDateTime getDate() const;
         QString getContent() const;
+        
+        // Setters
+        void setIdMessage(const quint32 id);
+        void setDate(QDateTime& date);
 };
 
 class ModelUser
@@ -189,6 +193,10 @@ class ModelUser
         QString getUserName() const;
         bool isConnected() const;
         QString getImage() const;
+        
+        // Setters
+        void setIdUser(const quint32 id);
+        void setConnected(const bool connected);
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

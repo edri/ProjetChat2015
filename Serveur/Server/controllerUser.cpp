@@ -1,7 +1,7 @@
 #include "controllerUser.h"
 #include "../Interpretor/packet.h"
 
-ControllerUser::ControllerUser(ControllerDB& db) : _db(db) {}
+ControllerUser::ControllerUser(ControllerDB& db, ControllerRoom& room) : _db(db), _room(room) {}
 
 void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
 {
@@ -11,6 +11,8 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         client->logged = true;
         ModelUser user = _db.info(id);
         client->socket.sendBinaryMessage(interpretor->sendInfoUser(user));
+        // Clés?
+        // Informer les salles que cet utilisateur s'est connecté
     }
     else
     {

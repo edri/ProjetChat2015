@@ -35,6 +35,16 @@ QDateTime ModelMessage::getDate() const
     return _date;
 }
 
+void ModelMessage::setIdMessage(const quint32 id)
+{
+    _idMessage = id;
+}
+
+void ModelMessage::setDate(QDateTime& date)
+{
+    _date = date;
+}
+
 ModelUser::ModelUser() {}
 
 ModelUser::ModelUser(const quint32 idUser, const QString& userName, const QString& firstName,
@@ -181,6 +191,16 @@ bool ModelUser::isConnected() const
 QString ModelUser::getImage() const
 {
     return _image;
+}
+
+void ModelUser::setIdUser(const quint32 id)
+{
+    _idUser = id;
+}
+
+void ModelUser::setConnected(const bool connected)
+{
+    _isConnected = connected;
 }
 
 QString ModelRoom::getName() const 

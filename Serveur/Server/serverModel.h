@@ -30,7 +30,7 @@ struct ChatorRoom
 {
     quint32 id;
     quint32 admin;
-    QList<ChatorRoom*> rooms;
+    QList<ChatorClient*> clients;
 };
 
 #endif

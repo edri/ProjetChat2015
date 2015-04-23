@@ -15,12 +15,13 @@ int main(int argc, char *argv[])
     ControllerDB cdb("db.sqlite");
     
     ControllerRoom cr(cdb);
-    ControllerUser cu(cdb);
+    ControllerUser cu(cdb, cr);
     
     ServerControllerInput sci(cu, cr);
     Interpretor i(sci);
     
     cu.interpretor = &i;
+    cr.interpretor = &i;
     
     Listener listener(1234, i);
     

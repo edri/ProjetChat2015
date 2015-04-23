@@ -2,10 +2,30 @@
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
-void ControllerRoom::storeMessage(const ModelMessage& message, ChatorClient* client)
+void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 {
     if (message.getIdUser() == client->id)
     {
-        quint32 idMessage = _db.storeMessage(message);
+        message.setIdMessage(_db.storeMessage(message));
+        ChatorRoom& room = onlineRooms[message.getIdRoom()];
+        
+        for (ChatorClient* client : room.clients)
+        {
+            client->socket.sendBinaryMessage(interpretor->sendMessage(message));
+        }
+    }
+}
+
+void ControllerRoom::userConnected(const ModelUser& user, const ChatorClient& currentClient)
+{
+    // Aussi envoyer le modeluser? je pense oui
+    Q_UNUSED(user);
+    
+    for (ChatorRoom* room : currentClient.rooms)
+    {
+        for (ChatorClient* client : room->clients)
+        {
+            client->socket.sendBinaryMessage(interpretor->join(currentClient.id, room->id));
+        }
     }
 }
