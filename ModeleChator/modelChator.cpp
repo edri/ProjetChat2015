@@ -25,6 +25,11 @@ quint32 ModelMessage::getIdUser() const
     return _idUser;
 }
 
+quint32 ModelMessage::getIdRoom() const
+{
+    return _idRoom;
+}
+
 QDateTime ModelMessage::getDate() const
 {
     return _date;

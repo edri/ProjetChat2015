@@ -157,6 +157,7 @@ class ModelMessage
         // Getters
         quint32 getIdMessage() const;
         quint32 getIdUser() const;
+        quint32 getIdRoom() const;
         QDateTime getDate() const;
         QString getContent() const;
 };

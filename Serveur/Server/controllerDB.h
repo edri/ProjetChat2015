@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QString>
 #include "../../ModeleChator/modelChator.h"
+#include "serverModel.h"
 
 class ControllerDB
 {
@@ -13,6 +14,7 @@ class ControllerDB
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
     ModelUser info(const quint32 id);
+    quint32 storeMessage(const ModelMessage& message);
     
     private :
     QSqlDatabase _db;

@@ -90,3 +90,14 @@ ModelUser ControllerDB::info(const quint32 id)
     
     return ModelUser(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), query.record().value("profilePicture").toString());
 }
+
+quint32 ControllerDB::storeMessage(const ModelMessage& message)
+{
+    QSqlQuery query(_db);
+    query.prepare("INSERT INTO message (contents, date, idUser, idRoom, lastUpdated) VALUES (:content, datetime('NOW'), :idUser, :idRoom, datetime('NOW'))");
+    query.bindValue(":content", message.getContent());
+    query.bindValue(":idUser", message.getIdUser());
+    query.bindValue(":idRoom", message.getIdRoom());
+    query.exec();
+    return query.lastInsertId().toUInt();
+}

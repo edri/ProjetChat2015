@@ -4,8 +4,8 @@ ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, Con
 
 void ServerControllerInput::receiveMessage(const ModelMessage& message, QObject* sender)
 {
-    Q_UNUSED(message);
-    Q_UNUSED(sender);
+    ChatorClient* client = (ChatorClient*) sender;
+    _controllerRoom.storeMessage(message, client);
 }
 
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
