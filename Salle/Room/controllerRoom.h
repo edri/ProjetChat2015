@@ -22,10 +22,6 @@ private:
     // Pointer on the current user.
     ModelUser* user;
     
-    // Load members of a room into the model of the list view.
-    void loadMembers(const ModelRoom* room);
-    // Add a member into the model of the list view.
-    void addMember(const QString name);
     // Connect signals from the views
     void connectViewRoom();
     void connectViewJoin();
@@ -49,13 +45,14 @@ public slots :
     // Add the current name entered into the members list. 
     void addMember();
     
-    // Remove the selected member, or all of them.
+    // Remove the selected member.
     void removeMember();
-    void removeMembers();
     
     // Call the creation respectively edition of a room according to the 
     // state of the room view.
     void actionRoom();
+    
+    void joinRoom();
     
     void cancelRoom();
     void cancelJoin();

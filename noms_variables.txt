@@ -11,3 +11,5 @@ SpinBox : sbx_blab
 StandardItemModel : sim_blab
 VBoxLayout : vbl_bla 
 HBoxLayout : hbl_bla
+
+QListWidget : lsw_blba

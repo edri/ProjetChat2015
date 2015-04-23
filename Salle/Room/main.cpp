@@ -7,11 +7,11 @@ int main(int argc, char *argv[])
 
     ModelChator* model = new ModelChator();
     // 5 utilisateurs de test.
-    ModelUser* user1 = new ModelUser(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), *(new QImage("img/54226b6cd2c4b.jpg")));
-    ModelUser* user2 = new ModelUser(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), *(new QImage("img/54226b6cd2c4b.jpg")));
-    ModelUser* user3 = new ModelUser(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), *(new QImage("img/54226b6cd2c4b.jpg")));
-    ModelUser* user4 = new ModelUser(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), *(new QImage("img/54226b6cd2c4b.jpg")));
-    ModelUser* user5 = new ModelUser(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), *(new QImage("img/54226b6cd2c4b.jpg")));
+    ModelUser* user1 = new ModelUser(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
+    ModelUser* user2 = new ModelUser(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
+    ModelUser* user3 = new ModelUser(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
+    ModelUser* user4 = new ModelUser(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
+    ModelUser* user5 = new ModelUser(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
     model->addUser(user1);
     model->addUser(user2);
     model->addUser(user3);
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     model->addRoom(room4);
     
     ControllerRoom w(model, currentUser);
-    w.showRoom(/*room2->getIdRoom()*/);
+    w.showRoom();//room2->getIdRoom());
     
     return a.exec();
 }

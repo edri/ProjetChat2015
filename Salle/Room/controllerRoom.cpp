@@ -1,4 +1,5 @@
 #include "controllerRoom.h"
+#include <iostream>
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* const user)
 {
@@ -13,16 +14,15 @@ ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* const user)
 void ControllerRoom::connectViewRoom()
 {
     // Connect signals with public slots.
-    connect(viewRoom->btn_add, SIGNAL(clicked()), this, SLOT(addMember()));
-    connect(viewRoom->ldt_member, SIGNAL(returnPressed()), this, SLOT(addMember()));
-    connect(viewRoom->btn_remove, SIGNAL(clicked()), this, SLOT(removeMember()));
-    connect(viewRoom->btn_clear, SIGNAL(clicked()), this, SLOT(removeMembers()));
-    connect(viewRoom->btn_cancel, SIGNAL(clicked()), this, SLOT(cancelRoom()));
-    connect(viewRoom->btn_create, SIGNAL(clicked()), this, SLOT(actionRoom()));
+    connect(viewRoom, SIGNAL(add()), this, SLOT(addMember()));
+    connect(viewRoom, SIGNAL(remove()), this, SLOT(removeMember()));
+    connect(viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
+    connect(viewRoom, SIGNAL(create()), this, SLOT(actionRoom()));
 }
 
 void ControllerRoom::connectViewJoin()
 {
+    connect(viewJoin->btn_join, SIGNAL(clicked()), this, SLOT(joinRoom()));
     connect(viewJoin->btn_cancel, SIGNAL(clicked()), this, SLOT(cancelJoin()));
 }
 
@@ -42,14 +42,17 @@ void ControllerRoom::actionRoom()
 void ControllerRoom::showRoom()
 {
     viewRoom = new ViewRoom();
-    connectViewRoom();
+    //connectViewRoom();
+    viewRoom->show();
+    return;
     
     // Set the label and button to have the texts corresponding to creation
-    viewRoom->lbl_title->setText(tr("Nouvelle Salle"));
-    viewRoom->btn_create->setText(tr("Créer"));
+    viewRoom->setTitle(tr("Nouvelle Salle"));
+    viewRoom->setAction(tr("Créer"));
+    viewRoom->setRemove(tr("Enlever"));
     
     // Add the user as a member of the room.
-    addMember(user->getUserName());
+    viewRoom->addMember(user->getUserName());
     
     viewRoom->show();
 }
@@ -57,107 +60,43 @@ void ControllerRoom::showRoom()
 void ControllerRoom::showRoom(const quint32 idRoom)
 {
     viewRoom = new ViewRoom();
-    connectViewRoom();
+    //connectViewRoom();
     viewRoom->editing = true;
-    
-    // Set the label and button to have the texts corresponding to edition
-    viewRoom->lbl_title->setText(tr("Edition Salle"));
-    viewRoom->btn_create->setText(tr("Editer"));
-    
+    viewRoom->show();
+    return;
     // Retrieve the room from the id
-    ModelRoom* room = model->getRoom(idRoom);
+    const ModelRoom* room = model->getRoom(idRoom);
+    // Set the label and button to have the texts corresponding to edition
+    viewRoom->setTitle(tr("Edition Salle"));
+    viewRoom->setAction(tr("Editer"));
+    viewRoom->setRemove(tr("Bannir"));
     
     // Initialize the fields with the values of the room.
-    loadMembers(room);
-    viewRoom->ldt_name->setText(room->getName());
-    viewRoom->sbx_number->setValue(room->getLimit());
-    viewRoom->ldt_logo->setText(room->getPicture());
-    viewRoom->chk_private->setChecked(room->isPrivate());
+    viewRoom->setRoomName(room->getName());
+    viewRoom->setNbMessage(room->getLimit());
+    viewRoom->setRoomLogo(room->getPicture());
+    viewRoom->setPrivate(room->isPrivate());
     if(room->isPrivate())
     {
-        viewRoom->rbt_visible->setChecked(room->isVisible());
-        viewRoom->rbt_onInvitation->setChecked(!room->isVisible());
+        viewRoom->setVisible(room->isVisible());
+        viewRoom->setInvitation(!room->isVisible());
     }
-    
+    viewRoom->loadMembers(room);
     viewRoom->show();
-}
-
-void ControllerRoom::loadMembers(const ModelRoom* room)
-{    
-    for(ModelUser* user : room->getUsers())
-    {
-        addMember(user->getUserName());
-    }
-}
-
-void ControllerRoom::addMember(const QString name)
-{
-    QStandardItem* item = new QStandardItem(name);
-    item->setEditable(false);
-    viewRoom->sim_members->appendRow(item);
 }
 
 void ControllerRoom::addMember()
 {
-    QString memberName = viewRoom->ldt_member->text().trimmed();
-    // Check that the name isn't an empty string and that it isn't already in the members list.
-    if (!memberName.isEmpty())
-    {
-        if(viewRoom->sim_members->findItems(memberName).isEmpty())
-        {
-            // TO DO : Check that the user exists.
-            addMember(memberName);
-        }
-        
-        else
-        {
-            QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cet utilisateur est déjà membre de cette salle"));
-        }
-    }
-    viewRoom->ldt_member->clear();
+    viewRoom->addMember();
 }
 
 void ControllerRoom::removeMember()
 {
-    // The room already exists so we check the user really wants to remove members
-    // from it. We also must send a command to the server.
-    if (viewRoom->editing)
-    {
-        // Stand in code.
-        viewRoom->sim_members->removeRow(viewRoom->lst_members->currentIndex().row());
-    }
-    
-    // The room isn't created yet, so we don't care if the members are removed and
-    // it just need to be removed locally.
-    else
-    {
-        viewRoom->sim_members->removeRow(viewRoom->lst_members->currentIndex().row());
-    }
-}
-
-void ControllerRoom::removeMembers()
-{
-    // The room already exists so we check the user really wants to remove members
-    // from it. We also must send a command to the server.
-    if (viewRoom->editing)
-    {
-        // Stand in code.
-        viewRoom->sim_members->clear();
-        
-    }
-    
-    // The room isn't created yet, so we don't care if the members are removed and
-    // it just need to be removed locally.
-    else
-    {
-        viewRoom->sim_members->clear();
-    }
-    
+    viewRoom->removeMember();
 }
 
 void ControllerRoom::createRoom()
 {
-    
     // The room must have a name.
     QString roomName = viewRoom->ldt_name->text().trimmed();
     if(roomName.isEmpty())
@@ -168,19 +107,35 @@ void ControllerRoom::createRoom()
     }
     
     // The room must have at least a member
-    if(viewRoom->sim_members->rowCount() == 0)
+    if(viewRoom->lsw_members->model()->rowCount() == 0)
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Une salle doit posséder au moins un membre"));
         viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
         return;
     }
     
-    // Here should be creation of room (not yet in interpretor).
+    //(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
+    //      const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users) 
 }
 
 void ControllerRoom::editRoom()
 {
     
+}
+
+
+void ControllerRoom::joinRoom()
+{
+   /*
+    *currentStaff = list_staff->selectionModel()->currentIndex();
+    
+    if(!currentStaff->isValid())
+    {
+        return;
+    }
+    
+    Item* staff = (Item*) model_staff->itemFromIndex(*currentStaff);
+    */
 }
 
 void ControllerRoom::cancelRoom()
