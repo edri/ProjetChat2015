@@ -40,17 +40,25 @@ public:
     // Open the room's edition window, loading informations from the passed room.
     void showRoom(const quint32 idRoom);
     
+    // Should be called when a user info is sent from the server to the controller
+    void addUser(const quint32 userId, const QString& userName);
+    // Should be called when a userDoesNotExist error is sent .
+    void userDoesNotExist();
+    
+    
 public slots :
 
     // Add the current name entered into the members list. 
-    void addMember();
+    void addUser();
     
     // Remove the selected member.
-    void removeMember();
+    void removeUser(const quint32 userId);
     
     // Call the creation respectively edition of a room according to the 
     // state of the room view.
     void actionRoom();
+    
+    void toggleAdmin();
     
     void joinRoom();
     

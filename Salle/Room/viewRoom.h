@@ -30,32 +30,36 @@ public:
     void setNbMessage(const quint32 limit);
     void setRoomLogo(const QString& picture);
     void setPrivate(const bool b);
-    void setVisible(const bool b);
+    void setRoomVisibility(const bool b);
     void setInvitation(const bool b);
+    // Getters
+    QString roomName();
+    QMap<quint32, QString> roomUsers();
+    QMap<quint32, QString> roomAdmins();
+    QString userName();
     
-    //void loadRoom(const ModelRoom* room);
-    // Load members of a room into the model of the list view.
-    void loadMembers(const ModelRoom* room);
-    // Add a member into the model of the list view.
-    void addMember(const QString name);
-    // Add the current name entered into the members list. 
-    void addMember();
+    
+    void toggleAdmin();
+    
+    void addUser(quint32 idUser, const QString& userName, const bool isAdmin = false);
     // Remove the selected member.
-    void removeMember();
+    void removeUser();
+    void removeUser(const quint32 userId);
     
 public slots:
     void toggleVisibility();
+    void willRemove();
     void action();
 
 signals:
     // Add a new member.
     void add();
     // Remove/kick a memeber.
-    void remove();
-    // Toggle admin rights for the selected member
-    void admin();
+    void remove(const quint32 userId);
     // Create a new room.
-    void create(); 
+    void create();
+    // Toggle admin rights
+    void admin();
     // Edit the current room
     void edit();
     // Cancel operation
@@ -64,9 +68,14 @@ signals:
     
 private:
 
+    void toggleAdmin(quint32 idUser, const QString& userName);
+    quint32 currentSelectedUserId();
+    
     // Core elements
     bool editing;
     QList<QLayout*>* layouts;
+    QMap<quint32, QString>* _users;
+    QMap<quint32, QString>* _admins;
     
     // GUI elements
     QLabel* lbl_title;
@@ -94,7 +103,8 @@ private:
     QPushButton* btn_cancel;
     QPushButton* btn_create;
     
-    QListWidget* lsw_members;
+    QListView* lst_members;
+    QStandardItemModel* sim_members;
 };
 
 #endif //CHAT_VIEW_ROOM_H

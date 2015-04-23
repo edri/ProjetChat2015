@@ -14,10 +14,11 @@ ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* const user)
 void ControllerRoom::connectViewRoom()
 {
     // Connect signals with public slots.
-    connect(viewRoom, SIGNAL(add()), this, SLOT(addMember()));
-    connect(viewRoom, SIGNAL(remove()), this, SLOT(removeMember()));
+    connect(viewRoom, SIGNAL(add()), this, SLOT(addUser()));
+    connect(viewRoom, SIGNAL(remove(quint32)), this, SLOT(removeUser(quint32)));
     connect(viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
     connect(viewRoom, SIGNAL(create()), this, SLOT(actionRoom()));
+    connect(viewRoom, SIGNAL(admin()), this, SLOT(toggleAdmin()));
 }
 
 void ControllerRoom::connectViewJoin()
@@ -42,9 +43,7 @@ void ControllerRoom::actionRoom()
 void ControllerRoom::showRoom()
 {
     viewRoom = new ViewRoom();
-    //connectViewRoom();
-    viewRoom->show();
-    return;
+    connectViewRoom();
     
     // Set the label and button to have the texts corresponding to creation
     viewRoom->setTitle(tr("Nouvelle Salle"));
@@ -52,18 +51,16 @@ void ControllerRoom::showRoom()
     viewRoom->setRemove(tr("Enlever"));
     
     // Add the user as a member of the room.
-    viewRoom->addMember(user->getUserName());
-    
+    viewRoom->addUser(user->getIdUser(), user->getUserName(), true);
     viewRoom->show();
 }
 
 void ControllerRoom::showRoom(const quint32 idRoom)
 {
     viewRoom = new ViewRoom();
-    //connectViewRoom();
+    connectViewRoom();
     viewRoom->editing = true;
-    viewRoom->show();
-    return;
+    
     // Retrieve the room from the id
     const ModelRoom* room = model->getRoom(idRoom);
     // Set the label and button to have the texts corresponding to edition
@@ -78,44 +75,100 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     viewRoom->setPrivate(room->isPrivate());
     if(room->isPrivate())
     {
-        viewRoom->setVisible(room->isVisible());
+        viewRoom->setRoomVisibility(room->isVisible());
         viewRoom->setInvitation(!room->isVisible());
     }
-    viewRoom->loadMembers(room);
+    
+    for(ModelUser* user : room->getUsers())
+    {
+        viewRoom->addUser(user->getIdUser(), user->getUserName());
+    }
+    
+    for(ModelUser* user : room->getAdmins())
+    {
+        viewRoom->addUser(user->getIdUser(), user->getUserName(), true);
+    }
     viewRoom->show();
 }
 
-void ControllerRoom::addMember()
+void ControllerRoom::addUser()
 {
-    viewRoom->addMember();
+    QString userName = viewRoom->userName();
+    
+    // Ignore is the user name is empty.
+    if(!userName.isEmpty())
+    {
+        viewRoom->setDisabled(true);
+        
+        // Ask the server for the user id.
+        // For now call the function itself
+        for(long long unsigned i = 0; i < 100000000; ++i)
+        {
+            std::cout << "";
+        }
+        if (userName == "Dieu")
+        {
+            userDoesNotExist();
+        }
+        else
+        {
+            addUser(0, userName);
+        }
+    }
 }
 
-void ControllerRoom::removeMember()
+void ControllerRoom::addUser(const quint32 userId, const QString& userName)
 {
-    viewRoom->removeMember();
+    viewRoom->setDisabled(false);
+    viewRoom->addUser(userId, userName);
+}
+
+void ControllerRoom::userDoesNotExist()
+{
+    viewRoom->setDisabled(false);
+    QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cette utilisateur n'existe pas."));
+}
+
+void ControllerRoom::removeUser(const quint32 userId)
+{
+    if (viewRoom->editing)
+    {
+        // Ban the user
+    }
+    
+    else
+    {
+        viewRoom->removeUser(userId);
+    }
 }
 
 void ControllerRoom::createRoom()
 {
     // The room must have a name.
-    QString roomName = viewRoom->ldt_name->text().trimmed();
-    if(roomName.isEmpty())
+    if(viewRoom->roomName().isEmpty())
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Vous devez entrer un nom pour la salle"));
-        viewRoom->ldt_name->setFocus(Qt::MouseFocusReason);
+        //viewRoom->ldt_name->setFocus(Qt::MouseFocusReason);
         return;
     }
     
     // The room must have at least a member
-    if(viewRoom->lsw_members->model()->rowCount() == 0)
+    if(viewRoom->roomUsers().isEmpty())// sim_members->rowCount() == 0)
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Une salle doit posséder au moins un membre"));
-        viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
+        //viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
         return;
     }
     
-    //(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
-    //      const bool isVisible, const QString& picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users) 
+    // The room must have at least an admin.
+    if(viewRoom->roomAdmins().isEmpty())
+    {
+        QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Une salle doit posséder au moins un admin"));
+        //viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
+        return;
+    }
+    
+    // As soon as interpretor allows to create a new room, will create a new room.
 }
 
 void ControllerRoom::editRoom()
@@ -123,19 +176,14 @@ void ControllerRoom::editRoom()
     
 }
 
-
-void ControllerRoom::joinRoom()
+void ControllerRoom::toggleAdmin()
 {
-   /*
-    *currentStaff = list_staff->selectionModel()->currentIndex();
-    
-    if(!currentStaff->isValid())
+    if (viewRoom->editing)
     {
-        return;
+        // Communicate with the server (not sure if it should).
     }
     
-    Item* staff = (Item*) model_staff->itemFromIndex(*currentStaff);
-    */
+    viewRoom->toggleAdmin();
 }
 
 void ControllerRoom::cancelRoom()
@@ -150,3 +198,7 @@ void ControllerRoom::cancelJoin()
     viewJoin->close();
 }
 
+void ControllerRoom::joinRoom()
+{
+   
+}

@@ -125,6 +125,7 @@ class ModelRoom
         quint32 getIdRoom() const;
         QMap<quint32, ModelMessage*> getMessages() const;
         QMap<quint32, ModelUser*> getUsers() const;
+        QMap<quint32, ModelUser*> getAdmins() const;
         QString getName() const;
         QString getPicture() const;
         quint32 getLimit() const;
