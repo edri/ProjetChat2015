@@ -6,7 +6,17 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser)
     _model = model;
     _currentUser = currentUser;
 
+    cci = new ClientControllerInput();
+    i = new Interpretor(*cci);
+    cc = new ClientConnector();
+
+    connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
+
+    co = new ControllerOutput(*cc, *i);
+    cc->connectToServer("localhost:1234");
+
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
+    connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
 }
 
 ControllerChat::~ControllerChat()
@@ -17,21 +27,20 @@ ControllerChat::~ControllerChat()
 
 void ControllerChat::showView() const
 {
-    _view->show();
-
     _view->setConnectedAsText(_currentUser->getUserName());
     loadRooms(_currentUser->getIdUser());
+
+    _view->show();
 }
 
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 {
-    _view->loadRoomMessage(1, "edri", "4", QDateTime::fromString("04.04.2015 20:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "jan", "3", QDateTime::fromString("04.04.2015 19:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "ben", "1", QDateTime::fromString("01.04.2015 20:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "b2b", "6", QDateTime::fromString("05.04.2015 20:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "mel", "2", QDateTime::fromString("01.04.2015 20:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "mel", "5", QDateTime::fromString("04.04.2015 21:17", "dd.MM.yyyy HH:mm"));
-    _view->loadRoomMessage(1, "edri", "7", QDateTime::currentDateTime());
+    ModelRoom* room = _model->getRoom(idRoom);
+
+    for (ModelMessage* message : room->getMessages())
+    {
+        _view->loadRoomMessage(message->getIdMessage(), _model->getUser(message->getIdUser())->getUserName(), message->getContent(), message->getDate());
+    }
 }
 
 void ControllerChat::loadRooms(const quint32 idUser) const
@@ -49,4 +58,16 @@ void ControllerChat::loadRooms(const quint32 idUser) const
     }
 
     _view->selectFirstRoom();
+}
+
+void ControllerChat::auth()
+{
+    ModelMessage message(0, 0, 0, QDateTime::currentDateTime(), "");
+}
+
+void ControllerChat::sendMessage() const
+{
+    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
+
+    co->sendMessage(message);
 }

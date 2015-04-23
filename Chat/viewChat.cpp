@@ -9,10 +9,10 @@ ViewChat::ViewChat(QWidget *parent) :
 {
     _ui->setupUi(this);
 
+    _ui->tre_rooms->setIconSize(QSize(30, 30));
     _ui->tre_messages->expandAll();
     _ui->tre_messages->resizeColumnToContents(0);
     _ui->tre_messages->header()->close();
-
     _ui->ldt_message->setFocus();
 }
 
@@ -113,17 +113,21 @@ void ViewChat::loadRoomMessage(const quint32 messageId, const QString& userName,
     _ui->tre_messages->resizeColumnToContents(0);
 }
 
+QString ViewChat::getMessageText() const
+{
+    return _ui->ldt_message->text();
+}
+
+quint32 ViewChat::getSelectedRoomId() const
+{
+    return _selectedRoomId;
+}
+
 void ViewChat::on_btn_send_clicked()
 {
     if (!_ui->ldt_message->text().trimmed().isEmpty())
     {
-        /*time_t t = time(0);
-        struct tm * now = localtime( & t );
-
-        QTreeWidgetItem *item1 = new QTreeWidgetItem(ui->tre_messages);
-        item1->setText(0, "[" + QString::number(now->tm_hour) + ":" + QString::number(now->tm_min) + "] <moi>");
-        item1->setText(1, ui->ldt_message->text());
-        //item1->setFlags(Qt::);*/
+        emit requestSendMessage();
 
         _ui->ldt_message->clear();
     }
@@ -156,13 +160,15 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
     {
         if (_ui->tre_rooms->topLevelItem(i)->isSelected())
         {
+            _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt();
+
             _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
             _ui->tre_rooms->expandItem(_ui->tre_rooms->topLevelItem(i));
 
             _ui->tre_messages->clear();
 
             // Request the controller to load the selected room's messages.
-            emit requestLoadRoomMessages(_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt());
+            emit requestLoadRoomMessages(_selectedRoomId);
         }
         else
             _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Normal));

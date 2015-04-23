@@ -12,15 +12,17 @@ int main(int argc, char *argv[])
     
     QApplication a(argc, argv);
     
-    Listener listener(1234);
-    
     ControllerDB cdb("db.sqlite");
     
     ControllerRoom cr(cdb);
     ControllerUser cu(cdb);
     
-    ServerControllerInput sci;
+    ServerControllerInput sci(cu, cr);
     Interpretor i(sci);
+    
+    cu.interpretor = &i;
+    
+    Listener listener(1234, i);
     
     return a.exec();
 }

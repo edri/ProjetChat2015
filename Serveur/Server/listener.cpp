@@ -4,8 +4,9 @@
 #include <QSslKey>
 #include "../controllerInput/controllerInput.h"
 #include "../Interpretor/interpretor.h"
+#include "serverModel.h"
 
-Listener::Listener(quint16 port) : _server("Chator", QWebSocketServer::SecureMode, this)
+Listener::Listener(quint16 port, Interpretor& interpretor) : _server("Chator", QWebSocketServer::SecureMode, this), _interpretor(interpretor)
 {
     QSslConfiguration sslConfiguration;
     QFile certFile(QStringLiteral("cert.pem"));
@@ -38,35 +39,23 @@ Listener::~Listener()
 
 void Listener::newConnection()
 {
-    QWebSocket *pSocket = _server.nextPendingConnection();
+    QWebSocket *newSocket = _server.nextPendingConnection();
+    ChatorClient* client = new ChatorClient(*newSocket);
+    _clients << client;
 
-    qDebug() << "Client connected:" << pSocket->peerName() << pSocket->origin();
-
-    connect(pSocket, &QWebSocket::binaryMessageReceived, this, &Listener::receive);
-    connect(pSocket, &QWebSocket::disconnected, this, &Listener::disconnected);
-
-    _clients << pSocket;
-}
-
-void Listener::receive(QByteArray message)
-{
-    Q_UNUSED(message)
-    qDebug() << "New message";
+    qDebug() << "Client connected:" << newSocket->peerAddress().toString();
     
-    // TEST____________________________________________________________________________________________
-    /*ServerControllerInput sci;
-    Interpretor i(sci);
-    i.processData(message);*/
+    connect(client, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(client, SIGNAL(binaryMessageReceived(const QByteArray& message)), &_interpretor, SLOT(processData(const QByteArray& data)));
 }
 
 void Listener::disconnected()
 {
     qDebug() << "Client disconnected";
-    QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    ChatorClient* pClient = qobject_cast<ChatorClient*>(sender());
     if (pClient)
     {
         _clients.removeAll(pClient);
-        pClient->deleteLater();
     }
 }
 

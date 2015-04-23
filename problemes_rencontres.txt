@@ -1,0 +1,6 @@
+Gestion :
+	- Gestion et synchronisation des travaux de chaque personne.
+	- Suivi des conventions de codage.
+	- Application du modèle MVC.
+	- 
+

@@ -9,7 +9,7 @@
 #include "../ServerConnector/connector.h"
 
 //class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
-class Interpretor
+class Interpretor : public QObject
 {
     public:
     Interpretor(ControllerInput& dispatcher);
@@ -18,7 +18,7 @@ class Interpretor
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
     QByteArray createAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);
-    QByteArray sendError(const QString& text);
+    QByteArray sendError(const ModelError& error);
     QByteArray join(const quint32 idUser, const quint32 idRoom);
     QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray disconnect(const quint32 idUser);
@@ -27,7 +27,6 @@ class Interpretor
     void processData(const QByteArray& data);
     
     private:
-    // Pointeur sur l'objet réseau
     ControllerInput& _dispatcher;
 };
 

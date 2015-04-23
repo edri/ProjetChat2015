@@ -91,6 +91,11 @@ quint32 ModelRoom::getIdRoom() const
     return _idRoom;
 }
 
+QMap<quint32, ModelMessage*> ModelRoom::getMessages() const
+{
+    return _messages;
+}
+
 ModelRoom* ModelChator::getRoom(const quint32 idRoom) const
 {
     return _rooms[idRoom];
@@ -105,6 +110,11 @@ void ModelChator::addUser(const quint32 idUser, const QString& userName, const Q
 void ModelChator::addUser(ModelUser* user)
 {
     _users.insert(user->getIdUser(), user);
+}
+
+ModelUser* ModelChator::getUser(const quint32 idUser) const
+{
+    return _users[idUser];
 }
 
 void ModelChator::addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QString &picture, QMap<quint32, ModelUser*>& admins, QMap<quint32, ModelUser*>& users)
