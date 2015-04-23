@@ -75,5 +75,7 @@ int main(int argc, char *argv[])
     ControllerRoom w(model, currentUser);
     w.showRoom();//room2->getIdRoom());
     
+    
+    
     return a.exec();
 }

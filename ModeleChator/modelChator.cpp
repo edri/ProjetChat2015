@@ -81,6 +81,11 @@ QMap<quint32, ModelUser*> ModelRoom::getUsers() const
     return _users;
 }
 
+QMap<quint32, ModelUser*> ModelRoom::getAdmins() const
+{
+    return _admins;
+}
+
 quint32 ModelRoom::getIdRoom() const
 {
     return _idRoom;

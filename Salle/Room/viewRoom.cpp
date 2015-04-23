@@ -3,8 +3,6 @@
 #include "viewRoom.h"
 #include "controllerRoom.h"
 
-#include <iostream>
-
  ViewRoom:: ViewRoom()
 {
     // Setting attributes
@@ -13,7 +11,8 @@
     // Initializazion of core elements
     editing = false;
     layouts = new QList<QLayout*>();
-    
+    _users = new QMap<quint32, QString>;
+    _admins = new QMap<quint32, QString>;
     // Initialization of the GUI elements.
     lbl_title = new QLabel("");
     lbl_title->setFont(QFont(this->font().family(), 
@@ -58,7 +57,10 @@
     btn_cancel = new QPushButton(tr("Annuler"));
     btn_create = new QPushButton("");
     
-    lsw_members = new QListWidget();
+    lst_members = new QListView();
+    
+    sim_members = new QStandardItemModel();
+    lst_members->setModel(sim_members);
     
     // Placing the elements inside layouts.
     
@@ -105,19 +107,20 @@
     vbl_main->addLayout(hbl_browse);
     vbl_main->addWidget(lbl_member);
     vbl_main->addLayout(hbl_member);
-    vbl_main->addWidget(lsw_members);
+    vbl_main->addWidget(lst_members);
     vbl_main->addLayout(hbl_remove);
     vbl_main->addLayout(hbl_visibilityOptions);
     vbl_main->addLayout(hbl_down);
     
     setLayout(vbl_main);
-    // Connect signals with public slots.
-    /*connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
+    // Connect signals with public slots or signals
+    connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
     connect(btn_add, SIGNAL(clicked()), this, SIGNAL(add()));
     connect(ldt_member, SIGNAL(returnPressed()), this, SIGNAL(add()));
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
-    connect(btn_remove, SIGNAL(clicked()), this, SIGNAL(remove()));
-    connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));*/
+    connect(btn_remove, SIGNAL(clicked()), this, SLOT(willRemove()));
+    connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));
+    connect(btn_admin, SIGNAL(clicked()), this, SIGNAL(admin()));
 }
 
 ViewRoom::~ ViewRoom()
@@ -140,7 +143,11 @@ ViewRoom::~ ViewRoom()
     delete btn_add;
     delete btn_cancel;
     delete btn_create;
-    delete lsw_members;
+    delete lst_members;
+    delete sim_members;
+    delete _users;
+    delete _admins;
+    
     
     // Delete layouts.
     for (QLayout* l : *layouts)
@@ -155,7 +162,7 @@ void ViewRoom::clear()
     ldt_logo->clear();
     ldt_member->clear();
     ldt_name->clear();
-    lsw_members->clear();
+    sim_members->clear();
     chk_private->setChecked(false);
     rbt_onInvitation->setChecked(false);
     rbt_visible->setChecked(false);
@@ -201,54 +208,18 @@ void ViewRoom::action()
     }
 }
 
-void ViewRoom::loadMembers(const ModelRoom* room)
-{    
-    for(ModelUser* user : room->getUsers())
-    {
-        addMember(user->getUserName());
-    }
+void ViewRoom::removeUser()
+{
+    sim_members->removeRow(lst_members->currentIndex().row());
 }
 
-void ViewRoom::addMember(const QString name)
+void ViewRoom::removeUser(const quint32 userId)
 {
-    lsw_members->addItem(name);
-}
-
-void ViewRoom::addMember()
-{
-    QString memberName = ldt_member->text().trimmed();
-    // Check that the name isn't an empty string and that it isn't already in the members list.
-    if (!memberName.isEmpty())
+    removeUser();
+    _users->remove(userId);
+    if(_users->find(userId) != _users->end())
     {
-        if(lsw_members->findItems(memberName, Qt::MatchExactly).isEmpty())
-        {
-            // TO DO : Check that the user exists.
-            addMember(memberName);
-        }
-        
-        else
-        {
-            QMessageBox::information(this, tr("Opération impossible") ,tr("Cet utilisateur est déjà membre de cette salle"));
-        }
-    }
-    ldt_member->clear();
-}
-
-void ViewRoom::removeMember()
-{
-    // The room already exists so we check the user really wants to remove members
-    // from it. We also must send a command to the server.
-    if (editing)
-    {
-        // Stand in code.
-        lsw_members->removeItemWidget(lsw_members->selectedItems().at(0));
-    }
-    
-    // The room isn't created yet, so we don't care if the members are removed and
-    // it just need to be removed locally.
-    else
-    {
-        lsw_members->removeItemWidget(lsw_members->selectedItems().at(0));
+        _admins->remove(userId);
     }
 }
 
@@ -285,7 +256,7 @@ void ViewRoom::setPrivate(const bool b)
     chk_private->setChecked(b);
 }
 
-void ViewRoom::setVisible(const bool b)
+void ViewRoom::setRoomVisibility(const bool b)
 {
     rbt_visible->setChecked(b);
 }
@@ -293,4 +264,108 @@ void ViewRoom::setVisible(const bool b)
 void ViewRoom::setInvitation(const bool b)
 {
     rbt_onInvitation->setChecked(b);
+}
+
+QString ViewRoom::roomName()
+{
+    return ldt_name->text().trimmed();
+}
+
+QMap<quint32, QString> ViewRoom::roomUsers()
+{
+    return *_users;
+}
+
+QMap<quint32, QString> ViewRoom::roomAdmins()
+{
+    return *_admins;
+}
+
+QString ViewRoom::userName()
+{
+    return ldt_member->text().trimmed();
+}
+
+void ViewRoom::toggleAdmin()
+{
+    quint32 userId = currentSelectedUserId();
+    toggleAdmin(userId, _users->value(userId));
+}
+
+quint32 ViewRoom::currentSelectedUserId()
+{
+    QModelIndex currentMember = lst_members->selectionModel()->currentIndex();
+    QString userName = sim_members->itemFromIndex(currentMember)->text();
+    return _users->key(userName);
+}
+
+void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
+{
+    // First search the use amongst the admins 
+    QMap<quint32, QString>::Iterator user = _admins->find(idUser);
+    
+    // If the user isn't an admin, it is a user.
+    if (user == _admins->end())
+    {
+        
+        // Used to verify that the user really exists but this case shoudln't
+        // happen.
+        /*user = _users->find(idUser);
+        if (user == _users->end())
+        {
+            // Throw exception ?
+            return;
+        }*/
+        // Add to the admins and change the display.
+        _admins->insert(idUser, userName);
+        
+        QList<QStandardItem*> user = sim_members->findItems(userName);
+        user.at(0)->setFont(QFont(this->font().family(), 
+                            this->font().pointSize(), QFont::Bold));
+    
+    }
+    
+    else
+    {
+        // Remove from the admins and change the display
+        _admins->remove(idUser);
+        
+        QList<QStandardItem*> user = sim_members->findItems(userName);
+        user.at(0)->setFont(QFont(this->font().family(), 
+                            this->font().pointSize(), QFont::Normal));
+    }
+}
+
+void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdmin)
+{
+    // The model destroys all its items when destroyed.
+    QStandardItem* item = new QStandardItem(userName);
+    item->setEditable(false);
+    sim_members->appendRow(item);
+    
+    // If isAdmin is true :
+    // If the user was not already inserted before, the user is inserted and 
+    // made into admin.
+    // If the user was already inserted but wasn't an admin, the user is
+    // mad into an admin.
+    // If the user was already inserted and already an admin, nothing is done.
+    // If isAdmin is flase :
+    // The use is inserted if it was not already.
+    
+    if (_users->find(idUser) == _users->end())
+    {
+        _users->insert(idUser, userName);
+    }
+    
+    if (isAdmin && _admins->find(idUser) == _admins->end())
+    {
+        toggleAdmin(idUser, userName);
+    }
+    
+    ldt_member->clear();
+}
+
+void ViewRoom::willRemove()
+{
+    emit remove(currentSelectedUserId());
 }
