@@ -75,5 +75,18 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     query.first();
     id = query.record().value(0).toUInt();
     
+    query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = :id");
+    query.bindValue(":id", id);
+    
     return true;
+}
+
+ModelUser ControllerDB::info(const quint32 id)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = :id");
+    query.bindValue(":id", id);
+    query.first();
+    
+    return ModelUser(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), query.record().value("profilePicture").toString());
 }

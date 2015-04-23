@@ -6,9 +6,10 @@ ControllerUser::ControllerUser(ControllerDB& db) : _db(db) {}
 void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
 {
     quint32 id;
-    if (_db.login(pseudo, hashedPWD, id))
+    if (_db.login(pseudo, hashedPWD, client->id))
     {
-        
+        client->logged = true;
+        ModelUser user = _db.info(id);
     }
     else
     {

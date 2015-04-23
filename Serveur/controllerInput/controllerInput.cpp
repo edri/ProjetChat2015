@@ -7,10 +7,3 @@ void ClientControllerInput::receiveMessage(const ModelMessage& message, QObject*
     Q_UNUSED(sender);
     Q_UNUSED(message);
 }
-
-void ClientControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
-{
-    Q_UNUSED(pseudo);
-    Q_UNUSED(hashedPWD); 
-    Q_UNUSED(sender);
-}

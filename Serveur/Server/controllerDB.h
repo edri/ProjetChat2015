@@ -3,6 +3,7 @@
 
 #include <QSqlDatabase>
 #include <QString>
+#include "../../ModeleChator/modelChator.h"
 
 class ControllerDB
 {
@@ -11,6 +12,7 @@ class ControllerDB
     bool connect();
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
+    ModelUser info(const quint32 id);
     
     private :
     QSqlDatabase _db;
