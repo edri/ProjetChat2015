@@ -186,24 +186,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ldt_port">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>200</y>
-      <width>210</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="ldt_password">
     <property name="geometry">
      <rect>
@@ -225,7 +207,20 @@
      </font>
     </property>
     <property name="inputMethodHints">
-     <set>Qt::ImhHiddenText</set>
+     <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>200</y>
+      <width>210</width>
+      <height>30</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -235,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

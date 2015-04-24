@@ -6,6 +6,7 @@ ViewUser::ViewUser(QWidget *parent) :
     ui(new Ui::ViewUser)
 {
     ui->setupUi(this);
+    ui->ldt_password->setValidator(new QIntValidator());
 }
 
 ViewUser::~ViewUser()
@@ -16,9 +17,39 @@ ViewUser::~ViewUser()
 void ViewUser::on_btn_connexion_clicked()
 {
     // Envoyer les données
+
+    // Valider manuellement: les champs doivent être remplis
+    if(ui->btn_connexion->text().isEmpty()) {
+        // Afficher un message d'erreur
+    }
+
+    // Récupérer les identifiants
+
+    // Emettre le signal
+    emit requestGetIds();
 }
 
 void ViewUser::on_btn_inscription_clicked()
 {
     // Ouvrir la fenêtre inscription
+}
+
+
+QString ViewUser::getUsername()
+{
+    return ui->ldt_Username->text();
+}
+
+QString ViewUser::getPassword()
+{
+    return ui->ldt_password->text();
+}
+
+QString ViewUser::getPort() {
+    return ui->spinBox->text();
+
+}
+
+QString ViewUser::getIpAddress() {
+    return ui->ldt_server->text();
 }
