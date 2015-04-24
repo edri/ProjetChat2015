@@ -87,6 +87,15 @@ QByteArray Interpretor::disconnect(const quint32 idUser)
     return data;
 }
 
+QByteArray connected(const ModelUser& user)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::CONNECTED << user;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -161,6 +170,14 @@ void Interpretor::processData(const QByteArray& data)
         {
             quint32 idUser;
             stream >> idUser;
+            // Envoyer ces objets quelque part
+        }
+        break;
+        
+        case MessageType::CONNECTED:
+        {
+            ModelUser user;
+            stream >> user;
             // Envoyer ces objets quelque part
         }
         break;

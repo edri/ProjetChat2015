@@ -7,6 +7,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
 {
     if (_db.login(pseudo, hashedPWD, client->id))
     {
+        // Envoi du ModelUser
         client->logged = true;
         ModelUser user = _db.info(id);
         client->socket.sendBinaryMessage(interpretor->sendInfoUser(user));
@@ -15,16 +16,22 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         QMap<quint32, ModeRoom> rooms;
         QMap<quint32, ModeUser> users;
         
+        // Récupération des ids des salles jointes
         QSet<quint32> idRooms = user.getRooms();
         for (quint32 idRoom : idRooms)
         {
+            // Récupération des informations de chaque salle
             ModelRoom room = _db.infoRoom(idRoom);
             rooms.insert(idRoom, _db.infoRoom(idRoom));
+            
+            // Récupération des ids des utilisateurs de chaque salle
             QSet<quint32> roomUsers = room.getUsers();
             for (quint32 idUser : roomUsers)
             {
+                // Si cet utilisateur n'est pas encore dans la liste, on le met
                 if (!users.contains(idUser))
                 {
+                    // Récupération des informations de l'utilisateur
                     users.insert(idUserm, _db.info(idUser));
                 }
             }
@@ -33,6 +40,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         client->socket.sendBinaryMessage(interpretor->join(rooms, users));
         
         // Informer les salles que cet utilisateur s'est connecté
+        _room.userConnected(user, client);
     }
     else
     {

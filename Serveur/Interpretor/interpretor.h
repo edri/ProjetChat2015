@@ -23,6 +23,7 @@ class Interpretor : public QObject
     QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);
     QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray disconnect(const quint32 idUser);
+    QByteArray connected(const ModelUser& user);
     
     public slots:
     void processData(const QByteArray& data);

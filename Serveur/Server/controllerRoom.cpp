@@ -37,13 +37,14 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient& currentC
             currentRoom = onlineRooms[idRoom];
         }
         
-        currentClient.rooms.append(currentRoom);
+        currentClient->rooms.append(currentRoom);
     }
     
-    for (ChatorRoom* room : currentClient.rooms)
+    for (ChatorRoom* room : currentClient->rooms)
     {
         for (ChatorClient* client : room->clients)
         {
+            client->socket.sendBinaryMessage(interpretor->connected(user));
             //client->socket.sendBinaryMessage(interpretor->join(currentClient.id, room->id));
         }
     }
