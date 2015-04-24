@@ -10,8 +10,8 @@ class ControllerInput : public QObject
     
     public:
     virtual void receiveMessage(ModelMessage& message, QObject* sender) = 0;
-    virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
-    virtual void infoUser(ModelUser& message, QObject* sender) = 0;
+    virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);
+}
 };
 
 class ClientControllerInput : public ControllerInput
@@ -19,8 +19,7 @@ class ClientControllerInput : public ControllerInput
     Q_OBJECT
     
     public:
-    virtual void receiveMessage(const ModelMessage& message, QObject* sender);
-    virtual void infoUser(ModelUser& message, QObject* sender);
+    virtual void receiveMessage(ModelMessage& message, QObject* sender);
 };
 
 #endif

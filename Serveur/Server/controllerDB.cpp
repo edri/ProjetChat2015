@@ -77,7 +77,8 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     
     query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = :id");
     query.bindValue(":id", id);
-    
+    query.exec()
+
     return true;
 }
 
@@ -86,9 +87,23 @@ ModelUser ControllerDB::info(const quint32 id)
     QSqlQuery query(_db);
     query.prepare("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = :id");
     query.bindValue(":id", id);
+    query.exec();
     query.first();
     
-    return ModelUser(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), query.record().value("profilePicture").toString());
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), QImage()); // query.record().value("profilePicture").toString()
+    QSet<quint32> rooms;
+    
+    //query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id");
+    query.prepare("SELECT idRoom FROM roomMembership WHERE idUser = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    
+    while(query.next())
+    {
+        rooms.insert(query.record().value(0).toUInt());
+    }
+    
+    return user;
 }
 
 quint32 ControllerDB::storeMessage(const ModelMessage& message)
@@ -100,4 +115,44 @@ quint32 ControllerDB::storeMessage(const ModelMessage& message)
     query.bindValue(":idRoom", message.getIdRoom());
     query.exec();
     return query.lastInsertId().toUInt();
+}
+
+ModelRoom ControllerDB::infoRoom(const quint32 id)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT idRoom, name, private, visible, picture, limitOfStoredMessages FROM room WHERE idRoom = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    query.first();
+    
+    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(), query.record().value("limitOfStoredMessages").toUInt());
+    
+    QSet<quint32> admins;
+    QSet<quint32> users;
+    
+    QSqlQuery query(_db);
+    query.prepare("SELECT idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege WHERE idRoom = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    
+    while(query.next())
+    {
+        if (query.record().value("name").toString() == "admin") {admins.insert(query.record().value("idUser").toUInt());}
+        else if (query.record().value("name").toString() == "user") {users.insert(query.record().value("idUser").toUInt());}
+    }
+    
+    QMap<quint32, ModelMessage> messages;
+    
+    QSqlQuery query(_db);
+    query.prepare("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    
+    while(query.next())
+    {
+        ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("content").toString());
+        messages.insert(message.getIdMessage(), message);
+    }
+    
+    return room;
 }

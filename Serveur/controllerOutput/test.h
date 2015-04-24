@@ -18,7 +18,7 @@ class Test : public QObject
     void auth();
     
     private:
-    ClientControllerInput *cci;
+    ClientControllerInput* cci;
     Interpretor* i;
     ClientConnector* cc;
     ControllerOutput* co;

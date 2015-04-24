@@ -51,12 +51,21 @@ QByteArray Interpretor::sendError(const ModelError& error)
     return data;
 }
 
-QByteArray Interpretor::join(const quint32 idUser, const quint32 idRoom)
+QByteArray Interpretor::userJoin(const quint32 idUser, const quint32 idRoom)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::JOIN << idUser << idRoom;
+    return data;
+}
+
+QByteArray Interpretor::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::JOIN << rooms << users;
     return data;
 }
 
@@ -121,11 +130,20 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
-        case MessageType::JOIN:
+        case MessageType::USER_JOIN:
         {
             quint32 idUser;
             quint32 idRoom;
             stream >> idUser >> idRoom;
+            // Envoyer ces objets quelque part
+        }
+        break;
+        
+        case MessageType::JOIN:
+        {
+            QMap<quint32, ModelRoom> rooms;
+            QMap<quint32, ModelUser> users;
+            stream >> rooms >> users;
             // Envoyer ces objets quelque part
         }
         break;

@@ -19,7 +19,8 @@ class Interpretor : public QObject
     QByteArray createAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);
     QByteArray sendError(const ModelError& error);
-    QByteArray join(const quint32 idUser, const quint32 idRoom);
+    QByteArray userJoin(const quint32 idUser, const quint32 idRoom);
+    QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);
     QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray disconnect(const quint32 idUser);
     

@@ -15,6 +15,7 @@ class ControllerDB
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);
+    ModelRoom infoRoom(const quint32 id);
     
     private :
     QSqlDatabase _db;

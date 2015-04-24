@@ -4,7 +4,7 @@ ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
 void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 {
-    if (message.getIdUser() == client->id)
+    if (client->logged && message.getIdUser() == client->id)
     {
         message.setIdMessage(_db.storeMessage(message));
         message.setDate(QDateTime::currentDateTime());

@@ -2,7 +2,7 @@
 #include "controllerInput.h"
 #include "../../ModeleChator/modelChator.h"
 
-void ClientControllerInput::receiveMessage(const ModelMessage& message, QObject* sender)
+void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sender)
 {
     Q_UNUSED(sender);
     Q_UNUSED(message);

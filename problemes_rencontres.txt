@@ -2,5 +2,5 @@ Gestion :
 	- Gestion et synchronisation des travaux de chaque personne.
 	- Suivi des conventions de codage.
 	- Application du modèle MVC.
-	- 
-
+	- Etablissement de la communication entre le serveur et le client.
+	- Installation des librairies SSL.

@@ -14,8 +14,8 @@ class ModelRoom;
 class ModelChator
 {
 	private :
-        QMap<quint32, ModelRoom*> _rooms;
-        QMap<quint32, ModelUser*> _users;
+        QMap<quint32, ModelRoom> _rooms;
+        QMap<quint32, ModelUser> _users;
 	
 	public :
         ModelChator();
@@ -94,9 +94,13 @@ class ModelRoom
         bool _visible;
         QString _picture;
         quint32 _limitOfStoredMessage;
-        QMap<quint32, ModelUser*> _admins;
-        QMap<quint32, ModelMessage*> _messages;
-        QMap<quint32, ModelUser*> _users;
+        
+        QSet<quint32> _admins;
+        QSet<quint32> _members;
+        
+        //QMap<quint32, ModelUser*> _admins;
+        QMap<quint32, ModelMessage> _messages;
+        //QMap<quint32, ModelUser*> _users;
 	
 	public :
         ModelRoom();
@@ -179,7 +183,7 @@ class ModelUser
         QString _lastName;
         bool _isConnected;
         QDateTime _lastConnection;
-        QString _image;
+        QImage _image;
         QSet<quint32> _roomsIds;
 	
 	public :
