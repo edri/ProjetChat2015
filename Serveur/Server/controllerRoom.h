@@ -11,12 +11,12 @@ class ControllerRoom
     public:
     ControllerRoom(ControllerDB& db);
     void storeMessage(ModelMessage& message, ChatorClient* client);
-    void userConnected(const ModelUser& user, const ChatorClient& client);
+    void userConnected(const ModelUser& user, ChatorClient& client);
     Interpretor* interpretor;
     
     private:
     ControllerDB& _db;
-    QMap<quint32, ChatorRoom> onlineRooms;
+    QMap<quint32, ChatorRoom*> onlineRooms;
 };
 
 #endif
