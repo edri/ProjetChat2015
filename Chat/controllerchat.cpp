@@ -63,11 +63,14 @@ void ControllerChat::loadRooms(const quint32 idUser) const
 void ControllerChat::auth()
 {
     ModelMessage message(0, 0, 0, QDateTime::currentDateTime(), "");
+
+    co->login("Jean-paul", "fromage66");
 }
 
 void ControllerChat::sendMessage() const
 {
     ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
 
-    co->sendMessage(message);
+    co->login("Jean-paul", "fromage66");
+    //co->sendMessage(message);
 }

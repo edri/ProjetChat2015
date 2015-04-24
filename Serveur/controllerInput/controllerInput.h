@@ -19,7 +19,7 @@ class ClientControllerInput : public ControllerInput
     Q_OBJECT
     
     public:
-    virtual void receiveMessage(const ModelMessage& message, QObject* sender);
+    virtual void receiveMessage(ModelMessage& message, QObject* sender);
 };
 
 #endif
