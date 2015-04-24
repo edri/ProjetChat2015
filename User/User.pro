@@ -4,19 +4,35 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = User
 TEMPLATE = app
 
+CONFIG += c++11
+
 
 SOURCES += main.cpp\
         viewUser.cpp \
-    controllerUser.cpp
+    controllerUser.cpp  \
+ "../Serveur/ServerConnector/connector.cpp" \
+ "../Serveur/Interpretor/interpretor.cpp" \
+ "../Serveur/Interpretor/packet.cpp" \
+ "../ModeleChator/modelChator.cpp" \
+ "../Serveur/controllerInput/controllerInput.cpp" \
+ "../Serveur/controllerOutput/controllerOutput.cpp"
 
 HEADERS  += viewUser.h \
-    controllerUser.h
+    controllerUser.h    \
+ "../Serveur/ServerConnector/connector.h" \
+ "../Serveur/Interpretor/interpretor.h" \
+ "../Serveur/Interpretor/packet.h" \
+ "../ModeleChator/modelChator.h" \
+ "../Serveur/controllerInput/controllerInput.h" \
+ "../Serveur/controllerOutput/controllerOutput.h"
 
 FORMS    += viewUser.ui
+
+
