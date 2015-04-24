@@ -17,27 +17,34 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
     }
 }
 
-void ControllerRoom::userConnected(const ModelUser& user, ChatorClient& currentClient)
+void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentClient)
 {
     // Aussi envoyer le modeluser? je pense oui
     Q_UNUSED(user);
     
+    // Récupération des ids des salles auxquelles l'utilisateur est inscrit
     QSet<quint32> rooms = user.getRooms();
     
     for (quint32 idRoom : rooms)
     {
+        // On vérifie si cette salle est en ligne
         ChatorRoom* currentRoom;
+        
         if (!onlineRooms.contains(idRoom))
         {
-            currentRoom = new ChatorRoom({currentClient.id, 0, &currentClient});
+            // Si elle n'est pas en ligne on la crée
+            currentRoom = new ChatorRoom({currentClient.id, 0, {}});
             onlineRooms.insert(idRoom, currentRoom);
         }
         else
         {
+            // Sinon, on récupère son pointeur
             currentRoom = onlineRooms[idRoom];
         }
         
+        // On stocke le pointeur dans l'utilisateur
         currentClient->rooms.append(currentRoom);
+        currentRoom->clients.append(client);
     }
     
     for (ChatorRoom* room : currentClient->rooms)
