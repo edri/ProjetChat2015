@@ -1,10 +1,10 @@
 #include "controllerRoom.h"
 #include <iostream>
 
-ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* const user)
+ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user)
 {
     this->model = model;
-    this->user = user;
+    currentUser = user;
     
     // Initialize the view at nullptr.
     viewRoom = nullptr;
@@ -51,7 +51,7 @@ void ControllerRoom::showRoom()
     viewRoom->setRemove(tr("Enlever"));
     
     // Add the user as a member of the room.
-    viewRoom->addUser(user->getIdUser(), user->getUserName(), true);
+    viewRoom->addUser(currentUser->getIdUser(), currentUser->getUserName(), true);
     viewRoom->show();
 }
 
@@ -62,23 +62,39 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     viewRoom->editing = true;
     
     // Retrieve the room from the id
-    const ModelRoom* room = model->getRoom(idRoom);
+    ModelRoom room = model->getRoom(idRoom);
     // Set the label and button to have the texts corresponding to edition
     viewRoom->setTitle(tr("Edition Salle"));
     viewRoom->setAction(tr("Editer"));
     viewRoom->setRemove(tr("Bannir"));
     
     // Initialize the fields with the values of the room.
-    viewRoom->setRoomName(room->getName());
-    viewRoom->setNbMessage(room->getLimit());
-    viewRoom->setRoomLogo(room->getPicture());
-    viewRoom->setPrivate(room->isPrivate());
-    if(room->isPrivate())
+    viewRoom->setRoomName(room.getName());
+    viewRoom->setNbMessage(room.getLimit());
+    //viewRoom->setRoomLogo(room.getPicture()); // How to retrieve the path for this image.
+    viewRoom->setRoomLogo("image.png");
+    viewRoom->setPrivate(room.isPrivate());
+    if(room.isPrivate())
     {
-        viewRoom->setRoomVisibility(room->isVisible());
-        viewRoom->setInvitation(!room->isVisible());
+        viewRoom->setRoomVisibility(room.isVisible());
+        viewRoom->setInvitation(!room.isVisible());
     }
     
+    ModelUser user;
+    for(quint32 userId : room.getUsers())
+    {
+        user = model->getUser(userId);
+        viewRoom->addUser(user.getIdUser(), user.getUserName());
+    }
+    
+    ModelUser admin;
+    for(quint32 adminId : room.getAdmins())
+    {
+        admin = model->getUser(adminId);
+        viewRoom->addUser(admin.getIdUser(), admin.getUserName(), true);
+    }
+    
+    /*
     for(ModelUser* user : room->getUsers())
     {
         viewRoom->addUser(user->getIdUser(), user->getUserName());
@@ -87,7 +103,7 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     for(ModelUser* user : room->getAdmins())
     {
         viewRoom->addUser(user->getIdUser(), user->getUserName(), true);
-    }
+    }*/
     viewRoom->show();
 }
 

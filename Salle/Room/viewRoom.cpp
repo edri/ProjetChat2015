@@ -338,11 +338,6 @@ void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
 
 void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdmin)
 {
-    // The model destroys all its items when destroyed.
-    QStandardItem* item = new QStandardItem(userName);
-    item->setEditable(false);
-    sim_members->appendRow(item);
-    
     // If isAdmin is true :
     // If the user was not already inserted before, the user is inserted and 
     // made into admin.
@@ -354,6 +349,10 @@ void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdm
     
     if (_users->find(idUser) == _users->end())
     {
+        // The model destroys all its items when destroyed.
+        QStandardItem* item = new QStandardItem(userName);
+        item->setEditable(false);
+        sim_members->appendRow(item);
         _users->insert(idUser, userName);
     }
     

@@ -7,73 +7,77 @@ int main(int argc, char *argv[])
 
     ModelChator* model = new ModelChator();
     // 5 utilisateurs de test.
-    ModelUser* user1 = new ModelUser(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
-    ModelUser* user2 = new ModelUser(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
-    ModelUser* user3 = new ModelUser(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
-    ModelUser* user4 = new ModelUser(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
-    ModelUser* user5 = new ModelUser(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), "img/54226b6cd2c4b.jpg");
+    QImage image("img/54226b6cd2c4b.jpg");
+    ModelUser user1 (1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), image);
+    ModelUser user2 (2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), image);
+    ModelUser user3 (3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), image);
+    ModelUser user4 (4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), image);
+    ModelUser user5 (5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), image);
     model->addUser(user1);
     model->addUser(user2);
     model->addUser(user3);
     model->addUser(user4);
     model->addUser(user5);
     // L'utilisateur connecté.
-    ModelUser* const currentUser = user1;
+    ModelUser currentUser = user1;
 
     // Quatre salles de test.
     // ====== 1 ======
     // Liste des administrateurs de la salle.
-    QMap<quint32, ModelUser*> adminsR1;
-    adminsR1.insert(user1->getIdUser(), user1);
+    QSet<quint32> adminsR1;
+    adminsR1.insert(user1.getIdUser());
     // Liste des utilisateurs de la salle.
-    QMap<quint32, ModelUser*> usersR1;
-    usersR1.insert(user1->getIdUser(), user1);
-    usersR1.insert(user3->getIdUser(), user3);
-    usersR1.insert(user5->getIdUser(), user5);
+    QSet<quint32>  usersR1;
+    usersR1.insert(user1.getIdUser());
+    usersR1.insert(user3.getIdUser());
+    usersR1.insert(user5.getIdUser());
     // Création de la salle de test.
-    ModelRoom* room1 = new ModelRoom(1, "Room1", 100, false, true, "aboutShoe.png", adminsR1, usersR1);
+    image = QImage("aboutShoe.png");
+    ModelRoom room1 (1, "Room1", 100, false, true, image, adminsR1, usersR1);
     model->addRoom(room1);
     // ====== 2 ======
     // Liste des administrateurs de la salle.
-    QMap<quint32, ModelUser*> adminsR2;
-    adminsR2.insert(user1->getIdUser(), user1);
-    adminsR2.insert(user2->getIdUser(), user2);
+    QSet<quint32>  adminsR2;
+    adminsR2.insert(user1.getIdUser());
+    adminsR2.insert(user2.getIdUser());
     // Liste des utilisateurs de la salle.
-    QMap<quint32, ModelUser*> usersR2;
-    usersR2.insert(user1->getIdUser(), user1);
-    usersR2.insert(user2->getIdUser(), user2);
-    usersR2.insert(user3->getIdUser(), user3);
-    usersR2.insert(user4->getIdUser(), user4);
-    usersR2.insert(user5->getIdUser(), user5);
+    QSet<quint32>  usersR2;
+    usersR2.insert(user1.getIdUser());
+    usersR2.insert(user2.getIdUser());
+    usersR2.insert(user3.getIdUser());
+    usersR2.insert(user4.getIdUser());
+    usersR2.insert(user5.getIdUser());
     // Création de la salle de test.
-    ModelRoom* room2 = new ModelRoom(2, "Room2", 10, true, false, "edit.png", adminsR2, usersR2);
+    image = QImage("edit.png");
+    ModelRoom room2 (2, "Room2", 10, true, false, image, adminsR2, usersR2);
     model->addRoom(room2);
     // ====== 3 ======
     // Liste des administrateurs de la salle.
-    QMap<quint32, ModelUser*> adminsR3;
-    adminsR1.insert(user2->getIdUser(), user2);
+    QSet<quint32>  adminsR3;
+    adminsR1.insert(user2.getIdUser());
     // Liste des utilisateurs de la salle.
-    QMap<quint32, ModelUser*> usersR3;
-    usersR1.insert(user2->getIdUser(), user2);
-    usersR1.insert(user3->getIdUser(), user3);
+    QSet<quint32>  usersR3;
+    usersR1.insert(user2.getIdUser());
+    usersR1.insert(user3.getIdUser());
     // Création de la salle de test.
-    ModelRoom* room3 = new ModelRoom(3, "Room3", 150, false, true, "delete.png", adminsR3, usersR3);
+    image = QImage("delete.png");
+    ModelRoom room3 (3, "Room3", 150, false, true, image, adminsR3, usersR3);
     model->addRoom(room3);
     // ====== 4 ======
     // Liste des administrateurs de la salle.
-    QMap<quint32, ModelUser*> adminsR4;
-    adminsR4.insert(user3->getIdUser(), user3);
+    QSet<quint32>  adminsR4;
+    adminsR4.insert(user3.getIdUser());
     // Liste des utilisateurs de la salle.
-    QMap<quint32, ModelUser*> usersR4;
-    usersR4.insert(user1->getIdUser(), user1);
-    usersR4.insert(user3->getIdUser(), user3);
-    usersR4.insert(user5->getIdUser(), user5);
+    QSet<quint32>  usersR4;
+    usersR4.insert(user1.getIdUser());
+    usersR4.insert(user3.getIdUser());
+    usersR4.insert(user5.getIdUser());
     // Création de la salle de test.
-    ModelRoom* room4 = new ModelRoom(4, "Room4", 100, false, true, "delete.png", adminsR4, usersR4);
+    ModelRoom room4 (4, "Room4", 100, false, true, image, adminsR4, usersR4);
     model->addRoom(room4);
     
-    ControllerRoom w(model, currentUser);
-    w.showRoom();//room2->getIdRoom());
+    ControllerRoom w(model, &currentUser);
+    w.showRoom(room2.getIdRoom());
     
     
     

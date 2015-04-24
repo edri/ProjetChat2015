@@ -19,8 +19,8 @@ private:
     ViewRoom* viewRoom;
     ViewJoin* viewJoin;
     
-    // Pointer on the current user.
-    ModelUser* user;
+    // Reference on the current user.
+    ModelUser* currentUser;
     
     // Connect signals from the views
     void connectViewRoom();
@@ -33,7 +33,7 @@ private:
     
 public:
 
-    ControllerRoom(ModelChator* model, ModelUser* const user);
+    ControllerRoom(ModelChator* model, ModelUser* user);
     
     // Open the room's creation window.
     void showRoom();
