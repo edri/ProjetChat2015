@@ -100,7 +100,7 @@ void Interpretor::processData(const QByteArray& data)
             ModelUser user;
             stream >> user;
             // Il y aura aussi les clés à gérer ici (récupération de la masterkey chiffrée)
-            // Envoyer cet objet quelque part
+            _dispatcher.infoUser(user, sender());
         }
         break;
         

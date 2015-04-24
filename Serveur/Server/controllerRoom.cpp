@@ -7,6 +7,7 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
     if (message.getIdUser() == client->id)
     {
         message.setIdMessage(_db.storeMessage(message));
+        message.setDate(QDateTime::currentDateTime());
         ChatorRoom& room = onlineRooms[message.getIdRoom()];
         
         for (ChatorClient* client : room.clients)

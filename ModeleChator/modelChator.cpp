@@ -40,7 +40,7 @@ void ModelMessage::setIdMessage(const quint32 id)
     _idMessage = id;
 }
 
-void ModelMessage::setDate(QDateTime& date)
+void ModelMessage::setDate(const QDateTime& date)
 {
     _date = date;
 }

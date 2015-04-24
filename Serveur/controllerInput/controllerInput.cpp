@@ -7,3 +7,9 @@ void ClientControllerInput::receiveMessage(const ModelMessage& message, QObject*
     Q_UNUSED(sender);
     Q_UNUSED(message);
 }
+
+void ClientControllerInput::infoUser(ModelUser& message, QObject* sender)
+{
+    Q_UNUSED(message);
+    Q_UNUSED(sender);
+}

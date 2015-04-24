@@ -164,7 +164,7 @@ class ModelMessage
         
         // Setters
         void setIdMessage(const quint32 id);
-        void setDate(QDateTime& date);
+        void setDate(const QDateTime& date);
 };
 
 class ModelUser
@@ -180,6 +180,7 @@ class ModelUser
         bool _isConnected;
         QDateTime _lastConnection;
         QString _image;
+        QSet<quint32> _roomsIds;
 	
 	public :
         ModelUser();
