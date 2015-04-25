@@ -22,7 +22,8 @@ SOURCES += main.cpp\
  "../Serveur/Interpretor/packet.cpp" \
  "../ModeleChator/modelChator.cpp" \
  "../Serveur/controllerInput/controllerInput.cpp" \
- "../Serveur/controllerOutput/controllerOutput.cpp"
+ "../Serveur/controllerOutput/controllerOutput.cpp" \
+    viewInscription.cpp
 
 HEADERS  += viewUser.h \
     controllerUser.h    \
@@ -31,8 +32,10 @@ HEADERS  += viewUser.h \
  "../Serveur/Interpretor/packet.h" \
  "../ModeleChator/modelChator.h" \
  "../Serveur/controllerInput/controllerInput.h" \
- "../Serveur/controllerOutput/controllerOutput.h"
+ "../Serveur/controllerOutput/controllerOutput.h" \
+    viewInscription.h
 
-FORMS    += viewUser.ui
+FORMS    += viewUser.ui \
+    viewInscription.ui
 
 

@@ -2,6 +2,7 @@
 #define VIEWUSER_H
 
 #include <QMainWindow>
+#include "viewInscription.h"
 
 namespace Ui {
 class ViewUser;
@@ -30,7 +31,8 @@ private slots:      // Fonctions appelées lorsqu'un événement se produit (sig
     void on_btn_inscription_clicked();
 
 private:
-    Ui::ViewUser *ui;
+    Ui::ViewUser* ui;
+    ViewInscription* _viewInscription;
 
 
 signals:
