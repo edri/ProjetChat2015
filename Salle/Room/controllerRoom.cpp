@@ -34,8 +34,8 @@ void ControllerRoom::connectViewRoom()
 void ControllerRoom::connectViewJoin()
 {
     // Connect the view signals with the controller's slots.
-    connect(viewJoin->btn_join, SIGNAL(clicked()), this, SLOT(joinRoom()));
-    connect(viewJoin->btn_cancel, SIGNAL(clicked()), this, SLOT(cancelJoin()));
+    connect(viewJoin, SIGNAL(join()), this, SLOT(joinRoom()));
+    connect(viewJoin, SIGNAL(cancel), this, SLOT(cancelJoin()));
 }
 
 void ControllerRoom::showRoom()

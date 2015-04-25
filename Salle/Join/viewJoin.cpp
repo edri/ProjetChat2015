@@ -43,6 +43,10 @@ ViewJoin::ViewJoin()
     vbl_main->addWidget(btn_cancel);
     
     setLayout(vbl_main);
+    
+    
+    connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
+    connect(btn_join, SIGNAL(clicked()), this, SIGNAL(join()));
 }
 
 ViewJoin::~ViewJoin()

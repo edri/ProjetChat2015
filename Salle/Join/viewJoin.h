@@ -14,14 +14,18 @@ class ViewJoin : public QWidget
 {
     Q_OBJECT
     
-    friend ControllerRoom;
-    
 public:
 
     ViewJoin(); 
     ~ViewJoin();
     
 public slots:
+
+signals:
+    // Signal emited when the user wishes to cancel the operation.
+    void cancel();
+    // Signal emited when the user wishes to join a room.
+    void join();
 
 private:
     
