@@ -1,7 +1,5 @@
 #include "viewChat.h"
 #include "ui_viewChat.h"
-#include <ctime>
-#include <QDate>
 
 ViewChat::ViewChat(QWidget *parent) :
     QMainWindow(parent),
@@ -26,15 +24,15 @@ void ViewChat::setConnectedAsText(const QString& user)
     _ui->lbl_connectedAs->setText("Connecté en tant que <b>" + user + "</b>.");
 }
 
-void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QString& roomPicture)
+void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
 {
     QTreeWidgetItem* roomItem = new QTreeWidgetItem(_ui->tre_rooms);
     roomItem->setData(0, Qt::UserRole, roomId);
     roomItem->setText(0, roomName);
-    roomItem->setIcon(0, QIcon("img/" + roomPicture));
+    roomItem->setIcon(0, QIcon(QBitmap::fromImage(roomPicture)));
 }
 
-void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QString& image, const bool isConnected)
+void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QImage& image, const bool isConnected)
 {
     for (int i = 0; i < _ui->tre_rooms->topLevelItemCount(); ++i)
     {
@@ -43,7 +41,7 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
             QTreeWidgetItem* userItem = new QTreeWidgetItem(_ui->tre_rooms->topLevelItem(i));
             userItem->setData(0, Qt::UserRole, userId);
             userItem->setText(0, userName);
-            userItem->setIcon(0, QIcon("img/" + image));
+            userItem->setIcon(0, QIcon(QBitmap::fromImage(image)));
 
             if (isConnected)
                 userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));

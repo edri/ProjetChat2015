@@ -21,8 +21,7 @@ SOURCES += main.cpp\
     "../Serveur/Interpretor/packet.cpp" \
     "../ModeleChator/modelChator.cpp" \
     "../Serveur/controllerInput/controllerInput.cpp" \
-    "../Serveur/controllerOutput/controllerOutput.cpp" \
-    "../Serveur/controllerOutput/test.cpp"
+    "../Serveur/controllerOutput/controllerOutput.cpp"
 
 HEADERS  += viewChat.h \
     controllerChat.h \
@@ -31,8 +30,7 @@ HEADERS  += viewChat.h \
     "../Serveur/Interpretor/packet.h" \
     "../ModeleChator/modelChator.h" \
     "../Serveur/controllerInput/controllerInput.h" \
-    "../Serveur/controllerOutput/controllerOutput.h" \
-    "../Serveur/controllerOutput/test.h"
+    "../Serveur/controllerOutput/controllerOutput.h"
 
 FORMS    += viewChat.ui
 
