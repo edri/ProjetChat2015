@@ -7,7 +7,6 @@
  * more info).
  */
 
-
 #include "controllerRoom.h"
 #include <iostream>
 
@@ -180,6 +179,16 @@ void ControllerRoom::createRoom()
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Le fichier du logo n'est pas une image valide. Si le nom du fichier commence ou se termine par une espace, essayer de la supprimer."));
     }
+    
+    // Construit l'image
+    QImage logo;
+    if (!viewRoom->roomName().isEmpty())
+    {
+        logo.load(viewRoom->roomName());
+    }
+    
+    QMap<quint32, ModelMessage> messages;
+    ModelRoom newRoom(0, viewRoom->roomName(), viewRoom->messageLimit(), viewRoom->isRoomPrivate(), viewRoom->isRoomVisible(), logo, viewRoom->roomAdmins(), viewRoom->roomUsers(), messages);
     
     // As soon as interpretor allows to create a new room, will create a new room.
 }

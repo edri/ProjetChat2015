@@ -280,14 +280,40 @@ QString ViewRoom::roomLogo()
     return ldt_logo->text().trimmed();
 }
 
-QMap<quint32, QString> ViewRoom::roomUsers()
+quint32 ViewRoom::messageLimit()
 {
-    return *_users;
+    return sbx_number->value();
 }
 
-QMap<quint32, QString> ViewRoom::roomAdmins()
+bool ViewRoom::isRoomPrivate()
 {
-    return *_admins;
+    return chk_private->isChecked();
+}
+bool ViewRoom::isRoomVisible()
+{
+    return !chk_private->isChecked() || rbt_visible->isChecked();
+}
+
+QSet<quint32> ViewRoom::roomUsers()
+{
+    QSet<quint32> ids;
+    for (quint32 id : _users->keys())
+    {
+        ids.insert(id);
+    }
+    
+    return ids;
+}
+
+QSet<quint32> ViewRoom::roomAdmins()
+{
+    QSet<quint32> ids;
+    for (quint32 id : _admins->keys())
+    {
+        ids.insert(id);
+    }
+    
+    return ids;
 }
 
 QString ViewRoom::userName()

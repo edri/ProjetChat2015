@@ -53,10 +53,13 @@ public:
     
     // Getters
     QString roomName();
-    QMap<quint32, QString> roomUsers();
-    QMap<quint32, QString> roomAdmins();
+    QSet<quint32> roomUsers();
+    QSet<quint32> roomAdmins();
     QString userName();
     QString roomLogo();
+    quint32 messageLimit();
+    bool isRoomPrivate();
+    bool isRoomVisible();
     bool isEditing();
     
     // Add the specified user to the view. If isAdmin is true, the user will also
