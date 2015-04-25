@@ -2,7 +2,7 @@
  * File : viewRoom.cpp
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 13:43 by Jan Purro
+ * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : Implementation of the room view.
  */
 
@@ -132,7 +132,7 @@
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
     connect(btn_remove, SIGNAL(clicked()), this, SLOT(remove()));
     connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));
-    connect(btn_admin, SIGNAL(clicked()), this, SIGNAL(admin()));
+    connect(btn_admin, SIGNAL(clicked()), this, SLOT(toggleAdmin()));
     connect(btn_browse, SIGNAL(clicked()), this, SLOT(browseImage()));
 }
 
@@ -386,5 +386,13 @@ void ViewRoom::browseImage()
 
 void ViewRoom::remove()
 {
-    emit remove(currentSelectedUserId());
+    if (!editing)
+    {
+        removeUser(currentSelectedUserId());
+    }
+    
+    else
+    {
+        // Add to the banned users.
+    }
 }

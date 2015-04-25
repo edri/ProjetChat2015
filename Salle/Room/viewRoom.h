@@ -2,7 +2,7 @@
  * File : viewRoom.h
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 13:43 by Jan Purro
+ * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : View used when creating or editing a room. Part of the room 
  * module.
  * 
@@ -59,8 +59,6 @@ public:
     QString roomLogo();
     bool isEditing();
     
-    
-    void toggleAdmin();
     // Add the specified user to the view. If isAdmin is true, the user will also
     // be added to the room admins.
     void addUser(quint32 idUser, const QString& userName, const bool isAdmin = false);
@@ -74,22 +72,20 @@ public slots:
     // disable them. Otherwise will enable them.
     void toggleVisibility();
     // Will call removeUser(userId) with the id of the currently selected user
-    // in the member list.
+    // in the member list if creating. Will add to the banned user if editing.
     void remove();
     // Will emit create() or edit() signal.
     void action();
     // Will open a window for the user to choose an image from its file system.
     void browseImage();
+    // Toggle the adminstration rights of the selected user in the member list.
+    void toggleAdmin();
 
 signals:
     // Signal emited when the user wishes to add a new member to the room.
     void add();
-    // Remove/kick a memeber.
-    void remove(const quint32 userId);
     // Signal emited when the user wishes to create a new room.
     void create();
-    // Toggle admin 
-    void admin();
     // Signal emited when the user wishes to apply the changes to a room.
     void edit();
     // Signal emited when the user wishes to cancel the operation.

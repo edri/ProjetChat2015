@@ -2,7 +2,7 @@
  * File : controllerRoom.cpp
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 14:04 by Jan Purro
+ * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : Implementation room module controller (see controllerRoom.h for
  * more info).
  */
@@ -26,11 +26,9 @@ void ControllerRoom::connectViewRoom()
 {
     // Connect the view signals with the controller's slots.
     connect(viewRoom, SIGNAL(add()), this, SLOT(addUser()));
-    connect(viewRoom, SIGNAL(remove(quint32)), this, SLOT(removeUser(quint32)));
     connect(viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
     connect(viewRoom, SIGNAL(create()), this, SLOT(createRoom()));
     connect(viewRoom, SIGNAL(edit()), this, SLOT(editRoom()));
-    connect(viewRoom, SIGNAL(admin()), this, SLOT(toggleAdmin()));
 }
 
 void ControllerRoom::connectViewJoin()
@@ -128,7 +126,7 @@ void ControllerRoom::addUser()
         
         else
         {
-            addUser(0, userName);
+            addUser(++bidon, userName);
         }
     }
 }
@@ -147,19 +145,6 @@ void ControllerRoom::userDoesNotExist()
     viewRoom->setDisabled(false);
     // Display an information box.
     QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cette utilisateur n'existe pas."));
-}
-
-void ControllerRoom::removeUser(const quint32 userId)
-{
-    if (viewRoom->isEditing())
-    {
-        // Ban the user // This should be done all at once when the edition is finished
-    }
-    
-    else
-    {
-        viewRoom->removeUser(userId); // This call is useless. The whole method is useless and will be removed
-    }
 }
 
 void ControllerRoom::createRoom()
@@ -214,16 +199,6 @@ bool ControllerRoom::isValidImage(const QString& path)
 void ControllerRoom::editRoom()
 {
     // Edit the room. This means validating the changes and forwarding them to the server.
-}
-
-void ControllerRoom::toggleAdmin()
-{
-    if (viewRoom->isEditing())
-    {
-        // Communicate with the server (not sure if it should). // No it shoudln't the changes are all communicated to the server at once.
-    }
-    // This call is thus useless. The whole method is useless will be removed.
-    viewRoom->toggleAdmin();
 }
 
 void ControllerRoom::cancelRoom()

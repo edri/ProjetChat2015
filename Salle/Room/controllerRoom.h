@@ -2,7 +2,7 @@
  * File : controllerRoom.h
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 14:04 by Jan Purro
+ * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : Controller for the room module.
  * 
  * The room module manage chat room's creation and edition(management) as well 
@@ -31,6 +31,9 @@ class ControllerRoom : public QObject
     Q_OBJECT
 private:
 
+    // Used for test
+    int bidon = 25;
+    
     // Pointers on the view(s) and the model.
     ModelChator* model;
     ViewRoom* viewRoom;
@@ -77,12 +80,6 @@ public slots :
     // Get the name entered by the user from the viewRoom and ask the server for
     // the corresponding userId (if the user exists).
     void addUser();
-    
-    // Will be removed
-    void removeUser(const quint32 userId);
-    
-    // Will be removed
-    void toggleAdmin();
     
     // Send the server a request for the user to join a specific room.
     void joinRoom();
