@@ -92,9 +92,9 @@ QDataStream& operator >> (QDataStream& ds, ModelUser& u)
 ModelRoom::ModelRoom() : _idRoom(0), _name(""), _private(false), _visible(false), _picture(QImage()), _limitOfStoredMessage(0), _admins(QSet<quint32>()), _members(QSet<quint32>()){}
 
 ModelRoom::ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
-          const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds) :
+          const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages) :
     _idRoom(idRoom), _name(name), _private(isPrivate), _visible(isVisible),
-    _picture(picture), _limitOfStoredMessage(limitOfStoredMessage), _admins(adminsIds), _members(usersIds) {}
+    _picture(picture), _limitOfStoredMessage(limitOfStoredMessage), _admins(adminsIds), _members(usersIds), _messages(messages) {}
 
 ModelRoom::~ModelRoom(){}
 

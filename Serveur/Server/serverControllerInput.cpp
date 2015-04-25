@@ -14,7 +14,7 @@ void ServerControllerInput::login(const QString& pseudo, const QString& hashedPW
     _controllerUser.login(pseudo, hashedPWD, client);
 }
 
-void ServerControllerInput::infoUser(ModelUser& message, QObject* sender)
+void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
 }

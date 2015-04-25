@@ -18,10 +18,7 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 }
 
 void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentClient)
-{
-    // Aussi envoyer le modeluser? je pense oui
-    Q_UNUSED(user);
-    
+{    
     // Récupération des ids des salles auxquelles l'utilisateur est inscrit
     QSet<quint32> rooms = user.getRooms();
     
