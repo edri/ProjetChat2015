@@ -2,7 +2,7 @@
  * File : controllerRoom.h
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 12:42
+ * Last Modified : 25.04.2015 14:04 by Jan Purro
  * Description : Controller for the room module.
  * 
  * The room module manage chat room's creation and edition(management) as well 
@@ -46,14 +46,8 @@ private:
     // be called when the viewJoin is a valid pointer(seg fault otherwise).
     void connectViewJoin();
     
-    // Creation of a room. Get the data from the viewRoom and send them
-    // to the server
-    void createRoom();
-    
-    // Edition of the loaded room.Get the data from the viewRoom and send them
-    // to the server
-    void editRoom();
-    
+    // Check that the file found at path is a valid image.
+    bool isValidImage(const QString& path);
     
 public:
 
@@ -73,16 +67,19 @@ public:
     
 public slots :
 
+    // Creation of a room. Get the data from the viewRoom and send them
+    // to the server
+    void createRoom();
+    
+    // Edition of the loaded room.Get the data from the viewRoom and send them
+    // to the server
+    void editRoom();
     // Get the name entered by the user from the viewRoom and ask the server for
     // the corresponding userId (if the user exists).
     void addUser();
     
     // Will be removed
     void removeUser(const quint32 userId);
-    
-    // Call the creation respectively edition of a room according to the 
-    // state of the room view.
-    void actionRoom();
     
     // Will be removed
     void toggleAdmin();

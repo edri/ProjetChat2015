@@ -1,18 +1,30 @@
+/*
+ * File : viewRoom.cpp
+ * Project : ProjetChat2015
+ * Author(s) : Jan Purro
+ * Last Modified : 25.04.2015 13:43 by Jan Purro
+ * Description : Implementation of the room view.
+ */
+
+
 #include <QtWidgets>
 
 #include "viewRoom.h"
 #include "controllerRoom.h"
 
- ViewRoom:: ViewRoom()
+ ViewRoom:: ViewRoom(const bool edit)
 {
     // Setting attributes
+    
+    // The view will be destroyed if it's closed.
     setAttribute(Qt::WA_DeleteOnClose, true);
     
     // Initializazion of core elements
-    editing = false;
+    editing = edit;
     layouts = new QList<QLayout*>();
     _users = new QMap<quint32, QString>;
     _admins = new QMap<quint32, QString>;
+    
     // Initialization of the GUI elements.
     lbl_title = new QLabel("");
     lbl_title->setFont(QFont(this->font().family(), 
@@ -118,7 +130,7 @@
     connect(btn_add, SIGNAL(clicked()), this, SIGNAL(add()));
     connect(ldt_member, SIGNAL(returnPressed()), this, SIGNAL(add()));
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
-    connect(btn_remove, SIGNAL(clicked()), this, SLOT(willRemove()));
+    connect(btn_remove, SIGNAL(clicked()), this, SLOT(remove()));
     connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));
     connect(btn_admin, SIGNAL(clicked()), this, SIGNAL(admin()));
     connect(btn_browse, SIGNAL(clicked()), this, SLOT(browseImage()));
@@ -174,6 +186,8 @@ void ViewRoom::toggleVisibility()
 {
     rbt_visible->setEnabled(chk_private->isChecked());
     rbt_onInvitation->setEnabled(chk_private->isChecked());
+    // If neither visibility option is selected and the checkbox for private room
+    // is checked the visible room option is checked by default.
     if (!bgp_visibility->checkedButton() && chk_private->isChecked())
     {
         rbt_visible->setChecked(true);
@@ -210,7 +224,7 @@ void ViewRoom::action()
 }
 
 void ViewRoom::removeUser()
-{
+{   
     sim_members->removeRow(lst_members->currentIndex().row());
 }
 
@@ -242,11 +256,6 @@ void ViewRoom::setRoomLogo(const QString& picture)
 void ViewRoom::setPrivate(const bool b)
 {
     chk_private->setChecked(b);
-}
-
-void ViewRoom::setEditing(bool b)
-{
-    editing = b;
 }
 
 void ViewRoom::setRoomVisibility(const bool b)
@@ -306,10 +315,10 @@ quint32 ViewRoom::currentSelectedUserId()
 
 void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
 {
-    // First search the use amongst the admins 
+    // First search the user amongst the admins 
     QMap<quint32, QString>::Iterator user = _admins->find(idUser);
     
-    // If the user isn't an admin, it is a user.
+    // If the user isn't an admin
     if (user == _admins->end())
     {
         
@@ -321,6 +330,7 @@ void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
             // Throw exception ?
             return;
         }*/
+        
         // Add to the admins and change the display.
         _admins->insert(idUser, userName);
         
@@ -374,7 +384,7 @@ void ViewRoom::browseImage()
     ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), tr("~"), tr("Image Files (*.png *.jpg)")));
 }
 
-void ViewRoom::willRemove()
+void ViewRoom::remove()
 {
     emit remove(currentSelectedUserId());
 }

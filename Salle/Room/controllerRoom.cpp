@@ -2,7 +2,7 @@
  * File : controllerRoom.cpp
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 12:42
+ * Last Modified : 25.04.2015 14:04 by Jan Purro
  * Description : Implementation room module controller (see controllerRoom.h for
  * more info).
  */
@@ -28,7 +28,8 @@ void ControllerRoom::connectViewRoom()
     connect(viewRoom, SIGNAL(add()), this, SLOT(addUser()));
     connect(viewRoom, SIGNAL(remove(quint32)), this, SLOT(removeUser(quint32)));
     connect(viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
-    connect(viewRoom, SIGNAL(create()), this, SLOT(actionRoom()));
+    connect(viewRoom, SIGNAL(create()), this, SLOT(createRoom()));
+    connect(viewRoom, SIGNAL(edit()), this, SLOT(editRoom()));
     connect(viewRoom, SIGNAL(admin()), this, SLOT(toggleAdmin()));
 }
 
@@ -37,22 +38,6 @@ void ControllerRoom::connectViewJoin()
     // Connect the view signals with the controller's slots.
     connect(viewJoin->btn_join, SIGNAL(clicked()), this, SLOT(joinRoom()));
     connect(viewJoin->btn_cancel, SIGNAL(clicked()), this, SLOT(cancelJoin()));
-}
-
-void ControllerRoom::actionRoom()
-{
-    // If the room is currently editing an already existing room, call the 
-    // function for editing rooms.
-    // Otherwise a new room is created.
-    if(viewRoom->isEditing())
-    {
-        editRoom();
-    }
-    
-    else
-    {
-        createRoom();
-    }
 }
 
 void ControllerRoom::showRoom()
@@ -74,10 +59,9 @@ void ControllerRoom::showRoom()
 
 void ControllerRoom::showRoom(const quint32 idRoom)
 {
-    viewRoom = new ViewRoom();
+    viewRoom = new ViewRoom(true);
     // Connect the view signals
     connectViewRoom();
-    viewRoom->setEditing(true);
     
     // Retrieve the room from the id
     ModelRoom room = model->getRoom(idRoom);
@@ -167,7 +151,7 @@ void ControllerRoom::userDoesNotExist()
 
 void ControllerRoom::removeUser(const quint32 userId)
 {
-    if (viewRoom->editing)
+    if (viewRoom->isEditing())
     {
         // Ban the user // This should be done all at once when the edition is finished
     }
@@ -207,17 +191,24 @@ void ControllerRoom::createRoom()
     }
     
     // The room logo must be either empty or a valid image.
-    QString logoPath = viewRoom->roomLogo();
-    // If the logoPath is empty or not an image, a null image will be 
-    // created. We check for null image only in the case the path was'nt empty.
-    QImage roomLogo(logoPath);
-    // Check for invalid path, should the format/size be checked too ?
-    if(!logoPath.isEmpty() && roomLogo.isNull())
+    if(!isValidImage(viewRoom->roomLogo()))
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Le fichier du logo n'est pas une image valide. Si le nom du fichier commence ou se termine par une espace, essayer de la supprimer."));
     }
     
     // As soon as interpretor allows to create a new room, will create a new room.
+}
+
+bool ControllerRoom::isValidImage(const QString& path)
+{
+    if (path.isEmpty())
+    {
+        return true;
+    }
+    // Check for invalid path or image, should the format/size be checked too ?
+    QImage logo(path);
+    
+    return !logo.isNull();
 }
 
 void ControllerRoom::editRoom()
@@ -227,7 +218,7 @@ void ControllerRoom::editRoom()
 
 void ControllerRoom::toggleAdmin()
 {
-    if (viewRoom->editing)
+    if (viewRoom->isEditing())
     {
         // Communicate with the server (not sure if it should). // No it shoudln't the changes are all communicated to the server at once.
     }
