@@ -38,7 +38,7 @@ void ControllerUser::connectToServeur() const
     QString port = "1234";   //
 
     // Se connecter au serveur
-    cc->connectToServer("10.192.92.84:1234");
+    cc->connectToServer("localhost:1234");
 
 
 
