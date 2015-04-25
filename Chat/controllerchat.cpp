@@ -69,5 +69,5 @@ void ControllerChat::sendMessage() const
 {
     ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
 
-    //co->sendMessage(message);
+    _co->sendMessage(message);
 }
