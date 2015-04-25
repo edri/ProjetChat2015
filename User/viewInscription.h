@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+//#include <QCloseEvent>
 
 namespace Ui {
 class viewInscription;
@@ -23,6 +24,7 @@ private slots:
 
 private:
     Ui::viewInscription *ui;
+    void closeEvent(QCloseEvent *);
 };
 
 #endif // VIEWINSCRIPTION_H
