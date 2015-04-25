@@ -5,12 +5,17 @@ ControllerUser::ControllerUser(ControllerDB& db, ControllerRoom& room) : _db(db)
 
 void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
 {
-    quint32 id = client->id;
-    if (_db.login(pseudo, hashedPWD, id))
+    qDebug() << "tentative de login depuis " << client->socket.peerAddress().toString() << pseudo << ", " << hashedPWD;
+    
+    if (_db.login(pseudo, hashedPWD, client->id))
     {
+        quint32 id = client->id;
+        qDebug() << "Authentification OK, userid = " << id;
+        
         // Envoi du ModelUser
         client->logged = true;
         ModelUser user = _db.info(id);
+        qDebug() << "User: " << user.getUserName();
         client->socket.sendBinaryMessage(interpretor->sendInfoUser(user));
         // Clés?
         
@@ -45,6 +50,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
     }
     else
     {
+        qDebug() << "Erreur d'authentification";
         client->socket.sendBinaryMessage(interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
     }
 }

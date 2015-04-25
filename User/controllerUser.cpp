@@ -13,6 +13,7 @@ ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, Clien
     // Connecter le signal au slot
     connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServeur()));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
+    connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 
 
 }
@@ -46,6 +47,6 @@ void ControllerUser::connectToServeur() const
 
 void ControllerUser::auth() const
 {
-    co->login("Jean-paul", "fromage66");
+    co->login("licorne", "java");
 }
 
