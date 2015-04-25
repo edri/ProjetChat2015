@@ -29,7 +29,7 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
     QTreeWidgetItem* roomItem = new QTreeWidgetItem(_ui->tre_rooms);
     roomItem->setData(0, Qt::UserRole, roomId);
     roomItem->setText(0, roomName);
-    roomItem->setIcon(0, QIcon(QBitmap::fromImage(roomPicture)));
+    roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
 }
 
 void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QImage& image, const bool isConnected)
@@ -41,7 +41,7 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
             QTreeWidgetItem* userItem = new QTreeWidgetItem(_ui->tre_rooms->topLevelItem(i));
             userItem->setData(0, Qt::UserRole, userId);
             userItem->setText(0, userName);
-            userItem->setIcon(0, QIcon(QBitmap::fromImage(image)));
+            userItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
 
             if (isConnected)
                 userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));

@@ -8,12 +8,34 @@ int main(int argc, char *argv[])
 
     ModelChator* model = new ModelChator();
     // Cinq utilisateurs de test.
-    QSet<quint32> idUsers;
-    ModelUser user1(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), QImage("img/54226b6d8bfa4.jpg"), idUsers);
-    ModelUser user2(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), QImage("img/5470a45364910.png"), idUsers);
-    ModelUser user3(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), QImage("img/54226b6cd2c4b.jpg"), idUsers);
-    ModelUser user4(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), QImage("img/541c2d4081e22.jpg"), idUsers);
-    ModelUser user5(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), QImage("img/54226b6e4cffe.jpg"), idUsers);
+    QSet<quint32> roomsU1;
+    roomsU1.insert(1);
+    roomsU1.insert(2);
+    roomsU1.insert(4);
+    ModelUser user1(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), QImage("img/54226b6d8bfa4.jpg"), roomsU1);
+
+    QSet<quint32> roomsU2;
+    roomsU2.insert(2);
+    roomsU2.insert(3);
+    ModelUser user2(2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), QImage("img/5470a45364910.png"), roomsU2);
+
+    QSet<quint32> roomsU3;
+    roomsU3.insert(1);
+    roomsU3.insert(2);
+    roomsU3.insert(3);
+    roomsU3.insert(4);
+    ModelUser user3(3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), QImage("img/54226b6cd2c4b.jpg"), roomsU3);
+
+    QSet<quint32> roomsU4;
+    roomsU4.insert(2);
+    ModelUser user4(4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), QImage("img/541c2d4081e22.jpg"), roomsU4);
+
+    QSet<quint32> roomsU5;
+    roomsU5.insert(1);
+    roomsU5.insert(2);
+    roomsU5.insert(4);
+    ModelUser user5(5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), QImage("img/54226b6e4cffe.jpg"), roomsU5);
+
     model->addUser(user1);
     model->addUser(user2);
     model->addUser(user3);

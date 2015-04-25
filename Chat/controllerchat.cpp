@@ -43,6 +43,7 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 void ControllerChat::loadRooms(const quint32 idUser) const
 {
     QList<quint32> userRooms = _model->getUserRooms(idUser);
+    qStableSort(userRooms);
 
     for (quint32 roomId : userRooms)
     {
