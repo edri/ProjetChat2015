@@ -2,18 +2,9 @@
  * File : controllerRoom.cpp
  * Project : ProjetChat2015
  * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 12:00
- * Description : Controller for the room module.
- * 
- * The room module manage chat room's creation and edition(management) as well 
- * as user joining a room.
- * Two views are available in this module : one for creation/edition and one for
- * joining called respectively ViewRoom and ViewJoin.
- * The model is the application model (ModelChator).
- * 
- * The controller will open views when needed, retriew and insert data from/in 
- * the model and take care of the communications with the server for this
- * module.
+ * Last Modified : 25.04.2015 12:42
+ * Description : Implementation room module controller (see controllerRoom.h for
+ * more info).
  */
 
 
@@ -178,12 +169,12 @@ void ControllerRoom::removeUser(const quint32 userId)
 {
     if (viewRoom->editing)
     {
-        // Ban the user
+        // Ban the user // This should be done all at once when the edition is finished
     }
     
     else
     {
-        viewRoom->removeUser(userId);
+        viewRoom->removeUser(userId); // This call is useless. The whole method is useless and will be removed
     }
 }
 
@@ -231,32 +222,32 @@ void ControllerRoom::createRoom()
 
 void ControllerRoom::editRoom()
 {
-    
+    // Edit the room. This means validating the changes and forwarding them to the server.
 }
 
 void ControllerRoom::toggleAdmin()
 {
     if (viewRoom->editing)
     {
-        // Communicate with the server (not sure if it should).
+        // Communicate with the server (not sure if it should). // No it shoudln't the changes are all communicated to the server at once.
     }
-    
+    // This call is thus useless. The whole method is useless will be removed.
     viewRoom->toggleAdmin();
 }
 
 void ControllerRoom::cancelRoom()
 {
-    // Close and delete the viewRoom.
+    // Close and delete the viewRoom (the viewRoom is set to be destroyed when closed).
     viewRoom->close();
 }
 
 void ControllerRoom::cancelJoin()
 {
-    // Close and delete the viewJoin.
+    // Close and delete the viewJoin (the viewJoin is set to be destroyed when closed).
     viewJoin->close();
 }
 
 void ControllerRoom::joinRoom()
 {
-   
+   // Inform the server that the user wish to join a room.
 }
