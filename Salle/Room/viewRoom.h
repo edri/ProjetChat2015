@@ -1,4 +1,17 @@
-// View for the creation of new rooms or edition of already existing ones.
+/*
+ * File : viewRoom.h
+ * Project : ProjetChat2015
+ * Author(s) : Jan Purro
+ * Last Modified : 25.04.2015 14:25 by Jan Purro
+ * Description : View used when creating or editing a room. Part of the room 
+ * module.
+ * 
+ * When the module controller (controllerRoom) construct a view, it will set if 
+ * the view is editing or creating a room. The mode can't be changed once the 
+ * room is created.
+ * 
+ * When closed the view is destroyed.
+ */
 
 #ifndef CHAT_VIEW_ROOM_H
 #define CHAT_VIEW_ROOM_H
@@ -6,20 +19,25 @@
 #include <QtWidgets>
 #include "../../ModeleChator/modelChator.h"
 
+// predeclaration of the controller.
 class ControllerRoom;
 
 class ViewRoom : public QWidget
 {
     Q_OBJECT
     
-    friend ControllerRoom;
+    //friend ControllerRoom;
     
 public:
     
-    // Clear all the fields in the widget.
+    // Clear all the fields in the view.
     void clear();
-
-    ViewRoom(); 
+    
+    // Constructor.
+    // Parameter : - edit : true if the user is modifiying a room, false is the
+    //                       user is creating a new room.
+    ViewRoom(const bool edit = false); 
+    // Desctructor.
     ~ViewRoom();
     
     // Setters
@@ -32,43 +50,54 @@ public:
     void setPrivate(const bool b);
     void setRoomVisibility(const bool b);
     void setInvitation(const bool b);
+    
     // Getters
     QString roomName();
     QMap<quint32, QString> roomUsers();
     QMap<quint32, QString> roomAdmins();
     QString userName();
+    QString roomLogo();
+    bool isEditing();
     
-    
-    void toggleAdmin();
-    
+    // Add the specified user to the view. If isAdmin is true, the user will also
+    // be added to the room admins.
     void addUser(quint32 idUser, const QString& userName, const bool isAdmin = false);
     // Remove the selected member.
     void removeUser();
+    // Remove the specified user from the room.
     void removeUser(const quint32 userId);
     
 public slots:
+    // If the radio buttons for the visibility of private rooms are enabled will
+    // disable them. Otherwise will enable them.
     void toggleVisibility();
-    void willRemove();
+    // Will call removeUser(userId) with the id of the currently selected user
+    // in the member list if creating. Will add to the banned user if editing.
+    void remove();
+    // Will emit create() or edit() signal.
     void action();
+    // Will open a window for the user to choose an image from its file system.
     void browseImage();
+    // Toggle the adminstration rights of the selected user in the member list.
+    void toggleAdmin();
 
 signals:
-    // Add a new member.
+    // Signal emited when the user wishes to add a new member to the room.
     void add();
-    // Remove/kick a memeber.
-    void remove(const quint32 userId);
-    // Create a new room.
+    // Signal emited when the user wishes to create a new room.
     void create();
-    // Toggle admin rights
-    void admin();
-    // Edit the current room
+    // Signal emited when the user wishes to apply the changes to a room.
     void edit();
-    // Cancel operation
+    // Signal emited when the user wishes to cancel the operation.
     void cancel();
     
 private:
 
+    // Toggle the administration rights of the user and modify the display of
+    // the user in the view (bold if admin, normal otherwise).
     void toggleAdmin(quint32 idUser, const QString& userName);
+    
+    // Returns the id of the currently selected user in the list.
     quint32 currentSelectedUserId();
     
     // Core elements
