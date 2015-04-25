@@ -224,19 +224,6 @@ void ViewRoom::removeUser(const quint32 userId)
     }
 }
 
-/*void ViewRoom::loadRoom(const ModelRoom* room)
-{
-    ldt_name->setText(room->getName());
-    sbx_number->setValue(room->getLimit());
-    ldt_logo->setText(room->getPicture());
-    chk_private->setChecked(room->isPrivate());
-    if(room->isPrivate())
-    {
-        rbt_visible->setChecked(room->isVisible());
-        rbt_onInvitation->setChecked(!room->isVisible());
-    }
-}*/
-
 void ViewRoom::setRoomName(const QString& name)
 {
     ldt_name->setText(name);
@@ -257,6 +244,11 @@ void ViewRoom::setPrivate(const bool b)
     chk_private->setChecked(b);
 }
 
+void ViewRoom::setEditing(bool b)
+{
+    editing = b;
+}
+
 void ViewRoom::setRoomVisibility(const bool b)
 {
     rbt_visible->setChecked(b);
@@ -272,6 +264,13 @@ QString ViewRoom::roomName()
     return ldt_name->text().trimmed();
 }
 
+QString ViewRoom::roomLogo()
+{
+    // Could be a problem if the image name starts, ends or is only composed of
+    // space characters, but that would be really weird.
+    return ldt_logo->text().trimmed();
+}
+
 QMap<quint32, QString> ViewRoom::roomUsers()
 {
     return *_users;
@@ -285,6 +284,11 @@ QMap<quint32, QString> ViewRoom::roomAdmins()
 QString ViewRoom::userName()
 {
     return ldt_member->text().trimmed();
+}
+
+bool ViewRoom::isEditing()
+{
+    return editing;
 }
 
 void ViewRoom::toggleAdmin()
@@ -367,7 +371,7 @@ void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdm
 
 void ViewRoom::browseImage()
 {
-    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg *.bmp)")));
+    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), tr("~"), tr("Image Files (*.png *.jpg)")));
 }
 
 void ViewRoom::willRemove()

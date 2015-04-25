@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     model->addRoom(room4);
     
     ControllerRoom w(model, &currentUser);
-    w.showRoom(room2.getIdRoom());
+    w.showRoom();//room2.getIdRoom());
     
     
     

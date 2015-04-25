@@ -32,12 +32,15 @@ public:
     void setPrivate(const bool b);
     void setRoomVisibility(const bool b);
     void setInvitation(const bool b);
+    void setEditing(bool b);
+    
     // Getters
     QString roomName();
     QMap<quint32, QString> roomUsers();
     QMap<quint32, QString> roomAdmins();
     QString userName();
-    
+    QString roomLogo();
+    bool isEditing();
     
     void toggleAdmin();
     
