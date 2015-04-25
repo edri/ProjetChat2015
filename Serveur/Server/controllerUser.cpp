@@ -5,7 +5,8 @@ ControllerUser::ControllerUser(ControllerDB& db, ControllerRoom& room) : _db(db)
 
 void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
 {
-    if (_db.login(pseudo, hashedPWD, client->id))
+    quint32 id = client->id;
+    if (_db.login(pseudo, hashedPWD, id))
     {
         // Envoi du ModelUser
         client->logged = true;
@@ -13,8 +14,8 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         client->socket.sendBinaryMessage(interpretor->sendInfoUser(user));
         // Clés?
         
-        QMap<quint32, ModeRoom> rooms;
-        QMap<quint32, ModeUser> users;
+        QMap<quint32, ModelRoom> rooms;
+        QMap<quint32, ModelUser> users;
         
         // Récupération des ids des salles jointes
         QSet<quint32> idRooms = user.getRooms();
@@ -32,7 +33,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
                 if (!users.contains(idUser))
                 {
                     // Récupération des informations de l'utilisateur
-                    users.insert(idUserm, _db.info(idUser));
+                    users.insert(idUser, _db.info(idUser));
                 }
             }
         }

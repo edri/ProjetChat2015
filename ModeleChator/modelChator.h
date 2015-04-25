@@ -73,7 +73,7 @@ class ModelChator
          *
          * Last edited by Miguel Santamaria, on 18.04.2015 00:18
         */
-        void addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage &picture, const QSet<quint32>& admins, const QSet<quint32>& users);
+        void addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage &picture, const QSet<quint32>& admins, const QSet<quint32>& users, const QMap<quint32, ModelMessage>& messages);
         void addRoom(const ModelRoom& room);
         /*
          * Created by Miguel Santamaria, on 20.04.2015 12:22

@@ -87,7 +87,7 @@ QByteArray Interpretor::disconnect(const quint32 idUser)
     return data;
 }
 
-QByteArray connected(const ModelUser& user)
+QByteArray Interpretor::connected(const ModelUser& user)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
