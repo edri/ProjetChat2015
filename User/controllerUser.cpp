@@ -7,10 +7,10 @@ ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, Clien
     this->i = i;
     this->cc = cc;
     this->co = co;
-    // Initialiser une nouvelle vue pour la connexion
+    // Initialize a new view for the connection
     this->_view = new ViewUser();
 
-    // Connecter le signal au slot
+    // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServeur()));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
@@ -32,13 +32,13 @@ void ControllerUser::showView() const
 
 void ControllerUser::connectToServeur() const
 {
-    // Récupérer les données avec les getters
+    // Use the getter to retrieve the data
     QString username = "Jean-paul";
     QString password = "fromage66";
     QString server = "localhost";
     QString port = "1234";   //
 
-    // Se connecter au serveur
+    // Connection to the servers
     cc->connectToServer("192.168.1.103:1234");
 }
 

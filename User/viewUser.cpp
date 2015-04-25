@@ -7,8 +7,8 @@ ViewUser::ViewUser(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->ldt_password->setValidator(new QIntValidator());
-    // Initialiser une nouvelle vue pour l'inscription
-    this->_viewInscription = new ViewInscription();
+    // Initialize a new view for the inscription
+    this->_viewInscription = new ViewInscription(this);
 }
 
 ViewUser::~ViewUser()
@@ -19,23 +19,26 @@ ViewUser::~ViewUser()
 
 void ViewUser::on_btn_connexion_clicked()
 {
-    // Envoyer les données
+    // Send the data
 
-    // Valider manuellement: les champs doivent être remplis
+    // manually valid : The field must be filled.
     if(ui->btn_connexion->text().isEmpty()) {
-        // Afficher un message d'erreur
+        // Show an error message
     }
 
-    // Récupérer les identifiants
+    // Get the login
 
-    // Emettre le signal
+    // send a signal
     emit requestGetIds();
 }
 
 void ViewUser::on_btn_inscription_clicked()
 {
-    // Ouvrir la fenêtre inscription
+    // Open the inscription window
     _viewInscription->show();
+    // Disable the main windows
+    setEnabled(false);
+    _viewInscription->setEnabled(true);
 }
 
 

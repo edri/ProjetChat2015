@@ -19,6 +19,8 @@ public:
 private slots:
     void on_btn_path_clicked();
 
+    void on_btn_inscription_clicked();
+
 private:
     Ui::viewInscription *ui;
 };

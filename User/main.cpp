@@ -16,14 +16,10 @@ int main(int argc, char *argv[])
     ClientConnector* cc = new ClientConnector();
     ControllerOutput* co = new ControllerOutput(*cc, *i);
 
-    // Créer le contrôleur qui créera la vue
+    // Create the controler which will create the view
     ControllerUser* controller = new ControllerUser(cci, i, cc, co);
-    // Lancer la vue
+    // Call the view
     controller->showView();
 
-
-
-    // Lance l'affichage des fenêtres + renvoie le
-    // signal de terminaison
     return a.exec();
 }

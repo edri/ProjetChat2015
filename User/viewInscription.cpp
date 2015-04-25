@@ -15,9 +15,20 @@ ViewInscription::~ViewInscription()
 
 void ViewInscription::on_btn_path_clicked()
 {
-    // Chercher l'image à charger
-
+    // Browse the files in order to find a picture
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Images (*.png *.gif *.jpg *.jpeg)");
-   // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
+
+    ui->ldt_profilPicture->setText(fichier);
+    // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
 
 }
+
+void ViewInscription::on_btn_inscription_clicked()
+{
+
+}
+
+//void ViewInscription::closeEvent(QCloseEvent *)
+//{
+
+//}
