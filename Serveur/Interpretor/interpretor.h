@@ -11,6 +11,8 @@
 //class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
 class Interpretor : public QObject
 {
+    Q_OBJECT
+    
     public:
     Interpretor(ControllerInput& dispatcher);
     

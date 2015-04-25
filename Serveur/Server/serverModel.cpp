@@ -6,7 +6,7 @@ ChatorClient::ChatorClient(QWebSocket& socket) : socket(socket)
     logged = false;
     
     connect(&socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
-    connect(&socket, SIGNAL(binaryMessageReceived(const QByteArray& message)), this, SIGNAL(binaryMessageReceived(const QByteArray& message)));
+    connect(&socket, SIGNAL(binaryMessageReceived(const QByteArray&)), this, SIGNAL(binaryMessageReceived(const QByteArray&)));
 }
 
 ChatorClient::~ChatorClient()

@@ -46,7 +46,7 @@ void Listener::newConnection()
     qDebug() << "Client connected:" << newSocket->peerAddress().toString();
     
     connect(client, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(client, SIGNAL(binaryMessageReceived(const QByteArray& message)), &_interpretor, SLOT(processData(const QByteArray& data)));
+    connect(client, SIGNAL(binaryMessageReceived(const QByteArray&)), &_interpretor, SLOT(processData(const QByteArray&)));
 }
 
 void Listener::disconnected()
