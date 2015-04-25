@@ -7,7 +7,7 @@ ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, Clien
     this->i = i;
     this->cc = cc;
     this->co = co;
-    // Initialiser une nouvelle vue
+    // Initialiser une nouvelle vue pour la connexion
     this->_view = new ViewUser();
 
     // Connecter le signal au slot
@@ -20,7 +20,7 @@ ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, Clien
 
 ControllerUser::~ControllerUser()
 {
-
+    delete _view;
 }
 
 
@@ -39,10 +39,7 @@ void ControllerUser::connectToServeur() const
     QString port = "1234";   //
 
     // Se connecter au serveur
-    cc->connectToServer("localhost:1234");
-
-
-
+    cc->connectToServer("192.168.1.103:1234");
 }
 
 void ControllerUser::auth() const

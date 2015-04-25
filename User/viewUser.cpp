@@ -7,10 +7,13 @@ ViewUser::ViewUser(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->ldt_password->setValidator(new QIntValidator());
+    // Initialiser une nouvelle vue pour l'inscription
+    this->_viewInscription = new ViewInscription();
 }
 
 ViewUser::~ViewUser()
 {
+    delete _viewInscription;
     delete ui;
 }
 
@@ -32,6 +35,7 @@ void ViewUser::on_btn_connexion_clicked()
 void ViewUser::on_btn_inscription_clicked()
 {
     // Ouvrir la fenêtre inscription
+    _viewInscription->show();
 }
 
 

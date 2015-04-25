@@ -17,6 +17,7 @@ class ControllerUser : public QObject
 private:
 
     ViewUser* _view;
+    ViewUser* _viewInscription;
 
     ClientControllerInput* cci;
     Interpretor* i;
