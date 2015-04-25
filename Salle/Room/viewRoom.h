@@ -50,6 +50,7 @@ public slots:
     void toggleVisibility();
     void willRemove();
     void action();
+    void browseImage();
 
 signals:
     // Add a new member.
@@ -64,7 +65,6 @@ signals:
     void edit();
     // Cancel operation
     void cancel();
-    
     
 private:
 

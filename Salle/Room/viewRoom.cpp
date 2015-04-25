@@ -121,6 +121,7 @@
     connect(btn_remove, SIGNAL(clicked()), this, SLOT(willRemove()));
     connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));
     connect(btn_admin, SIGNAL(clicked()), this, SIGNAL(admin()));
+    connect(btn_browse, SIGNAL(clicked()), this, SLOT(browseImage()));
 }
 
 ViewRoom::~ ViewRoom()
@@ -362,6 +363,11 @@ void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdm
     }
     
     ldt_member->clear();
+}
+
+void ViewRoom::browseImage()
+{
+    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg *.bmp)")));
 }
 
 void ViewRoom::willRemove()
