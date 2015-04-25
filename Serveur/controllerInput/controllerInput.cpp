@@ -10,6 +10,5 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sende
 
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
-    Q_UNUSED(user);
-    Q_UNUSED(sender);
+    qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
 }

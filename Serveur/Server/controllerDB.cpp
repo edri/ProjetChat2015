@@ -4,6 +4,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QVariant>
 
 ControllerDB::ControllerDB(const QString& dbName)
 {
@@ -63,20 +64,19 @@ bool ControllerDB::init()
 }
 
 bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint32& id)
-{
+{    
     QSqlQuery query(_db);
-    query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
-    query.bindValue(":login", pseudo);
-    query.bindValue(":password", hashedPWD);
-    query.exec();
+    //query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
+    //query.bindValue(":login", pseudo);
+    //query.bindValue(":password", hashedPWD);
+    query.exec("SELECT idUser FROM user WHERE login = \"" + pseudo + "\" AND password = \"" + hashedPWD + "\"");
     
-    if (query.size() != 1) {return false;}
+    if (query.record().count() != 1) {return false;}
     
     query.first();
     id = query.record().value(0).toUInt();
     
-    query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = :id");
-    query.bindValue(":id", id);
+    query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
     query.exec();
 
     return true;
@@ -85,8 +85,7 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
 ModelUser ControllerDB::info(const quint32 id)
 {
     QSqlQuery query(_db);
-    query.prepare("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = :id");
-    query.bindValue(":id", id);
+    query.prepare("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = " + QString::number(id));
     query.exec();
     query.first();
     
@@ -94,8 +93,7 @@ ModelUser ControllerDB::info(const quint32 id)
     QSet<quint32> rooms;
     
     //query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id");
-    query.prepare("SELECT idRoom FROM roomMembership WHERE idUser = :id");
-    query.bindValue(":id", id);
+    query.prepare("SELECT idRoom FROM roomMembership WHERE idUser = " + QString::number(id));
     query.exec();
     
     while(query.next())
@@ -109,11 +107,11 @@ ModelUser ControllerDB::info(const quint32 id)
 quint32 ControllerDB::storeMessage(const ModelMessage& message)
 {
     QSqlQuery query(_db);
-    query.prepare("INSERT INTO message (contents, date, idUser, idRoom, lastUpdated) VALUES (:content, datetime('NOW'), :idUser, :idRoom, datetime('NOW'))");
-    query.bindValue(":content", message.getContent());
-    query.bindValue(":idUser", message.getIdUser());
-    query.bindValue(":idRoom", message.getIdRoom());
-    query.exec();
+    //query.prepare("INSERT INTO message (contents, date, idUser, idRoom, lastUpdated) VALUES (:content, datetime('NOW'), :idUser, :idRoom, datetime('NOW'))");
+    //query.bindValue(":content", message.getContent());
+    //query.bindValue(":idUser", message.getIdUser());
+    //query.bindValue(":idRoom", message.getIdRoom());
+    query.exec("INSERT INTO message (contents, date, idUser, idRoom, lastUpdated) VALUES (\"" + message.getContent()  + "\", datetime('NOW'), " + QString::number(message.getIdUser()) + ", " + QString::number(message.getIdRoom()) + ", datetime('NOW'))");
     return query.lastInsertId().toUInt();
 }
 
@@ -124,8 +122,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     QSet<quint32> users;
     
     QSqlQuery query(_db);
-    query.prepare("SELECT idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege WHERE idRoom = :id");
-    query.bindValue(":id", id);
+    query.prepare("SELECT idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege WHERE idRoom = " + QString::number(id));
     query.exec();
     
     quint32 idUser;
@@ -140,8 +137,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    query.prepare("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = :id");
-    query.bindValue(":id", id);
+    query.prepare("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = " + QString::number(id));
     query.exec();
     
     while(query.next())
@@ -151,8 +147,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     }
     
     // Récupération des informations de la salle
-    query.prepare("SELECT idRoom, name, private, visible, picture, limitOfStoredMessages FROM room WHERE idRoom = :id");
-    query.bindValue(":id", id);
+    query.prepare("SELECT idRoom, name, private, visible, picture, limitOfStoredMessages FROM room WHERE idRoom = " + QString::number(id));
     query.exec();
     query.first();
     
