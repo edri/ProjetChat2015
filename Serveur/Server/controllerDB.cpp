@@ -77,7 +77,7 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     
     query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = :id");
     query.bindValue(":id", id);
-    query.exec()
+    query.exec();
 
     return true;
 }
@@ -118,15 +118,8 @@ quint32 ControllerDB::storeMessage(const ModelMessage& message)
 }
 
 ModelRoom ControllerDB::infoRoom(const quint32 id)
-{
-    QSqlQuery query(_db);
-    query.prepare("SELECT idRoom, name, private, visible, picture, limitOfStoredMessages FROM room WHERE idRoom = :id");
-    query.bindValue(":id", id);
-    query.exec();
-    query.first();
-    
-    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(), query.record().value("limitOfStoredMessages").toUInt());
-    
+{    
+    // Récupération des membres et des admins
     QSet<quint32> admins;
     QSet<quint32> users;
     
@@ -135,15 +128,18 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     query.bindValue(":id", id);
     query.exec();
     
+    quint32 idUser;
+    
     while(query.next())
     {
-        if (query.record().value("name").toString() == "admin") {admins.insert(query.record().value("idUser").toUInt());}
-        else if (query.record().value("name").toString() == "user") {users.insert(query.record().value("idUser").toUInt());}
+        idUser = query.record().value("idUser").toUInt();
+        if (query.record().value("name").toString() == "admin") {admins.insert(idUser);}
+        users.insert(idUser);
     }
     
+    // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    QSqlQuery query(_db);
     query.prepare("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = :id");
     query.bindValue(":id", id);
     query.exec();
@@ -153,6 +149,16 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
         ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("content").toString());
         messages.insert(message.getIdMessage(), message);
     }
+    
+    // Récupération des informations de la salle
+    query.prepare("SELECT idRoom, name, private, visible, picture, limitOfStoredMessages FROM room WHERE idRoom = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    query.first();
+    
+    // Construction de la salle
+    
+    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(), admins, users, messages);
     
     return room;
 }

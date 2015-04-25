@@ -29,7 +29,6 @@ class ChatorClient : public QObject
 struct ChatorRoom
 {
     quint32 id;
-    quint32 admin;
     QList<ChatorClient*> clients;
 };
 

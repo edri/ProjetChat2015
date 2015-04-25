@@ -30,7 +30,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         if (!onlineRooms.contains(idRoom))
         {
             // Si elle n'est pas en ligne on la crée
-            currentRoom = new ChatorRoom({currentClient.id, 0, {}});
+            currentRoom = new ChatorRoom({currentClient->id, {}});
             onlineRooms.insert(idRoom, currentRoom);
         }
         else
@@ -41,7 +41,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         
         // On stocke le pointeur dans l'utilisateur
         currentClient->rooms.append(currentRoom);
-        currentRoom->clients.append(client);
+        currentRoom->clients.append(currentClient);
     }
     
     for (ChatorRoom* room : currentClient->rooms)
