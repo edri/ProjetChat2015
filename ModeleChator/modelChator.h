@@ -41,7 +41,7 @@ class ModelChator
          *
          * Last edited by Jan Purro, on 24.04.2015 15::57
         */
-        void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
+        void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image, const QSet<quint32> roomsIds);
         void addUser(const ModelUser& user);
         
         /*
@@ -224,7 +224,7 @@ class ModelUser
 	
 	public :
         ModelUser();
-        ModelUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image);
+        ModelUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image, const QSet<quint32> roomsIds);
 		~ModelUser();
 		
         void modify(const QString& firstName, const QString& lastName, const QImage& image);

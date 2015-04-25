@@ -12,7 +12,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         quint32 id = client->id;
         qDebug() << "Authentification OK, userid = " << id;
         
-        // Envoi du ModelUser
+        // Send the ModelUser to the client
         client->logged = true;
         ModelUser user = _db.info(id);
         qDebug() << "User: " << user.getUserName();
@@ -22,30 +22,37 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         QMap<quint32, ModelRoom> rooms;
         QMap<quint32, ModelUser> users;
         
-        // Récupération des ids des salles jointes
+        // Get the ids of the rooms of the user
         QSet<quint32> idRooms = user.getRooms();
         for (quint32 idRoom : idRooms)
         {
-            // Récupération des informations de chaque salle
+            qDebug() << "present dans salle: " << idRoom;
+            // Get the informations of each room
             ModelRoom room = _db.infoRoom(idRoom);
             rooms.insert(idRoom, _db.infoRoom(idRoom));
             
-            // Récupération des ids des utilisateurs de chaque salle
+            // Get the ids of all the users present in this room 
             QSet<quint32> roomUsers = room.getUsers();
             for (quint32 idUser : roomUsers)
             {
-                // Si cet utilisateur n'est pas encore dans la liste, on le met
+                qDebug() << "autres present dans salle: " << idUser;
+                // If this user isn't in the list yet, we insert it
                 if (!users.contains(idUser))
                 {
-                    // Récupération des informations de l'utilisateur
+                    // Get the informations of the user
                     users.insert(idUser, _db.info(idUser));
                 }
             }
         }
         
+        for (ModelUser m : users)
+        {
+            qDebug() << "dans la liste: " << m.getUserName();
+        }
+        
         client->socket.sendBinaryMessage(interpretor->join(rooms, users));
         
-        // Informer les salles que cet utilisateur s'est connecté
+        // Inform everyone in the rooms that this client is online
         _room.userConnected(user, client);
     }
     else

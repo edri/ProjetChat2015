@@ -19,27 +19,29 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 
 void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentClient)
 {    
-    // Récupération des ids des salles auxquelles l'utilisateur est inscrit
+    // Get the ids of the rooms where this user is connected
     QSet<quint32> rooms = user.getRooms();
     
     for (quint32 idRoom : rooms)
     {
-        // On vérifie si cette salle est en ligne
+        // Check if the room is already online
         ChatorRoom* currentRoom;
         
         if (!onlineRooms.contains(idRoom))
         {
-            // Si elle n'est pas en ligne on la crée
-            currentRoom = new ChatorRoom({currentClient->id, {}});
+            qDebug() << "Mise en ligne de la salle " << idRoom;
+            // If it is not, we add it
+            currentRoom = new ChatorRoom({idRoom, {}});
             onlineRooms.insert(idRoom, currentRoom);
         }
         else
         {
-            // Sinon, on récupère son pointeur
+            qDebug() << "Salle déjà en ligne " << idRoom;
+            // If this room is already online, we insert the user in it
             currentRoom = onlineRooms[idRoom];
         }
         
-        // On stocke le pointeur dans l'utilisateur
+        // Then, we store the pointer to this client and bind it to the room
         currentClient->rooms.append(currentRoom);
         currentRoom->clients.append(currentClient);
     }
@@ -48,6 +50,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
     {
         for (ChatorClient* client : room->clients)
         {
+            qDebug() << "Notification de R/U " << room->id << "/" << client->id;
             client->socket.sendBinaryMessage(interpretor->connected(user));
             //client->socket.sendBinaryMessage(interpretor->join(currentClient.id, room->id));
         }

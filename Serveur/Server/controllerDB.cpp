@@ -76,8 +76,7 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     query.first();
     id = query.record().value(0).toUInt();
     
-    query.prepare("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
-    query.exec();
+    query.exec("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
 
     return true;
 }
@@ -85,11 +84,6 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
 ModelUser ControllerDB::info(const quint32 id)
 {
     QSqlQuery query(_db);
-    query.prepare("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = " + QString::number(id));
-    query.exec();
-    query.first();
-    
-    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), QImage()); // query.record().value("profilePicture").toString()
     QSet<quint32> rooms;
     
     //query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id");
@@ -100,6 +94,11 @@ ModelUser ControllerDB::info(const quint32 id)
     {
         rooms.insert(query.record().value(0).toUInt());
     }
+    
+    query.exec("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = " + QString::number(id));
+    query.first();
+    
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), QImage(), rooms); // query.record().value("profilePicture").toString()
     
     return user;
 }

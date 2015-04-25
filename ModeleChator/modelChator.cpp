@@ -54,9 +54,9 @@ ModelUser::ModelUser() : _idUser(0), _userName(""), _firstName(""), _lastName(""
 
 ModelUser::ModelUser(const quint32 idUser, const QString& userName, const QString& firstName,
                      const QString& lastName, const bool isConnected, const QDateTime& lastConnection,
-                     const QImage& image) :
+                     const QImage& image, const QSet<quint32> roomsIds) :
     _idUser(idUser), _userName(userName), _firstName(firstName),_lastName(lastName), _isConnected(isConnected),
-    _lastConnection(lastConnection), _image(image) {}
+    _lastConnection(lastConnection), _image(image), _roomsIds(roomsIds) {}
 ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
@@ -149,9 +149,9 @@ const ModelUser& ModelChator::getUser(const quint32 idUser) const
     return _users.find(idUser).value();
 }
 
-void ModelChator::addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image)
+void ModelChator::addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image, const QSet<quint32> roomsIds)
 {
-    _users.insert(idUser, ModelUser(idUser, userName, firstName, lastName, isConnected, lastConnection, image));
+    _users.insert(idUser, ModelUser(idUser, userName, firstName, lastName, isConnected, lastConnection, image, roomsIds));
 }
 
 void ModelChator::addUser(const ModelUser& user)
