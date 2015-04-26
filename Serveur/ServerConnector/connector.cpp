@@ -38,8 +38,8 @@ void ClientConnector::sslErrors(const QList<QSslError>& errors)
     for (QSslError error : errors)
     {
         //qDebug() << "Erreur SSL: " << error.errorString();
-        agreeMessageBox.setText(tr("Une erreur SSL/TLS est survenue"));
-        agreeMessageBox.setInformativeText(error.errorString() + tr("\n\nVoulez-vous continuer?"));
+        agreeMessageBox.setText(tr("Une erreur SSL/TLS est survenue lors de la connexion au serveur: ") + _socket.peerName());
+        agreeMessageBox.setInformativeText(error.errorString() + "\n\n" + tr("Voulez-vous continuer?"));
         agreeMessageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         agreeMessageBox.setDefaultButton(QMessageBox::Yes);
         agreeMessageBox.setDetailedText(error.certificate().toText());
