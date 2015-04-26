@@ -2,11 +2,12 @@
 #define CLIENT_CONTROLLER_INPUT_H
 
 #include "controllerInput.h"
-#include "../../Chat/controllerchat.h"
+#include "../../Chat/controllerChat.h"
 #include "../../Salle/Room/controllerRoom.h"
 #include "../../User/controllerUser.h"
 
 class ControllerUser;
+class ControllerChat;
 
 class ClientControllerInput : public ControllerInput
 {

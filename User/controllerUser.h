@@ -9,6 +9,8 @@
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
 
+class ClientControllerInput;
+
 class ControllerUser : public QObject
 {
 
