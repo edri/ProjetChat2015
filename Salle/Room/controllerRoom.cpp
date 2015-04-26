@@ -12,6 +12,7 @@
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput)
 {
+	bidon = 25;
     this->model = model;
     currentUser = user;
     this->controllerOutput = controllerOuput;

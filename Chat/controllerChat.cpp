@@ -14,6 +14,9 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
 
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
+
+    // TEST ; A SUPPRIMER PAR LA SUITE.
+    connect(_cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
 }
 
 ControllerChat::~ControllerChat()
@@ -60,9 +63,11 @@ void ControllerChat::loadRooms(const quint32 idUser) const
     _view->selectFirstRoom();
 }
 
+// TEST ; A SUPPRIMER PAR LA SUITE.
 void ControllerChat::auth()
 {
     ModelMessage message(0, 0, 0, QDateTime::currentDateTime(), "");
+    _co->login("licorne", "java");
 }
 
 void ControllerChat::sendMessage() const

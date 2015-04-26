@@ -1,6 +1,7 @@
 #include <QtCore/QDebug>
 #include "connector.h"
 #include <QUrl>
+#include <QMessageBox>
 
 ClientConnector::ClientConnector() : _isConnected(false)
 {
@@ -32,5 +33,19 @@ void ClientConnector::connected()
 
 void ClientConnector::sslErrors(const QList<QSslError>& errors)
 {
+    QMessageBox agreeMessageBox(QMessageBox::Question, tr("Erreur SSL/TLS"), "");
+    
+    for (QSslError error : errors)
+    {
+        //qDebug() << "Erreur SSL: " << error.errorString();
+        agreeMessageBox.setText(tr("Une erreur SSL/TLS est survenue lors de la connexion au serveur: ") + _socket.peerName());
+        agreeMessageBox.setInformativeText(error.errorString() + "\n\n" + tr("Voulez-vous continuer?"));
+        agreeMessageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        agreeMessageBox.setDefaultButton(QMessageBox::Yes);
+        agreeMessageBox.setDetailedText(error.certificate().toText());
+        
+        if (agreeMessageBox.exec() != QMessageBox::Yes) {_socket.abort(); return;}
+    }
+    
     _socket.ignoreSslErrors();
 }

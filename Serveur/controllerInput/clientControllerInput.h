@@ -2,11 +2,12 @@
 #define CLIENT_CONTROLLER_INPUT_H
 
 #include "controllerInput.h"
-#include "../../Chat/controllerchat.h"
+#include "../../Chat/controllerChat.h"
 #include "../../Salle/Room/controllerRoom.h"
 #include "../../User/controllerUser.h"
 
 class ControllerUser;
+class ControllerChat;
 
 class ClientControllerInput : public ControllerInput
 {
@@ -33,6 +34,8 @@ class ClientControllerInput : public ControllerInput
     void infoUser(ModelUser& user, QObject* sender);
     // Method called when confirmation of creation or edition of a room is received.
     void room(const ModelRoom& room, bool edited, QObject* sender);
+    // Method called when the client has to add a room and its users
+    void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
     
     
 };

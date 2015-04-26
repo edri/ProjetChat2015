@@ -33,7 +33,7 @@ class ControllerRoom : public QObject
 private:
 
     // Used for test
-    int bidon = 25;
+    int bidon;
     
     // Pointers on the view(s) and the model.
     ModelChator* model;

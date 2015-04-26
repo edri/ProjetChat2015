@@ -50,3 +50,26 @@ void ClientControllerInput::room(const ModelRoom& room, bool edited, QObject* se
     Q_UNUSED(sender);
     _controllerRoom->roomConfirmation(room, edited);
 }
+void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
+{
+    qDebug() << "dans join";
+    for (ModelRoom mr : rooms)
+    {
+        qDebug() << "Il faut ajouter la salle " << mr.getIdRoom() << ": " << mr.getName();
+        QSet<quint32> rusers = mr.getUsers();
+        QSet<quint32> radmins = mr.getAdmins();
+        
+        for (quint32 u : rusers)
+        {
+            ModelUser mu = users[u];
+            qDebug() << "Contenant l'utilisateur " << mu.getIdUser() << ": " << mu.getUserName();
+        }
+        
+        for (quint32 u : radmins)
+        {
+            ModelUser mu = users[u];
+            qDebug() << "Administré par " << mu.getIdUser() << ": " << mu.getUserName();
+        }
+    }
+    Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
+}

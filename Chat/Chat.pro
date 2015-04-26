@@ -15,22 +15,24 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         viewChat.cpp \
-    controllerChat.cpp \
-    "../Serveur/ServerConnector/connector.cpp" \
-    "../Serveur/Interpretor/interpretor.cpp" \
-    "../Serveur/Interpretor/packet.cpp" \
-    "../ModeleChator/modelChator.cpp" \
-    "../Serveur/controllerInput/controllerInput.cpp" \
-    "../Serveur/controllerOutput/controllerOutput.cpp"
+        controllerChat.cpp \
+        "../Serveur/ServerConnector/connector.cpp" \
+        "../Serveur/Interpretor/interpretor.cpp" \
+        "../Serveur/Interpretor/packet.cpp" \
+        "../ModeleChator/modelChator.cpp" \
+        "../Serveur/controllerInput/controllerInput.cpp" \
+        "../Serveur/controllerInput/clientControllerInput.cpp" \
+        "../Serveur/controllerOutput/controllerOutput.cpp"
 
 HEADERS  += viewChat.h \
-    controllerChat.h \
-    "../Serveur/ServerConnector/connector.h" \
-    "../Serveur/Interpretor/interpretor.h" \
-    "../Serveur/Interpretor/packet.h" \
-    "../ModeleChator/modelChator.h" \
-    "../Serveur/controllerInput/controllerInput.h" \
-    "../Serveur/controllerOutput/controllerOutput.h"
+        controllerChat.h \
+        "../Serveur/ServerConnector/connector.h" \
+        "../Serveur/Interpretor/interpretor.h" \
+        "../Serveur/Interpretor/packet.h" \
+        "../ModeleChator/modelChator.h" \
+        "../Serveur/controllerInput/controllerInput.h" \
+        "../Serveur/controllerInput/clientControllerInput.h" \
+        "../Serveur/controllerOutput/controllerOutput.h"
 
 FORMS    += viewChat.ui
 

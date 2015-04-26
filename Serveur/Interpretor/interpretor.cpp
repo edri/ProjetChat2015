@@ -160,10 +160,11 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::JOIN:
         {
+            qDebug() << "Déserialisation join";
             QMap<quint32, ModelRoom> rooms;
             QMap<quint32, ModelUser> users;
             stream >> rooms >> users;
-            // Envoyer ces objets quelque part
+            _dispatcher.join(rooms, users, sender());
         }
         break;
         
