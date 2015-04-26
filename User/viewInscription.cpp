@@ -28,10 +28,14 @@ void ViewInscription::on_btn_inscription_clicked()
     ui->lbl_info->setText("");
 
     // Verify the fields
-    if(ui->ldt_userName->text().isEmpty() && ui->ldt_password->text().isEmpty() && ui->ldt_passwordConf->text().isEmpty())
-        ui->lbl_info->setText("Veuillez mentionnez tous les champs requis.");//show a warning
+    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
+       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty()) {
+        // Afficher un avertissement
+        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
+    }
     else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
-        ui->lbl_info->setText("Le mot de passe ne correspond pas.");//show a warning;
+        // Afficher un avertissement
+        ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
     else
     {
         //Warn the controler that data are ready to be send to the server
@@ -47,15 +51,20 @@ void ViewInscription::on_btn_inscription_clicked()
 
 }
 
+
 void ViewInscription::closeEvent(QCloseEvent *)
 {
     // Enable connexion window once you close the inscription window
     //ViewInscription::QMainWindow.setDisabled(false);
 }
 
-QString ViewInscription::getFirstName()
+
+QString ViewInscription::getFirstName() const
 {
-    //return ui->lbl_firstName
+    // Récupérer le prénom
+    return ui->ldt_firstName->text();
 }
+
+
 
 //getters à ajouter pour chaque champs
