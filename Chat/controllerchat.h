@@ -10,6 +10,8 @@
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
 
+class ClientControllerInput;
+
 class ControllerChat : public QObject
 {
     Q_OBJECT

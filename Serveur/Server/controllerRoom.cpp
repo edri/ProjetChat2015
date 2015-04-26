@@ -4,11 +4,11 @@ ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
 void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 {
-    if (client->logged && message.getIdUser() == client->id)
+    ChatorRoom* room = nullptr;
+    if (client->logged && message.getIdUser() == client->id && (room = onlineRooms[message.getIdRoom()]) && room->clients.contains(client))
     {
         message.setIdMessage(_db.storeMessage(message));
         message.setDate(QDateTime::currentDateTime());
-        ChatorRoom* room = onlineRooms[message.getIdRoom()];
         
         for (ChatorClient* client : room->clients)
         {
@@ -43,8 +43,8 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         }
         
         // Then, we store the pointer to this client and bind it to the room
-        currentClient->rooms.append(currentRoom);
-        currentRoom->clients.append(currentClient);
+        currentClient->rooms.insert(currentRoom);
+        currentRoom->clients.insert(currentClient);
     }
     
     QSet<quint32> upToDateClients;

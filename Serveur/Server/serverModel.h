@@ -19,7 +19,7 @@ class ChatorClient : public QObject
     quint32 id;
     bool logged;
     QWebSocket& socket;
-    QList<ChatorRoom*> rooms;
+    QSet<ChatorRoom*> rooms;
     
     signals:
     void disconnected();
@@ -29,7 +29,7 @@ class ChatorClient : public QObject
 struct ChatorRoom
 {
     quint32 id;
-    QList<ChatorClient*> clients;
+    QSet<ChatorClient*> clients;
 };
 
 #endif

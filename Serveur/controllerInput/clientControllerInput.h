@@ -6,6 +6,8 @@
 #include "../../Salle/Room/controllerRoom.h"
 #include "../../User/controllerUser.h"
 
+class ControllerUser;
+
 class ClientControllerInput : public ControllerInput
 {
     ControllerChat& _controllerChat;

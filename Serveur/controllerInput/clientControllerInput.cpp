@@ -1,5 +1,5 @@
 #include <QtCore/QDebug>
-#include "controllerInput.h"
+#include "clientControllerInput.h"
 
 
 ClientControllerInput::ClientControllerInput(ControllerChat& controllerChat, ControllerUser& controllerUser, ControllerRoom& controllerRoom) : _controllerChat(controllerChat), _controllerUser(controllerUser), _controllerRoom(controllerRoom) {}
