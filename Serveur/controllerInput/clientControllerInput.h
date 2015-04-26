@@ -10,15 +10,22 @@ class ControllerUser;
 
 class ClientControllerInput : public ControllerInput
 {
-    ControllerChat& _controllerChat;
-    ControllerUser& _controllerUser;
-    ControllerRoom& _controllerRoom;
+    ControllerChat* _controllerChat;
+    ControllerUser* _controllerUser;
+    ControllerRoom* _controllerRoom;
     // Error controller ?
     // Main controller ?
     
     public:
     
-    ClientControllerInput(ControllerChat& controllerChat, ControllerUser& controllerUser, ControllerRoom& controllerRoom);
+    // Constructors
+    ClientControllerInput();
+    ClientControllerInput(ControllerChat* controllerChat, ControllerUser* controllerUser, ControllerRoom* controllerRoom);
+    
+    // Setters
+    void controllerChat(ControllerChat* controllerChat);
+    void controllerUser(ControllerUser* controlleruser);
+    void controllerRoom(ControllerRoom* controllerRoom);
     
     // Method called when a message is received by the client.
     void receiveMessage(ModelMessage& message, QObject* sender);

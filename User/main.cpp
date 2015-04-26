@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
 
     // Create the controler which will create the view
     ControllerUser* controller = new ControllerUser(cci, i, cc, co);
+    cci->controllerUser(controller);
+    // Il faut encore initialiser les autres controlleurs du cci.
+
     // Call the view
     controller->showView();
 
