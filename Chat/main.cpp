@@ -132,7 +132,6 @@ int main(int argc, char *argv[])
     ClientConnector* cc = new ClientConnector();
     ControllerOutput* co = new ControllerOutput(*cc, *i);
     cc->connectToServer("localhost:1234");
-    co->login("licorne", "java");
 
     ControllerChat* c = new ControllerChat(model, currentUser, cci, i, cc, co);
     c->showView();
