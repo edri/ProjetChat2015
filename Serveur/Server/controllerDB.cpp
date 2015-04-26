@@ -71,9 +71,8 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     //query.bindValue(":password", hashedPWD);
     query.exec("SELECT idUser FROM user WHERE login = \"" + pseudo + "\" AND password = \"" + hashedPWD + "\"");
 
-    if (query.size() != 1) {return false;}
+    if (!query.first()) {return false;}
     
-    query.first();
     id = query.record().value(0).toUInt();
     
     query.exec("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));

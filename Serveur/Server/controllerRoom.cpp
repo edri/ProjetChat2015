@@ -31,7 +31,8 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         {
             qDebug() << "Mise en ligne de la salle " << idRoom;
             // If it is not, we add it
-            currentRoom->id =idRoom;
+            currentRoom = new ChatorRoom;
+            currentRoom->id = idRoom;
             onlineRooms.insert(idRoom, currentRoom);
         }
         else
