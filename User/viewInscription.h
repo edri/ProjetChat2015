@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+//#include <QCloseEvent>
 
 namespace Ui {
 class viewInscription;
@@ -16,6 +17,8 @@ public:
     explicit ViewInscription(QWidget *parent = 0);
     ~ViewInscription();
 
+    QString getFirstName() const;
+
 private slots:
     void on_btn_path_clicked();
 
@@ -23,6 +26,7 @@ private slots:
 
 private:
     Ui::viewInscription *ui;
+    void closeEvent(QCloseEvent *);
 };
 
 #endif // VIEWINSCRIPTION_H

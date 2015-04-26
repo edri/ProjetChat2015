@@ -233,7 +233,7 @@ class ModelUser
         quint32 getIdUser() const;
         QString getUserName() const;
         bool isConnected() const;
-        QString getImage() const;
+        QImage getImage() const;
         const QSet<quint32>& getRooms() const;
         QSet<quint32>& getRooms();
         
