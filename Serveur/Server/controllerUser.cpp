@@ -31,6 +31,14 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
             ModelRoom room = _db.infoRoom(idRoom);
             rooms.insert(idRoom, _db.infoRoom(idRoom));
             
+            
+            // Test
+            QMap<quint32, ModelMessage> mes = room.getMessages();
+            for (ModelMessage mm : mes) 
+            {
+                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent();
+             }
+            
             // Get the ids of all the users present in this room 
             QSet<quint32> roomUsers = room.getUsers();
             for (quint32 idUser : roomUsers)
