@@ -17,6 +17,8 @@ public:
     explicit ViewInscription(QWidget *parent = 0);
     ~ViewInscription();
 
+    QString getFirstName() const;
+
 private slots:
     void on_btn_path_clicked();
 
