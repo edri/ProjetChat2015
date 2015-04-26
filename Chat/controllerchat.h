@@ -17,13 +17,14 @@ private:
     ViewChat* _view;
     ModelChator* _model;
     ModelUser* _currentUser;
-    ClientControllerInput *cci;
-    Interpretor* i;
-    ClientConnector* cc;
-    ControllerOutput* co;
+    ClientControllerInput* _cci;
+    Interpretor* _i;
+    ClientConnector* _cc;
+    ControllerOutput* _co;
 
 public:
-    ControllerChat(ModelChator* model, ModelUser* currentUser);
+    ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
+                   Interpretor* i, ClientConnector* cc, ControllerOutput* co);
     ~ControllerChat();
 
     void showView() const;

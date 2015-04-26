@@ -267,6 +267,11 @@ bool ModelUser::isConnected() const
     return _isConnected;
 }
 
+QImage ModelUser::getImage() const
+{
+    return _image;
+}
+
 QSet<quint32>& ModelUser::getRooms()
 {
     return _roomsIds;

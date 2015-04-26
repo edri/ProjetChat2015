@@ -36,8 +36,11 @@ private:
 
 
 signals:
-    // Demander à récupérer les identifiants
+    // Ask to get the login
     void requestGetIds() const;
+
+    // Ask to get the information of the user inscription
+    void requestGetNewUser() const;
 };
 
 #endif // VIEWUSER_H
