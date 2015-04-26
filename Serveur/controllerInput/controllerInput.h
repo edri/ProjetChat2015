@@ -17,8 +17,10 @@ class ControllerInput : public QObject
 class ClientControllerInput : public ControllerInput
 {
     public:
-    virtual void receiveMessage(ModelMessage& message, QObject* sender);
-    virtual void infoUser(ModelUser& user, QObject* sender);
+    void receiveMessage(ModelMessage& message, QObject* sender);
+    void infoUser(ModelUser& user, QObject* sender);
+    
+    
 };
 
 #endif
