@@ -43,3 +43,10 @@ void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
     //ControllerUser Missing method
     //_controllerUser.infoUser(user);
 }
+
+void ClientControllerInput::room(const ModelRoom& room, bool edited, QObject* sender)
+{
+    // Sender is unused in the client controller.
+    Q_UNUSED(sender);
+    _controllerRoom->roomConfirmation(room, edited);
+}

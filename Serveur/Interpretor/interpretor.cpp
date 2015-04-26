@@ -96,6 +96,15 @@ QByteArray Interpretor::connected(const ModelUser& user)
     return data;
 }
 
+QByteArray Interpretor::room(const ModelRoom& room, bool edited)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::ROOM << edited << room;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -182,6 +191,15 @@ void Interpretor::processData(const QByteArray& data)
             // Envoyer ces objets quelque part
         }
         break;
+        
+        case MessageType::ROOM:
+        {
+            bool edited;
+            ModelRoom room;
+            stream >> edited;
+            stream >> room;
+            _dispatcher.room(room, edited, sender());
+        }
         
         case MessageType::SERVER_ERROR:
         {

@@ -27,6 +27,12 @@ class Interpretor : public QObject
     QByteArray disconnect(const quint32 idUser);
     QByteArray connected(const ModelUser& user);
     
+    // Serialize a room and the flage indicating if the room was edited or created.
+    // The message type will be ROOM.
+    // The flag is written first, the room second.
+    // Created Jan Purro 26.04.2015 14:55
+    QByteArray room(const ModelRoom& room, bool edited);
+    
     public slots:
     void processData(const QByteArray& data);
     

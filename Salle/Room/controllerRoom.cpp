@@ -10,10 +10,11 @@
 #include "controllerRoom.h"
 #include <iostream>
 
-ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user)
+ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput)
 {
     this->model = model;
     currentUser = user;
+    this->controllerOutput = controllerOuput;
     
     // Initialize the view at nullptr. They will be constructed when needed
     // and destroyed when closed.
@@ -148,6 +149,9 @@ void ControllerRoom::userDoesNotExist()
 
 void ControllerRoom::createRoom()
 {
+    // Disable the view again
+    viewRoom->setDisabled(true);
+    
     // First run a few checks and inform the users if something is wrong/missing.
     
     // The room must have a name.
@@ -155,6 +159,9 @@ void ControllerRoom::createRoom()
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Vous devez entrer un nom pour la salle"));
         //viewRoom->ldt_name->setFocus(Qt::MouseFocusReason);
+        
+        // Enable the view again
+        viewRoom->setDisabled(false);
         return;
     }
     
@@ -163,6 +170,8 @@ void ControllerRoom::createRoom()
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Une salle doit posséder au moins un membre"));
         //viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
+        // Enable the view again
+        viewRoom->setDisabled(false);
         return;
     }
     
@@ -171,6 +180,8 @@ void ControllerRoom::createRoom()
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Une salle doit posséder au moins un admin"));
         //viewRoom->ldt_member->setFocus(Qt::MouseFocusReason);
+        // Enable the view again
+        viewRoom->setDisabled(false);
         return;
     }
     
@@ -178,6 +189,9 @@ void ControllerRoom::createRoom()
     if(!isValidImage(viewRoom->roomLogo()))
     {
         QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Le fichier du logo n'est pas une image valide. Si le nom du fichier commence ou se termine par une espace, essayer de la supprimer."));
+        // Enable the view again
+        viewRoom->setDisabled(false);
+        return;
     }
     
     // Construit l'image
@@ -187,10 +201,11 @@ void ControllerRoom::createRoom()
         logo.load(viewRoom->roomName());
     }
     
+    // Construct a ModelRoom object.
     QMap<quint32, ModelMessage> messages;
     ModelRoom newRoom(0, viewRoom->roomName(), viewRoom->messageLimit(), viewRoom->isRoomPrivate(), viewRoom->isRoomVisible(), logo, viewRoom->roomAdmins(), viewRoom->roomUsers(), messages);
     
-    // As soon as interpretor allows to create a new room, will create a new room.
+    controllerOutput->room(newRoom);
 }
 
 bool ControllerRoom::isValidImage(const QString& path)
@@ -225,4 +240,14 @@ void ControllerRoom::cancelJoin()
 void ControllerRoom::joinRoom()
 {
    // Inform the server that the user wish to join a room.
+}
+
+void ControllerRoom::roomConfirmation(const ModelRoom& room, bool edited)
+{
+    // Enable the view again
+    // viewRoom->setDisabled(false);
+    Q_UNUSED(room);
+    Q_UNUSED(edited);
+    // Close the view.
+    viewRoom->close();
 }

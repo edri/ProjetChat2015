@@ -38,3 +38,8 @@ void ControllerOutput::disconnect(const quint32 idUser)
 {
     _connector.send(_interpretor.disconnect(idUser));
 }
+
+void ControllerOutput::room(const ModelRoom& room, bool edited)
+{
+    _connector.send(_interpretor.room(room, edited));
+}

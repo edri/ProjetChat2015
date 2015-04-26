@@ -31,6 +31,8 @@ class ClientControllerInput : public ControllerInput
     void receiveMessage(ModelMessage& message, QObject* sender);
     // Method called when user's info are received by the client when loging in.
     void infoUser(ModelUser& user, QObject* sender);
+    // Method called when confirmation of creation or edition of a room is received.
+    void room(const ModelRoom& room, bool edited, QObject* sender);
     
     
 };

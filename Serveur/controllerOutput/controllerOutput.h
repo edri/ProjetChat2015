@@ -17,6 +17,15 @@ class ControllerOutput
     void leave(const quint32 idUser, const quint32 idRoom);
     void disconnect(const quint32 idUser);
     
+    /* Called when creating or editing a room.
+     * - room : the created or edited room.
+     * - edited : false if the room is created, true if the room is an already existing modfied room.
+     * 
+     * Oui je sais le nom est peut être pas le plus génial qui soit. Mais bon createRoom ou editRoom c'est pas cool non plus, alors tant que c'est le seul truc qui concerne directement les salles autant le garder.
+     * Created by Jan Purro 26.04.2015 14:46 
+     */
+    void room(const ModelRoom& room, bool edited = false);
+    
     private:
     Connector& _connector;
     Interpretor& _interpretor;

@@ -1,18 +1,49 @@
 #include <QApplication>
 #include "controllerRoom.h"
+#include "../../Serveur/Interpretor/interpretor.h"
+#include "../../Serveur/controllerInput/clientControllerInput.h"
+#include "../../Serveur/ServerConnector/connector.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
+    
+    ClientControllerInput cci;
+    Interpretor i(cci);
+    ClientConnector c;
+    ControllerOutput co(c, i);
     ModelChator* model = new ModelChator();
+    
+    
     // 5 utilisateurs de test.
     QImage image("img/54226b6cd2c4b.jpg");
-    ModelUser user1 (1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), image);
-    ModelUser user2 (2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), image);
-    ModelUser user3 (3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), image);
-    ModelUser user4 (4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), image);
-    ModelUser user5 (5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), image);
+    
+    // Init user's rooms sets.
+    QSet<quint32> roomIdUser1;
+    QSet<quint32> roomIdUser2;
+    QSet<quint32> roomIdUser3;
+    QSet<quint32> roomIdUser4;
+    QSet<quint32> roomIdUser5;
+    
+    roomIdUser1.insert(1);
+    roomIdUser1.insert(2);
+    roomIdUser1.insert(4);
+    roomIdUser2.insert(2);
+    roomIdUser2.insert(3);
+    roomIdUser3.insert(1);
+    roomIdUser3.insert(2);
+    roomIdUser3.insert(3);
+    roomIdUser3.insert(4);
+    roomIdUser4.insert(2);
+    roomIdUser5.insert(1);
+    roomIdUser5.insert(2);
+    roomIdUser5.insert(4);
+    
+    ModelUser user1 (1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), image,roomIdUser1);
+    ModelUser user2 (2, "beedle", "Bastien", "Rouiller", false, QDateTime::currentDateTime(), image,roomIdUser2);
+    ModelUser user3 (3, "benoistwolleb", "Benoist", "Wolleb", false, QDateTime::currentDateTime(), image,roomIdUser3);
+    ModelUser user4 (4, "melhk", "Mélanie", "Huck", false, QDateTime::currentDateTime(), image,roomIdUser4);
+    ModelUser user5 (5, "jurporan", "Jan", "Purro", false, QDateTime::currentDateTime(), image,roomIdUser5);
     model->addUser(user1);
     model->addUser(user2);
     model->addUser(user3);
@@ -78,8 +109,9 @@ int main(int argc, char *argv[])
     ModelRoom room4 (4, "Room4", 100, false, true, image, adminsR4, usersR4, messages);
     model->addRoom(room4);
     
-    ControllerRoom w(model, &currentUser);
-    w.showRoom(room2.getIdRoom());
+    ControllerRoom cr(model, &currentUser, &co);
+    cci.controllerRoom(&cr);
+    cr.showRoom();//room2.getIdRoom());
     
     
     

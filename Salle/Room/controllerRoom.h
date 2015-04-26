@@ -25,6 +25,7 @@
 // These paths will be probably changed at some time.
 #include "../../ModeleChator/modelChator.h"
 #include "../Join/viewJoin.h"
+#include "../../Serveur/controllerOutput/controllerOutput.h"
 
 class ControllerRoom : public QObject
 {
@@ -38,6 +39,8 @@ private:
     ModelChator* model;
     ViewRoom* viewRoom;
     ViewJoin* viewJoin;
+    ControllerOutput* controllerOutput;
+    
     
     // Pinter on the current user.
     ModelUser* currentUser;
@@ -55,7 +58,7 @@ private:
 public:
 
     // Constructor.
-    ControllerRoom(ModelChator* model, ModelUser* user);
+    ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOutput);
     
     // Open the room's creation window.
     void showRoom();
@@ -66,6 +69,8 @@ public:
     void addUser(const quint32 userId, const QString& userName);
     // Should be called when a userDoesNotExist error is sent .
     void userDoesNotExist();
+    // Should be called when a Room message is received by the client.
+    void roomConfirmation(const ModelRoom& room, bool edited);
     
     
 public slots :
