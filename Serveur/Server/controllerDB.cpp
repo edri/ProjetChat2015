@@ -70,10 +70,9 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     //query.bindValue(":login", pseudo);
     //query.bindValue(":password", hashedPWD);
     query.exec("SELECT idUser FROM user WHERE login = \"" + pseudo + "\" AND password = \"" + hashedPWD + "\"");
+
+    if (!query.first()) {return false;}
     
-    if (query.record().count() != 1) {return false;}
-    
-    query.first();
     id = query.record().value(0).toUInt();
     
     query.exec("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
@@ -136,12 +135,11 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    query.prepare("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = " + QString::number(id));
-    query.exec();
+    query.exec("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = " + QString::number(id));
     
     while(query.next())
     {
-        ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("content").toString());
+        ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("contents").toString());
         messages.insert(message.getIdMessage(), message);
     }
     

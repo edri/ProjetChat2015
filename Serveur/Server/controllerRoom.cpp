@@ -31,7 +31,8 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         {
             qDebug() << "Mise en ligne de la salle " << idRoom;
             // If it is not, we add it
-            currentRoom->id =idRoom;
+            currentRoom = new ChatorRoom;
+            currentRoom->id = idRoom;
             onlineRooms.insert(idRoom, currentRoom);
         }
         else
@@ -46,13 +47,18 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         currentRoom->clients.append(currentClient);
     }
     
+    QSet<quint32> upToDateClients;
+    
     for (ChatorRoom* room : currentClient->rooms)
     {
         for (ChatorClient* client : room->clients)
         {
-            qDebug() << "Notification de R/U " << room->id << "/" << client->id;
-            client->socket.sendBinaryMessage(interpretor->connected(user));
-            //client->socket.sendBinaryMessage(interpretor->join(currentClient.id, room->id));
+            if (!upToDateClients.contains(client->id))
+            {
+                qDebug() << "Notification de R/U " << room->id << "/" << client->id;
+                upToDateClients.insert(client->id);
+                client->socket.sendBinaryMessage(interpretor->connected(user));
+            }
         }
     }
 }
