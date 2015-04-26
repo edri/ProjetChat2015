@@ -61,12 +61,12 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
-    return ds;
+    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 {
-    return ds;
+    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
@@ -81,12 +81,12 @@ QDataStream& operator >> (QDataStream& ds, ModelMessage& m)
 
 QDataStream& operator << (QDataStream& ds, const ModelUser& u)
 {
-    return ds << u._userName << u._firstName << u._lastName << u._isConnected << u._lastConnection << u._image;
+    return ds << u._idUser << u._userName << u._firstName << u._lastName << u._isConnected << u._lastConnection << u._image;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelUser& u)
 {
-    return ds >> u._userName >> u._firstName >> u._lastName >> u._isConnected >> u._lastConnection >> u._image;
+    return ds >> u._idUser >> u._userName >> u._firstName >> u._lastName >> u._isConnected >> u._lastConnection >> u._image;
 }
 
 ModelRoom::ModelRoom() : _idRoom(0), _name(""), _private(false), _visible(false), _picture(QImage()), _limitOfStoredMessage(0), _admins(QSet<quint32>()), _members(QSet<quint32>()){}

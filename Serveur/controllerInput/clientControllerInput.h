@@ -31,6 +31,8 @@ class ClientControllerInput : public ControllerInput
     void receiveMessage(ModelMessage& message, QObject* sender);
     // Method called when user's info are received by the client when loging in.
     void infoUser(ModelUser& user, QObject* sender);
+    // Method called when the client has to add a room and its users
+    void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
     
     
 };
