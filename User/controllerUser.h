@@ -4,7 +4,7 @@
 #include <QString>
 #include "viewUser.h"
 #include "../ModeleChator/modelChator.h"
-#include "../Serveur/controllerInput/controllerInput.h"
+#include "../Serveur/controllerInput/clientControllerInput.h"
 #include "../Serveur/Interpretor/interpretor.h"
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"

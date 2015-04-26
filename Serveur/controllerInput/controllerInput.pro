@@ -13,8 +13,16 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     controllerInput.cpp \
-    ../../ModeleChator/modelChator.cpp
+    clientControllerInput.cpp \
+    ../../ModeleChator/modelChator.cpp \
+    ../../Chat/controllerchat.cpp \
+    ../../Salle/Room/controllerRoom.cpp \
+    ../../User/controllerUser.cpp
 
 HEADERS += \
     controllerInput.h \
+    clientControllerInput.h \
+    ../../Chat/controllerchat.h \
+    ../../Salle/Room/controllerRoom.h \
+    ../../User/controllerUser.h \
     ../../ModeleChator/modelChator.h

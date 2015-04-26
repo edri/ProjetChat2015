@@ -1,5 +1,6 @@
 #include <QtCore/QCoreApplication>
 #include "controllerInput.h"
+#include "clientControllerInput.h"
 
 int main(int argc, char *argv[])
 {

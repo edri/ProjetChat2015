@@ -2,13 +2,7 @@
 #include "controllerInput.h"
 #include "../../ModeleChator/modelChator.h"
 
-void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sender)
-{
-    Q_UNUSED(sender);
-    
-}
-
-void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
-{
-    qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
-}
+// Oui c'est un peu vide, normal controllerInput est une classe abstraite, j'ai
+// juste pas enlever le fichier (peut être aurais-je dû ?). Les méthodes (de
+// ClientControllerChat précdemment déclarées ici se trouver désormais dans
+// ClientControllerChat.cpp.    Jan Purro
