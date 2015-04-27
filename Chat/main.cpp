@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     cc->connectToServer("localhost:1234");
 
     ControllerChat* c = new ControllerChat(model, currentUser, cci, i, cc, co);
+    cci->controllerChat(c);
     c->showView();
 
     return a.exec();

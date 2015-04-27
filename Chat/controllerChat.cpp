@@ -17,6 +17,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
 
     // TEST ; A SUPPRIMER PAR LA SUITE.
     connect(_cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
+    connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 }
 
 ControllerChat::~ControllerChat()
@@ -76,7 +77,8 @@ void ControllerChat::auth()
 
 void ControllerChat::sendMessage() const
 {
-    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
+    //ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
+    ModelMessage message(0, 1, 7, QDateTime::currentDateTime(), _view->getMessageText());
 
     _co->sendMessage(message);
 }
