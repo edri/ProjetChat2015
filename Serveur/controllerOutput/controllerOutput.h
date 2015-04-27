@@ -26,6 +26,13 @@ class ControllerOutput
      */
     void room(const ModelRoom& room, bool edited = false);
     
+    /* Called when asking the server for the ID corresponding to a user name, provided the user exists.
+     *  - userName : the inquired user name.
+     *  - exists : only used by the server when responding 
+     *  - userId : only used by the server when responding 
+     */
+    void userId(const QString& userName, bool exists = false, quint32 userId = 0);
+    
     private:
     Connector& _connector;
     Interpretor& _interpretor;

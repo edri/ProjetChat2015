@@ -44,13 +44,6 @@ void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
     //_controllerUser.infoUser(user);
 }
 
-void ClientControllerInput::room(const ModelRoom& room, bool edited, QObject* sender)
-{
-    // Sender is unused in the client controller.
-    Q_UNUSED(sender);
-    _controllerRoom->roomConfirmation(room, edited);
-}
-
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
 {
     qDebug() << "dans join";
@@ -73,4 +66,15 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
         }
     }
     Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
+}
+
+void ClientControllerInput::userId(const QString& userName, bool exists, quint32 userId, QObject* sender)
+{
+    Q_UNUSED(sender);
+    Q_UNUSED(userName);
+    // if (controllerUser->userIsConnected()) // Need to add the method to the controller user.
+    
+    _controllerRoom->userId(exists, userId);
+    
+    // else { call controllerUser->foo();}
 }

@@ -12,7 +12,6 @@
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput)
 {
-	bidon = 25;
     this->model = model;
     currentUser = user;
     this->controllerOutput = controllerOuput;
@@ -113,39 +112,8 @@ void ControllerRoom::addUser()
         viewRoom->setDisabled(true);
         
         // Ask the server for the user id.
-        
-        // For now call the function itself
-        for(long long unsigned i = 0; i < 100000000; ++i) // Emulates waiting 
-        {
-            std::cout << "";
-        }
-        
-        if (userName == "Dieu") // Simulate non-existent user.
-        {
-            userDoesNotExist();
-        }
-        
-        else
-        {
-            addUser(++bidon, userName);
-        }
+        controllerOutput->userId(userName);
     }
-}
-
-void ControllerRoom::addUser(const quint32 userId, const QString& userName)
-{
-    // Enable the room again.
-    viewRoom->setDisabled(false);
-    // Add the user.
-    viewRoom->addUser(userId, userName);
-}
-
-void ControllerRoom::userDoesNotExist()
-{
-    // Enable the room again
-    viewRoom->setDisabled(false);
-    // Display an information box.
-    QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cette utilisateur n'existe pas."));
 }
 
 void ControllerRoom::createRoom()
@@ -207,6 +175,8 @@ void ControllerRoom::createRoom()
     ModelRoom newRoom(0, viewRoom->roomName(), viewRoom->messageLimit(), viewRoom->isRoomPrivate(), viewRoom->isRoomVisible(), logo, viewRoom->roomAdmins(), viewRoom->roomUsers(), messages);
     
     controllerOutput->room(newRoom);
+    
+    viewRoom->setDisabled(false);
 }
 
 bool ControllerRoom::isValidImage(const QString& path)
@@ -243,12 +213,20 @@ void ControllerRoom::joinRoom()
    // Inform the server that the user wish to join a room.
 }
 
-void ControllerRoom::roomConfirmation(const ModelRoom& room, bool edited)
+void ControllerRoom::userId(bool exists, quint32 userId)
 {
+    if(!exists)
+    {   
+        QMessageBox::information(viewRoom, tr("Opération impossible") ,tr("Cette utilisateur n'existe pas."));
+    }
+    
+    else
+    {
+        // Add the user.
+        viewRoom->addUser(userId, viewRoom->userName());
+    }
+    
     // Enable the view again
-    // viewRoom->setDisabled(false);
-    Q_UNUSED(room);
-    Q_UNUSED(edited);
-    // Close the view.
-    viewRoom->close();
+    viewRoom->setDisabled(false);
+    
 }

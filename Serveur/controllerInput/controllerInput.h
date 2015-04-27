@@ -12,8 +12,9 @@ class ControllerInput : public QObject
     virtual void receiveMessage(ModelMessage& message, QObject* sender) = 0;
     virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
     virtual void infoUser(ModelUser& user, QObject* sender) = 0;
-    virtual void room(const ModelRoom& room, bool edited, QObject* sender) = 0;
+    virtual void room(const ModelRoom& room, bool edited, QObject* sender) {Q_UNUSED(room); Q_UNUSED(edited); Q_UNUSED(sender);}
     virtual void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender) {Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);}
+    virtual void userId(const QString& userName, bool exists, quint32 userId, QObject* sender) {Q_UNUSED(userName); Q_UNUSED(exists); Q_UNUSED(userId); Q_UNUSED(sender);}
 };
 
 #endif
