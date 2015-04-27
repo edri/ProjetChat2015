@@ -16,7 +16,7 @@ void ServerControllerInput::login(const QString& pseudo, const QString& hashedPW
 
 void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
-    ChatorClient* client = (ChatorClient*) sender;
+    //ChatorClient* client = (ChatorClient*) sender;
     Q_UNUSED(user);
     Q_UNUSED(sender);
 }
@@ -32,4 +32,12 @@ void ServerControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
     {
         _controllerRoom.createRoom(room, client);
     }
+}
+
+void ServerControllerInput::userId(const QString& userName, bool exists, quint32 userId, QObject* sender)
+{
+    Q_UNUSED(exists);
+    Q_UNUSED(userId);
+    ChatorClient* client = (ChatorClient*) sender;
+    _controllerUser.userId(userName, client);
 }

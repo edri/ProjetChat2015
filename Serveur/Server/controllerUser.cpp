@@ -69,3 +69,10 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         client->socket.sendBinaryMessage(interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
     }
 }
+
+void ControllerUser::userId(const QString& userName, ChatorClient* client)
+{
+    quint32 userId = 0;
+    bool exists = _db.userExists(userName, userId);
+    client->socket.sendBinaryMessage(interpretor->userId(userName, exists, userId));
+}

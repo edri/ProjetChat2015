@@ -11,6 +11,7 @@ class ControllerUser
     public:
     ControllerUser(ControllerDB& db, ControllerRoom& room);
     void login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client);
+    void userId(const QString& userName, ChatorClient* client);
     Interpretor* interpretor;
     
     private:

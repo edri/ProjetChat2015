@@ -180,3 +180,18 @@ quint32 ControllerDB::createRoom(const ModelRoom& room)
     
     return idRoom;
 }
+
+bool ControllerDB::userExists(const QString& pseudo, quint32& id)
+{
+    QSqlQuery query(_db);
+    //query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
+    //query.bindValue(":login", pseudo);
+    //query.bindValue(":password", hashedPWD);
+    query.exec("SELECT idUser FROM user WHERE login = \"" + pseudo + "\"");
+
+    if (!query.first()) {return false;}
+    
+    id = query.record().value(0).toUInt();
+    
+    return true;
+}
