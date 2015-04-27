@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     model->addUser(user4);
     model->addUser(user5);
     // L'utilisateur connecté.
-    ModelUser* currentUser = &user1;
+    ModelUser* currentUser = new ModelUser();
 
     // Dix messages de test.
     ModelMessage message1(1, 2, 7, QDateTime::fromString("04.04.2015 20:17", "dd.MM.yyyy HH:mm"), "Salut !");
