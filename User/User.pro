@@ -21,9 +21,11 @@ SOURCES += main.cpp\
  "../Serveur/Interpretor/interpretor.cpp" \
  "../Serveur/Interpretor/packet.cpp" \
  "../ModeleChator/modelChator.cpp" \
- "../Serveur/controllerInput/controllerInput.cpp" \
  "../Serveur/controllerInput/clientControllerInput.cpp" \
  "../Serveur/controllerOutput/controllerOutput.cpp" \
+ ../Salle/Room/controllerRoom.cpp\
+ ../Salle/Room/viewRoom.cpp\
+ ../Salle/Join/viewJoin.cpp\
     viewInscription.cpp
 
 HEADERS  += viewUser.h \
@@ -35,6 +37,9 @@ HEADERS  += viewUser.h \
  "../Serveur/controllerInput/controllerInput.h" \
  "../Serveur/controllerInput/clientControllerInput.h" \
  "../Serveur/controllerOutput/controllerOutput.h" \
+ ../Salle/Room/controllerRoom.h\
+ ../Salle/Room/viewRoom.h\
+ ../Salle/Join/viewJoin.h\
     viewInscription.h
 
 FORMS    += viewUser.ui \
