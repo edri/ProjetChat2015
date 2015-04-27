@@ -29,8 +29,8 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sende
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
-     //ControllerChat Missing method
-    //_controllerChat.receiveMessage(message);
+
+    _controllerChat->receiveMessage(message);
 }
 
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)

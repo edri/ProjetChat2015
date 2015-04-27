@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     roomsU1.insert(1);
     roomsU1.insert(2);
     roomsU1.insert(4);
-    ModelUser user1(1, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), QImage("img/54226b6d8bfa4.jpg"), roomsU1);
+    ModelUser user1(7, "edri", "Miguel", "Santamaria", true, QDateTime::currentDateTime(), QImage("img/54226b6d8bfa4.jpg"), roomsU1);
 
     QSet<quint32> roomsU2;
     roomsU2.insert(2);
@@ -45,16 +45,16 @@ int main(int argc, char *argv[])
     ModelUser* currentUser = &user1;
 
     // Dix messages de test.
-    ModelMessage message1(1, 2, 1, QDateTime::fromString("04.04.2015 20:17", "dd.MM.yyyy HH:mm"), "Salut !");
+    ModelMessage message1(1, 2, 7, QDateTime::fromString("04.04.2015 20:17", "dd.MM.yyyy HH:mm"), "Salut !");
     ModelMessage message2(2, 2, 2, QDateTime::fromString("04.04.2015 20:18", "dd.MM.yyyy HH:mm"), "hello");
     ModelMessage message3(3, 2, 3, QDateTime::fromString("04.04.2015 20:20", "dd.MM.yyyy HH:mm"), "Yo");
-    ModelMessage message4(4, 2, 1, QDateTime::fromString("04.04.2015 20:20", "dd.MM.yyyy HH:mm"), "Ca va ?");
+    ModelMessage message4(4, 2, 7, QDateTime::fromString("04.04.2015 20:20", "dd.MM.yyyy HH:mm"), "Ca va ?");
     ModelMessage message5(5, 2, 2, QDateTime::fromString("04.04.2015 20:22", "dd.MM.yyyy HH:mm"), "bien et toi?");
-    ModelMessage message6(6, 2, 1, QDateTime::fromString("04.04.2015 20:25", "dd.MM.yyyy HH:mm"), "Pépère ouais ^^");
+    ModelMessage message6(6, 2, 7, QDateTime::fromString("04.04.2015 20:25", "dd.MM.yyyy HH:mm"), "Pépère ouais ^^");
     ModelMessage message7(7, 2, 4, QDateTime::fromString("04.04.2015 20:32", "dd.MM.yyyy HH:mm"), "Hello");
     ModelMessage message8(8, 2, 3, QDateTime::fromString("04.04.2015 23:56", "dd.MM.yyyy HH:mm"), "J'ai trouvé un site trop bien");
-    ModelMessage message9(9, 2, 1, QDateTime::fromString("05.04.2015 00:02", "dd.MM.yyyy HH:mm"), "Pas encore au lit ? :p");
-    ModelMessage message10(10, 1, 1, QDateTime::fromString("18.04.2015 15:10", "dd.MM.yyyy HH:mm"), "Yop");
+    ModelMessage message9(9, 2, 7, QDateTime::fromString("05.04.2015 00:02", "dd.MM.yyyy HH:mm"), "Pas encore au lit ? :p");
+    ModelMessage message10(10, 1, 7, QDateTime::fromString("18.04.2015 15:10", "dd.MM.yyyy HH:mm"), "Yop");
 
     // Quatre salles de test.
     // ====== 1 ======
