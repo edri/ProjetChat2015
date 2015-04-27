@@ -16,6 +16,7 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
         
         for (ChatorClient* client : room->clients)
         {
+            qDebug() << "envoi du message au client " << client->id;
             client->socket.sendBinaryMessage(data);
         }
     }

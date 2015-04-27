@@ -14,8 +14,8 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
 
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
-
-    connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
+    
+    //connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 }
 
 ControllerChat::~ControllerChat()
