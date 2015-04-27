@@ -50,6 +50,7 @@ void ClientControllerInput::room(const ModelRoom& room, bool edited, QObject* se
     Q_UNUSED(sender);
     _controllerRoom->roomConfirmation(room, edited);
 }
+
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
 {
     qDebug() << "dans join";
