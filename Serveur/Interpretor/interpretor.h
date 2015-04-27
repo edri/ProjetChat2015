@@ -33,6 +33,12 @@ class Interpretor : public QObject
     // Created Jan Purro 26.04.2015 14:55
     QByteArray room(const ModelRoom& room, bool edited);
     
+    // Serialize a user name (packet is used to ask the server if a username is used and obtain the user's id if he exists).
+    // userId and exists are not used by the client, the server use them to answer the clien request.
+    // The message type will be USER_ID. The parameters are written in the same order they appear in the prototype.
+    // Created Jan Purro 27.04.2015 13:35
+    QByteArray userId(const QString& userName, bool exists, quint32 userId);
+    
     public slots:
     void processData(const QByteArray& data);
     

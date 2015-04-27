@@ -33,6 +33,11 @@ void ControllerChat::showView() const
     _view->show();
 }
 
+void ControllerChat::receiveMessage(ModelMessage& message) const
+{
+    int a = 0;
+}
+
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 {
     ModelRoom& room = _model->getRoom(idRoom);
@@ -66,7 +71,6 @@ void ControllerChat::loadRooms(const quint32 idUser) const
 // TEST ; A SUPPRIMER PAR LA SUITE.
 void ControllerChat::auth()
 {
-    ModelMessage message(0, 0, 0, QDateTime::currentDateTime(), "");
     _co->login("licorne", "java");
 }
 

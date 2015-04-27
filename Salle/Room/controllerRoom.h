@@ -31,9 +31,6 @@ class ControllerRoom : public QObject
 {
     Q_OBJECT
 private:
-
-    // Used for test
-    int bidon;
     
     // Pointers on the view(s) and the model.
     ModelChator* model;
@@ -64,13 +61,8 @@ public:
     void showRoom();
     // Open the room's edition window, loading informations from the passed room.
     void showRoom(const quint32 idRoom);
-    
-    // Should be called when a user info is sent from the server to the controller
-    void addUser(const quint32 userId, const QString& userName);
-    // Should be called when a userDoesNotExist error is sent .
-    void userDoesNotExist();
-    // Should be called when a Room message is received by the client.
-    void roomConfirmation(const ModelRoom& room, bool edited);
+    // Should be called when a user's id is received by the client.
+    void userId(bool exists, quint32 userId);
     
     
 public slots :

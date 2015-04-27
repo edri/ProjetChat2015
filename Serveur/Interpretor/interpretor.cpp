@@ -105,6 +105,15 @@ QByteArray Interpretor::room(const ModelRoom& room, bool edited)
     return data;
 }
 
+QByteArray Interpretor::userId(const QString& userName, bool exists, quint32 userId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::USER_ID << userName << exists << userId;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -200,6 +209,17 @@ void Interpretor::processData(const QByteArray& data)
             stream >> edited;
             stream >> room;
             _dispatcher.room(room, edited, sender());
+        }
+        
+        case MessageType::USER_ID:
+        {
+            QString userName;
+            bool exists;
+            quint32 userId;
+            stream >> userName;
+            stream >> exists;
+            stream >> userId;
+            _dispatcher.userId(userName, exists, userId, sender());
         }
         
         case MessageType::SERVER_ERROR:

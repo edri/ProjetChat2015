@@ -43,3 +43,8 @@ void ControllerOutput::room(const ModelRoom& room, bool edited)
 {
     _connector.send(_interpretor.room(room, edited));
 }
+
+void ControllerOutput::userId(const QString& userName, bool exists, quint32 userId)
+{
+    _connector.send(_interpretor.userId(userName, exists, userId));
+}
