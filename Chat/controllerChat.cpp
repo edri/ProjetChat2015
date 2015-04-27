@@ -36,7 +36,8 @@ void ControllerChat::showView() const
 
 void ControllerChat::receiveMessage(ModelMessage& message) const
 {
-    int a = 0;
+    _model->getRoom(message.getIdRoom()).addMessage(message);
+    _view->loadRoomMessage(message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(), message.getContent(), message.getDate());
 }
 
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
