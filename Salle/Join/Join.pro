@@ -13,7 +13,7 @@ TARGET = join
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
+SOURCES += _main.cpp\
         viewJoin.cpp
 
 HEADERS  += viewJoin.h
