@@ -30,7 +30,6 @@ SOURCES += main.cpp\
  ../Chat/controllerChat.cpp\
  ../Chat/viewChat.cpp
 
-
 HEADERS  += viewUser.h \
     controllerUser.h    \
  "../Serveur/ServerConnector/connector.h" \
