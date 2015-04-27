@@ -1,7 +1,7 @@
 #include "controllerUser.h"
 #include "../Interpretor/packet.h"
 
-ControllerUser::ControllerUser(ControllerDB& db, ControllerRoom& room) : _db(db), _room(room) {}
+ControllerUser::ControllerUser(ControllerDB& db) : _db(db) {}
 
 void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
 {
@@ -12,11 +12,13 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         quint32 id = client->id;
         qDebug() << "Authentification OK, userid = " << id;
         
+        _connectedUsers.insert(id, client);
+        
         // Send the ModelUser to the client
         client->logged = true;
         ModelUser user = _db.info(id);
         qDebug() << "User: " << user.getUserName();
-        client->socket.sendBinaryMessage(interpretor->sendInfoUser(user));
+        client->socket.sendBinaryMessage(_interpretor->sendInfoUser(user));
         // Clés?
         
         QMap<quint32, ModelRoom> rooms;
@@ -58,15 +60,15 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
             qDebug() << "dans la liste: " << m.getUserName();
         }
         
-        client->socket.sendBinaryMessage(interpretor->join(rooms, users));
+        client->socket.sendBinaryMessage(_interpretor->join(rooms, users));
         
         // Inform everyone in the rooms that this client is online
-        _room.userConnected(user, client);
+        _room->userConnected(user, client);
     }
     else
     {
         qDebug() << "Erreur d'authentification";
-        client->socket.sendBinaryMessage(interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
     }
 }
 
@@ -74,5 +76,10 @@ void ControllerUser::userId(const QString& userName, ChatorClient* client)
 {
     quint32 userId = 0;
     bool exists = _db.userExists(userName, userId);
-    client->socket.sendBinaryMessage(interpretor->userId(userName, exists, userId));
+    client->socket.sendBinaryMessage(_interpretor->userId(userName, exists, userId));
+}
+
+QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
+{
+    return _connectedUsers;
 }

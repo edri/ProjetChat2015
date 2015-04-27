@@ -81,12 +81,12 @@ QDataStream& operator >> (QDataStream& ds, ModelMessage& m)
 
 QDataStream& operator << (QDataStream& ds, const ModelUser& u)
 {
-    return ds << u._idUser << u._userName << u._firstName << u._lastName << u._isConnected << u._lastConnection << u._image;
+    return ds << u._idUser << u._userName << u._firstName << u._lastName << u._isConnected << u._lastConnection << u._image << u._roomsIds;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelUser& u)
 {
-    return ds >> u._idUser >> u._userName >> u._firstName >> u._lastName >> u._isConnected >> u._lastConnection >> u._image;
+    return ds >> u._idUser >> u._userName >> u._firstName >> u._lastName >> u._isConnected >> u._lastConnection >> u._image >> u._roomsIds;
 }
 
 ModelRoom::ModelRoom() : _idRoom(0), _name(""), _private(false), _visible(false), _picture(QImage()), _limitOfStoredMessage(0), _admins(QSet<quint32>()), _members(QSet<quint32>()){}

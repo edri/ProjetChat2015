@@ -41,8 +41,8 @@ void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
     
     qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
     
-    //ControllerUser Missing method
-    //_controllerUser.infoUser(user);
+    //ControllerUser
+    _controllerUser->infoUser(user);
 }
 
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)

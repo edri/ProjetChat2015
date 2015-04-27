@@ -5,6 +5,9 @@
 #include "controllerDB.h"
 #include "../../ModeleChator/modelChator.h"
 #include "../Interpretor/interpretor.h"
+#include "controllerUser.h"
+
+class ControllerUser;
 
 class ControllerRoom
 {
@@ -13,7 +16,8 @@ class ControllerRoom
     void storeMessage(ModelMessage& message, ChatorClient* client);
     void userConnected(const ModelUser& user, ChatorClient* client);
     void createRoom(ModelRoom& room, ChatorClient* client);
-    Interpretor* interpretor;
+    Interpretor* _interpretor;
+    ControllerUser* _user;
     
     private:
     ControllerDB& _db;
