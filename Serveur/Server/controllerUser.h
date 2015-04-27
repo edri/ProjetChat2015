@@ -6,18 +6,21 @@
 #include "../Interpretor/interpretor.h"
 #include "controllerRoom.h"
 
+class ControllerRoom;
+
 class ControllerUser
 {
     public:
-    ControllerUser(ControllerDB& db, ControllerRoom& room);
+    ControllerUser(ControllerDB& db);
     void login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client);
     void userId(const QString& userName, ChatorClient* client);
-    Interpretor* interpretor;
+    QMap<quint32, ChatorClient*>& getConnectedUsers();
+    Interpretor* _interpretor;
+    ControllerRoom* _room;
     
     private:
     ControllerDB& _db;
-    ControllerRoom& _room;
-    QMap<quint32, ChatorClient*> connectedUsers;
+    QMap<quint32, ChatorClient*> _connectedUsers;
 };
 
 #endif
