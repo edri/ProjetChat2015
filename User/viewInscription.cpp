@@ -6,6 +6,8 @@ ViewInscription::ViewInscription(QWidget *parent) :
     ui(new Ui::viewInscription)
 {
     ui->setupUi(this);
+    ui->btn_question->setEnabled(false);
+    ui->btn_question->setToolTip("Votre mot de passe doit contenir au moins : \nune miniscule, une majuscule, un nombre et un caractère spécial");
 }
 
 ViewInscription::~ViewInscription()
