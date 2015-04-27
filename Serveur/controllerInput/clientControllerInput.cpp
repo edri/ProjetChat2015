@@ -48,11 +48,19 @@ void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
 {
     qDebug() << "dans join";
-    for (ModelRoom mr : rooms)
+
+    for (ModelUser user : users)
     {
-        qDebug() << "Il faut ajouter la salle " << mr.getIdRoom() << ": " << mr.getName();
-        QSet<quint32> rusers = mr.getUsers();
-        QSet<quint32> radmins = mr.getAdmins();
+        _controllerChat->loadUser(user);
+    }
+
+    for (ModelRoom room : rooms)
+    {
+        _controllerChat->loadRoom(room);
+
+        /*qDebug() << "Il faut ajouter la salle " << room.getIdRoom() << ": " << room.getName();
+        QSet<quint32> rusers = room.getUsers();
+        QSet<quint32> radmins = room.getAdmins();
         
         for (quint32 u : rusers)
         {
@@ -64,8 +72,11 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
         {
             ModelUser mu = users[u];
             qDebug() << "Administré par " << mu.getIdUser() << ": " << mu.getUserName();
-        }
+        }*/
     }
+
+    _controllerChat->loadUserRooms(7);
+
     Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
 }
 

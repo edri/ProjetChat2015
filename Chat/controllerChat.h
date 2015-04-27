@@ -30,10 +30,12 @@ public:
     ~ControllerChat();
 
     void showView() const;
+    void loadUser(ModelUser& user) const;
+    void loadRoom(ModelRoom& room) const;
     void receiveMessage(ModelMessage& message) const;
 
 public slots :
-    void loadRooms(const quint32 idUser) const;
+    void loadUserRooms(const quint32 idUser) const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
     void auth();

@@ -29,9 +29,19 @@ ControllerChat::~ControllerChat()
 void ControllerChat::showView() const
 {
     _view->setConnectedAsText(_currentUser->getUserName());
-    loadRooms(_currentUser->getIdUser());
+    //loadUserRooms(_currentUser->getIdUser());
 
     _view->show();
+}
+
+void ControllerChat::loadUser(ModelUser& user) const
+{
+    _model->addUser(user);
+}
+
+void ControllerChat::loadRoom(ModelRoom& room) const
+{
+    _model->addRoom(room);
 }
 
 void ControllerChat::receiveMessage(ModelMessage& message) const
@@ -50,7 +60,7 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
     }
 }
 
-void ControllerChat::loadRooms(const quint32 idUser) const
+void ControllerChat::loadUserRooms(const quint32 idUser) const
 {
     QList<quint32> userRooms = _model->getUserRooms(idUser);
     qStableSort(userRooms);
@@ -78,8 +88,8 @@ void ControllerChat::auth()
 
 void ControllerChat::sendMessage() const
 {
-    //ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
-    ModelMessage message(0, 1, 7, QDateTime::currentDateTime(), _view->getMessageText());
+    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
 
     _co->sendMessage(message);
+    //loadUserRooms(_currentUser->getIdUser());
 }
