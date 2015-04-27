@@ -15,8 +15,6 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
 
-    // TEST ; A SUPPRIMER PAR LA SUITE.
-    connect(_cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 }
 
@@ -29,7 +27,6 @@ ControllerChat::~ControllerChat()
 void ControllerChat::showView() const
 {
     _view->setConnectedAsText(_currentUser->getUserName());
-    //loadUserRooms(_currentUser->getIdUser());
 
     _view->show();
 }
@@ -60,9 +57,9 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
     }
 }
 
-void ControllerChat::loadUserRooms(const quint32 idUser) const
+void ControllerChat::loadUserRooms() const
 {
-    QList<quint32> userRooms = _model->getUserRooms(idUser);
+    QList<quint32> userRooms = _model->getUserRooms(_currentUser->getIdUser());
     qStableSort(userRooms);
 
     for (quint32 roomId : userRooms)
@@ -80,16 +77,9 @@ void ControllerChat::loadUserRooms(const quint32 idUser) const
     _view->selectFirstRoom();
 }
 
-// TEST ; A SUPPRIMER PAR LA SUITE.
-void ControllerChat::auth()
-{
-    _co->login("licorne", "java");
-}
-
 void ControllerChat::sendMessage() const
 {
     ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
 
     _co->sendMessage(message);
-    //loadUserRooms(_currentUser->getIdUser());
 }

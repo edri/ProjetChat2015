@@ -53,7 +53,7 @@ void ControllerUser::auth() const
 
 void ControllerUser::infoUser(ModelUser& user) {
     _model->addUser(user);
-    _currentUser = &user;
+    *_currentUser = _model->getUser(user.getIdUser());
     _controllerChat->showView();
 }
 

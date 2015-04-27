@@ -35,10 +35,9 @@ public:
     void receiveMessage(ModelMessage& message) const;
 
 public slots :
-    void loadUserRooms(const quint32 idUser) const;
+    void loadUserRooms() const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
-    void auth();
 
 };
 

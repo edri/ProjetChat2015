@@ -75,7 +75,7 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
         }*/
     }
 
-    _controllerChat->loadUserRooms(7);
+    _controllerChat->loadUserRooms();
 
     Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
 }

@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    /*QApplication a(argc, argv);
 
     ModelChator* model = new ModelChator();
     // Cinq utilisateurs de test.
@@ -131,11 +131,11 @@ int main(int argc, char *argv[])
     Interpretor* i = new Interpretor(*cci);
     ClientConnector* cc = new ClientConnector();
     ControllerOutput* co = new ControllerOutput(*cc, *i);
-    cc->connectToServer("10.192.92.84:1234");
+    //cc->connectToServer("10.192.92.84:1234");
 
     ControllerChat* c = new ControllerChat(model, currentUser, cci, i, cc, co);
     cci->controllerChat(c);
     c->showView();
 
-    return a.exec();
+    return a.exec();*/
 }

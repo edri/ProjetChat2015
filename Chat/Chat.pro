@@ -25,7 +25,10 @@ SOURCES += main.cpp \
         ../Serveur/controllerOutput/controllerOutput.cpp \
         ../Salle/Room/controllerRoom.cpp \
         ../Salle/Room/viewRoom.cpp \
-        ../Salle/Join/viewJoin.cpp
+        ../Salle/Join/viewJoin.cpp \
+        ../User/controllerUser.cpp \
+        ../User/viewUser.cpp \
+        ../User/viewInscription.cpp
 
 HEADERS  += viewChat.h \
         controllerChat.h \
@@ -38,8 +41,13 @@ HEADERS  += viewChat.h \
         ../Serveur/controllerOutput/controllerOutput.h \
         ../Salle/Room/controllerRoom.h \
         ../Salle/Room/viewRoom.h \
-        ../Salle/Join/viewJoin.h
+        ../Salle/Join/viewJoin.h \
+        ../User/controllerUser.h \
+        ../User/viewUser.h \
+        ../User/viewInscription.h
 
-FORMS    += viewChat.ui
+FORMS    += viewChat.ui \
+            ../User/viewUser.ui \
+            ../User/viewInscription.ui
 
 RESOURCES +=

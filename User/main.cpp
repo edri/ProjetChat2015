@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
     ControllerOutput* controllerOutput = new ControllerOutput(*connector, *interpretor);
 
     ControllerChat* controllerChat = new ControllerChat(model, currentUser, controllerInput, interpretor, connector, controllerOutput);
-    controllerInput->controllerChat(controllerChat);
 
     // Create the controler which will create the view
     ControllerUser* controllerUser = new ControllerUser(model, currentUser, controllerInput, interpretor, connector, controllerOutput, controllerChat);
