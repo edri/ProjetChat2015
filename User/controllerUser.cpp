@@ -33,17 +33,17 @@ void ControllerUser::showView() const
 void ControllerUser::connectToServeur() const
 {
     // Use the getter to retrieve the data
-    QString username = "Jean-paul";
-    QString password = "fromage66";
-    QString server = "localhost";
-    QString port = "1234";   //
+    QString server = _view->getIpAddress();
+    QString port = _view->getPort();   //
 
     // Connection to the servers
-    cc->connectToServer("localhost:1234");
+    cc->connectToServer(server + ":" + port);
 }
 
 void ControllerUser::auth() const
 {
-    co->login("licorne", "java");
+    QString username = _view->getUsername();
+    QString password = _view->getPassword();
+    co->login(username, password);
 }
 

@@ -42,14 +42,26 @@ void ViewInscription::on_btn_inscription_clicked()
         // send a signal
 
         //The server verify if the username is already used
-        //ui->lbl_info->setText("Ce nom d'utilisateur est déjà utilisé.");
+        if(true) {
+          ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est déjà utilisé.</font>");
+        }
 
         // User added succesfully
-        //ui->lbl_info->setText("Votre compte a été créé avec succès");
+        // Afficher un popup indiquant que l'inscription est réussie
+        QMessageBox info;
+        info.setText("Votre compte a été créé avec succès");
+        info.exec();
+
+        // Réactiver la fenêtre de connection si tout s'est bien passé
+
+
+
     }
 
 
 }
+
+
 
 
 void ViewInscription::closeEvent(QCloseEvent *)
@@ -65,6 +77,18 @@ QString ViewInscription::getFirstName() const
     return ui->ldt_firstName->text();
 }
 
+QString ViewInscription::getLastName() const
+{
+    // Récupérer le nom
+    return ui->ldt_lastName->text();
+}
+
+QString ViewInscription::getUserName() const
+{
+    // Récupérer le nom d'utilisateur
+    return ui->ldt_userName->text();
+}
 
 
-//getters à ajouter pour chaque champs
+
+

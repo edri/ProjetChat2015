@@ -6,7 +6,7 @@ ViewUser::ViewUser(QWidget *parent) :
     ui(new Ui::ViewUser)
 {
     ui->setupUi(this);
-    ui->ldt_password->setValidator(new QIntValidator());
+    //ui->ldt_password->setValidator(new QIntValidator());
     // Initialize a new view for the inscription
     this->_viewInscription = new ViewInscription(this);
 }
@@ -19,17 +19,18 @@ ViewUser::~ViewUser()
 
 void ViewUser::on_btn_connexion_clicked()
 {
-    // Send the data
 
-    // manually valid : The field must be filled.
-    if(ui->btn_connexion->text().isEmpty()) {
-        // Show an error message
+    // Vérifier que les champs ne soient pas vides
+    if(ui->ldt_username->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_server->text().isEmpty()) {
+        // Afficher un message d'erreur
+        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
+    } else {
+        // Send the data
+        emit requestGetIds();
+
     }
 
-    // Get the login
 
-    // send a signal
-    emit requestGetIds();
 }
 
 void ViewUser::on_btn_inscription_clicked()
@@ -42,21 +43,25 @@ void ViewUser::on_btn_inscription_clicked()
 }
 
 
-QString ViewUser::getUsername()
+QString ViewUser::getUsername() const
 {
-    return ui->ldt_Username->text();
+    return ui->ldt_username->text();
 }
 
-QString ViewUser::getPassword()
+QString ViewUser::getPassword() const
 {
     return ui->ldt_password->text();
 }
 
-QString ViewUser::getPort() {
+QString ViewUser::getPort() const
+{
     return ui->spinBox->text();
 
 }
 
-QString ViewUser::getIpAddress() {
+QString ViewUser::getIpAddress() const
+{
     return ui->ldt_server->text();
 }
+
+

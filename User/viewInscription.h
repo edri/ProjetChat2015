@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QMessageBox>
 //#include <QCloseEvent>
 
 namespace Ui {
@@ -18,6 +19,11 @@ public:
     ~ViewInscription();
 
     QString getFirstName() const;
+
+    QString getLastName() const;
+
+    QString getUserName() const;
+
 
 private slots:
     void on_btn_path_clicked();

@@ -16,10 +16,10 @@ public:
     explicit ViewUser(QWidget *parent = 0);
     ~ViewUser();
 
-    QString getUsername();
-    QString getPassword();
-    QString getPort();
-    QString getIpAddress();
+    QString getUsername() const;
+    QString getPassword() const;
+    QString getPort() const;
+    QString getIpAddress() const;
 
 private slots:      // Fonctions appelées lorsqu'un événement se produit (signal = msg envoyé par un objet)
 

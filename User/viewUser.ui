@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>342</height>
+    <width>501</width>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>260</y>
+      <y>280</y>
       <width>210</width>
       <height>30</height>
      </rect>
@@ -34,7 +34,7 @@
      <string>Inscription</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="lbl_server">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -49,10 +49,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Serveur</string>
+     <string>* Serveur</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="lbl_userName">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -82,10 +82,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Nom d'utilisateur</string>
+     <string>* Nom d'utilisateur</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="lbl_port">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -100,10 +100,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Port</string>
+     <string>* Port</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="lbl_password">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -124,14 +124,14 @@
      </font>
     </property>
     <property name="text">
-     <string>Mot de passe</string>
+     <string>* Mot de passe</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_connexion">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>260</y>
+      <y>280</y>
       <width>210</width>
       <height>30</height>
      </rect>
@@ -147,7 +147,7 @@
      <string>Connexion</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ldt_Username">
+   <widget class="QLineEdit" name="ldt_username">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -186,6 +186,63 @@
      <string/>
     </property>
    </widget>
+   <widget class="QSpinBox" name="spinBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>200</y>
+      <width>210</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="maximum">
+     <number>65536</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_info">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>320</y>
+      <width>459</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>500</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>250</y>
+      <width>201</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>* champs obligatoires</string>
+    </property>
+   </widget>
    <widget class="QLineEdit" name="ldt_password">
     <property name="geometry">
      <rect>
@@ -197,7 +254,7 @@
     </property>
     <property name="maximumSize">
      <size>
-      <width>16777215</width>
+      <width>500</width>
       <height>30</height>
      </size>
     </property>
@@ -206,21 +263,8 @@
       <pointsize>11</pointsize>
      </font>
     </property>
-    <property name="inputMethodHints">
-     <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
-    </property>
     <property name="echoMode">
      <enum>QLineEdit::Password</enum>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spinBox">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>200</y>
-      <width>210</width>
-      <height>30</height>
-     </rect>
     </property>
    </widget>
   </widget>
@@ -229,7 +273,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>500</width>
+     <width>501</width>
      <height>21</height>
     </rect>
    </property>
