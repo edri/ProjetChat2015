@@ -1,0 +1,43 @@
+Une petit résumé pour qui veut échanger des données avec le serveur.
+
+- Il faut ajouter un nouveau type de message dans l'enum se trouvant dans le fichier Serveur/Interpretor/packet.h
+
+- Il faut ajouter une méthode à la classe Interpretor (Serveur/Interpretor/interpretor.h/cpp). Cette méthode sert à sérialiser le message. Il suffit de s'inspirer des méthodes déjà existante. On peut sérialiser plusieurs objets dans le flux mais toujours le type de message en premier.
+
+- Dans la méthode processData de Interpretor (le gros switch) il faut ajouter un case pour le nouveau type de message. Il appelera une méthode du "_dispatcher", c'est à dire un objet de type ClientControllerInput côté client et ServerControllerInput côté serveur, deux classes héritant de la classe abstraite ControllerInput (Serveur/controllerInput/controllerInput.h).
+
+- Il faut donc déclarer une nouvelle méthode (celle que l'interpretor appelera) dans le ControllerInput (laisser un corps vide pour cette classe). Il faut qu'il y ait un paramètre sender de type Object* dans ces méthodes. Seul le serveur utilise se paramètre. 
+
+- Il faut ensuite redéfinir cette méthode dans les deux sous-classes. ClientControllerInput pour le côté client ServerControllerInput pour le côté serveur. Côté client la méthode se contentera généralement d'appeler une méthode d'un des autres controlleur côté client. Côté serveur c'est le même principe.
+
+- Ça sous-entend qu'une telle méthode existe chez le contrôleur concerné. Sinon il faudra la coder. Ça sous-entend aussi que le controlleurInput possède un pointeur / une référence vers le controlleur en question.
+
+- Le controlleurInput (aussi bien côté client que côté serveur) gère ce qui se passe quand le client respectivement le serveur reçoit un message du type créé.
+
+- Pour pouvoir envoyer un message depuis le client il faut ajouter une méthode au controllerOutput (Serveur/controllerOutput/...). De nouveau s'inspirer de ce qui existe déjà. Il s'agit d'un simple appel à la fonction précédemment déclarée dans Interpretor (il suffit de demander au connector d'envoyer les data sérialisées par l'Interpretor).
+
+- Il suffit ensuite d'appeler cette méthode depuis n'importe quel autre controlleur, qui possèdent tous déjà un pointeur vers ce controlleuOutput.
+
+- Ça paraît beaucoup mais c'est seulement quelques lignes à chaque fois et la plupart du temps on peut copié collé une bonne partie du code déjà existant pour l'adapter.
+
+Pour résumer :
+
+    Pour l'envoi d'un message depuis le client vers le serveur :
+        
+    - Appeler une méthode de controllerOutput qui appelera une méthode de sérialisation des données d'Interpretor. Cette méthode retourne un tableau de bits qui est passé au Connector qui se charge d'envoyer le paquet.
+    
+    Pour la réception d'un message du serveur par le client :
+    
+    - Le case dans la méthode processData d'Interpretor correspondant au type du message appele la méthode appropriée de ClientControllerInput qui fait peut être un ou deux trucs mais plus probablement se contente d'appler une méthode d'un autre controlleur.
+
+Faire attention à :
+
+    - Essayer de minimiser les types de messages. Réfléchir quels autres cas d'utilisations du message pourraient survenir. 
+    
+    - Penser aussi que le message peut être échanger dans les deux sens. Penser aussi que la méthode controllerInput est utilisée des deux côtés. Il est donc toutà fait possible d'avoir un paramètre (que se soit de la méthode ou dans le message) qui ne soit utilisé que d'un côté (c'est déjé le cas avec sender de toute façpn).
+    
+    - Éviter de sérialiser trop de données dans le message. Par exemple envoyer tout un ModelRoom alors que c'est seulement un champ ou deux qui sont pertinents.
+    
+    - Prévenir les autres qu'un nouveau paquet a été crée.
+    
+    - S'attendre à avoir des conflits sur ces fichiers si qqun d'autre modif en mêmem temps ^^
