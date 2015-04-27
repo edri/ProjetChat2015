@@ -15,14 +15,17 @@ int main(int argc, char *argv[])
     Interpretor* i = new Interpretor(*cci);
     ClientConnector* cc = new ClientConnector();
     ControllerOutput* co = new ControllerOutput(*cc, *i);
+    ModelChator* model = new ModelChator();
+    ModelUser currentUser;
+    ControllerChat* controllerChat = new ControllerChat(model, &currentUser, cci, i, cc, co);
 
     // Create the controler which will create the view
-    ControllerUser* controller = new ControllerUser(cci, i, cc, co);
-    cci->controllerUser(controller);
+    ControllerUser* controllerUser = new ControllerUser(model, &currentUser, cci, i, cc, co, controllerChat);
+    cci->controllerUser(controllerUser);
     // Il faut encore initialiser les autres controlleurs du cci.
 
     // Call the view
-    controller->showView();
+    controllerUser->showView();
 
     return a.exec();
 }

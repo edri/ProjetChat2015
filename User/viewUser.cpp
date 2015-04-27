@@ -27,6 +27,9 @@ void ViewUser::on_btn_connexion_clicked()
     } else {
         // Send the data
         emit requestGetIds();
+        // Les données doivent être confirmées
+
+
 
     }
 

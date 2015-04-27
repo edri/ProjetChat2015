@@ -1,7 +1,7 @@
 #include "controllerUser.h"
 
-ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, ClientConnector* cc,
-                               ControllerOutput* co)
+ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i, ClientConnector* cc,
+                               ControllerOutput* co, ControllerChat* controllerChat)
 {
     this->cci = cci;
     this->i = i;
@@ -9,6 +9,9 @@ ControllerUser::ControllerUser(ClientControllerInput* cci, Interpretor* i, Clien
     this->co = co;
     // Initialize a new view for the connection
     this->_view = new ViewUser();
+    this->_model = new ModelChator();
+    this->_currentUser = currentUser;
+    this->_controllerChat = controllerChat;
 
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServeur()));
@@ -46,4 +49,21 @@ void ControllerUser::auth() const
     QString password = _view->getPassword();
     co->login(username, password);
 }
+
+
+void ControllerUser::infoUser(ModelUser& user) {
+    _model->addUser(user);
+    _currentUser = &user;
+    _controllerChat->showView();
+}
+
+
+
+
+
+
+
+
+
+
 

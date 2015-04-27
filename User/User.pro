@@ -26,7 +26,10 @@ SOURCES += main.cpp\
  ../Salle/Room/controllerRoom.cpp\
  ../Salle/Room/viewRoom.cpp\
  ../Salle/Join/viewJoin.cpp\
-    viewInscription.cpp
+    viewInscription.cpp\
+ ../Chat/controllerChat.cpp\
+ ../Chat/viewChat.cpp
+
 
 HEADERS  += viewUser.h \
     controllerUser.h    \
@@ -40,9 +43,12 @@ HEADERS  += viewUser.h \
  ../Salle/Room/controllerRoom.h\
  ../Salle/Room/viewRoom.h\
  ../Salle/Join/viewJoin.h\
-    viewInscription.h
+    viewInscription.h\
+ ../Chat/controllerChat.h\
+ ../Chat/viewChat.h
 
 FORMS    += viewUser.ui \
-    viewInscription.ui
+    viewInscription.ui\
+    ../Chat/viewChat.ui
 
 
