@@ -27,6 +27,7 @@ void ServerControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
     if (edited)
     {
         int i = 0; // Instruction caca pour combler le vide abyssal de la non implémentation de la modification de salle
+        Q_UNUSED(i);
     }
     else
     {

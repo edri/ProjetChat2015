@@ -1,4 +1,5 @@
 #include "controllerRoom.h"
+#include <QByteArray>
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
@@ -11,9 +12,11 @@ void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
         message.setIdMessage(_db.storeMessage(message));
         message.setDate(QDateTime::currentDateTime());
         
+        QByteArray data = _interpretor->sendMessage(message);
+        
         for (ChatorClient* client : room->clients)
         {
-            client->socket.sendBinaryMessage(interpretor->sendMessage(message));
+            client->socket.sendBinaryMessage(data);
         }
     }
 }
@@ -49,6 +52,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         }
     
     QSet<quint32> upToDateClients;
+    QByteArray data = _interpretor->connected(user);
     
     for (ChatorRoom* room : currentClient->rooms)
     {
@@ -58,7 +62,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
             {
                 qDebug() << "Notification de R/U " << room->id << "/" << client->id;
                 upToDateClients.insert(client->id);
-                client->socket.sendBinaryMessage(interpretor->connected(user));
+                client->socket.sendBinaryMessage(data);
             }
         }
     }
@@ -69,12 +73,33 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     room.setIdRoom(_db.createRoom(room));
     
     QSet<quint32> users = room.getUsers();
+    
+    ChatorRoom* newRoom = new ChatorRoom;
+    newRoom->id = room.getIdRoom();
+    onlineRooms.insert(newRoom->id, newRoom);
+    
+    QMap<quint32, ChatorClient*>& connectedUsers = _user->getConnectedUsers();
+    
     QMap<quint32, ModelUser> usersData;
+    ChatorClient* currentClient;
     
     for (quint32 idUser : users)
     {
         usersData.insert(idUser, _db.info(idUser));
+        if (connectedUsers.contains(idUser))
+        {
+            currentClient = connectedUsers[idUser];
+            currentClient->rooms.insert(newRoom);
+            newRoom->clients.insert(currentClient);
+        }
     }
     
-    // CONtinuer ici
+    QMap<quint32, ModelRoom> roomToSend;
+    roomToSend.insert(newRoom->id, room);
+    QByteArray data = _interpretor->join(roomToSend, usersData);
+    
+    for (ChatorClient* client : newRoom->clients)
+    {
+        client->socket.sendBinaryMessage(data);
+    }
 }
