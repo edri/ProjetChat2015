@@ -21,7 +21,7 @@ void ViewUser::on_btn_connexion_clicked()
 {
 
     // Vérifier que les champs ne soient pas vides
-    if(ui->ldt_username->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_server->text().isEmpty()) {
+    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_server->text().isEmpty()) {
         // Afficher un message d'erreur
         ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
     } else {
@@ -48,7 +48,7 @@ void ViewUser::on_btn_inscription_clicked()
 
 QString ViewUser::getUsername() const
 {
-    return ui->ldt_username->text();
+    return ui->ldt_userName->text();
 }
 
 QString ViewUser::getPassword() const
