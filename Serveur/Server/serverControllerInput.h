@@ -13,9 +13,10 @@ class ServerControllerInput : public ControllerInput
     public:
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
-    virtual void receiveMessage(ModelMessage& message, QObject* sender);
-    virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender);
-    virtual void infoUser(ModelUser& user, QObject* sender);
+    void receiveMessage(ModelMessage& message, QObject* sender);
+    void login(const QString& pseudo, const QString& hashedPWD, QObject* sender);
+    void infoUser(ModelUser& user, QObject* sender);
+    void room(const ModelRoom& room, bool edited, QObject* sender);
     
     private:
     ControllerUser& _controllerUser;

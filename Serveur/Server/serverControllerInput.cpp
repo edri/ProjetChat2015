@@ -18,3 +18,10 @@ void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
 }
+
+void ServerControllerInput::room(const ModelRoom& room, bool edited, QObject* sender)
+{
+    Q_UNUSED(room);
+    Q_UNUSED(sender);
+    Q_UNUSED(edited);
+}
