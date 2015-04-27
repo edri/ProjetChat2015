@@ -17,11 +17,19 @@ void ServerControllerInput::login(const QString& pseudo, const QString& hashedPW
 void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
+    Q_UNUSED(user);
+    Q_UNUSED(sender);
 }
 
-void ServerControllerInput::room(const ModelRoom& room, bool edited, QObject* sender)
+void ServerControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
 {
-    Q_UNUSED(room);
-    Q_UNUSED(sender);
-    Q_UNUSED(edited);
+    ChatorClient* client = (ChatorClient*) sender;
+    if (edited)
+    {
+        int i = 0; // Instruction caca pour combler le vide abyssal de la non implémentation de la modification de salle
+    }
+    else
+    {
+        _controllerRoom.createRoom(room, client);
+    }
 }

@@ -45,7 +45,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         // Then, we store the pointer to this client and bind it to the room
         currentClient->rooms.insert(currentRoom);
         currentRoom->clients.insert(currentClient);
-    }
+        }
     
     QSet<quint32> upToDateClients;
     
@@ -61,4 +61,19 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
             }
         }
     }
+}
+
+void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
+{
+    room.setIdRoom(_db.createRoom(room));
+    
+    QSet<quint32> users = room.getUsers();
+    QMap<quint32, ModelUser> usersData;
+    
+    for (quint32 idUser : users)
+    {
+        usersData.insert(idUser, _db.info(idUser));
+    }
+    
+    // CONtinuer ici
 }

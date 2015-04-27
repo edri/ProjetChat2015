@@ -315,3 +315,7 @@ bool ModelRoom::isVisible() const
 {
     return _visible;
 }
+void ModelRoom::setIdRoom(const quint32 id)
+{
+    _idRoom = id;
+}

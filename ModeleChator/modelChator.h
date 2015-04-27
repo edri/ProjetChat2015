@@ -174,6 +174,7 @@ class ModelRoom
 
         // Setters
         void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
+        void setIdRoom(const quint32 id);
 };
 
 class ModelMessage

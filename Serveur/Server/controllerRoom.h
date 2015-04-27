@@ -12,6 +12,7 @@ class ControllerRoom
     ControllerRoom(ControllerDB& db);
     void storeMessage(ModelMessage& message, ChatorClient* client);
     void userConnected(const ModelUser& user, ChatorClient* client);
+    void createRoom(ModelRoom& room, ChatorClient* client);
     Interpretor* interpretor;
     
     private:

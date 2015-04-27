@@ -44,7 +44,7 @@ void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
     //_controllerUser.infoUser(user);
 }
 
-void ClientControllerInput::room(const ModelRoom& room, bool edited, QObject* sender)
+void ClientControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);

@@ -154,3 +154,29 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     
     return room;
 }
+
+quint32 ControllerDB::createRoom(const ModelRoom& room)
+{
+    QSqlQuery query(_db);
+    
+    query.exec("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (\"" + room.getName() + "\", " + room.getLimit() + ", " + QString::number(room.isPrivate()? 1 : 0) + ", " + QString::number(room.isVisible()? 1 : 0) + ", \"\")");
+    
+    quint32 idRoom = query.lastInsertId().toUInt();
+    
+    QSet<quint32> users = room.getUsers();
+    QSet<quint32> admins = room.getAdmins();
+    
+    // VOIR LES PREPARED STATEMENTS
+    for (quint32 idAdmin : admins)
+    {
+        query.exec("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (" + QString::number(idAdmin) + ", " + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = \"admin\"))");
+        users.remove(idAdmin);
+    }
+    
+    for (quint32 idUser : users)
+    {
+        query.exec("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (" + QString::number(idUser) + ", " + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = \"user\"))");
+    }
+    
+    return idRoom;
+}
