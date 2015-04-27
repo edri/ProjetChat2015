@@ -29,6 +29,7 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sende
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
+    qDebug() << "Message recu: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
 
     _controllerChat->receiveMessage(message);
 }

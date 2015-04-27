@@ -5,6 +5,7 @@ ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
 {
     ChatorRoom* room = nullptr;
+    qDebug() << "Message à stocker: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
     if (client->logged && message.getIdUser() == client->id && (room = onlineRooms[message.getIdRoom()]) && room->clients.contains(client))
     {
         message.setIdMessage(_db.storeMessage(message));

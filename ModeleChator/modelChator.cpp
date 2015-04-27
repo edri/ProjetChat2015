@@ -71,12 +71,12 @@ QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
 {
-    return ds << m._idMessage << m._idUser << m._date << m._content;
+    return ds << m._idMessage << m._idRoom << m._idUser << m._date << m._content;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelMessage& m)
 {
-    return ds >> m._idMessage >> m._idUser >> m._date >> m._content;
+    return ds >> m._idMessage >> m._idRoom >> m._idUser >> m._date >> m._content;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelUser& u)
