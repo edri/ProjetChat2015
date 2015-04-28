@@ -55,6 +55,7 @@ void ControllerUser::infoUser(ModelUser& user) {
     _model->addUser(user);
     *_currentUser = _model->getUser(user.getIdUser());
     _controllerChat->showView();
+    _view->close();
 }
 
 

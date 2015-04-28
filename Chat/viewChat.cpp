@@ -109,6 +109,7 @@ void ViewChat::loadRoomMessage(const quint32 messageId, const QString& userName,
     }
 
     _ui->tre_messages->resizeColumnToContents(0);
+    _ui->tre_messages->scrollToBottom();
 }
 
 QString ViewChat::getMessageText() const
