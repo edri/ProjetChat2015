@@ -7,7 +7,7 @@ ViewInscription::ViewInscription(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
-    ui->btn_question->setToolTip("Votre mot de passe doit contenir au moins : \nune miniscule, une majuscule, un nombre et un caractère spécial");
+    ui->btn_question->setToolTip("Votre mot de passe doit contenir au moins : \nune miniscule, une majuscule, un chiffre et un caractère spécial");
 }
 
 ViewInscription::~ViewInscription()
@@ -29,17 +29,24 @@ void ViewInscription::on_btn_inscription_clicked()
 {
     ui->lbl_info->setText("");
 
+    QRegExp passwordRestriction("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-z^A-Z^0-9]).{8,}$");
+
     // Verify the fields
     if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
-       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty()) {
+       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty())
+    {
         // Afficher un avertissement
         ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
     }
     else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
         // Afficher un avertissement
         ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
+    else if(!passwordRestriction.exactMatch(ui->ldt_password->text()))
+        ui->lbl_info->setText("<font color='red'><p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p></font>");
     else
     {
+        /* TODO
+
         //Warn the controler that data are ready to be send to the server
         // send a signal
 
@@ -50,17 +57,16 @@ void ViewInscription::on_btn_inscription_clicked()
 
         // User added succesfully
         // Afficher un popup indiquant que l'inscription est réussie
+
         QMessageBox info;
         info.setText("Votre compte a été créé avec succès");
         info.exec();
 
         // Réactiver la fenêtre de connection si tout s'est bien passé
 
-
-
+        */
+        ui->lbl_info->setText("OK");
     }
-
-
 }
 
 
