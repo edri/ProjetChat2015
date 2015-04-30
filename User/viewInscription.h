@@ -33,6 +33,8 @@ private slots:
 private:
     Ui::viewInscription *ui;
     void closeEvent(QCloseEvent *);
+    bool verifyProfileImage();
+    const QString passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
 };
 
 #endif // VIEWINSCRIPTION_H
