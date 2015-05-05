@@ -1,5 +1,6 @@
 #include "viewInscription.h"
 #include "ui_viewInscription.h"
+#include <QDebug>
 
 ViewInscription::ViewInscription(QWidget *parent) :
     QMainWindow(parent),
@@ -7,7 +8,7 @@ ViewInscription::ViewInscription(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
-    ui->btn_question->setToolTip("Votre mot de passe doit contenir au moins : \nune miniscule, une majuscule, un nombre et un caractère spécial");
+    ui->btn_question->setToolTip(passwordRequirement);
 }
 
 ViewInscription::~ViewInscription()
@@ -27,19 +28,37 @@ void ViewInscription::on_btn_path_clicked()
 
 void ViewInscription::on_btn_inscription_clicked()
 {
+    /* TODO
+     * Regrouper dans une fonction les vérification des champs, cette dernière retourne true si tout est ok
+     * Envoi des données au serveur et réception de réponses de ce dernier
+    */
     ui->lbl_info->setText("");
+
+    // Regular expressions
+    QRegExp passwordRestriction("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-z^A-Z^0-9]).{8,}$");
+    QRegExp userNameRestriction("^[a-zA-Z0-9_ -]*$");
+
 
     // Verify the fields
     if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
-       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty()) {
-        // Afficher un avertissement
+       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty())
+    {
         ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
     }
+    else if(!userNameRestriction.exactMatch(ui->ldt_userName->text()))
+        ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
     else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
-        // Afficher un avertissement
         ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
+    else if(!ui->ldt_profilPicture->text().isEmpty() && !verifyProfileImage())
+        ui->lbl_info->setText("<font color='red'>Image spécifiée incorrecte</font>");
+    else if(ui->ldt_password->text() == ui->ldt_userName->text())
+        ui->lbl_info->setText("<font color='red'>Votre mot de passe doit être différent de votre nom d'utilisateur.</font>");
+    else if(!passwordRestriction.exactMatch(ui->ldt_password->text()))
+        ui->lbl_info->setText("<font color='red'>" + passwordRequirement + "</font>");
     else
     {
+        /* TODO
+
         //Warn the controler that data are ready to be send to the server
         // send a signal
 
@@ -50,21 +69,25 @@ void ViewInscription::on_btn_inscription_clicked()
 
         // User added succesfully
         // Afficher un popup indiquant que l'inscription est réussie
+
         QMessageBox info;
         info.setText("Votre compte a été créé avec succès");
         info.exec();
 
         // Réactiver la fenêtre de connection si tout s'est bien passé
 
-
-
+        */
+        ui->lbl_info->setText("Prêt à être envoyé au serveur");
     }
-
-
 }
 
+bool ViewInscription::verifyProfileImage()
+{
+    QString extension = ui->ldt_profilPicture->text().right(4).toLower();
+    QFile file(ui->ldt_profilPicture->text());
 
-
+    return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));
+}
 
 void ViewInscription::closeEvent(QCloseEvent *)
 {
@@ -90,7 +113,3 @@ QString ViewInscription::getUserName() const
     // Récupérer le nom d'utilisateur
     return ui->ldt_userName->text();
 }
-
-
-
-
