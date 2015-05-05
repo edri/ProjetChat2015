@@ -18,11 +18,10 @@ int main(int argc, char *argv[])
     ClientConnector* connector = new ClientConnector();
     ControllerOutput* controllerOutput = new ControllerOutput(*connector, *interpretor);
 
-    ControllerChat* controllerChat = new ControllerChat(model, currentUser, controllerInput, interpretor, connector, controllerOutput);
-
     // Create the controler which will create the view
-    ControllerUser* controllerUser = new ControllerUser(model, currentUser, controllerInput, interpretor, connector, controllerOutput, controllerChat);
     ControllerRoom* controllerRoom = new ControllerRoom (model, currentUser, controllerOutput);
+    ControllerChat* controllerChat = new ControllerChat(model, currentUser, controllerInput, interpretor, connector, controllerOutput, controllerRoom);
+    ControllerUser* controllerUser = new ControllerUser(model, currentUser, controllerInput, interpretor, connector, controllerOutput, controllerChat);
     controllerInput->controllerUser(controllerUser);
     controllerInput->controllerChat(controllerChat);
     controllerInput->controllerRoom(controllerRoom);

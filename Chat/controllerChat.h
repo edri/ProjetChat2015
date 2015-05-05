@@ -9,6 +9,7 @@
 #include "../Serveur/Interpretor/interpretor.h"
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
+#include "../Salle/Room/controllerRoom.h"
 
 class ClientControllerInput;
 
@@ -23,10 +24,11 @@ private:
     Interpretor* _i;
     ClientConnector* _cc;
     ControllerOutput* _co;
+    ControllerRoom* _controllerRoom;
 
 public:
     ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
-                   Interpretor* i, ClientConnector* cc, ControllerOutput* co);
+                   Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom);
     ~ControllerChat();
 
     void showView() const;
@@ -36,6 +38,7 @@ public:
 
 public slots :
     void loadUserRooms() const;
+    void openRoomModule() const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
 

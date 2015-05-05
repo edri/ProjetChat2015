@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Connecté en tant que &lt;b&gt;Miguel&lt;/b&gt;.</string>
+     <string>Connecté en tant que &lt;b&gt;&lt;/b&gt;.</string>
     </property>
    </widget>
    <widget class="QScrollArea" name="scrollArea">
@@ -186,6 +186,17 @@
     <column>
      <property name="text">
       <string>Liste des salles de discussion</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
      </property>
     </column>
    </widget>
