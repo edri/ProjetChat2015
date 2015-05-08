@@ -27,34 +27,67 @@ void ViewChat::setConnectedAsText(const QString& user)
 
 void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
 {
-    QTreeWidgetItem* roomItem = new QTreeWidgetItem(_ui->tre_rooms);
+    bool alreadyExisting = false;
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
-    roomItem->setData(0, Qt::UserRole, roomId);
-    roomItem->setText(0, roomName);
-    roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        {
+            alreadyExisting = true;
+            break;
+        }
+    }
 
-    roomItem->setData(1, Qt::UserRole, 0);
-    roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
-    roomItem->setForeground(1, QBrush(QColor(255, 85, 0)));
-    roomItem->setTextAlignment(1, Qt::AlignHCenter);
+    if (!alreadyExisting)
+    {
+        QTreeWidgetItem* roomItem = new QTreeWidgetItem(_ui->tre_rooms);
+
+        roomItem->setData(0, Qt::UserRole, roomId);
+        roomItem->setText(0, roomName);
+        roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+
+        roomItem->setData(1, Qt::UserRole, 0);
+        roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
+        roomItem->setForeground(1, QBrush(QColor(255, 85, 0)));
+        roomItem->setTextAlignment(1, Qt::AlignHCenter);
+    }
 }
 
 void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QImage& image, const bool isConnected)
 {
-    for (int i = 0; i < _ui->tre_rooms->topLevelItemCount(); ++i)
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+    bool userAlreadyExisting = false;
+    quint32 nbRoomUsers;
+
+    for (int i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
-            QTreeWidgetItem* userItem = new QTreeWidgetItem(_ui->tre_rooms->topLevelItem(i));
-            userItem->setData(0, Qt::UserRole, userId);
-            userItem->setText(0, userName);
-            userItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
-            userItem->setFlags(Qt::NoItemFlags);
+            nbRoomUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
-            if (isConnected)
-                userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
+            for (quint32 j = 0; j < nbRoomUsers; ++j)
+            {
+                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+                {
+                    userAlreadyExisting = true;
+                    break;
+                }
+            }
 
-            break;
+            if (!userAlreadyExisting)
+            {
+                QTreeWidgetItem* userItem = new QTreeWidgetItem(_ui->tre_rooms->topLevelItem(i));
+                userItem->setData(0, Qt::UserRole, userId);
+                userItem->setText(0, userName);
+                userItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
+                userItem->setFlags(Qt::NoItemFlags);
+
+                if (isConnected)
+                    userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
+
+                break;
+            }
         }
     }
 }
@@ -65,7 +98,8 @@ void ViewChat::selectFirstRoom() const
         _ui->tre_rooms->setCurrentItem(_ui->tre_rooms->topLevelItem(0));
 }
 
-void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName, const QString& content, const QDateTime& date)
+void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName,
+                               const QString& content, const QDateTime& date, const bool isCurrentUsersMessage)
 {
     quint32 i, j;
     quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
@@ -73,7 +107,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
     bool createNewDate = false;
     QDate tempDate;
 
-    for (int k = 0; k < nbTopRoomItems; ++k)
+    for (quint32 k = 0; k < nbTopRoomItems; ++k)
     {
         if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == roomId)
         {
@@ -84,6 +118,13 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                 messageItem->setData(1, Qt::UserRole, messageId);
                 messageItem->setText(0, "[" + date.toString("HH:mm") + "] <" + userName + ">");
                 messageItem->setText(1, content);
+
+                if (isCurrentUsersMessage)
+                {
+                    messageItem->setBackgroundColor(0, QColor(234, 239, 245));
+                    messageItem->setBackgroundColor(1, QColor(234, 239, 245));
+                    messageItem->setFlags(messageItem->flags() | Qt::ItemIsEditable);
+                }
 
                 // Select the top-level item in which we will put the new message.
                 for (i = 0; i < nbTopMessageItems; ++i)
@@ -124,6 +165,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                 }
 
                 _ui->tre_messages->resizeColumnToContents(0);
+                _ui->tre_messages->resizeColumnToContents(1);
                 _ui->tre_messages->scrollToBottom();
             }
             else
@@ -207,3 +249,17 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
             _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Normal));
     }
 }
+
+void ViewChat::on_tre_messages_itemChanged(QTreeWidgetItem* item, int column)
+{
+    /*item->setBackgroundColor(0, QColor(255, 0, 0));
+    item->setBackgroundColor(1, QColor(255, 0, 0));*/
+
+    emit requestEditMessage(item);
+}
+
+void ViewChat::on_tre_messages_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    _ui->tre_messages->editItem(item, 1);
+}
+

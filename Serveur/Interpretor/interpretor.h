@@ -15,8 +15,10 @@ class Interpretor : public QObject
     
     public:
     Interpretor(ControllerInput& dispatcher);
-    
-    QByteArray sendMessage(const ModelMessage& message);
+
+    // Serialize a message and the flag indicating if the message was edited or created.
+    // Last edited by Miguel Santamaria on 08.05.2015 07:21.
+    QByteArray sendMessage(const ModelMessage& message, const bool edited = false);
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
     QByteArray createAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);

@@ -25,7 +25,7 @@ void ClientControllerInput::controllerRoom(ControllerRoom* controllerRoom)
     _controllerRoom = controllerRoom;
 }
 
-void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sender)
+void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edited, QObject* sender)
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);

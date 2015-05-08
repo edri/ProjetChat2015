@@ -16,8 +16,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestOpenRoomModule()), this, SLOT(openRoomModule()));
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
-    
-    //connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
+    connect(_view, SIGNAL(requestEditMessage(const QTreeWidgetItem*)), this, SLOT(editMessage(const QTreeWidgetItem*)));
 }
 
 ControllerChat::~ControllerChat()
@@ -46,7 +45,8 @@ void ControllerChat::loadRoom(ModelRoom& room) const
 void ControllerChat::receiveMessage(ModelMessage& message) const
 {
     _model->getRoom(message.getIdRoom()).addMessage(message);
-    _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(), message.getContent(), message.getDate());
+    _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
+                           message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()));
 }
 
 void ControllerChat::openRoomModule() const
@@ -60,7 +60,8 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 
     for (ModelMessage& message : room.getMessages())
     {
-        _view->loadRoomMessage(idRoom, message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(), message.getContent(), message.getDate());
+        _view->loadRoomMessage(idRoom, message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
+                               message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()));
     }
 }
 
@@ -88,5 +89,12 @@ void ControllerChat::sendMessage() const
 {
     ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
 
-    _co->sendMessage(message);
+    _co->sendMessage(message, false);
+}
+
+void ControllerChat::editMessage(const QTreeWidgetItem* item) const
+{
+    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), item->text(1));
+
+    _co->sendMessage(message, true);
 }

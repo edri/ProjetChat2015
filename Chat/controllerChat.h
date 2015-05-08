@@ -41,6 +41,7 @@ public slots :
     void openRoomModule() const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
+    void editMessage(const QTreeWidgetItem* item) const;
 
 };
 

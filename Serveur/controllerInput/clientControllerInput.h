@@ -29,12 +29,12 @@ class ClientControllerInput : public ControllerInput
     void controllerRoom(ControllerRoom* controllerRoom);
     
     // Method called when a message is received by the client.
-    void receiveMessage(ModelMessage& message, QObject* sender);
+    void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     // Method called when user's info are received by the client when loging in.
     void infoUser(ModelUser& user, QObject* sender);
     // Method called when the client has to add a room and its users
     void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
-    // Method called when a requested user ID is returned by the server after a clien trequest.
+    // Method called when a requested user ID is returned by the server after a client request.
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
     
 };

@@ -14,7 +14,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     this->_controllerChat = controllerChat;
 
     // Bind the signals and the slots
-    connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServeur()));
+    connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServer()));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 
@@ -33,7 +33,7 @@ void ControllerUser::showView() const
 }
 
 
-void ControllerUser::connectToServeur() const
+void ControllerUser::connectToServer() const
 {
     // Use the getter to retrieve the data
     QString server = _view->getIpAddress();

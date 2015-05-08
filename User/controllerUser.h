@@ -48,7 +48,7 @@ public:
 
 
 public slots:
-    void connectToServeur() const;
+    void connectToServer() const;
     void auth() const;
 
 };

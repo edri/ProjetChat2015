@@ -6,6 +6,8 @@ ViewInscription::ViewInscription(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::viewInscription)
 {
+    passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
+
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
     ui->btn_question->setToolTip(passwordRequirement);

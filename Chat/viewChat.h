@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDate>
 #include <QBitmap>
+#include <QTreeWidgetItem>
 
 namespace Ui
 {
@@ -26,7 +27,8 @@ public:
     void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
     void addUserToRoom(const quint32 roomId, const quint32 userId, const QString& userName, const QImage& image, const bool isConnected);
     void selectFirstRoom() const;
-    void loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName, const QString& content, const QDateTime& date);
+    void loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName,
+                         const QString& content, const QDateTime& date, const bool isCurrentUsersMessage);
 
     QString getMessageText() const;
     quint32 getSelectedRoomId() const;
@@ -38,11 +40,14 @@ private slots:
     void on_btn_joinRoom_clicked();
     void on_btn_leaveRoom_clicked();
     void on_tre_rooms_itemSelectionChanged();
+    void on_tre_messages_itemChanged(QTreeWidgetItem* item, int column);
+    void on_tre_messages_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule() const;
     void requestSendMessage() const;
+    void requestEditMessage(const QTreeWidgetItem* item) const;
 };
 
 #endif // VIEWCHAT_H

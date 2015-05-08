@@ -3,9 +3,9 @@
 
 ControllerOutput::ControllerOutput(Connector& connector, Interpretor& interpretor) : _connector(connector), _interpretor(interpretor) {};
 
-void ControllerOutput::sendMessage(const ModelMessage& message)
+void ControllerOutput::sendMessage(const ModelMessage& message, const bool edited)
 {
-    _connector.send(_interpretor.sendMessage(message));
+    _connector.send(_interpretor.sendMessage(message, edited));
 }
 
 void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)

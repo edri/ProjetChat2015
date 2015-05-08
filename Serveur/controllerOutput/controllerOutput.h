@@ -9,7 +9,7 @@ class ControllerOutput
     public:
     ControllerOutput(Connector& connector, Interpretor& interpretor);
     
-    void sendMessage(const ModelMessage& message);
+    void sendMessage(const ModelMessage& message, const bool edited);
     void login(const QString& pseudo, const QString& hashedPwd);
     void createAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
