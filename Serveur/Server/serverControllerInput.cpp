@@ -5,7 +5,7 @@ ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, Con
 void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edited, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
-    _controllerRoom.storeMessage(message, client);
+    _controllerRoom.storeMessage(message, edited, client);
 }
 
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
@@ -41,4 +41,15 @@ void ServerControllerInput::userId(const QString& userName, bool exists, quint32
     Q_UNUSED(userId);
     ChatorClient* client = (ChatorClient*) sender;
     _controllerUser.userId(userName, client);
+}
+
+void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
+{
+    Q_UNUSED(userId);
+    _controllerUser.disconnect((ChatorClient*) sender);
+}
+
+void ServerControllerInput::createAccount(ModelUser& user, QObject* sender)
+{
+    _controllerUser.createAccount(user, (ChatorClient*) sender);
 }

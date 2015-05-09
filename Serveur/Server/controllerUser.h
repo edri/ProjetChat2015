@@ -14,6 +14,9 @@ class ControllerUser
     ControllerUser(ControllerDB& db);
     void login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client);
     void userId(const QString& userName, ChatorClient* client);
+    void createAccount(ModelUser& user, ChatorClient* client);
+    void disconnect(ChatorClient* client);
+    
     QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;
     ControllerRoom* _room;

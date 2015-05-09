@@ -192,7 +192,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             quint32 idUser;
             stream >> idUser;
-            // Envoyer ces objets quelque part
+            _dispatcher.disconnect(idUser, sender());
         }
         break;
         
