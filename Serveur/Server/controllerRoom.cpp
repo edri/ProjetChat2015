@@ -3,16 +3,24 @@
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
-void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
+void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, ChatorClient* client)
 {
     ChatorRoom* room = nullptr;
     qDebug() << "Message à stocker: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
     if (client->logged && message.getIdUser() == client->id && (room = onlineRooms[message.getIdRoom()]) && room->clients.contains(client))
     {
-        message.setIdMessage(_db.storeMessage(message));
-        message.setDate(QDateTime::currentDateTime());
+        if (edited)
+        {
+            _db.editMessage(message);
+            message.setEditionDate(QDateTime::currentDateTime());
+        }
+        else
+        {
+            message.setIdMessage(_db.storeMessage(message));
+            message.setDate(QDateTime::currentDateTime());
+        }
         
-        QByteArray data = _interpretor->sendMessage(message);
+        QByteArray data = _interpretor->sendMessage(message, edited);
         
         for (ChatorClient* client : room->clients)
         {
@@ -71,6 +79,12 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
 
 void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
 {
+    if (!client->logged)
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::ROOM_CREATION, "User not logged in")));
+        return;
+    }
+    
     room.setIdRoom(_db.createRoom(room));
     
     QSet<quint32> users = room.getUsers();

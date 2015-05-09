@@ -113,6 +113,12 @@ quint32 ControllerDB::storeMessage(const ModelMessage& message)
     return query.lastInsertId().toUInt();
 }
 
+void ControllerDB::editMessage(const ModelMessage& message)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE message SET contents = \"" + message.getContent() + "\", lastUpdated = datetime('NOW') WHERE idMessage = " + QString::number(message.getIdMessage()));
+}
+
 ModelRoom ControllerDB::infoRoom(const quint32 id)
 {    
     // Récupération des membres et des admins

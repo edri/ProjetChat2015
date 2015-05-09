@@ -187,6 +187,7 @@ class ModelMessage
         quint32 _idRoom;
         quint32 _idUser;
         QDateTime _date;
+        QDateTime _lastEditionDate;
         QString _content;
 	
 	public :
@@ -201,11 +202,13 @@ class ModelMessage
         quint32 getIdUser() const;
         quint32 getIdRoom() const;
         QDateTime getDate() const;
+        QDateTime getEditionDate() const;
         QString getContent() const;
         
         // Setters
         void setIdMessage(const quint32 id);
         void setDate(const QDateTime& date);
+        void setEditionDate(const QDateTime& date);
 };
 
 class ModelUser

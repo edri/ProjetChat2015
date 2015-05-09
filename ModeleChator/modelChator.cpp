@@ -6,7 +6,7 @@ ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDat
 
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
                            const QDateTime& date, const QString& content) :
-    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _content(content) {}
+    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(), _content(content) {}
 
 ModelMessage::~ModelMessage(){}
 
@@ -40,6 +40,11 @@ QDateTime ModelMessage::getDate() const
     return _date;
 }
 
+QDateTime ModelMessage::getEditionDate() const
+{
+    return _lastEditionDate;
+}
+
 void ModelMessage::setIdMessage(const quint32 id)
 {
     _idMessage = id;
@@ -48,6 +53,11 @@ void ModelMessage::setIdMessage(const quint32 id)
 void ModelMessage::setDate(const QDateTime& date)
 {
     _date = date;
+}
+
+void ModelMessage::setEditionDate(const QDateTime& date)
+{
+    _lastEditionDate = date;
 }
 
 ModelUser::ModelUser() : _idUser(0), _userName(""), _firstName(""), _lastName(""), _isConnected(false), _lastConnection(QDateTime()), _image(QImage()) {}
