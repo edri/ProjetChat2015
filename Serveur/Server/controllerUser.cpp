@@ -83,3 +83,21 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
 {
     return _connectedUsers;
 }
+
+void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
+{
+    if (!_db.createAccount(user))
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::USER_CREATION, "Cannot create the user")));
+        return;
+    }
+    
+    // Appeler login
+    //login(user.);
+}
+
+void ControllerUser::disconnect(ChatorClient* client)
+{
+    // FAIRE QUELQUE CHOSE
+    Q_UNUSED(client);
+}

@@ -93,6 +93,7 @@ void ClientControllerInput::userId(const QString& userName, bool exists, quint32
 
 void ClientControllerInput::disconnect(const quint32 userId, QObject* sender)
 {
+    // IL FAUT FAIRE QUELQUE CHOSE ICI!!!
     Q_UNUSED(userId);
     Q_UNUSED(sender);
 }

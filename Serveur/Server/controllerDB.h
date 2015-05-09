@@ -13,6 +13,7 @@ class ControllerDB
     bool connect();
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
+    bool createAccount(ModelUser& user);
     bool userExists(const QString& pseudo, quint32& id);
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);

@@ -13,7 +13,7 @@ class ServerControllerInput : public ControllerInput
     public:
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
-    void createAccount(ModelUser& user);
+    void createAccount(ModelUser& user, QObject* sender);
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void login(const QString& pseudo, const QString& hashedPWD, QObject* sender);
     void infoUser(ModelUser& user, QObject* sender);

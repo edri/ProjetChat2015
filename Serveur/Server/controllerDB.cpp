@@ -201,3 +201,10 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     
     return true;
 }
+
+bool ControllerDB::createAccount(ModelUser& user)
+{
+    Q_UNUSED(user);
+    // Insérer l'utilisateur et modifier son ID
+    return true;
+}
