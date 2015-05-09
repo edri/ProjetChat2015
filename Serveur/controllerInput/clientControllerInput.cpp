@@ -31,7 +31,7 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edi
     Q_UNUSED(sender);
     qDebug() << "Message recu: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
 
-    _controllerChat->receiveMessage(message);
+    _controllerChat->receiveMessage(message, edited);
 }
 
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)

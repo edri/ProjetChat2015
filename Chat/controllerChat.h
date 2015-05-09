@@ -34,7 +34,7 @@ public:
     void showView() const;
     void loadUser(ModelUser& user) const;
     void loadRoom(ModelRoom& room) const;
-    void receiveMessage(ModelMessage& message) const;
+    void receiveMessage(ModelMessage& message, const bool edited) const;
 
 public slots :
     void loadUserRooms() const;
