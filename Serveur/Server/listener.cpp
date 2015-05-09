@@ -6,7 +6,7 @@
 #include "../Interpretor/interpretor.h"
 #include "serverModel.h"
 
-Listener::Listener(quint16 port, Interpretor& interpretor) : _server("Chator", QWebSocketServer::SecureMode, this), _interpretor(interpretor)
+Listener::Listener(quint16 port, Interpretor& interpretor, ServerControllerInput& controllerInput) : _server("Chator", QWebSocketServer::SecureMode, this), _interpretor(interpretor), _controllerInput(controllerInput)
 {
     QSslConfiguration sslConfiguration;
     QFile certFile(QStringLiteral("cert.pem"));
@@ -52,10 +52,14 @@ void Listener::newConnection()
 void Listener::disconnected()
 {
     qDebug() << "Client disconnected";
-    ChatorClient* pClient = qobject_cast<ChatorClient*>(sender());
-    if (pClient)
+    
+    ChatorClient* client = (ChatorClient*) sender();
+    
+    _controllerInput.disconnect(client->id, (QObject*) client);
+    
+    if (client)
     {
-        _clients.removeAll(pClient);
+        _clients.removeAll(client);
     }
 }
 

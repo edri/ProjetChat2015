@@ -42,3 +42,14 @@ void ServerControllerInput::userId(const QString& userName, bool exists, quint32
     ChatorClient* client = (ChatorClient*) sender;
     _controllerUser.userId(userName, client);
 }
+
+void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
+{
+    Q_UNUSED(userId);
+    Q_UNUSED(sender);
+}
+
+void ServerControllerInput::createAccount(ModelUser& user)
+{
+    Q_UNUSED(user);
+}

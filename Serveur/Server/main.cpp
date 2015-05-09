@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     cu._interpretor = &i;
     cr._interpretor = &i;
     
-    Listener listener(1234, i);
+    Listener listener(1234, i, sci);
     
     return a.exec();
 }

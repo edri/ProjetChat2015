@@ -8,12 +8,13 @@
 #include <QWebSocketServer>
 #include "../Interpretor/interpretor.h"
 #include "serverModel.h"
+#include "serverControllerInput.h"
 
 class Listener : public QObject
 {
     Q_OBJECT
 public:
-    Listener(quint16 port, Interpretor& interpretor);
+    Listener(quint16 port, Interpretor& interpretor, ServerControllerInput& controllerInput);
     ~Listener();
 
 public slots:
@@ -25,6 +26,7 @@ private:
     QWebSocketServer _server;
     QList<ChatorClient*> _clients;
     Interpretor& _interpretor;
+    ServerControllerInput& _controllerInput;
 };
 
 #endif
