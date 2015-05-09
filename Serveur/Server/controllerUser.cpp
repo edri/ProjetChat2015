@@ -98,6 +98,28 @@ void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
 
 void ControllerUser::disconnect(ChatorClient* client)
 {
-    // FAIRE QUELQUE CHOSE
-    Q_UNUSED(client);
+    _db.logout(client->id);
+    _connectedUsers.remove(client->id);
+    
+    QSet<ChatorClient*> users;
+    
+    for (ChatorRoom* room : client->rooms)
+    {
+        room->clients.remove(client);
+        users += room->clients;
+        if (room->clients.empty())
+        {
+            _room->getOnlineRooms().remove(room->id);
+            delete room;
+        }
+    }
+    
+    QByteArray data = _interpretor->disconnect(client->id);
+    
+    for (ChatorClient* user : users)
+    {
+        user->socket.sendBinaryMessage(data);
+    }
+    
+    delete client;
 }

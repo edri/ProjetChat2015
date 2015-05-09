@@ -75,7 +75,7 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     
     id = query.record().value(0).toUInt();
     
-    query.exec("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
+    query.exec("UPDATE user SET lastConnection = datetime('NOW'), isConnected = 1 WHERE idUser = " + QString::number(id));
 
     return true;
 }
@@ -94,10 +94,10 @@ ModelUser ControllerDB::info(const quint32 id)
         rooms.insert(query.record().value(0).toUInt());
     }
     
-    query.exec("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = " + QString::number(id));
+    query.exec("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture, isConnected FROM user WHERE idUser = " + QString::number(id));
     query.first();
     
-    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), QImage(), rooms); // query.record().value("profilePicture").toString()
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(), rooms); // query.record().value("profilePicture").toString()
     
     return user;
 }
@@ -207,4 +207,10 @@ bool ControllerDB::createAccount(ModelUser& user)
     Q_UNUSED(user);
     // Insérer l'utilisateur et modifier son ID
     return true;
+}
+
+void ControllerDB::logout(const quint32 userId)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE user SET isConnected = 0 WHERE idUser = " + QString::number(userId));
 }
