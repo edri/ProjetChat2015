@@ -236,6 +236,8 @@ class ModelUser
         // Getters
         quint32 getIdUser() const;
         QString getUserName() const;
+        QString getFirstName() const;
+        QString getLastName() const;
         bool isConnected() const;
         QImage getImage() const;
         const QSet<quint32>& getRooms() const;
