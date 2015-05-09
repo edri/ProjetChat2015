@@ -42,11 +42,11 @@ void ControllerChat::loadRoom(ModelRoom& room) const
     _model->addRoom(room);
 }
 
-void ControllerChat::receiveMessage(ModelMessage& message) const
+void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
     _model->getRoom(message.getIdRoom()).addMessage(message);
     _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                           message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()));
+                           message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()), edited);
 }
 
 void ControllerChat::openRoomModule() const
