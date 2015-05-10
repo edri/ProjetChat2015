@@ -36,29 +36,11 @@ void ViewInscription::on_btn_inscription_clicked()
     */
     ui->lbl_info->setText("");
 
-    // Regular expressions
-    QRegExp passwordRestriction("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-z^A-Z^0-9]).{8,}$");
-    QRegExp userNameRestriction("^[a-zA-Z0-9_ -]*$");
-
-
-    // Verify the fields
-    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
-       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty())
+    if(verifyFields())
     {
-        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
-    }
-    else if(!userNameRestriction.exactMatch(ui->ldt_userName->text()))
-        ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
-    else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
-        ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
-    else if(!ui->ldt_profilPicture->text().isEmpty() && !verifyProfileImage())
-        ui->lbl_info->setText("<font color='red'>Image spécifiée incorrecte</font>");
-    else if(ui->ldt_password->text() == ui->ldt_userName->text())
-        ui->lbl_info->setText("<font color='red'>Votre mot de passe doit être différent de votre nom d'utilisateur.</font>");
-    else if(!passwordRestriction.exactMatch(ui->ldt_password->text()))
-        ui->lbl_info->setText("<font color='red'>" + passwordRequirement + "</font>");
-    else
-    {
+        // Send the data
+        emit requestGetNewUser();
+
         /* TODO
 
         //Warn the controler that data are ready to be send to the server
@@ -83,6 +65,48 @@ void ViewInscription::on_btn_inscription_clicked()
     }
 }
 
+bool ViewInscription::verifyFields()
+{
+    // Regular expressions
+    QRegExp passwordRestriction("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-z^A-Z^0-9]).{8,}$");
+    QRegExp userNameRestriction("^[a-zA-Z0-9_ -]*$");
+
+    // Verify the fields
+    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
+       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty())
+    {
+        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
+        return false;
+    }
+    else if(!userNameRestriction.exactMatch(ui->ldt_userName->text()))
+    {
+        ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
+        return false;
+    }
+    else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
+    {
+        ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
+        return false;
+    }
+    else if(ui->ldt_password->text() == ui->ldt_userName->text())
+    {
+        ui->lbl_info->setText("<font color='red'>Votre mot de passe doit être différent de votre nom d'utilisateur.</font>");
+        return false;
+    }
+    else if(!passwordRestriction.exactMatch(ui->ldt_password->text()))
+    {
+        ui->lbl_info->setText("<font color='red'>" + passwordRequirement + "</font>");
+        return false;
+    }
+    else if(!ui->ldt_profilPicture->text().isEmpty() && !verifyProfileImage())
+    {
+        ui->lbl_info->setText("<font color='red'>Image spécifiée incorrecte</font>");
+        return false;
+    }
+    else
+        return true;
+}
+
 bool ViewInscription::verifyProfileImage()
 {
     QString extension = ui->ldt_profilPicture->text().right(4).toLower();
@@ -100,18 +124,25 @@ void ViewInscription::closeEvent(QCloseEvent *)
 
 QString ViewInscription::getFirstName() const
 {
-    // Récupérer le prénom
     return ui->ldt_firstName->text();
 }
 
 QString ViewInscription::getLastName() const
 {
-    // Récupérer le nom
     return ui->ldt_lastName->text();
 }
 
 QString ViewInscription::getUserName() const
 {
-    // Récupérer le nom d'utilisateur
     return ui->ldt_userName->text();
+}
+
+QString ViewInscription::getPassword() const
+{
+    return ui->ldt_password->text();
+}
+
+QImage ViewInscription::getProfileImage() const
+{
+    return QImage(ui->ldt_profilPicture->text());
 }

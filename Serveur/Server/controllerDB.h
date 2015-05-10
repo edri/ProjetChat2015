@@ -4,12 +4,13 @@
 #include <QSqlDatabase>
 #include <QString>
 #include "../../ModeleChator/modelChator.h"
+#include "../../ModeleChator/chatorConstants.h"
 #include "serverModel.h"
 
 class ControllerDB
 {
     public:
-    ControllerDB(const QString& dbName = "db.sqlite");
+    ControllerDB(const QString& dbName = DATABASE_FILE_NAME);
     bool connect();
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);

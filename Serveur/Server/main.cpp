@@ -6,13 +6,13 @@
 #include "serverControllerInput.h"
 #include "controllerRoom.h"
 #include "controllerUser.h"
+#include "../../ModeleChator/chatorConstants.h"
 
 int main(int argc, char *argv[])
 {
-    
     QApplication a(argc, argv);
     
-    ControllerDB cdb("db.sqlite");
+    ControllerDB cdb(DATABASE_FILE_NAME);
     
     ControllerRoom cr(cdb);
     ControllerUser cu(cdb);
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     cu._interpretor = &i;
     cr._interpretor = &i;
     
-    Listener listener(1234, i, sci);
+    Listener listener(PORT_TO_LISTEN, i, sci);
     
     return a.exec();
 }

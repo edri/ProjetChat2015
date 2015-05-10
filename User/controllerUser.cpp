@@ -16,6 +16,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds()), this, SLOT(connectToServer()));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
+    //connect(_viewInscription, SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServeur()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 
 
@@ -33,11 +34,14 @@ void ControllerUser::showView() const
 }
 
 
-void ControllerUser::connectToServer() const
+
+void ControllerUser::connectToServer()
 {
     // Use the getter to retrieve the data
     QString server = _view->getIpAddress();
     QString port = _view->getPort();   //
+
+    callerConnection = sender();
 
     // Connection to the servers
     cc->connectToServer(server + ":" + port);
@@ -45,9 +49,12 @@ void ControllerUser::connectToServer() const
 
 void ControllerUser::auth() const
 {
-    QString username = _view->getUsername();
-    QString password = _view->getPassword();
-    co->login(username, password);
+    if(callerConnection == (QObject*)_view)
+    {
+        QString username = _view->getUsername();
+        QString password = _view->getPassword();
+        co->login(username, password);
+    }
 }
 
 
@@ -58,13 +65,17 @@ void ControllerUser::infoUser(ModelUser& user) {
     _view->close();
 }
 
+void ControllerUser::InscriptionToServer() const
+{
+    //pour l'instant on récupère seulement username et password
+    // Get user information
+    QString firstName = _view->getViewInscription()->getFirstName();
+    QString lastName = _view->getViewInscription()->getLastName();
+    QString userName = _view->getViewInscription()->getUserName();
+    QString password = _view->getViewInscription()->getPassword();
+    QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
+    ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
-
-
-
-
-
-
-
-
+    co->createAccount(myUser);
+}

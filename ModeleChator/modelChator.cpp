@@ -273,6 +273,16 @@ QString ModelUser::getUserName() const
     return _userName;
 }
 
+QString ModelUser::getFirstName() const
+{
+    return _firstName;
+}
+
+QString ModelUser::getLastName() const
+{
+    return _lastName;
+}
+
 bool ModelUser::isConnected() const
 {
     return _isConnected;

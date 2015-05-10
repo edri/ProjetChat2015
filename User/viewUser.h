@@ -20,6 +20,7 @@ public:
     QString getPassword() const;
     QString getPort() const;
     QString getIpAddress() const;
+    ViewInscription* getViewInscription() const;
 
 private slots:      // Fonctions appelées lorsqu'un événement se produit (signal = msg envoyé par un objet)
 
@@ -38,9 +39,6 @@ private:
 signals:
     // Ask to get the login
     void requestGetIds() const;
-
-    // Ask to get the information of the user inscription
-    void requestGetNewUser() const;
 };
 
 #endif // VIEWUSER_H
