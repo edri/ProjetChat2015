@@ -44,9 +44,14 @@ void ControllerChat::loadRoom(ModelRoom& room) const
 
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
-    _model->getRoom(message.getIdRoom()).addMessage(message);
+    if (!edited)
+        _model->getRoom(message.getIdRoom()).addMessage(message);
+    else
+        _model->modifyMessage(message.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
+
     _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                           message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()), edited);
+                           message.getContent(), message.getDate(), message.getEditionDate(),
+                           (message.getIdUser() == _currentUser->getIdUser()), edited);
 }
 
 void ControllerChat::openRoomModule() const
@@ -61,7 +66,8 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
     for (ModelMessage& message : room.getMessages())
     {
         _view->loadRoomMessage(idRoom, message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                               message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()));
+                               message.getContent(), message.getDate(), message.getEditionDate(),
+                               (message.getIdUser() == _currentUser->getIdUser()));
     }
 }
 
