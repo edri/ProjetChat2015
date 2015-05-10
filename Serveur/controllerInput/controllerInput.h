@@ -9,7 +9,9 @@ class ControllerInput : public QObject
     Q_OBJECT
     
     public:
-    virtual void receiveMessage(ModelMessage& message, QObject* sender) = 0;
+    virtual void createAccount(ModelUser& user, QObject* sender) {Q_UNUSED(user); Q_UNUSED(sender);}
+    virtual void receiveMessage(ModelMessage& message, const bool edited, QObject* sender) = 0;
+    virtual void disconnect(const quint32 userId, QObject* sender) = 0;
     virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
     virtual void infoUser(ModelUser& user, QObject* sender) = 0;
     virtual void room(ModelRoom& room, bool edited, QObject* sender) {Q_UNUSED(room); Q_UNUSED(edited); Q_UNUSED(sender);}

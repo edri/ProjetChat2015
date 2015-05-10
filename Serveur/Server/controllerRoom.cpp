@@ -3,16 +3,24 @@
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
-void ControllerRoom::storeMessage(ModelMessage& message, ChatorClient* client)
+void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, ChatorClient* client)
 {
     ChatorRoom* room = nullptr;
     qDebug() << "Message à stocker: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
-    if (client->logged && message.getIdUser() == client->id && (room = onlineRooms[message.getIdRoom()]) && room->clients.contains(client))
+    if (client->logged && message.getIdUser() == client->id && (room = _onlineRooms[message.getIdRoom()]) && room->clients.contains(client))
     {
-        message.setIdMessage(_db.storeMessage(message));
-        message.setDate(QDateTime::currentDateTime());
+        if (edited)
+        {
+            _db.editMessage(message);
+            message.setEditionDate(QDateTime::currentDateTime());
+        }
+        else
+        {
+            message.setIdMessage(_db.storeMessage(message));
+            message.setDate(QDateTime::currentDateTime());
+        }
         
-        QByteArray data = _interpretor->sendMessage(message);
+        QByteArray data = _interpretor->sendMessage(message, edited);
         
         for (ChatorClient* client : room->clients)
         {
@@ -32,19 +40,19 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         // Check if the room is already online
         ChatorRoom* currentRoom;
         
-        if (!onlineRooms.contains(idRoom))
+        if (!_onlineRooms.contains(idRoom))
         {
             qDebug() << "Mise en ligne de la salle " << idRoom;
             // If it is not, we add it
             currentRoom = new ChatorRoom;
             currentRoom->id = idRoom;
-            onlineRooms.insert(idRoom, currentRoom);
+            _onlineRooms.insert(idRoom, currentRoom);
         }
         else
         {
             qDebug() << "Salle déjà en ligne " << idRoom;
             // If this room is already online, we insert the user in it
-            currentRoom = onlineRooms[idRoom];
+            currentRoom = _onlineRooms[idRoom];
         }
         
         // Then, we store the pointer to this client and bind it to the room
@@ -71,13 +79,19 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
 
 void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
 {
+    if (!client->logged)
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::ROOM_CREATION, "User not logged in")));
+        return;
+    }
+    
     room.setIdRoom(_db.createRoom(room));
     
     QSet<quint32> users = room.getUsers();
     
     ChatorRoom* newRoom = new ChatorRoom;
     newRoom->id = room.getIdRoom();
-    onlineRooms.insert(newRoom->id, newRoom);
+    _onlineRooms.insert(newRoom->id, newRoom);
     
     QMap<quint32, ChatorClient*>& connectedUsers = _user->getConnectedUsers();
     
@@ -103,4 +117,9 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     {
         client->socket.sendBinaryMessage(data);
     }
+}
+
+QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
+{
+    return _onlineRooms;
 }

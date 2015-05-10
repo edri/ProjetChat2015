@@ -25,13 +25,13 @@ void ClientControllerInput::controllerRoom(ControllerRoom* controllerRoom)
     _controllerRoom = controllerRoom;
 }
 
-void ClientControllerInput::receiveMessage(ModelMessage& message, QObject* sender)
+void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edited, QObject* sender)
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
     qDebug() << "Message recu: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
 
-    _controllerChat->receiveMessage(message);
+    _controllerChat->receiveMessage(message, edited);
 }
 
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
@@ -89,4 +89,11 @@ void ClientControllerInput::userId(const QString& userName, bool exists, quint32
     _controllerRoom->userId(exists, userId);
     
     // else { call controllerUser->foo();}
+}
+
+void ClientControllerInput::disconnect(const quint32 userId, QObject* sender)
+{
+    // IL FAUT FAIRE QUELQUE CHOSE ICI!!!
+    Q_UNUSED(userId);
+    Q_UNUSED(sender);
 }

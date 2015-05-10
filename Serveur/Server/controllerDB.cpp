@@ -5,15 +5,26 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QVariant>
+#include <QFileInfo>
 
 ControllerDB::ControllerDB(const QString& dbName)
 {
-    _db = QSqlDatabase::addDatabase("QSQLITE");
+    _db = QSqlDatabase::addDatabase(DATABASE_TYPE);
     _db.setDatabaseName(dbName);
     
     if (! connect())
     {
         qDebug() << "Unable to connect to or initialize the database, there's noting to do...";
+        exit(EXIT_FAILURE);
+    }
+    
+    QFileInfo profilePicturesInfo(PROFILE_PICTURE_FOLDER);
+    QDir profilePicturesDirectory;
+    
+    if ((!profilePicturesInfo.exists() && !profilePicturesDirectory.mkdir(PROFILE_PICTURE_FOLDER)) || !profilePicturesInfo.isDir() || !profilePicturesInfo.isReadable() || !profilePicturesInfo.isWritable())
+    {
+        qDebug() << "Cannot access the picture folder properly: " << PROFILE_PICTURE_FOLDER;
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -38,7 +49,7 @@ bool ControllerDB::connect()
 
 bool ControllerDB::init()
 {
-    QFile initScript("init.sql");
+    QFile initScript(DATABASE_INIT_SCRIPT);
     if (! initScript.open(QIODevice::ReadOnly))
     {
         qDebug() << "No init script could be found or we cannot read it";
@@ -75,7 +86,7 @@ bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint3
     
     id = query.record().value(0).toUInt();
     
-    query.exec("UPDATE user SET lastConnection = datetime('NOW') WHERE idUser = " + QString::number(id));
+    query.exec("UPDATE user SET lastConnection = datetime('NOW'), isConnected = 1 WHERE idUser = " + QString::number(id));
 
     return true;
 }
@@ -94,10 +105,10 @@ ModelUser ControllerDB::info(const quint32 id)
         rooms.insert(query.record().value(0).toUInt());
     }
     
-    query.exec("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture FROM user WHERE idUser = " + QString::number(id));
+    query.exec("SELECT idUser, login, firstName, lastName, lastConnection, profilePicture, isConnected FROM user WHERE idUser = " + QString::number(id));
     query.first();
     
-    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), true, query.record().value("lastConnection").toDateTime(), QImage(), rooms); // query.record().value("profilePicture").toString()
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(query.record().value("profilePicture").toString()), rooms);
     
     return user;
 }
@@ -111,6 +122,12 @@ quint32 ControllerDB::storeMessage(const ModelMessage& message)
     //query.bindValue(":idRoom", message.getIdRoom());
     query.exec("INSERT INTO message (contents, date, idUser, idRoom, lastUpdated) VALUES (\"" + message.getContent()  + "\", datetime('NOW'), " + QString::number(message.getIdUser()) + ", " + QString::number(message.getIdRoom()) + ", datetime('NOW'))");
     return query.lastInsertId().toUInt();
+}
+
+void ControllerDB::editMessage(const ModelMessage& message)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE message SET contents = \"" + message.getContent() + "\", lastUpdated = datetime('NOW') WHERE idMessage = " + QString::number(message.getIdMessage()));
 }
 
 ModelRoom ControllerDB::infoRoom(const quint32 id)
@@ -194,4 +211,38 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     id = query.record().value(0).toUInt();
     
     return true;
+}
+
+bool ControllerDB::createAccount(ModelUser& user)
+{
+    
+    QFile profilePicture;
+    quint64 msecs = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    
+    do
+    {
+        profilePicture.setFileName(PROFILE_PICTURE_FOLDER + QString::number(msecs));
+    } while (profilePicture.exists() && msecs++);
+    
+    profilePicture.open(QIODevice::WriteOnly);
+    user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
+    profilePicture.close();
+    
+    QSqlQuery query(_db);
+    
+    query.exec("SELECT idUser FROM user WHERE login = \"" + user.getUserName() + "\"");
+    
+    if (query.first()) {return false;}
+    
+    query.exec("INSERT INTO user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", 0, 0, 0, 0, 0)");
+    
+    user.setIdUser(query.lastInsertId().toUInt());
+    
+    return true;
+}
+
+void ControllerDB::logout(const quint32 userId)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE user SET isConnected = 0 WHERE idUser = " + QString::number(userId));
 }

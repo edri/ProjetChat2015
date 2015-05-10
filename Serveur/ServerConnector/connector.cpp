@@ -12,8 +12,11 @@ ClientConnector::ClientConnector() : _isConnected(false)
 
 void ClientConnector::connectToServer(QString url)
 {
-    qDebug() << "trying to connect to " << url;
-    _socket.open(QUrl("wss://" + url));
+    if (!_isConnected)
+    {
+        qDebug() << "trying to connect to " << url;
+        _socket.open(QUrl("wss://" + url));
+    }
 }
 
 void ClientConnector::send(const QByteArray& data)

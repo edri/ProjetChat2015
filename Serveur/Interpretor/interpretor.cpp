@@ -4,12 +4,12 @@
 
 Interpretor::Interpretor(ControllerInput& dispatcher) : _dispatcher(dispatcher){};
 
-QByteArray Interpretor::sendMessage(const ModelMessage& message)
+QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edited)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::MESSAGE << message;
+    stream << (quint32) MessageType::MESSAGE << edited << message;
     return data;
 }
 
@@ -143,9 +143,11 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::MESSAGE:
         {
+            bool edited;
             ModelMessage message;
+            stream >> edited;
             stream >> message;
-            _dispatcher.receiveMessage(message, sender());
+            _dispatcher.receiveMessage(message, edited, sender());
         }
         break;
         
@@ -190,7 +192,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             quint32 idUser;
             stream >> idUser;
-            // Envoyer ces objets quelque part
+            _dispatcher.disconnect(idUser, sender());
         }
         break;
         

@@ -34,11 +34,13 @@ private:
     void closeEvent(QCloseEvent *);
     bool verifyFields();
     bool verifyProfileImage();
-    const QString passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
+    QString passwordRequirement;
 
 signals:
     // Ask to get the information of the user inscription
     void requestGetNewUser() const;
+
+
 
 };
 

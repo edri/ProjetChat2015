@@ -13,11 +13,13 @@ class ServerControllerInput : public ControllerInput
     public:
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
-    void receiveMessage(ModelMessage& message, QObject* sender);
+    void createAccount(ModelUser& user, QObject* sender);
+    void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void login(const QString& pseudo, const QString& hashedPWD, QObject* sender);
     void infoUser(ModelUser& user, QObject* sender);
     void room(ModelRoom& room, bool edited, QObject* sender);
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
+    void disconnect(const quint32 userId, QObject* sender);
     
     private:
     ControllerUser& _controllerUser;

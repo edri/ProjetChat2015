@@ -9,6 +9,7 @@
 #include "../Serveur/Interpretor/interpretor.h"
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
+#include "../Salle/Room/controllerRoom.h"
 
 class ClientControllerInput;
 
@@ -23,21 +24,24 @@ private:
     Interpretor* _i;
     ClientConnector* _cc;
     ControllerOutput* _co;
+    ControllerRoom* _controllerRoom;
 
 public:
     ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
-                   Interpretor* i, ClientConnector* cc, ControllerOutput* co);
+                   Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom);
     ~ControllerChat();
 
     void showView() const;
     void loadUser(ModelUser& user) const;
     void loadRoom(ModelRoom& room) const;
-    void receiveMessage(ModelMessage& message) const;
+    void receiveMessage(ModelMessage& message, const bool edited) const;
 
 public slots :
     void loadUserRooms() const;
+    void openRoomModule() const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
+    void editMessage(const QTreeWidgetItem* item) const;
 
 };
 

@@ -50,7 +50,7 @@ public:
 
 
 public slots:
-    void connectToServeur();
+    void connectToServer();
     void auth() const;
     void InscriptionToServer() const;
 
