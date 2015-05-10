@@ -19,11 +19,10 @@ public:
     ~ViewInscription();
 
     QString getFirstName() const;
-
     QString getLastName() const;
-
     QString getUserName() const;
-
+    QString getPassword() const;
+    QImage getProfileImage() const;
 
 private slots:
     void on_btn_path_clicked();
@@ -33,8 +32,14 @@ private slots:
 private:
     Ui::viewInscription *ui;
     void closeEvent(QCloseEvent *);
+    bool verifyFields();
     bool verifyProfileImage();
     const QString passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
+
+signals:
+    // Ask to get the information of the user inscription
+    void requestGetNewUser() const;
+
 };
 
 #endif // VIEWINSCRIPTION_H

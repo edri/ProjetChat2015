@@ -33,6 +33,8 @@ private:
 
     ModelUser* _currentUser;
 
+    QObject* callerConnection;
+
 
 public:
     ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i,
@@ -48,8 +50,9 @@ public:
 
 
 public slots:
-    void connectToServeur() const;
+    void connectToServeur();
     void auth() const;
+    void InscriptionToServer() const;
 
 };
 

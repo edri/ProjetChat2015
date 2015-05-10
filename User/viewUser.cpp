@@ -19,25 +19,27 @@ ViewUser::~ViewUser()
 
 void ViewUser::on_btn_connexion_clicked()
 {
-
     // Vérifier que les champs ne soient pas vides
-    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_server->text().isEmpty()) {
+    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_server->text().isEmpty())
+    {
         // Afficher un message d'erreur
         ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
-    } else {
+    }
+    else
+    {
         // Send the data
         emit requestGetIds();
         // Les données doivent être confirmées
-
-
-
     }
-
-
 }
 
 void ViewUser::on_btn_inscription_clicked()
 {
+    // TODO : Vérifier sur ce bouton ou lors de l'inscription si serveur atteignable
+    // Send the data
+    emit requestGetIds();
+
+    // deplacer le code ci-dessous dans controller
     // Open the inscription window
     _viewInscription->show();
     // Disable the main windows
@@ -67,4 +69,8 @@ QString ViewUser::getIpAddress() const
     return ui->ldt_server->text();
 }
 
+ ViewInscription* ViewUser::getViewInscription() const
+{
+    return _viewInscription;
+}
 
