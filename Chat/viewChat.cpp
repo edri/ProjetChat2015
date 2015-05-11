@@ -100,8 +100,8 @@ void ViewChat::selectFirstRoom() const
 }
 
 void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName,
-                               const QString& content, const QDateTime& date, const bool isCurrentUsersMessage,
-                               const bool edited)
+                               const QString& content, const QDateTime& date, const QDateTime& lastUpdateDate,
+                               const bool isCurrentUsersMessage, const bool edited)
 {
     quint32 i, j;
     quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
@@ -129,10 +129,9 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                             {
                                 _isEditingMessage = true;
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setText(1, content);
-                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + date.toString("dd.MM.yyyy à HH:mm") + "]");
+                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setTextColor(2, QColor(192, 192, 192));
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
-                                _ui->tre_messages->resizeColumnToContents(2);
                             }
                         }
                     }
@@ -144,6 +143,13 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                     messageItem->setData(1, Qt::UserRole, messageId);
                     messageItem->setText(0, "[" + date.toString("HH:mm") + "] <" + userName + ">");
                     messageItem->setText(1, content);
+
+                    if (lastUpdateDate != date)
+                    {
+                        messageItem->setText(2, "[Edité le " + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
+                        messageItem->setTextColor(2, QColor(192, 192, 192));
+                        messageItem->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
+                    }
 
                     if (isCurrentUsersMessage)
                     {
@@ -197,6 +203,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                 }
 
                 _ui->tre_messages->resizeColumnToContents(1);
+                _ui->tre_messages->resizeColumnToContents(2);
             }
             else if (!edited)
             {

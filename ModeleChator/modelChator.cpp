@@ -10,9 +10,10 @@ ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const 
 
 ModelMessage::~ModelMessage(){}
 
-void ModelMessage::modify(const QString& content)
+void ModelMessage::modify(const QString& content, const QDateTime lastEditionDate)
 {
     _content = content;
+    _lastEditionDate = lastEditionDate;
 }
 
 QString ModelMessage::getContent() const
@@ -199,9 +200,9 @@ ModelMessage& ModelChator::getMessage(const quint32 idRoom, const quint32 idMess
     return _rooms[idRoom].getMessage(idMessage);
 }
 
-void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents)
+void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
 {
-    _rooms[idRoom].modifyMessage(idMessage, contents);
+    _rooms[idRoom].modifyMessage(idMessage, contents, lastEditionDate);
 }
 
 void ModelChator::deleteMessage(const quint32 idRoom, const quint32 idMessage)
@@ -224,9 +225,9 @@ void ModelRoom::addMessage(const ModelMessage& message)
     _messages.insert(message.getIdMessage(), ModelMessage(message));
 }
 
-void ModelRoom::modifyMessage(const quint32 idMessage, const QString& contents)
+void ModelRoom::modifyMessage(const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
 {
-    _messages[idMessage].modify(contents);
+    _messages[idMessage].modify(contents, lastEditionDate);
 }
 
 void ModelRoom::deleteMessage(const quint32 idMessage)
