@@ -136,7 +136,7 @@ class ModelRoom
          *
          * Last edited by Jan Purro, on 24.04.2015 15:45
         */
-        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
+        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime &lastEditionDate, const QString& content);
         void addMessage(const ModelMessage& message);
         
         // Last edited by Miguel Santamaria, on 09.05.2015 18:47
@@ -195,7 +195,7 @@ class ModelMessage
 	
 	public :
         ModelMessage();
-        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
+        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QString& content);
 		~ModelMessage();
 		
         void modify(const QString& content, const QDateTime lastEditionDate);

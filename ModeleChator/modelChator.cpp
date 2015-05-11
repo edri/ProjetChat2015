@@ -5,8 +5,8 @@ ModelChator::ModelChator() {}
 ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _content("") {}
 
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
-                           const QDateTime& date, const QString& content) :
-    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(), _content(content) {}
+                           const QDateTime& date, const QDateTime& lastEditionDate, const QString& content) :
+    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(lastEditionDate), _content(content) {}
 
 ModelMessage::~ModelMessage(){}
 
@@ -215,9 +215,9 @@ ModelMessage& ModelRoom::getMessage(const quint32 idMessage)
     return _messages[idMessage];
 }
 
-void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QString &content)
+void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QDateTime &lastEditionDate, const QString &content)
 {
-    _messages.insert(idMessage, ModelMessage(idMessage, idRoom, idUser, date, content));
+    _messages.insert(idMessage, ModelMessage(idMessage, idRoom, idUser, date, lastEditionDate, content));
 }
 
 void ModelRoom::addMessage(const ModelMessage& message)
