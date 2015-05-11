@@ -12,13 +12,14 @@ void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, Chat
         if (edited)
         {
             _db.editMessage(message);
-            message.setEditionDate(QDateTime::currentDateTime());
         }
         else
         {
             message.setIdMessage(_db.storeMessage(message));
             message.setDate(QDateTime::currentDateTime());
         }
+        
+        message.setEditionDate(QDateTime::currentDateTime());
         
         QByteArray data = _interpretor->sendMessage(message, edited);
         
