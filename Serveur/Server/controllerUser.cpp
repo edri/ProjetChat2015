@@ -38,7 +38,7 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
             QMap<quint32, ModelMessage> mes = room.getMessages();
             for (ModelMessage mm : mes) 
             {
-                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent();
+                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent() << ", créé le " << mm.getDate().toString() << ", edité le " << mm.getEditionDate().toString();
              }
             
             // Get the ids of all the users present in this room 

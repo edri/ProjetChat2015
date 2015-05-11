@@ -152,7 +152,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    query.exec("SELECT idMessage, idRoom, idUser, date, contents FROM message WHERE idRoom = " + QString::number(id));
+    query.exec("SELECT idMessage, idRoom, idUser, date, lastUpdated, contents FROM message WHERE idRoom = " + QString::number(id));
     
     while(query.next())
     {
