@@ -156,7 +156,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     
     while(query.next())
     {
-        ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("contents").toString());
+        ModelMessage message(query.record().value("idMessage").toUInt(), query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("lastUpdated").toDateTime(), query.record().value("contents").toString());
         messages.insert(message.getIdMessage(), message);
     }
     

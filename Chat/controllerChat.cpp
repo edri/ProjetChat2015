@@ -93,14 +93,14 @@ void ControllerChat::loadUserRooms() const
 
 void ControllerChat::sendMessage() const
 {
-    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
+    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), _view->getMessageText());
 
     _co->sendMessage(message, false);
 }
 
 void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 {
-    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), item->text(1));
+    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), item->text(1));
 
     _co->sendMessage(message, true);
 }

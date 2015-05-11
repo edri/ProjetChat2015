@@ -2,7 +2,7 @@
 
 ModelChator::ModelChator() {}
 
-ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _content("") {}
+ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _lastEditionDate(QDateTime::currentDateTime()), _content("") {}
 
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
                            const QDateTime& date, const QDateTime& lastEditionDate, const QString& content) :
@@ -82,12 +82,12 @@ QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
 {
-    return ds << m._idMessage << m._idRoom << m._idUser << m._date << m._content;
+    return ds << m._idMessage << m._idRoom << m._idUser << m._date << m._lastEditionDate << m._content;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelMessage& m)
 {
-    return ds >> m._idMessage >> m._idRoom >> m._idUser >> m._date >> m._content;
+    return ds >> m._idMessage >> m._idRoom >> m._idUser >> m._date >> m._lastEditionDate >> m._content;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelUser& u)
