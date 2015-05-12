@@ -52,13 +52,11 @@ void ViewInscription::on_btn_inscription_clicked()
         }
 
         // User added succesfully
-        // Afficher un popup indiquant que l'inscription est réussie
+        // Connecter l'utilisateur
 
         QMessageBox info;
         info.setText("Votre compte a été créé avec succès");
         info.exec();
-
-        // Réactiver la fenêtre de connection si tout s'est bien passé
 
         */
         ui->lbl_info->setText("Prêt à être envoyé au serveur");
