@@ -158,7 +158,8 @@ Salt Cryptor::generateSalt(const unsigned saltLength)
     return salt;
 }
 
-Hash Cryptor::generateHash(const string& password, Salt& salt)
+Hash Cryptor::generateHash(const string& password, Salt& salt,
+                           const unsigned numberOfRounds);
 {
     Hash hash;
     hash.resize(HASH_LENGTH/8);
@@ -169,7 +170,7 @@ Hash Cryptor::generateHash(const string& password, Salt& salt)
      * If the operation isn't succesful (i.e. the return value is 0), write an
      * error message to cerr and returns an empty hash.*/
     if (!PKCS5_PBKDF2_HMAC(password.c_str(), (int) password.size(), salt.data(),
-        (int) salt.size(), NUMBER_OF_HASH_ROUNDS, EVP_sha512(), 
+        (int) salt.size(), numberOfRounds, EVP_sha512(), 
         HASH_LENGTH/8, hash.data()))
     {
         cerr << "Hash generation was unsuccessful." << endl;

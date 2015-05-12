@@ -18,20 +18,25 @@ const unsigned SALT_LENGTH = 64;
 const unsigned RSA_KEY_LENGTH = 4096;
 const int HASH_LENGTH = 512;
 
+// Public exponent used for the RSA keys generation.
 const unsigned long PUBLIC_EXPONENT = 65537;
 
+// Number of rounds to generate a hash.
 const unsigned NUMBER_OF_HASH_ROUNDS = 10000;
 
+// Typedefs
 typedef vector<unsigned char> Salt;
 typedef vector<unsigned char> Hash;
 
+// Abstraction for the AES keys. contains both the key and the initialization 
+// vector.
 struct AESKey
 {
     vector<unsigned char> key;
     vector<unsigned char> initializationVector;
-    
 };
 
+// Abstraction for the RSA keys. Contains both private and public keys.
 struct RSAPair
 {
     vector<char> privateKey;
@@ -41,14 +46,39 @@ struct RSAPair
 class Cryptor
 {
     public:
+    /* Constructor.
+     * Will initialize the openssl environnement for the session.
+     */
     Cryptor();
+    
+    /* Destructor.
+     * Will clean up the openssl environnement at the end of the session.
+     */
     ~Cryptor();
     
+    /* Randomly generate an AES key. The PRNs are cryptographically secure, if 
+     * the openssl documentation is to be trusted.
+     * keyLength : the desired size of the aes key, in bytes (octets).*/
     AESKey generateAESKey(const unsigned keyLength = AES_KEY_LENGTH/8);
+    
+    /* Randomly generate a pair of private/public RSA keys. The PRNs are 
+     * cryptographically secure, if the openssl docuementation is to be trusted.
+     * keyLength : the desired size of the RSA key, in bits.*/
     RSAPair generateRSAPair(const unsigned keyLength = RSA_KEY_LENGTH);
     
+    /* Generate a random salt. The PRNs are cryptographically secure, if 
+     * the openssl documentation is to be trusted.
+     * saltLength : the desired size for the salt, in bytes (octets).
+     */ 
     Salt generateSalt(const unsigned saltLength = SALT_LENGTH/8);
-    Hash generateHash(const string& password, Salt& salt);
+    
+    /* Generate the hash for the given password and salt. The 
+     * password : the password to be hashed.
+     * salt : the added salt to avoid tables attack.
+     * numberOfRounds : the number of rounds to generate the hash. Using a high
+     * number of round avoid brute force attack.*/
+    Hash generateHash(const string& password, Salt& salt,
+         const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
     
     int cypherAES(string& message, const AESKey& encryptionKey);
     int decypherAES(string& message, const AESKey& encryptionKey);
