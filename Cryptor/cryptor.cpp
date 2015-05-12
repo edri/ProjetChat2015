@@ -159,7 +159,7 @@ Salt Cryptor::generateSalt(const unsigned saltLength)
 }
 
 Hash Cryptor::generateHash(const string& password, Salt& salt,
-                           const unsigned numberOfRounds);
+                           const unsigned numberOfRounds)
 {
     Hash hash;
     hash.resize(HASH_LENGTH/8);

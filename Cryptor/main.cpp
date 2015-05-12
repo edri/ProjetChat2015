@@ -50,11 +50,11 @@ int main()
     cout << "Simulation création utilisateur" << endl;
     
     string password = "mot de passe";
-    Salt saltPassword = generateSalt();
-    Hash hashPassword = generateHash(password, saltPassword);
-    RSAPair userRSAKeys = generateRSAPair();
-    Salt saltKey = generateSalt();
-    Hash masterKey = generateHash(password, saltKey);
+    Salt saltPassword = cryptor->generateSalt();
+    Hash hashPassword = cryptor->generateHash(password, saltPassword);
+    RSAPair userRSAKeys = cryptor->generateRSAPair();
+    Salt saltKey = cryptor->generateSalt();
+    Hash masterKey = cryptor->generateHash(password, saltKey);
     
     delete cryptor;
     return 0;
