@@ -3,7 +3,7 @@
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
-void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, ChatorClient* client)
+void ControllerRoom::processMessage(ModelMessage& message, const bool edited, ChatorClient* client)
 {
     ChatorRoom* room = nullptr;
     
@@ -156,4 +156,19 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
 QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
 {
     return _onlineRooms;
+}
+
+void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
+{
+    
+}
+
+void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
+{
+    
+}
+
+void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
+{
+    
 }

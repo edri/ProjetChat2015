@@ -142,3 +142,8 @@ void ControllerUser::disconnect(ChatorClient* client)
     
     delete client;
 }
+
+void ControllerUser::modifyUser(const ModelUser& user, ChatorClient* client)
+{
+    
+}
