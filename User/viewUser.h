@@ -38,7 +38,7 @@ private:
 
 signals:
     // Ask to get the login
-    void requestGetIds() const;
+    void requestGetIds(bool fromBtnConnection) const;
 };
 
 #endif // VIEWUSER_H
