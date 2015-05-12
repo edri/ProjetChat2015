@@ -8,12 +8,13 @@ Cryptor::Cryptor()
     RAND_poll();
     // Load the human readable error strings for libcrypto
     ERR_load_crypto_strings();
-    // Link all algortithms (maybe unnecessary)
+    // Link all algortithms
     OpenSSL_add_all_algorithms();
 }
 
 Cryptor::~Cryptor()
 {
+    // Cleanup the environnement
     CRYPTO_cleanup_all_ex_data();
     EVP_cleanup();
     ERR_free_strings();
@@ -21,22 +22,26 @@ Cryptor::~Cryptor()
 
 void Cryptor::handleRANDError(const int RANDResult)
 {
-    unsigned long errorCode;
-    
+    /* Depending on the return value, write an apporpriate error message to
+     * cerr. Also write the library error message if it's applicable.*/
     switch (RANDResult)
     {
+        // Nothing was wrong (normally this function shouldn't be called in this case).
         case 1 : 
             break;
+        // Returned by RAND_bytes if the operation isn't supported by the RAND function (from the openssl "documentation")
         case -1 :
             cerr << "RAND_bytes not supported by current RAND function." << endl;
-            errorCode = ERR_get_error();
-            cerr << ERR_error_string(errorCode, NULL) << endl;
+            cerr << ERR_error_string(ERR_get_error(), NULL) << endl;
+            break;
+        // Returned by RAND_bytes if the operation didn't succeed.
         case 0 :    
             cerr << "RAND_bytes couldn't generate random numbers" << endl;
-            errorCode = ERR_get_error();
-            cerr << ERR_error_string(errorCode, NULL) << endl;
+            cerr << ERR_error_string(ERR_get_error(), NULL) << endl;
+            break;
         default :
             cerr << "RAND_bytes returned an unexpected value" << endl;
+            break;
     }
     
 }
@@ -44,13 +49,14 @@ void Cryptor::handleRANDError(const int RANDResult)
 AESKey Cryptor::generateAESKey(const unsigned keyLength)
 {
     int randomResult;
+    
     AESKey newKey;
     newKey.key.resize(keyLength);
     newKey.initializationVector.resize(keyLength);
     
-    // Generate random AES Key. Returns 1 if successful 0 otherwise, -1 if it's not supported
+    /* Generate the AES key. If the operation wasn't succesful (return value 
+     * != 1) calls a function to handle the error and returns an empty key.*/
     randomResult = RAND_bytes(newKey.key.data(), keyLength);
-    
     if (randomResult != 1)
     {
         handleRANDError(randomResult);
@@ -59,8 +65,10 @@ AESKey Cryptor::generateAESKey(const unsigned keyLength)
         return newKey;
     }
     
+    /* Generate the initialization vector. If the operation wasn't succesful 
+     * (return value != 1) calls a function to handle the error and returns an 
+     * empty key.*/
     randomResult = RAND_bytes(newKey.initializationVector.data(), keyLength);
-    
     if (randomResult != 1)
     {
         handleRANDError(randomResult);
@@ -81,7 +89,9 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     BIGNUM* publicExponent = BN_new();
     BN_set_word(publicExponent, PUBLIC_EXPONENT);
     
-    // RSA keypair generation. Returns 0 if unsuccessful, 1 otherwise (we suppose, the docummentation isn't exactly clear on that).
+    /* RSA keypair generation. Returns 0 if unsuccessful, 1 otherwise (as much 
+     * ass we can guess from the documentation). If the operation was a failure,
+     * write an error message and returns an empty pair of keys.*/
     if (!RSA_generate_key_ex(keypair, keyLength, publicExponent, 0))
     {
         cerr << "RSA key generation was unsuccessful." << endl;
@@ -90,24 +100,34 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
         return keys;
     }
     
+    /* Both keys are write into a buffer and then into a char string. Once the
+     * operation is completed returns the pair.*/
+    
+    // Create buffers.
     BIO* privateKeyBuffer = BIO_new(BIO_s_mem());
     BIO* publicKeyBuffer = BIO_new(BIO_s_mem());
     
+    // Write keys into the buffers.
     PEM_write_bio_RSAPrivateKey(privateKeyBuffer, keypair, NULL, NULL, 0, NULL, NULL);
     PEM_write_bio_RSAPublicKey(publicKeyBuffer, keypair);
     
+    // Retrieve keys length.
     int privateKeyLength = BIO_pending(privateKeyBuffer);
     int publicKeyLength = BIO_pending(publicKeyBuffer);
     
+    // Resize the vectors.
     keys.privateKey.resize(privateKeyLength + 1);
     keys.publicKey.resize(publicKeyLength + 1);
     
+    // Write the content of the buffers into the char arrays.
     BIO_read(privateKeyBuffer, keys.privateKey.data(), privateKeyLength);
     BIO_read(publicKeyBuffer, keys.publicKey.data(), publicKeyLength);
     
+    // Add ending character to the strings.
     keys.privateKey[privateKeyLength] = '\0';
     keys.publicKey[publicKeyLength] = '\0';
     
+    // Cleanup
     BIO_free(privateKeyBuffer);
     BIO_free(publicKeyBuffer);
     RSA_free(keypair);
@@ -121,6 +141,9 @@ Salt Cryptor::generateSalt(const unsigned saltLength)
     Salt salt;
     salt.resize(saltLength);
     
+    /* Generate the random salt. If the operation wasn't succesful 
+     * (return value != 1) calls a function to handle the error and returns an 
+     * empty salt.*/
     randomResult = RAND_bytes(salt.data(), saltLength);
     
     if (randomResult != 1)
@@ -140,6 +163,11 @@ Hash Cryptor::generateHash(const string& password, Salt& salt)
     Hash hash;
     hash.resize(HASH_LENGTH/8);
     
+    /* Generate the derivation key (hash), from the password and the salt using
+     * the sha512 digest method. The operation is repeated NUMBER_OF_HASH_ROUND
+     * times.
+     * If the operation isn't succesful (i.e. the return value is 0), write an
+     * error message to cerr and returns an empty hash.*/
     if (!PKCS5_PBKDF2_HMAC(password.c_str(), (int) password.size(), salt.data(),
         (int) salt.size(), NUMBER_OF_HASH_ROUNDS, EVP_sha512(), 
         HASH_LENGTH/8, hash.data()))
