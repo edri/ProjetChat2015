@@ -29,7 +29,7 @@ public:
     void addUserToRoom(const quint32 roomId, const quint32 userId, const QString& userName, const QImage& image, const bool isConnected);
     void selectFirstRoom() const;
     void loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName,
-                         const QString& content, const QDateTime& date, const bool isCurrentUsersMessage,
+                         const QString& content, const QDateTime& date, const QDateTime& lastUpdateDate, const bool isCurrentUsersMessage,
                          const bool edited = false);
 
     QString getMessageText() const;

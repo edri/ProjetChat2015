@@ -44,9 +44,14 @@ void ControllerChat::loadRoom(ModelRoom& room) const
 
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
-    _model->getRoom(message.getIdRoom()).addMessage(message);
+    if (!edited)
+        _model->getRoom(message.getIdRoom()).addMessage(message);
+    else
+        _model->modifyMessage(message.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
+
     _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                           message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()), edited);
+                           message.getContent(), message.getDate(), message.getEditionDate(),
+                           (message.getIdUser() == _currentUser->getIdUser()), edited);
 }
 
 void ControllerChat::openRoomModule() const
@@ -61,7 +66,8 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
     for (ModelMessage& message : room.getMessages())
     {
         _view->loadRoomMessage(idRoom, message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                               message.getContent(), message.getDate(), (message.getIdUser() == _currentUser->getIdUser()));
+                               message.getContent(), message.getDate(), message.getEditionDate(),
+                               (message.getIdUser() == _currentUser->getIdUser()));
     }
 }
 
@@ -87,14 +93,14 @@ void ControllerChat::loadUserRooms() const
 
 void ControllerChat::sendMessage() const
 {
-    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), _view->getMessageText());
+    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), _view->getMessageText());
 
     _co->sendMessage(message, false);
 }
 
 void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 {
-    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), item->text(1));
+    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), item->text(1));
 
     _co->sendMessage(message, true);
 }

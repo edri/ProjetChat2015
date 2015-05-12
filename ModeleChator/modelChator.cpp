@@ -2,17 +2,18 @@
 
 ModelChator::ModelChator() {}
 
-ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _content("") {}
+ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _lastEditionDate(QDateTime::currentDateTime()), _content("") {}
 
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
-                           const QDateTime& date, const QString& content) :
-    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(), _content(content) {}
+                           const QDateTime& date, const QDateTime& lastEditionDate, const QString& content) :
+    _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(lastEditionDate), _content(content) {}
 
 ModelMessage::~ModelMessage(){}
 
-void ModelMessage::modify(const QString& content)
+void ModelMessage::modify(const QString& content, const QDateTime lastEditionDate)
 {
     _content = content;
+    _lastEditionDate = lastEditionDate;
 }
 
 QString ModelMessage::getContent() const
@@ -81,12 +82,12 @@ QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
 {
-    return ds << m._idMessage << m._idRoom << m._idUser << m._date << m._content;
+    return ds << m._idMessage << m._idRoom << m._idUser << m._date << m._lastEditionDate << m._content;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelMessage& m)
 {
-    return ds >> m._idMessage >> m._idRoom >> m._idUser >> m._date >> m._content;
+    return ds >> m._idMessage >> m._idRoom >> m._idUser >> m._date >> m._lastEditionDate >> m._content;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelUser& u)
@@ -199,9 +200,9 @@ ModelMessage& ModelChator::getMessage(const quint32 idRoom, const quint32 idMess
     return _rooms[idRoom].getMessage(idMessage);
 }
 
-void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents)
+void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
 {
-    _rooms[idRoom].modifyMessage(idMessage, contents);
+    _rooms[idRoom].modifyMessage(idMessage, contents, lastEditionDate);
 }
 
 void ModelChator::deleteMessage(const quint32 idRoom, const quint32 idMessage)
@@ -214,9 +215,9 @@ ModelMessage& ModelRoom::getMessage(const quint32 idMessage)
     return _messages[idMessage];
 }
 
-void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QString &content)
+void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QDateTime &lastEditionDate, const QString &content)
 {
-    _messages.insert(idMessage, ModelMessage(idMessage, idRoom, idUser, date, content));
+    _messages.insert(idMessage, ModelMessage(idMessage, idRoom, idUser, date, lastEditionDate, content));
 }
 
 void ModelRoom::addMessage(const ModelMessage& message)
@@ -224,9 +225,9 @@ void ModelRoom::addMessage(const ModelMessage& message)
     _messages.insert(message.getIdMessage(), ModelMessage(message));
 }
 
-void ModelRoom::modifyMessage(const quint32 idMessage, const QString& contents)
+void ModelRoom::modifyMessage(const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
 {
-    _messages[idMessage].modify(contents);
+    _messages[idMessage].modify(contents, lastEditionDate);
 }
 
 void ModelRoom::deleteMessage(const quint32 idMessage)

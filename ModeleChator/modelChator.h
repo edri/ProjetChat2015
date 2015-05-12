@@ -92,7 +92,9 @@ class ModelChator
 		
         // Last edited by Jan Purro on 24.04.2015 16:47
         ModelMessage& getMessage(const quint32 idRoom, const quint32 idMessage);
-        void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents);
+        // Last edited by Miguel Santamaria on 09.05.2015 18:46
+        // Adding last edition's date.
+        void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate);
 		void deleteMessage(const quint32 idRoom, const quint32 idMessage);	
 };
 
@@ -134,11 +136,12 @@ class ModelRoom
          *
          * Last edited by Jan Purro, on 24.04.2015 15:45
         */
-        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
+        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime &lastEditionDate, const QString& content);
         void addMessage(const ModelMessage& message);
         
-        // Last edited by Jan Purro, on 24.04.2015 15:50
-		void modifyMessage(const quint32 idMessage, const QString& contents);
+        // Last edited by Miguel Santamaria, on 09.05.2015 18:47
+        // Adding the last edition's date.
+        void modifyMessage(const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate);
 		void deleteMessage(const quint32 idMessage);
 		
         /*
@@ -192,10 +195,10 @@ class ModelMessage
 	
 	public :
         ModelMessage();
-        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QString& content);
+        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QString& content);
 		~ModelMessage();
 		
-        void modify(const QString& content);
+        void modify(const QString& content, const QDateTime lastEditionDate);
 
         // Getters
         quint32 getIdMessage() const;

@@ -28,7 +28,10 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
         QSet<quint32> idRooms = user.getRooms();
         for (quint32 idRoom : idRooms)
         {
+            // Test
             qDebug() << "present dans salle: " << idRoom;
+            // until here
+            
             // Get the informations of each room
             ModelRoom room = _db.infoRoom(idRoom);
             rooms.insert(idRoom, _db.infoRoom(idRoom));
@@ -38,8 +41,8 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
             QMap<quint32, ModelMessage> mes = room.getMessages();
             for (ModelMessage mm : mes) 
             {
-                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent();
-             }
+                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent() << ", créé le " << mm.getDate().toString() << ", edité le " << mm.getEditionDate().toString();
+            }// until here
             
             // Get the ids of all the users present in this room 
             QSet<quint32> roomUsers = room.getUsers();
@@ -55,10 +58,11 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
             }
         }
         
+        // Tests
         for (ModelUser m : users)
         {
             qDebug() << "dans la liste: " << m.getUserName();
-        }
+        }// until here
         
         client->socket.sendBinaryMessage(_interpretor->join(rooms, users));
         
@@ -67,7 +71,9 @@ void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, Chat
     }
     else
     {
+        // Test
         qDebug() << "Erreur d'authentification";
+        // until here
         client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
     }
 }
@@ -86,6 +92,8 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
 
 void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
 {
+    qDebug() << "Enregistrement";
+    
     if (!_db.createAccount(user))
     {
         client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::USER_CREATION, "Cannot create the user")));
@@ -98,15 +106,24 @@ void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
 
 void ControllerUser::disconnect(ChatorClient* client)
 {
+    // Process the logout in the database (toggle the online bool, update the last connection date)
     _db.logout(client->id);
+    
+    // Remove the client from the list of all connected clients
     _connectedUsers.remove(client->id);
     
+    // We have to notify every related clients that this one is disconnecting
     QSet<ChatorClient*> users;
     
     for (ChatorRoom* room : client->rooms)
     {
+        // We remove this client from every room which he is in
         room->clients.remove(client);
+        
+        // Every other users of this room will have to be informed. We use a set so we can add multiple times a same client.
         users += room->clients;
+        
+        // If the room is now empty, this client was the last one so we have to disconnect the room
         if (room->clients.empty())
         {
             _room->getOnlineRooms().remove(room->id);
@@ -114,8 +131,10 @@ void ControllerUser::disconnect(ChatorClient* client)
         }
     }
     
+    // Build the disconnect message
     QByteArray data = _interpretor->disconnect(client->id);
     
+    // Send the disconnect message
     for (ChatorClient* user : users)
     {
         user->socket.sendBinaryMessage(data);
