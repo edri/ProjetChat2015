@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
 // All lengths are in bits.
 const unsigned AES_KEY_LENGTH = 256; 
 const unsigned SALT_LENGTH = 64;
@@ -21,6 +23,7 @@ const unsigned long PUBLIC_EXPONENT = 65537;
 const unsigned NUMBER_OF_HASH_ROUNDS = 10000;
 
 typedef vector<unsigned char> Salt;
+typedef vector<unsigned char> Hash;
 
 struct AESKey
 {
@@ -45,14 +48,14 @@ class Cryptor
     RSAPair generateRSAPair(const unsigned keyLength = RSA_KEY_LENGTH);
     
     Salt generateSalt(const unsigned saltLength = SALT_LENGTH/8);
-    QString generateHash(const QString& password, Salt& salt);
+    Hash generateHash(const string& password, Salt& salt);
     
-    int cypherAES(QString& message, const AESKey key);
-    int decypherAES(QString& message, const AESKey key);
-    int cypherAES(RSAPair& message, const AESKey key);
-    int decypherAES(RSAPair& message, const AESKey key);    
-    int cypherRSA(AESKey& key, const RSAPair& key);
-    int decypherRSA(AESKey& key, const RSAPair& key);
+    int cypherAES(string& message, const AESKey& encryptionKey);
+    int decypherAES(string& message, const AESKey& encryptionKey);
+    int cypherAES(RSAPair& key, const AESKey& encryptionKey);
+    int decypherAES(RSAPair& key, const AESKey& encryptionKey);    
+    int cypherRSA(AESKey& key, const RSAPair& encryptionKey);
+    int decypherRSA(AESKey& key, const RSAPair& encryptionKey);
     
     private :
     void handleRANDError(const int RANDResult);

@@ -45,8 +45,8 @@ AESKey Cryptor::generateAESKey(const unsigned keyLength)
 {
     int randomResult;
     AESKey newKey;
-    newKey.key.reserve(keyLength);
-    newKey.initializationVector.reserve(keyLength);
+    newKey.key.resize(keyLength);
+    newKey.initializationVector.resize(keyLength);
     
     // Generate random AES Key. Returns 1 if successful 0 otherwise, -1 if it's not supported
     randomResult = RAND_bytes(newKey.key.data(), keyLength);
@@ -85,8 +85,7 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     if (!RSA_generate_key_ex(keypair, keyLength, publicExponent, 0))
     {
         cerr << "RSA key generation was unsuccessful." << endl;
-        errorCode = ERR_get_error();
-        cerr << ERR_error_string(errorCode, NULL) << endl;
+        cerr << ERR_error_string(ERR_get_error(), NULL) << endl;
         RSA_free(keypair);
         return keys;
     }
@@ -94,14 +93,14 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     BIO* privateKeyBuffer = BIO_new(BIO_s_mem());
     BIO* publicKeyBuffer = BIO_new(BIO_s_mem());
     
-    PEM_write_bio_RSAPrivateKey(privateKey, keypair, NULL, NULL, 0, NULL, NULL);
-    PEM_write_bio_RSAPublicKey(publicKey, keypair);
+    PEM_write_bio_RSAPrivateKey(privateKeyBuffer, keypair, NULL, NULL, 0, NULL, NULL);
+    PEM_write_bio_RSAPublicKey(publicKeyBuffer, keypair);
     
     int privateKeyLength = BIO_pending(privateKeyBuffer);
     int publicKeyLength = BIO_pending(publicKeyBuffer);
     
-    keys.privateKey.reserve(privateKeyLength + 1);
-    keys.publicKey.reserve(publicKeyLength + 1);
+    keys.privateKey.resize(privateKeyLength + 1);
+    keys.publicKey.resize(publicKeyLength + 1);
     
     BIO_read(privateKeyBuffer, keys.privateKey.data(), privateKeyLength);
     BIO_read(publicKeyBuffer, keys.publicKey.data(), publicKeyLength);
@@ -120,28 +119,49 @@ Salt Cryptor::generateSalt(const unsigned saltLength)
 {
     int randomResult;
     Salt salt;
-    salt.reserve(saltLength);
+    salt.resize(saltLength);
     
     randomResult = RAND_bytes(salt.data(), saltLength);
     
     if (randomResult != 1)
     {
         handleRANDError(randomResult);
-        salt.clear()
+        salt.clear();
         return salt;
     }
     
     salt.shrink_to_fit();
+    
     return salt;
 }
 
-string Cryptor::generateHash(const string& password, Salt& salt)
+Hash Cryptor::generateHash(const string& password, Salt& salt)
 {
-    unsigned char hash[HASH_LENGTH/8];
-    if (!PKCS5_PBKDF2_HMAC(password.c_str(), (int) password.size(), salt.data(), salt.size(), NUMBER_OF_HASH_ROUNDS, EVP_sha512(), HASH_LENGTH/8, hash))
+    Hash hash;
+    hash.resize(HASH_LENGTH/8);
+    
+    if (!PKCS5_PBKDF2_HMAC(password.c_str(), (int) password.size(), salt.data(),
+        (int) salt.size(), NUMBER_OF_HASH_ROUNDS, EVP_sha512(), 
+        HASH_LENGTH/8, hash.data()))
     {
-        return -1;
+        cerr << "Hash generation was unsuccessful." << endl;
+        cerr << ERR_error_string(ERR_get_error(), NULL) << endl;
+        hash.clear();
     }
     
-    
+    hash.shrink_to_fit();
+    return hash;
 }
+
+int Cryptor::cypherAES(string& message, const AESKey& encryptionKey)
+{return 1;}
+int Cryptor::decypherAES(string& message, const AESKey& encryptionKey)
+{return 1;}
+int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
+{return 1;}
+int Cryptor::decypherAES(RSAPair& key, const AESKey& encryptionKey)
+{return 1;}
+int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
+{return 1;}
+int Cryptor::decypherRSA(AESKey& key, const RSAPair& encryptionKey)
+{return 1;}
