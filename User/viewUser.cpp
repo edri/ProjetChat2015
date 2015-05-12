@@ -38,13 +38,6 @@ void ViewUser::on_btn_inscription_clicked()
     // TODO : Vérifier sur ce bouton ou lors de l'inscription si serveur atteignable
     // Send the data
     emit requestGetIds(false);
-
-    // deplacer le code ci-dessous dans controller
-    // Open the inscription window
-    _viewInscription->show();
-    // Disable the main windows
-    setEnabled(false);
-    _viewInscription->setEnabled(true);
 }
 
 

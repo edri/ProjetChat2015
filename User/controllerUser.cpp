@@ -55,6 +55,14 @@ void ControllerUser::auth() const
         QString password = _view->getPassword();
         co->login(username, password);
     }
+    else  // button inscription
+    {
+        // Open the inscription window
+        _view->getViewInscription()->show();
+        // Disable the main windows
+        _view->setEnabled(false);
+        _view->getViewInscription()->setEnabled(true);
+    }
 }
 
 
