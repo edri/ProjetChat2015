@@ -14,9 +14,11 @@ using namespace std;
 
 // All lengths are in bits.
 const unsigned AES_KEY_LENGTH = 256; 
+const unsigned AES_BLOCK_SIZE = 128;
 const unsigned SALT_LENGTH = 64;
 const unsigned RSA_KEY_LENGTH = 4096;
 const int HASH_LENGTH = 512;
+
 
 // Public exponent used for the RSA keys generation.
 const unsigned long PUBLIC_EXPONENT = 65537;

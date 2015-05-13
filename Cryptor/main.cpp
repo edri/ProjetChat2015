@@ -37,7 +37,7 @@ int main()
     cout << endl;
     
     cout << "Generated initialization vector : ";
-    for (unsigned i = 0; i < AES_KEY_LENGTH/8; ++i)
+    for (unsigned i = 0; i < AES_BLOCK_SIZE/8; ++i)
     {
         printf("%02X", aesKey.initializationVector.at(i));
     }

@@ -52,7 +52,7 @@ AESKey Cryptor::generateAESKey(const unsigned keyLength)
     
     AESKey newKey;
     newKey.key.resize(keyLength);
-    newKey.initializationVector.resize(keyLength);
+    newKey.initializationVector.resize(AES_BLOCK_SIZE/8);
     
     /* Generate the AES key. If the operation wasn't succesful (return value 
      * != 1) calls a function to handle the error and returns an empty key.*/
@@ -68,7 +68,8 @@ AESKey Cryptor::generateAESKey(const unsigned keyLength)
     /* Generate the initialization vector. If the operation wasn't succesful 
      * (return value != 1) calls a function to handle the error and returns an 
      * empty key.*/
-    randomResult = RAND_bytes(newKey.initializationVector.data(), keyLength);
+    randomResult = RAND_bytes(newKey.initializationVector.data(), 
+                              AES_BLOCK_SIZE/8);
     if (randomResult != 1)
     {
         handleRANDError(randomResult);
