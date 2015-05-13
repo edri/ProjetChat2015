@@ -183,9 +183,9 @@ Hash Cryptor::generateHash(const string& password, Salt& salt,
     return hash;
 }
 
-int Cryptor::cypherAES(string& message, const AESKey& encryptionKey)
+int Cryptor::cypherAES(char* clearMessage, unsigned messageLength, char* cypherMessage, unsigned cypherLength, const AESKey& encryptionKey)
 {return 1;}
-int Cryptor::decypherAES(string& message, const AESKey& encryptionKey)
+int Cryptor::decypherAES(char* cypherMessage, unsigned cypherLength, char* clearMessage, unsigned messageLength, const AESKey& encryptionKey)
 {return 1;}
 int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
 {return 1;}

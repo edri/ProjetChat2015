@@ -5,6 +5,17 @@
 
 int main()
 {
+    const char* str1 = "poulet\0lolilol";
+    string lol;
+    lol.assign(str1, 14);
+    cout << "Message : " << lol << " Taille : " << lol.size() << endl;
+    const char* str2 = lol.data();
+    for (size_t i = 0; i < lol.size(); ++i)
+    {
+        cout << str2[i] << endl;
+    }
+    
+    /*
     Cryptor* cryptor = new Cryptor();
     
     Salt salt = cryptor->generateSalt();
@@ -56,6 +67,6 @@ int main()
     Salt saltKey = cryptor->generateSalt();
     Hash masterKey = cryptor->generateHash(password, saltKey);
     
-    delete cryptor;
+    delete cryptor;*/
     return 0;
 } 
