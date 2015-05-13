@@ -28,7 +28,7 @@ void ViewUser::on_btn_connexion_clicked()
     else
     {
         // Send the data
-        emit requestGetIds();
+        emit requestGetIds(true);
         // Les données doivent être confirmées
     }
 }
@@ -37,14 +37,7 @@ void ViewUser::on_btn_inscription_clicked()
 {
     // TODO : Vérifier sur ce bouton ou lors de l'inscription si serveur atteignable
     // Send the data
-    emit requestGetIds();
-
-    // deplacer le code ci-dessous dans controller
-    // Open the inscription window
-    _viewInscription->show();
-    // Disable the main windows
-    setEnabled(false);
-    _viewInscription->setEnabled(true);
+    emit requestGetIds(false);
 }
 
 

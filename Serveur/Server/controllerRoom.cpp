@@ -3,12 +3,12 @@
 
 ControllerRoom::ControllerRoom(ControllerDB& db) : _db(db) {}
 
-void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, ChatorClient* client)
+void ControllerRoom::processMessage(ModelMessage& message, const bool edited, ChatorClient* client)
 {
     ChatorRoom* room = nullptr;
     
     // Test
-    qDebug() << "Message à stocker: " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser();
+    qDebug() << "Message à stocker: " << message.getIdMessage() << ", " << message.getContent() << " dans chambre " << message.getIdRoom() << " de user " << message.getIdUser() << ", cree" << message.getDate();
     // until here
     
     // We check that it is a genuine message: the client must be logged in, the client must be the sender of the message, the room must be online, the client has to be registered in that room
@@ -18,6 +18,7 @@ void ControllerRoom::storeMessage(ModelMessage& message, const bool edited, Chat
         if (edited)
         {
             _db.editMessage(message);
+            qDebug() << "Modification du message " << message.getIdMessage() << ", cree " << message.getDate() << ", modifie " << message.getEditionDate();
         }
         else
         {
@@ -71,10 +72,11 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
         // Then, we store the pointer to this client and bind it to the room
         currentClient->rooms.insert(currentRoom);
         currentRoom->clients.insert(currentClient);
-        }
+    }
     
     // We will store the clients that already have been informed
     QSet<quint32> upToDateClients;
+    upToDateClients.insert(currentClient->id);
     
     // Build the packet
     QByteArray data = _interpretor->connected(user);
@@ -154,4 +156,19 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
 QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
 {
     return _onlineRooms;
+}
+
+void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
+{
+    
+}
+
+void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
+{
+    
+}
+
+void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
+{
+    
 }

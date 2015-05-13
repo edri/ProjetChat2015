@@ -16,6 +16,7 @@ class ControllerUser
     void userId(const QString& userName, ChatorClient* client);
     void createAccount(ModelUser& user, ChatorClient* client);
     void disconnect(ChatorClient* client);
+    void modifyUser(const ModelUser& user, ChatorClient* client);
     
     QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;

@@ -33,7 +33,7 @@ private:
 
     ModelUser* _currentUser;
 
-    QObject* callerConnection;
+    bool fromBtnConnection;
 
 
 public:
@@ -50,7 +50,7 @@ public:
 
 
 public slots:
-    void connectToServer();
+    void connectToServer(bool fromBtnConnection);
     void auth() const;
     void InscriptionToServer() const;
 

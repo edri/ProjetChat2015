@@ -130,6 +130,12 @@ void ControllerDB::editMessage(const ModelMessage& message)
     query.exec("UPDATE message SET contents = \"" + message.getContent() + "\", lastUpdated = datetime('NOW') WHERE idMessage = " + QString::number(message.getIdMessage()));
 }
 
+void ControllerDB::deleteMessage(const ModelMessage& message)
+{
+    QSqlQuery query(_db);
+    query.exec("DELETE FROM message WHERE idMessage = " + QString::number(message.getIdMessage()));
+}
+
 ModelRoom ControllerDB::infoRoom(const quint32 id)
 {    
     // Récupération des membres et des admins
@@ -152,7 +158,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    query.exec("SELECT idMessage, idRoom, idUser, date, lastUpdated, contents FROM message WHERE idRoom = " + QString::number(id));
+    query.exec("SELECT idMessage, idRoom, idUser, date, lastUpdated, contents FROM message WHERE idRoom = " + QString::number(id) + " ORDER BY date");
     
     while(query.next())
     {
@@ -167,7 +173,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     
     // Construction de la salle
     
-    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(), admins, users, messages);
+    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(query.record().value("picture").toString()), admins, users, messages);
     
     return room;
 }
