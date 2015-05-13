@@ -32,6 +32,11 @@ class ControllerOutput
      *  - userId : only used by the server when responding 
      */
     void userId(const QString& userName, bool exists = false, quint32 userId = 0);
+
+    /* Called when a room administrator want to delete it.
+     * - roomId : the room's id we want to delete.
+     */
+    void deleteRoom(const quint32 roomId);
     
     private:
     Connector& _connector;

@@ -26,8 +26,8 @@ class Interpretor : public QObject
     QByteArray userJoin(const quint32 idUser, const quint32 idRoom);
     QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);
     QByteArray leave(const quint32 idUser, const quint32 idRoom);
-    QByteArray disconnect(const quint32 idUser);
     QByteArray connected(const ModelUser& user);
+    QByteArray disconnect(const quint32 idUser);
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.

@@ -200,7 +200,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             stream >> user;
-            // Envoyer ces objets quelque part
+            _dispatcher.connected(user.getIdUser(), sender());
         }
         break;
         

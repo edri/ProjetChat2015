@@ -17,17 +17,20 @@
    <widget class="QLabel" name="lbl_connectedAs">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>280</x>
       <y>10</y>
-      <width>181</width>
-      <height>16</height>
+      <width>491</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Connecté en tant que &lt;b&gt;&lt;/b&gt;.</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
    </widget>
-   <widget class="QScrollArea" name="scrollArea">
+   <widget class="QScrollArea" name="sca_buttons">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -139,6 +142,12 @@
       <property name="text">
        <string>Nouvelle salle...</string>
       </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
      </widget>
      <widget class="QPushButton" name="btn_leaveRoom">
       <property name="geometry">
@@ -200,7 +209,7 @@
      </property>
     </column>
    </widget>
-   <widget class="QScrollArea" name="scrollArea_2">
+   <widget class="QScrollArea" name="sca_message">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -335,9 +344,6 @@
        <string>Envoyer</string>
       </property>
      </widget>
-     <zorder>ldt_message</zorder>
-     <zorder>btn_send</zorder>
-     <zorder>horizontalLayoutWidget_2</zorder>
     </widget>
    </widget>
    <widget class="QTreeWidget" name="tre_messages">
@@ -392,6 +398,45 @@
      </property>
     </column>
    </widget>
+   <widget class="QPushButton" name="btn_delete">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>7</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Supprimer</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_edit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>7</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Editer...</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <zorder>lbl_connectedAs</zorder>
+   <zorder>tre_rooms</zorder>
+   <zorder>sca_message</zorder>
+   <zorder>tre_messages</zorder>
+   <zorder>sca_buttons</zorder>
+   <zorder>btn_delete</zorder>
+   <zorder>btn_edit</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

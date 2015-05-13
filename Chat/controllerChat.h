@@ -35,6 +35,7 @@ public:
     void loadUser(ModelUser& user) const;
     void loadRoom(ModelRoom& room) const;
     void receiveMessage(ModelMessage& message, const bool edited) const;
+    void userStatusChanged(const quint32 userId, const bool isConnected) const;
 
 public slots :
     void loadUserRooms() const;
@@ -42,6 +43,7 @@ public slots :
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
     void editMessage(const QTreeWidgetItem* item) const;
+    void deleteRoom(const quint32 roomId) const;
 
 };
 

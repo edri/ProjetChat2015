@@ -164,11 +164,11 @@ class ModelRoom
 
         // Getters
         quint32 getIdRoom() const;
-        QMap<quint32, ModelMessage> getMessages() const;
-        QSet<quint32> getUsers() const;
-        QSet<quint32> getAdmins() const;
-        QString getName() const;
-        QImage getPicture() const;
+        QMap<quint32, ModelMessage>& getMessages();
+        const QSet<quint32>& getUsers() const;
+        const QSet<quint32>& getAdmins() const;
+        const QString& getName() const;
+        QImage& getPicture();
         quint32 getLimit() const;
         bool isPrivate() const ;
         bool isVisible() const;
@@ -204,9 +204,9 @@ class ModelMessage
         quint32 getIdMessage() const;
         quint32 getIdUser() const;
         quint32 getIdRoom() const;
-        QDateTime getDate() const;
-        QDateTime getEditionDate() const;
-        QString getContent() const;
+        QDateTime& getDate();
+        QDateTime& getEditionDate();
+        const QString& getContent() const;
         
         // Setters
         void setIdMessage(const quint32 id);
@@ -238,11 +238,11 @@ class ModelUser
 
         // Getters
         quint32 getIdUser() const;
-        QString getUserName() const;
-        QString getFirstName() const;
-        QString getLastName() const;
+        const QString& getUserName()const ;
+        QString& getFirstName();
+        QString& getLastName();
         bool isConnected() const;
-        QImage getImage() const;
+        QImage& getImage();
         const QSet<quint32>& getRooms() const;
         QSet<quint32>& getRooms();
         

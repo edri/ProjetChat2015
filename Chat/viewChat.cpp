@@ -8,6 +8,9 @@ ViewChat::ViewChat(QWidget *parent) :
 {
     _ui->setupUi(this);
 
+    _ui->btn_edit->hide();
+    _ui->btn_delete->hide();
+
     _ui->tre_rooms->setIconSize(QSize(30, 30));
     _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 50);
     _ui->tre_messages->expandAll();
@@ -61,7 +64,7 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
     bool userAlreadyExisting = false;
     quint32 nbRoomUsers;
 
-    for (int i = 0; i < nbRooms; ++i)
+    for (quint32 i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
@@ -232,6 +235,42 @@ quint32 ViewChat::getSelectedRoomId() const
     return _selectedRoomId;
 }
 
+void ViewChat::userStatusChanged(const quint32 userId, const bool isConnected) const
+{
+    quint32 nbTopRoomItems = _ui->tre_rooms->topLevelItemCount();
+    quint32 nbRoomUsers;
+
+    for (quint32 i = 0; i < nbTopRoomItems; ++i)
+    {
+        nbRoomUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
+
+        for (quint32 j = 0; j < nbRoomUsers; ++j)
+        {
+            if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+            {
+                if (isConnected)
+                    _ui->tre_rooms->topLevelItem(i)->child(j)->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
+                else
+                    _ui->tre_rooms->topLevelItem(i)->child(j)->setFont(0, QFont("MS Shell Dlg 2", 8));
+            }
+        }
+    }
+}
+
+void ViewChat::updateButtons(const bool isAdmin) const
+{
+    if (isAdmin)
+    {
+        _ui->btn_edit->show();
+        _ui->btn_delete->show();
+    }
+    else
+    {
+        _ui->btn_edit->hide();
+        _ui->btn_delete->hide();
+    }
+}
+
 void ViewChat::on_btn_send_clicked()
 {
     if (!_ui->ldt_message->text().trimmed().isEmpty())
@@ -300,10 +339,22 @@ void ViewChat::on_tre_messages_itemChanged(QTreeWidgetItem* item, int column)
 
 void ViewChat::on_tre_messages_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
+    Q_UNUSED(column);
+
     _ui->tre_messages->editItem(item, 1);
 }
 
 void ViewChat::on_actionQuitter_triggered()
 {
     exit(0);
+}
+
+void ViewChat::on_btn_edit_clicked()
+{
+
+}
+
+void ViewChat::on_btn_delete_clicked()
+{
+    emit requestDeleteRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
 }

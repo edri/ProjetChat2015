@@ -11,6 +11,7 @@ class ControllerInput : public QObject
     public:
     virtual void createAccount(ModelUser& user, QObject* sender) {Q_UNUSED(user); Q_UNUSED(sender);}
     virtual void receiveMessage(ModelMessage& message, const bool edited, QObject* sender) = 0;
+    virtual void connected(const quint32 userId, QObject* sender) { Q_UNUSED(userId); Q_UNUSED(sender) }
     virtual void disconnect(const quint32 userId, QObject* sender) = 0;
     virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
     virtual void infoUser(ModelUser& user, QObject* sender) = 0;
