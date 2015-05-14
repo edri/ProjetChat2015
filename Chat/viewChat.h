@@ -34,6 +34,8 @@ public:
 
     QString getMessageText() const;
     quint32 getSelectedRoomId() const;
+    void userStatusChanged(const quint32 userId, const bool isConnected) const;
+    void updateButtons(const bool isAdmin) const;
 
 private slots:
     void on_btn_send_clicked();
@@ -44,14 +46,16 @@ private slots:
     void on_tre_rooms_itemSelectionChanged();
     void on_tre_messages_itemChanged(QTreeWidgetItem* item, int column);
     void on_tre_messages_itemDoubleClicked(QTreeWidgetItem *item, int column);
-
     void on_actionQuitter_triggered();
+    void on_btn_edit_clicked();
+    void on_btn_delete_clicked();
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule() const;
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
+    void requestDeleteRoom(const quint32 roomId) const;
 };
 
 #endif // VIEWCHAT_H

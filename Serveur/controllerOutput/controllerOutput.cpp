@@ -48,3 +48,9 @@ void ControllerOutput::userId(const QString& userName, bool exists, quint32 user
 {
     _connector.send(_interpretor.userId(userName, exists, userId));
 }
+
+void ControllerOutput::deleteRoom(const quint32 roomId)
+{
+    // UN TRUC DU GENRE
+    //_connector.send(_interpretor.deleteRoom(roomId));
+}

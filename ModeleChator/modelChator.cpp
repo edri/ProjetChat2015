@@ -16,7 +16,7 @@ void ModelMessage::modify(const QString& content, const QDateTime lastEditionDat
     _lastEditionDate = lastEditionDate;
 }
 
-QString ModelMessage::getContent() const
+const QString& ModelMessage::getContent() const
 {
     return _content;
 }
@@ -36,12 +36,12 @@ quint32 ModelMessage::getIdRoom() const
     return _idRoom;
 }
 
-QDateTime ModelMessage::getDate() const
+QDateTime& ModelMessage::getDate()
 {
     return _date;
 }
 
-QDateTime ModelMessage::getEditionDate() const
+QDateTime& ModelMessage::getEditionDate()
 {
     return _lastEditionDate;
 }
@@ -120,12 +120,12 @@ void ModelRoom::addAdmin(const quint32 idUser)
     _admins.insert(idUser);
 }
 
-QSet<quint32> ModelRoom::getUsers() const
+const QSet<quint32>& ModelRoom::getUsers() const
 {
     return _members;
 }
 
-QSet<quint32> ModelRoom::getAdmins() const
+const QSet<quint32>& ModelRoom::getAdmins() const
 {
     return _admins;
 }
@@ -135,7 +135,7 @@ quint32 ModelRoom::getIdRoom() const
     return _idRoom;
 }
 
-QMap<quint32, ModelMessage> ModelRoom::getMessages() const
+QMap<quint32, ModelMessage>& ModelRoom::getMessages()
 {
     return _messages;
 }
@@ -268,17 +268,17 @@ quint32 ModelUser::getIdUser() const
     return _idUser;
 }
 
-QString ModelUser::getUserName() const
+const QString& ModelUser::getUserName() const
 {
     return _userName;
 }
 
-QString ModelUser::getFirstName() const
+QString& ModelUser::getFirstName()
 {
     return _firstName;
 }
 
-QString ModelUser::getLastName() const
+QString& ModelUser::getLastName()
 {
     return _lastName;
 }
@@ -288,7 +288,7 @@ bool ModelUser::isConnected() const
     return _isConnected;
 }
 
-QImage ModelUser::getImage() const
+QImage& ModelUser::getImage()
 {
     return _image;
 }
@@ -313,12 +313,12 @@ void ModelUser::setConnected(const bool connected)
     _isConnected = connected;
 }
 
-QString ModelRoom::getName() const 
+const QString& ModelRoom::getName() const
 { 
     return _name;
 }
 
-QImage ModelRoom::getPicture() const
+QImage& ModelRoom::getPicture()
 {
     return _picture;
 }

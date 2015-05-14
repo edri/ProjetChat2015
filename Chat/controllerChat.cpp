@@ -17,6 +17,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
     connect(_view, SIGNAL(requestEditMessage(const QTreeWidgetItem*)), this, SLOT(editMessage(const QTreeWidgetItem*)));
+    connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(deleteRoom(quint32)));
 }
 
 ControllerChat::~ControllerChat()
@@ -54,6 +55,11 @@ void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) co
                            (message.getIdUser() == _currentUser->getIdUser()), edited);
 }
 
+void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnected) const
+{
+    _view->userStatusChanged(userId, isConnected);
+}
+
 void ControllerChat::openRoomModule() const
 {
     _controllerRoom->showRoom();
@@ -62,6 +68,8 @@ void ControllerChat::openRoomModule() const
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 {
     ModelRoom& room = _model->getRoom(idRoom);
+
+    _view->updateButtons(room.getAdmins().contains(_currentUser->getIdUser()));
 
     for (ModelMessage& message : room.getMessages())
     {
@@ -100,7 +108,12 @@ void ControllerChat::sendMessage() const
 
 void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 {
-    ModelMessage message(item->data(0, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), item->text(1));
+    ModelMessage message(item->data(1, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), item->text(1));
 
     _co->sendMessage(message, true);
+}
+
+void ControllerChat::deleteRoom(const quint32 roomId) const
+{
+    _co->deleteRoom(roomId);
 }

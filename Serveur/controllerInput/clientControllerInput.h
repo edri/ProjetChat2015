@@ -36,6 +36,8 @@ class ClientControllerInput : public ControllerInput
     void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
     // Method called when a requested user ID is returned by the server after a client request.
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
+    // Method called when another user connects
+    void connected(const quint32 userId, QObject* sender);
     // Method called when another user disconnects
     void disconnect(const quint32 userId, QObject* sender);
     
