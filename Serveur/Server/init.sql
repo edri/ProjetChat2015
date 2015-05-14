@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS user (
   lastConnection DATETIME,
   publicKey BLOB NOT NULL,
   privateKey BLOB NOT NULL,
-  salt BINARY(8) NOT NULL,
-  masterKey BINARY(32) NOT NULL
+  saltPassword BINARY(8) NOT NULL,
+  saltKey BINARY(8) NOT NULL
   );
 
 

@@ -27,6 +27,7 @@ void ViewUser::on_btn_connexion_clicked()
     }
     else
     {
+        ui->lbl_info->setText("Connexion au serveur...");
         // Send the data
         emit requestGetIds(true);
         // Les données doivent être confirmées
@@ -35,7 +36,8 @@ void ViewUser::on_btn_connexion_clicked()
 
 void ViewUser::on_btn_inscription_clicked()
 {
-    // TODO : Vérifier sur ce bouton ou lors de l'inscription si serveur atteignable
+    ui->lbl_info->setText("Connexion au serveur...");
+
     // Send the data
     emit requestGetIds(false);
 }
