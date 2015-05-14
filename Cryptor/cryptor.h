@@ -29,6 +29,7 @@ const unsigned NUMBER_OF_HASH_ROUNDS = 10000;
 // Typedefs
 typedef vector<unsigned char> Salt;
 typedef vector<unsigned char> Hash;
+typedef vector<unsigned char> CypherText;
 
 // Abstraction for the AES keys. contains both the key and the initialization 
 // vector.
@@ -82,8 +83,8 @@ class Cryptor
     Hash generateHash(const string& password, Salt& salt,
          const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
     
-    int cypherAES(string& message, const AESKey& encryptionKey);
-    int decypherAES(string& message, const AESKey& encryptionKey);
+    int cypherAES(char* clearMessage, unsigned messageLength, char* cypherMessage, unsigned cypherLength, const AESKey& encryptionKey);
+    int decypherAES(char* cypherMessage, unsigned cypherLength, char* clearMessage, unsigned messageLength, const AESKey& encryptionKey);
     int cypherAES(RSAPair& key, const AESKey& encryptionKey);
     int decypherAES(RSAPair& key, const AESKey& encryptionKey);    
     int cypherRSA(AESKey& key, const RSAPair& encryptionKey);

@@ -46,6 +46,7 @@ public:
 
     //
     void infoUser(ModelUser& user);
+    void createUser(ModelUser& user);
 
 
 

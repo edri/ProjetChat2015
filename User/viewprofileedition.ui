@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>421</height>
+    <width>452</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>9</x>
       <y>9</y>
       <width>431</width>
-      <height>384</height>
+      <height>361</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -244,14 +244,14 @@
          </item>
         </layout>
        </item>
-       <item row="7" column="0" colspan="2">
-        <widget class="QCheckBox" name="chk_afficherHeure">
+       <item row="6" column="0" colspan="2">
+        <widget class="QCheckBox" name="chk_showTime">
          <property name="text">
           <string>afficher l'heure des messages</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <widget class="QLabel" name="lbl_info">
          <property name="font">
           <font>
@@ -267,7 +267,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <widget class="QPushButton" name="btn_modifier">
          <property name="font">
           <font>
@@ -291,7 +291,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>457</width>
+     <width>452</width>
      <height>21</height>
     </rect>
    </property>
