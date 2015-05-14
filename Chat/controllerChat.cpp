@@ -17,7 +17,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
     connect(_view, SIGNAL(requestEditMessage(const QTreeWidgetItem*)), this, SLOT(editMessage(const QTreeWidgetItem*)));
-    connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(deleteRoom(quint32)));
+    connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(deleteRoomInDb(quint32)));
 }
 
 ControllerChat::~ControllerChat()
@@ -113,7 +113,13 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
     _co->sendMessage(message, true);
 }
 
-void ControllerChat::deleteRoom(const quint32 roomId) const
+void ControllerChat::deleteRoomInDb(const quint32 roomId) const
 {
     _co->deleteRoom(roomId);
+}
+
+void ControllerChat::deleteRoomInModel(const quint32 roomId) const
+{
+    _model->deleteRoom(roomId);
+    _view->deleteRoom(roomId);
 }

@@ -35,6 +35,7 @@ class ControllerOutput
 
     /* Called when a room administrator want to delete it.
      * - roomId : the room's id we want to delete.
+     * Created by Miguel Santamaria on 13.05.2015 08:52
      */
     void deleteRoom(const quint32 roomId);
     

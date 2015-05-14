@@ -20,6 +20,7 @@ class ServerControllerInput : public ControllerInput
     void room(ModelRoom& room, bool edited, QObject* sender);
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
     void disconnect(const quint32 userId, QObject* sender);
+    void deleteRoom(const quint32 roomId, QObject* sender);
     
     private:
     ControllerUser& _controllerUser;

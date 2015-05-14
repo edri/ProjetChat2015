@@ -104,3 +104,10 @@ void ClientControllerInput::disconnect(const quint32 userId, QObject* sender)
 
     _controllerChat->userStatusChanged(userId, false);
 }
+
+void ClientControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
+{
+    Q_UNUSED(sender);
+
+    _controllerChat->deleteRoomInModel(roomId);
+}

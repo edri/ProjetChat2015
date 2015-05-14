@@ -114,6 +114,15 @@ QByteArray Interpretor::userId(const QString& userName, bool exists, quint32 use
     return data;
 }
 
+QByteArray Interpretor::deleteRoom(const quint32 roomId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::DELETE_ROOM << roomId;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -212,7 +221,8 @@ void Interpretor::processData(const QByteArray& data)
             stream >> room;
             _dispatcher.room(room, edited, sender());
         }
-        
+        break;
+
         case MessageType::USER_ID:
         {
             QString userName;
@@ -223,6 +233,15 @@ void Interpretor::processData(const QByteArray& data)
             stream >> userId;
             _dispatcher.userId(userName, exists, userId, sender());
         }
+        break;
+
+        case MessageType::DELETE_ROOM:
+        {
+            quint32 roomId;
+            stream >> roomId;
+            _dispatcher.deleteRoom(roomId, sender());
+        }
+        break;
         
         case MessageType::SERVER_ERROR:
         {

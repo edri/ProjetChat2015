@@ -40,6 +40,8 @@ class ClientControllerInput : public ControllerInput
     void connected(const quint32 userId, QObject* sender);
     // Method called when another user disconnects
     void disconnect(const quint32 userId, QObject* sender);
+    // Method called when an administrator want to delete a room.
+    void deleteRoom(const quint32 roomId, QObject* sender);
     
 };
 

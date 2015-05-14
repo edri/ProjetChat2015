@@ -52,3 +52,10 @@ void ServerControllerInput::createAccount(ModelUser& user, QObject* sender)
 {
     _controllerUser.createAccount(user, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
+{
+    Q_UNUSED(roomId);
+    Q_UNUSED(sender);
+    // IL FAUT FAIRE QQCH ICI.
+}

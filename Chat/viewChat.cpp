@@ -271,6 +271,20 @@ void ViewChat::updateButtons(const bool isAdmin) const
     }
 }
 
+void ViewChat::deleteRoom(const quint32 roomId) const
+{
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        {
+            _ui->tre_rooms->takeTopLevelItem(i);
+            break;
+        }
+    }
+}
+
 void ViewChat::on_btn_send_clicked()
 {
     if (!_ui->ldt_message->text().trimmed().isEmpty())

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
+    <width>927</width>
     <height>585</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>280</x>
       <y>10</y>
-      <width>491</width>
+      <width>631</width>
       <height>20</height>
      </rect>
     </property>
@@ -214,7 +214,7 @@
      <rect>
       <x>270</x>
       <y>500</y>
-      <width>511</width>
+      <width>651</width>
       <height>51</height>
      </rect>
     </property>
@@ -305,7 +305,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>509</width>
+       <width>649</width>
        <height>49</height>
       </rect>
      </property>
@@ -314,7 +314,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>391</width>
+        <width>531</width>
         <height>31</height>
        </rect>
       </property>
@@ -334,7 +334,7 @@
      <widget class="QPushButton" name="btn_send">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>550</x>
         <y>10</y>
         <width>93</width>
         <height>28</height>
@@ -351,7 +351,7 @@
      <rect>
       <x>270</x>
       <y>40</y>
-      <width>511</width>
+      <width>651</width>
       <height>461</height>
      </rect>
     </property>
@@ -423,6 +423,9 @@
       <height>25</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>Editer...</string>
     </property>
@@ -443,7 +446,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>790</width>
+     <width>927</width>
      <height>26</height>
     </rect>
    </property>
