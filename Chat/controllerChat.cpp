@@ -116,7 +116,9 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 
 void ControllerChat::askServerToDeleteRoom(const quint32 roomId) const
 {
-    _co->deleteRoom(roomId);
+    // The connected user must be a room's administrator to delete it.
+    if (_model->getRoom(roomId).getAdmins().contains(_currentUser->getIdUser()))
+        _co->deleteRoom(roomId);
 }
 
 void ControllerChat::deleteRoomInModel(const quint32 roomId) const
