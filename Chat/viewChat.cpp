@@ -279,6 +279,7 @@ void ViewChat::deleteRoom(const quint32 roomId) const
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
+            _ui->tre_messages->clear();
             _ui->tre_rooms->takeTopLevelItem(i);
             break;
         }
@@ -302,7 +303,13 @@ void ViewChat::on_ldt_message_returnPressed()
 
 void ViewChat::on_btn_leaveRoom_clicked()
 {
+    int ret = QMessageBox::warning(this, tr("Attention"),
+                                   tr("Êtes-vous sûr de vouloir quitter cette salle ?"),
+                                   tr("Oui"), tr("Non"));
 
+    // "Yes" pressed.
+    if (ret == 0)
+        emit requestLeaveRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
 }
 
 void ViewChat::on_btn_joinRoom_clicked()
@@ -342,9 +349,6 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
 
 void ViewChat::on_tre_messages_itemChanged(QTreeWidgetItem* item, int column)
 {
-    /*item->setBackgroundColor(0, QColor(255, 0, 0));
-    item->setBackgroundColor(1, QColor(255, 0, 0));*/
-
     if (column == 1 && !_isEditingMessage)
         emit requestEditMessage(item);
 
@@ -370,5 +374,11 @@ void ViewChat::on_btn_edit_clicked()
 
 void ViewChat::on_btn_delete_clicked()
 {
-    emit requestDeleteRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+    int ret = QMessageBox::warning(this, tr("Attention"),
+                                   tr("Êtes-vous sûr de vouloir supprimer cette salle ?"),
+                                   tr("Oui"), tr("Non"));
+
+    // "Yes" pressed.
+    if (ret == 0)
+        emit requestDeleteRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
 }

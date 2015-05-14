@@ -89,6 +89,14 @@ class ModelChator
         // Last edited by Jan Purro on 24.04.2015 16:40
         void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
 		void deleteRoom(const quint32 idRoom);
+
+        /*
+         * Created by Miguel Santamaria on 14.05.2015 19:55
+         *
+         * Unsuscribe the given user to the given room.
+         *
+         */
+        void removeUser(const quint32 userId, const quint32 roomId);
 		
         // Last edited by Jan Purro on 24.04.2015 16:47
         ModelMessage& getMessage(const quint32 idRoom, const quint32 idMessage);
@@ -152,6 +160,13 @@ class ModelRoom
          * Last edited by Jan Purro, on 24.04.2015 15:35
          */
         void addUser(const quint32 idUser);
+
+        /*
+         * Created by Miguel Santamaria on 14.05.2015 19:57
+         *
+         * Remove the given user of the room.
+         */
+        void removeUser(const quint32 userId);
         
         /*
          * Created by Jan Purro, on 24.04.2015 15:35

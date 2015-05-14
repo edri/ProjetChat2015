@@ -123,6 +123,15 @@ QByteArray Interpretor::deleteRoom(const quint32 roomId)
     return data;
 }
 
+QByteArray Interpretor::leaveRoom(const quint32 roomId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::LEAVE_ROOM << roomId;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -242,7 +251,15 @@ void Interpretor::processData(const QByteArray& data)
             _dispatcher.deleteRoom(roomId, sender());
         }
         break;
-        
+
+        case MessageType::LEAVE_ROOM:
+        {
+            quint32 roomId;
+            stream >> roomId;
+            _dispatcher.leaveRoom(roomId, sender());
+        }
+        break;
+
         case MessageType::SERVER_ERROR:
         {
             ModelError error;

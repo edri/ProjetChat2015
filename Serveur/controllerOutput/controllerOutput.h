@@ -38,6 +38,12 @@ class ControllerOutput
      * Created by Miguel Santamaria on 13.05.2015 08:52
      */
     void deleteRoom(const quint32 roomId);
+
+    /* Called when an user want to leave a room.
+     * - roomId : the room's id the user want to leave.
+     * Created by Miguel Santamaria on 14.05.2015 18:31
+     */
+    void leaveRoom(const quint32 roomId);
     
     private:
     Connector& _connector;

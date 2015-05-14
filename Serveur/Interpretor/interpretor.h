@@ -44,6 +44,7 @@ class Interpretor : public QObject
     // Serialize a room's id.
     // Created by Miguel Santamaria on 13.05.2015 09:04
     QByteArray deleteRoom(const quint32 roomId);
+    QByteArray leaveRoom(const quint32 roomId);
     
     public slots:
     void processData(const QByteArray& data);

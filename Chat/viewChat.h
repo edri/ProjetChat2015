@@ -2,8 +2,9 @@
 #define VIEWCHAT_H
 
 #include <QMainWindow>
-#include <QDate>
 #include <QBitmap>
+#include <QDate>
+#include <QMessageBox>
 #include <QTreeWidgetItem>
 
 namespace Ui
@@ -57,6 +58,7 @@ signals:
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
     void requestDeleteRoom(const quint32 roomId) const;
+    void requestLeaveRoom(const quint32 roomId) const;
 };
 
 #endif // VIEWCHAT_H

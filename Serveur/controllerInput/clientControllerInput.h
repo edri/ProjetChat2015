@@ -42,6 +42,8 @@ class ClientControllerInput : public ControllerInput
     void disconnect(const quint32 userId, QObject* sender);
     // Method called when an administrator want to delete a room.
     void deleteRoom(const quint32 roomId, QObject* sender);
+    // Method called when an user want to leave a room.
+    void leaveRoom(const quint32 roomId, QObject* sender);
     
 };
 

@@ -43,8 +43,10 @@ public slots :
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
     void editMessage(const QTreeWidgetItem* item) const;
-    void deleteRoomInDb(const quint32 roomId) const;
+    void askServerToDeleteRoom(const quint32 roomId) const;
     void deleteRoomInModel(const quint32 roomId) const;
+    void askServerToLeaveRoom(const quint32 roomId) const;
+    void leaveRoomInModel(const quint32 roomId) const;
 
 };
 
