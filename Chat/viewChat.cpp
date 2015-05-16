@@ -4,7 +4,8 @@
 ViewChat::ViewChat(QWidget *parent) :
     QMainWindow(parent),
     _ui(new Ui::viewChat),
-    _isEditingMessage(false)
+    _isEditingMessage(false),
+    _menu(new QMenu(this))
 {
     _ui->setupUi(this);
 
@@ -13,15 +14,21 @@ ViewChat::ViewChat(QWidget *parent) :
 
     _ui->tre_rooms->setIconSize(QSize(30, 30));
     _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 50);
+
     _ui->tre_messages->expandAll();
     _ui->tre_messages->resizeColumnToContents(3);
     _ui->tre_messages->header()->close();
+
     _ui->ldt_message->setFocus();
+
+    _ui->tre_messages->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_ui->tre_messages, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMessage(const QPoint&)));
 }
 
 ViewChat::~ViewChat()
 {
     delete _ui;
+    delete _menu;
 }
 
 void ViewChat::setConnectedAsText(const QString& user)
@@ -144,6 +151,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                     QTreeWidgetItem* messageItem = new QTreeWidgetItem();
                     messageItem->setData(0, Qt::UserRole, date);
                     messageItem->setData(1, Qt::UserRole, messageId);
+                    messageItem->setData(2, Qt::UserRole, isCurrentUsersMessage);
                     messageItem->setText(0, "[" + date.toString("HH:mm") + "] <" + userName + ">");
                     messageItem->setText(1, content);
 
@@ -381,4 +389,34 @@ void ViewChat::on_btn_delete_clicked()
     // "Yes" pressed.
     if (ret == 0)
         emit requestDeleteRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+}
+
+void ViewChat::showContextMessage(const QPoint &pos)
+{
+    // The selected item must be the current user's property.
+    if (_ui->tre_messages->selectedItems().at(0)->data(2, Qt::UserRole).toBool())
+    {
+        QAction* editAct = _menu->addAction(QIcon("img/edit.png"), tr("Editer"));
+        QAction* delAct = _menu->addAction(QIcon("img/delete.png"), tr("Supprimer"));
+
+        QAction* act = _menu->exec(_ui->tre_messages->viewport()->mapToGlobal(pos));
+
+        if (act == editAct)
+        {
+            _ui->tre_messages->editItem(_ui->tre_messages->selectedItems().at(0), 1);
+            delete delAct;
+        }
+        else if (act == delAct)
+        {
+            emit requestDeleteMessage(_ui->tre_messages->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+            delete editAct;
+        }
+        else
+        {
+            delete editAct;
+            delete delAct;
+        }
+
+        delete act;
+    }
 }

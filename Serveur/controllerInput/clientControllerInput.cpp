@@ -112,8 +112,9 @@ void ClientControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
     _controllerChat->deleteRoomInModel(roomId);
 }
 
-void ClientControllerInput::leaveRoom(const quint32 roomId, QObject *sender)
+void ClientControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject *sender)
 {
+    Q_UNUSED(userId);
     Q_UNUSED(sender);
 
     _controllerChat->leaveRoomInModel(roomId);

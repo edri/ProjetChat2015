@@ -128,7 +128,7 @@ QByteArray Interpretor::leaveRoom(const quint32 roomId)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::LEAVE_ROOM << roomId;
+    stream << (quint32) MessageType::LEAVE << roomId;
     return data;
 }
 
@@ -200,10 +200,10 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::LEAVE:
         {
-            quint32 idUser;
-            quint32 idRoom;
-            stream >> idUser >> idRoom;
-            // Envoyer ces objets quelque part
+            quint32 userId;
+            quint32 roomId;
+            stream >> userId >> roomId;
+            _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;
         
@@ -250,14 +250,6 @@ void Interpretor::processData(const QByteArray& data)
             quint32 roomId;
             stream >> roomId;
             _dispatcher.deleteRoom(roomId, sender());
-        }
-        break;
-
-        case MessageType::LEAVE_ROOM:
-        {
-            quint32 roomId;
-            stream >> roomId;
-            _dispatcher.leaveRoom(roomId, sender());
         }
         break;
 
