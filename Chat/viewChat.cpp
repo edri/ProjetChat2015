@@ -117,8 +117,8 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
     quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
     quint32 nbTopRoomItems = _ui->tre_rooms->topLevelItemCount();
     quint32 nbChildren;
-    bool createNewDate = false;
-    QDate tempDate;
+    /*bool createNewDate = false;
+    QDate tempDate;*/
 
     for (quint32 k = 0; k < nbTopRoomItems; ++k)
     {
@@ -157,7 +157,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
 
                     if (lastUpdateDate != date)
                     {
-                        messageItem->setText(2, "[Edité le " + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
+                        messageItem->setText(2, "[" + tr("Edité le ") + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
                         messageItem->setTextColor(2, QColor(192, 192, 192));
                         messageItem->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
                     }
@@ -171,7 +171,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                     }
 
                     // Select the top-level item in which we will put the new message.
-                    for (i = 0; i < nbTopMessageItems; ++i)
+                    /*for (i = 0; i < nbTopMessageItems; ++i)
                     {
                         tempDate = QDate::fromString(_ui->tre_messages->topLevelItem(i)->text(0), "dd.MM.yyyy");
 
@@ -183,18 +183,20 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                             createNewDate = true;
                             break;
                         }
-                    }
+                    }*/
 
-                    if (i < nbTopMessageItems && !createNewDate)
+                    if (nbTopMessageItems && QDate::fromString(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->text(0), "dd.MM.yyyy") == date.date())
+                    /*if (i < nbTopMessageItems && !createNewDate)*/
                     {
                         // Insert the message in the right place in the top-level item.
-                        for (j = 0; j < (quint32)_ui->tre_messages->topLevelItem(i)->childCount(); ++j)
+                        /*for (j = 0; j < (quint32)_ui->tre_messages->topLevelItem(i)->childCount(); ++j)
                         {
                             if (_ui->tre_messages->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toDateTime() > date)
                                 break;
                         }
 
-                        _ui->tre_messages->topLevelItem(i)->insertChild(j, messageItem);
+                        _ui->tre_messages->topLevelItem(i)->insertChild(j, messageItem);*/
+                        _ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->insertChild(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->childCount(), messageItem);
                     }
                     else
                     {
@@ -204,8 +206,11 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                         dateItem->setText(0, date.toString("dd.MM.yyyy"));
                         dateItem->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
 
-                        _ui->tre_messages->insertTopLevelItem(i, dateItem);
-                        _ui->tre_messages->topLevelItem(i)->insertChild(0, messageItem);
+                        /*_ui->tre_messages->insertTopLevelItem(i, dateItem);
+                        _ui->tre_messages->topLevelItem(i)->insertChild(0, messageItem);*/
+                        _ui->tre_messages->insertTopLevelItem(nbTopMessageItems, dateItem);
+                        _ui->tre_messages->topLevelItem(nbTopMessageItems)->insertChild(0, messageItem);
+
                         _ui->tre_messages->expandItem(dateItem);
                     }
 
