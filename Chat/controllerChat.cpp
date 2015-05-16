@@ -117,12 +117,12 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 
 void ControllerChat::askServerToDeleteMessage(const quint32 messageId) const
 {
-    //_co->deleteMessage(messageId);
+    _co->deleteMessage(messageId);
 }
 
 void ControllerChat::deleteMessageInModel(const quint32 messageId) const
 {
-
+    _view->deleteMessage(messageId);
 }
 
 void ControllerChat::askServerToDeleteRoom(const quint32 roomId) const

@@ -7,6 +7,13 @@ void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerRoom.processMessage(message, edited, (ChatorClient*) sender);
 }
 
+void ServerControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+{
+    Q_UNUSED(messageId);
+    Q_UNUSED(sender);
+    // IL FAUT FAIRE QQCH ICI.
+}
+
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;

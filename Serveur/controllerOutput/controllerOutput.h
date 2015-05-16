@@ -10,6 +10,13 @@ class ControllerOutput
     ControllerOutput(Connector& connector, Interpretor& interpretor);
     
     void sendMessage(const ModelMessage& message, const bool edited);
+
+    /* Called when an user want to delete its message.
+     * - messageId : the message's id we want to delete.
+     * Created by Miguel Santamaria on 16.05.2015 21:30
+     */
+    void deleteMessage(const quint32 messageId);
+
     void login(const QString& pseudo, const QString& hashedPwd);
     void createAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
@@ -22,7 +29,7 @@ class ControllerOutput
      * - edited : false if the room is created, true if the room is an already existing modfied room.
      * 
      * Oui je sais le nom est peut être pas le plus génial qui soit. Mais bon createRoom ou editRoom c'est pas cool non plus, alors tant que c'est le seul truc qui concerne directement les salles autant le garder.
-     * Created by Jan Purro 26.04.2015 14:46 
+     * Created by Jan Purro on 26.04.2015 14:46
      */
     void room(const ModelRoom& room, bool edited = false);
     

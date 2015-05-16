@@ -13,6 +13,15 @@ QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edit
     return data;
 }
 
+QByteArray Interpretor::deleteMessage(const quint32 messageId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::DELETE_MESSAGE << messageId;
+    return data;
+}
+
 QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
     QByteArray data;
@@ -170,6 +179,13 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
+        case MessageType::DELETE_MESSAGE:
+        {
+            quint32 messageId;
+            stream >> messageId;
+            _dispatcher.deleteMessage(messageId, sender());
+        }
+
         case MessageType::LOGIN:
         {
             QString pseudo;

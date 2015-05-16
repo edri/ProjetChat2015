@@ -279,6 +279,32 @@ void ViewChat::updateButtons(const bool isAdmin) const
     }
 }
 
+void ViewChat::deleteMessage(const quint32 messageId) const
+{
+    quint32 nbMessageDates = _ui->tre_messages->topLevelItemCount();
+    quint32 nbMessages;
+
+    for (quint32 i = 0; i < nbMessageDates; ++i)
+    {
+        nbMessages = _ui->tre_messages->topLevelItem(i)->childCount();
+
+        for (quint32 j = 0; j < nbMessages; ++j)
+        {
+            int a = _ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole).toInt();
+            if (a == messageId)
+            {
+                _ui->tre_messages->topLevelItem(i)->takeChild(j);
+
+                // If the top-level item has no child anymore, we take it too.
+                if (--nbMessages == 0)
+                    _ui->tre_messages->takeTopLevelItem(i);
+
+                return;
+            }
+        }
+    }
+}
+
 void ViewChat::deleteRoom(const quint32 roomId) const
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
@@ -408,7 +434,7 @@ void ViewChat::showContextMessage(const QPoint &pos)
         }
         else if (act == delAct)
         {
-            emit requestDeleteMessage(_ui->tre_messages->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+            emit requestDeleteMessage(_ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toInt());
             delete editAct;
         }
         else

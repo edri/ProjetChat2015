@@ -38,6 +38,7 @@ public:
     quint32 getSelectedRoomId() const;
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
     void updateButtons(const bool isAdmin) const;
+    void deleteMessage(const quint32 messageId) const;
     void deleteRoom(const quint32 roomId) const;
 
 private slots:

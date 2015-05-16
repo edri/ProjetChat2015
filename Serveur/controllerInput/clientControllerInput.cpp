@@ -34,6 +34,13 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerChat->receiveMessage(message, edited);
 }
 
+void ClientControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+{
+    Q_UNUSED(sender);
+
+    _controllerChat->deleteMessageInModel(messageId);
+}
+
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
     // Sender is unused in the client controller.

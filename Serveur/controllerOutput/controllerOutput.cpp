@@ -8,6 +8,11 @@ void ControllerOutput::sendMessage(const ModelMessage& message, const bool edite
     _connector.send(_interpretor.sendMessage(message, edited));
 }
 
+void ControllerOutput::deleteMessage(const quint32 messageId)
+{
+    _connector.send(_interpretor.deleteMessage(messageId));
+}
+
 void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)
 {
     _connector.send(_interpretor.login(pseudo, hashedPwd));
