@@ -427,8 +427,8 @@ void ViewChat::showContextMessage(const QPoint &pos)
     // The selected item must be the current user's property.
     if (_ui->tre_messages->selectedItems().at(0)->data(2, Qt::UserRole).toBool())
     {
-        QAction* editAct = _menu->addAction(QIcon("img/edit.png"), tr("Editer"));
-        QAction* delAct = _menu->addAction(QIcon("img/delete.png"), tr("Supprimer"));
+        QAction* editAct = _menu->addAction(QIcon(":/icons/img/edit.png"), tr("Editer"));
+        QAction* delAct = _menu->addAction(QIcon(":/icons/img/delete.png"), tr("Supprimer"));
 
         QAction* act = _menu->exec(_ui->tre_messages->viewport()->mapToGlobal(pos));
 
