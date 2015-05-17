@@ -13,6 +13,15 @@ QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edit
     return data;
 }
 
+QByteArray Interpretor::deleteMessage(const quint32 messageId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::DELETE_MESSAGE << messageId;
+    return data;
+}
+
 QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
     QByteArray data;
@@ -128,7 +137,7 @@ QByteArray Interpretor::leaveRoom(const quint32 roomId)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::LEAVE_ROOM << roomId;
+    stream << (quint32) MessageType::LEAVE << roomId;
     return data;
 }
 
@@ -170,6 +179,13 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
+        case MessageType::DELETE_MESSAGE:
+        {
+            quint32 messageId;
+            stream >> messageId;
+            _dispatcher.deleteMessage(messageId, sender());
+        }
+
         case MessageType::LOGIN:
         {
             QString pseudo;
@@ -200,10 +216,10 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::LEAVE:
         {
-            quint32 idUser;
-            quint32 idRoom;
-            stream >> idUser >> idRoom;
-            // Envoyer ces objets quelque part
+            quint32 userId;
+            quint32 roomId;
+            stream >> userId >> roomId;
+            _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;
         
@@ -250,14 +266,6 @@ void Interpretor::processData(const QByteArray& data)
             quint32 roomId;
             stream >> roomId;
             _dispatcher.deleteRoom(roomId, sender());
-        }
-        break;
-
-        case MessageType::LEAVE_ROOM:
-        {
-            quint32 roomId;
-            stream >> roomId;
-            _dispatcher.leaveRoom(roomId, sender());
         }
         break;
 

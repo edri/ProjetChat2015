@@ -20,6 +20,7 @@ private:
     Ui::viewChat* _ui;
     quint32 _selectedRoomId;
     bool _isEditingMessage;
+    QMenu* _menu;
 
 public:
     explicit ViewChat(QWidget *parent = 0);
@@ -37,6 +38,7 @@ public:
     quint32 getSelectedRoomId() const;
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
     void updateButtons(const bool isAdmin) const;
+    void deleteMessage(const quint32 messageId) const;
     void deleteRoom(const quint32 roomId) const;
 
 private slots:
@@ -51,12 +53,14 @@ private slots:
     void on_actionQuitter_triggered();
     void on_btn_edit_clicked();
     void on_btn_delete_clicked();
+    void showContextMessage(const QPoint& pos);
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule() const;
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
+    void requestDeleteMessage(const quint32 messageId) const;
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
 };
