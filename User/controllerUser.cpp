@@ -16,7 +16,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
-    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServeur()));
+    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServer()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 
 
