@@ -20,17 +20,29 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_6">
     <item>
-     <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,2" columnminimumwidth="300,500">
+     <layout class="QGridLayout" name="glt_main" columnstretch="1,2" columnminimumwidth="300,500">
       <property name="topMargin">
        <number>0</number>
       </property>
       <item row="1" column="0">
-       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
+       <layout class="QVBoxLayout" name="vlt_rooms" stretch="0,0">
         <property name="spacing">
          <number>0</number>
         </property>
         <item>
          <widget class="QTreeWidget" name="tre_rooms">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAsNeeded</enum>
           </property>
@@ -62,7 +74,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
+         <layout class="QVBoxLayout" name="vlt_roomButtons">
           <item>
            <widget class="QWidget" name="wdg_roomButtons" native="true">
             <property name="sizePolicy">
@@ -75,6 +87,12 @@
              <size>
               <width>0</width>
               <height>100</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>16777215</height>
              </size>
             </property>
             <property name="palette">
@@ -569,12 +587,6 @@
               </widget>
              </item>
             </layout>
-            <zorder>btn_joinRoom</zorder>
-            <zorder>btn_newRoom</zorder>
-            <zorder>btn_leaveRoom</zorder>
-            <zorder>btn_joinRoom</zorder>
-            <zorder>btn_newRoom</zorder>
-            <zorder>btn_leaveRoom</zorder>
            </widget>
           </item>
          </layout>
@@ -582,7 +594,7 @@
        </layout>
       </item>
       <item row="1" column="1">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="vlt_chat">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -633,7 +645,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="hlt_chatMessage">
           <item>
            <widget class="QWidget" name="wdg_chat" native="true">
             <property name="sizePolicy">
@@ -707,7 +719,7 @@
        </layout>
       </item>
       <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="hlt_roomButtons">
         <property name="spacing">
          <number>4</number>
         </property>
@@ -746,7 +758,7 @@
        </layout>
       </item>
       <item row="0" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="hlt_info">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
@@ -759,6 +771,64 @@
         <property name="bottomMargin">
          <number>3</number>
         </property>
+        <item>
+         <widget class="QPushButton" name="btn_expandAll">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Tout développer</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="icons.qrc">
+            <normaloff>:/icons/img/expand.png</normaloff>:/icons/img/expand.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_collapseAll">
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Tout réduire</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="icons.qrc">
+            <normaloff>:/icons/img/collapse.png</normaloff>:/icons/img/collapse.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>&lt;</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="lbl_connectedAs">
           <property name="text">
@@ -774,11 +844,6 @@
      </layout>
     </item>
    </layout>
-   <zorder>tre_rooms</zorder>
-   <zorder>sca_message</zorder>
-   <zorder>tre_messages</zorder>
-   <zorder>sca_buttons</zorder>
-   <zorder>gridLayoutWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

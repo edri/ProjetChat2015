@@ -3,9 +3,9 @@
 ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
                                Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom)
 {
-    _view = new ViewChat();
-
     _model = model;
+    _view = new ViewChat(_model);
+
     _currentUser = currentUser;
     _cci = cci;
     _i = i;
@@ -30,8 +30,8 @@ ControllerChat::~ControllerChat()
 
 void ControllerChat::showView() const
 {
+    ViewChat::currentUserId = _currentUser->getIdUser();
     _view->setConnectedAsText(_currentUser->getUserName());
-
     _view->show();
 }
 
@@ -52,9 +52,7 @@ void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) co
     else
         _model->modifyMessage(message.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
 
-    _view->loadRoomMessage(message.getIdRoom(), message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                           message.getContent(), message.getDate(), message.getEditionDate(),
-                           (message.getIdUser() == _currentUser->getIdUser()), edited);
+    _view->loadRoomMessage(message, edited);
 }
 
 void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnected) const
@@ -72,13 +70,7 @@ void ControllerChat::loadRoomMessages(const quint32 idRoom) const
     ModelRoom& room = _model->getRoom(idRoom);
 
     _view->updateButtons(room.getAdmins().contains(_currentUser->getIdUser()));
-
-    for (ModelMessage& message : room.getMessages())
-    {
-        _view->loadRoomMessage(idRoom, message.getIdMessage(), _model->getUser(message.getIdUser()).getUserName(),
-                               message.getContent(), message.getDate(), message.getEditionDate(),
-                               (message.getIdUser() == _currentUser->getIdUser()));
-    }
+    _view->loadRoomMessages(_model->getRoom(idRoom).getMessages());
 }
 
 void ControllerChat::loadUserRooms() const

@@ -1,9 +1,12 @@
 #include "viewChat.h"
 #include "ui_viewChat.h"
 
-ViewChat::ViewChat(QWidget *parent) :
+quint32 ViewChat::currentUserId;
+
+ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     QMainWindow(parent),
     _ui(new Ui::viewChat),
+    _model(model),
     _isEditingMessage(false),
     _menu(new QMenu(this))
 {
@@ -25,6 +28,48 @@ ViewChat::~ViewChat()
 {
     delete _ui;
     delete _menu;
+}
+
+void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const
+{
+    QTreeWidgetItem* messageItem = new QTreeWidgetItem();
+    messageItem->setData(0, Qt::UserRole, message.getDate());
+    messageItem->setData(1, Qt::UserRole, message.getIdMessage());
+    messageItem->setData(2, Qt::UserRole, isCurrentUserMessage);
+    messageItem->setText(0, "[" + message.getDate().toString("HH:mm") + "] <" + _model->getUser(message.getIdUser()).getUserName() + ">");
+    messageItem->setText(1, message.getContent());
+
+    if (message.getEditionDate() != message.getDate())
+    {
+        messageItem->setText(2, "[" + tr("Edité le ") + message.getEditionDate().toString("dd.MM.yyyy à HH:mm") + "]");
+        messageItem->setTextColor(2, QColor(192, 192, 192));
+        messageItem->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
+    }
+
+    if (isCurrentUserMessage)
+    {
+        messageItem->setBackgroundColor(0, QColor(234, 239, 245));
+        messageItem->setBackgroundColor(1, QColor(234, 239, 245));
+        messageItem->setBackgroundColor(2, QColor(234, 239, 245));
+        messageItem->setFlags(messageItem->flags() | Qt::ItemIsEditable);
+    }
+
+    if (nbTopMessageItems && QDate::fromString(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->text(0), "dd.MM.yyyy") == message.getDate().date())
+        _ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->insertChild(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->childCount(), messageItem);
+    else
+    {
+        // Create the top-level item, and insert the message in the first subrow.
+        QTreeWidgetItem* dateItem = new QTreeWidgetItem();
+        dateItem->setData(0, Qt::UserRole, message.getDate());
+        dateItem->setText(0, message.getDate().toString("dd.MM.yyyy"));
+        dateItem->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
+
+        _ui->tre_messages->insertTopLevelItem(nbTopMessageItems, dateItem);
+        _ui->tre_messages->topLevelItem(nbTopMessageItems)->insertChild(0, messageItem);
+        _ui->tre_messages->expandItem(dateItem);
+
+        ++nbTopMessageItems;
+    }
 }
 
 void ViewChat::setConnectedAsText(const QString& user)
@@ -105,20 +150,29 @@ void ViewChat::selectFirstRoom() const
         _ui->tre_rooms->setCurrentItem(_ui->tre_rooms->topLevelItem(0));
 }
 
-void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, const QString& userName,
-                               const QString& content, const QDateTime& date, const QDateTime& lastUpdateDate,
-                               const bool isCurrentUsersMessage, const bool edited)
+void ViewChat::loadRoomMessages(const QMap<quint32, ModelMessage>& messages)
+{
+    quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
+
+    for (ModelMessage message : messages)
+        addMessageToTree(nbTopMessageItems, message, message.getIdUser() == currentUserId);
+
+    _ui->tre_messages->resizeColumnToContents(0);
+    _ui->tre_messages->resizeColumnToContents(1);
+    _ui->tre_messages->resizeColumnToContents(2);
+    _ui->tre_messages->scrollToBottom();
+}
+
+void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
 {
     quint32 i, j;
     quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
     quint32 nbTopRoomItems = _ui->tre_rooms->topLevelItemCount();
     quint32 nbChildren;
-    /*bool createNewDate = false;
-    QDate tempDate;*/
 
     for (quint32 k = 0; k < nbTopRoomItems; ++k)
     {
-        if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == message.getIdRoom())
         {
             if (_ui->tre_rooms->topLevelItem(k)->isSelected())
             {
@@ -131,11 +185,11 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
 
                         for (j = 0; j < nbChildren; ++j)
                         {
-                            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole) == messageId)
+                            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole) == message.getIdMessage())
                             {
                                 _isEditingMessage = true;
-                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(1, content);
-                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
+                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(1, message.getContent());
+                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + message.getEditionDate().toString("dd.MM.yyyy à HH:mm") + "]");
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setTextColor(2, QColor(192, 192, 192));
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
                             }
@@ -144,71 +198,7 @@ void ViewChat::loadRoomMessage(const quint32 roomId, const quint32 messageId, co
                 }
                 else
                 {
-                    QTreeWidgetItem* messageItem = new QTreeWidgetItem();
-                    messageItem->setData(0, Qt::UserRole, date);
-                    messageItem->setData(1, Qt::UserRole, messageId);
-                    messageItem->setData(2, Qt::UserRole, isCurrentUsersMessage);
-                    messageItem->setText(0, "[" + date.toString("HH:mm") + "] <" + userName + ">");
-                    messageItem->setText(1, content);
-
-                    if (lastUpdateDate != date)
-                    {
-                        messageItem->setText(2, "[" + tr("Edité le ") + lastUpdateDate.toString("dd.MM.yyyy à HH:mm") + "]");
-                        messageItem->setTextColor(2, QColor(192, 192, 192));
-                        messageItem->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
-                    }
-
-                    if (isCurrentUsersMessage)
-                    {
-                        messageItem->setBackgroundColor(0, QColor(234, 239, 245));
-                        messageItem->setBackgroundColor(1, QColor(234, 239, 245));
-                        messageItem->setBackgroundColor(2, QColor(234, 239, 245));
-                        messageItem->setFlags(messageItem->flags() | Qt::ItemIsEditable);
-                    }
-
-                    // Select the top-level item in which we will put the new message.
-                    /*for (i = 0; i < nbTopMessageItems; ++i)
-                    {
-                        tempDate = QDate::fromString(_ui->tre_messages->topLevelItem(i)->text(0), "dd.MM.yyyy");
-
-                        if (tempDate == date.date())
-                            break;
-                        else if (tempDate > date.date())
-                        {
-                            // The top-level item doesn't exist yet, we must create it.
-                            createNewDate = true;
-                            break;
-                        }
-                    }*/
-
-                    if (nbTopMessageItems && QDate::fromString(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->text(0), "dd.MM.yyyy") == date.date())
-                    /*if (i < nbTopMessageItems && !createNewDate)*/
-                    {
-                        // Insert the message in the right place in the top-level item.
-                        /*for (j = 0; j < (quint32)_ui->tre_messages->topLevelItem(i)->childCount(); ++j)
-                        {
-                            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toDateTime() > date)
-                                break;
-                        }
-
-                        _ui->tre_messages->topLevelItem(i)->insertChild(j, messageItem);*/
-                        _ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->insertChild(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->childCount(), messageItem);
-                    }
-                    else
-                    {
-                        // Create the top-level item, and insert the message in the first subrow.
-                        QTreeWidgetItem* dateItem = new QTreeWidgetItem();
-                        dateItem->setData(0, Qt::UserRole, date);
-                        dateItem->setText(0, date.toString("dd.MM.yyyy"));
-                        dateItem->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
-
-                        /*_ui->tre_messages->insertTopLevelItem(i, dateItem);
-                        _ui->tre_messages->topLevelItem(i)->insertChild(0, messageItem);*/
-                        _ui->tre_messages->insertTopLevelItem(nbTopMessageItems, dateItem);
-                        _ui->tre_messages->topLevelItem(nbTopMessageItems)->insertChild(0, messageItem);
-
-                        _ui->tre_messages->expandItem(dateItem);
-                    }
+                    addMessageToTree(nbTopMessageItems, message, message.getIdUser() == currentUserId);
 
                     _ui->tre_messages->resizeColumnToContents(0);
                     _ui->tre_messages->scrollToBottom();
@@ -448,7 +438,19 @@ void ViewChat::showContextMessage(const QPoint &pos)
     }
 }
 
-void ViewChat::on_tre_rooms_expanded(const QModelIndex &index)
+void ViewChat::resizeEvent(QResizeEvent *event)
 {
-    _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 50);
+    Q_UNUSED(event);
+
+    _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 60);
+}
+
+void ViewChat::on_btn_expandAll_clicked()
+{
+    _ui->tre_messages->expandAll();
+}
+
+void ViewChat::on_btn_collapseAll_clicked()
+{
+    _ui->tre_messages->collapseAll();
 }
