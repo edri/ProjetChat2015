@@ -12,17 +12,13 @@ ViewChat::ViewChat(QWidget *parent) :
     _ui->btn_edit->hide();
     _ui->btn_delete->hide();
 
-    _ui->tre_rooms->setIconSize(QSize(30, 30));
-    _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 50);
-
     _ui->tre_messages->expandAll();
     _ui->tre_messages->resizeColumnToContents(3);
     _ui->tre_messages->header()->close();
-
-    _ui->ldt_message->setFocus();
-
     _ui->tre_messages->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(_ui->tre_messages, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMessage(const QPoint&)));
+
+    _ui->ldt_message->setFocus();
 }
 
 ViewChat::~ViewChat()
@@ -450,4 +446,9 @@ void ViewChat::showContextMessage(const QPoint &pos)
 
         delete act;
     }
+}
+
+void ViewChat::on_tre_rooms_expanded(const QModelIndex &index)
+{
+    _ui->tre_rooms->setColumnWidth(0, _ui->tre_rooms->width() - 50);
 }

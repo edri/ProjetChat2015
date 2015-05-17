@@ -55,6 +55,8 @@ private slots:
     void on_btn_delete_clicked();
     void showContextMessage(const QPoint& pos);
 
+    void on_tre_rooms_expanded(const QModelIndex &index);
+
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule() const;
