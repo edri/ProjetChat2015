@@ -24,6 +24,8 @@ QByteArray Interpretor::deleteMessage(const quint32 messageId)
 
 QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
+    qDebug() << "Envoi de login";
+    
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
@@ -181,6 +183,7 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::DELETE_MESSAGE:
         {
+            qDebug() << "Déserialisation deletemessage";
             quint32 messageId;
             stream >> messageId;
             _dispatcher.deleteMessage(messageId, sender());
@@ -188,6 +191,7 @@ void Interpretor::processData(const QByteArray& data)
 
         case MessageType::LOGIN:
         {
+            qDebug() << "Déserialisation login";
             QString pseudo;
             QString hashedPwd;
             stream >> pseudo >> hashedPwd;

@@ -20,9 +20,10 @@ class ControllerDB
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);
     void editMessage(const ModelMessage& message);
-    void deleteMessage(const ModelMessage& message);
+    void deleteMessage(const quint32 id);
     ModelRoom infoRoom(const quint32 id);
     quint32 createRoom(const ModelRoom& room);
+    ModelMessage infoMessage(const quint32 id);
     
     private :
     QSqlDatabase _db;

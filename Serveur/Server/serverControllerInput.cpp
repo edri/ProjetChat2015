@@ -9,9 +9,7 @@ void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edi
 
 void ServerControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
 {
-    Q_UNUSED(messageId);
-    Q_UNUSED(sender);
-    // IL FAUT FAIRE QQCH ICI.
+    _controllerRoom.deleteMessage(messageId, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)

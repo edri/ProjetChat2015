@@ -130,10 +130,18 @@ void ControllerDB::editMessage(const ModelMessage& message)
     query.exec("UPDATE message SET contents = \"" + message.getContent() + "\", lastUpdated = datetime('NOW') WHERE idMessage = " + QString::number(message.getIdMessage()));
 }
 
-void ControllerDB::deleteMessage(const ModelMessage& message)
+void ControllerDB::deleteMessage(const quint32 id)
 {
     QSqlQuery query(_db);
-    query.exec("DELETE FROM message WHERE idMessage = " + QString::number(message.getIdMessage()));
+    query.exec("DELETE FROM message WHERE idMessage = " + QString::number(id));
+}
+
+ModelMessage ControllerDB::infoMessage(const quint32 id)
+{
+    QSqlQuery query(_db);
+    query.exec("SELECT contents, date, idUser, idRoom, lastUpdated FROM message WHERE idMessage = " + QString::number(id));
+    query.first();
+    return ModelMessage(id, query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("lastUpdated").toDateTime(), query.record().value("contents").toString());
 }
 
 ModelRoom ControllerDB::infoRoom(const quint32 id)
