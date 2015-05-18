@@ -34,11 +34,11 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerChat->receiveMessage(message, edited);
 }
 
-void ClientControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+void ClientControllerInput::deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender)
 {
     Q_UNUSED(sender);
 
-    _controllerChat->deleteMessageInModel(messageId);
+    _controllerChat->deleteMessageInModel(roomId, messageId);
 }
 
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
