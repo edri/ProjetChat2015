@@ -50,5 +50,4 @@ FORMS    += viewChat.ui \
             ../User/viewUser.ui \
             ../User/viewInscription.ui
 
-RESOURCES += \
-    icons.qrc
+RESOURCES +=

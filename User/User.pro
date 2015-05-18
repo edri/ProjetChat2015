@@ -53,4 +53,7 @@ FORMS    += viewUser.ui \
     ../Chat/viewChat.ui \
     viewprofileedition.ui
 
+RESOURCES += \
+    icons.qrc
+
 
