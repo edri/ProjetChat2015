@@ -248,9 +248,11 @@ bool ControllerDB::createAccount(ModelUser& user)
     
     if (query.first()) {return false;}
     
-    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
+    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
     
     user.setIdUser(query.lastInsertId().toUInt());
+    
+    qDebug() << "Inscription faite dans la db: " << query.lastError().text();
     
     return true;
 }
