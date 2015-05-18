@@ -191,3 +191,8 @@ void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
 {
     
 }
+
+void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
+{
+    
+}

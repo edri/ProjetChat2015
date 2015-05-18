@@ -5,8 +5,8 @@
 #include <QString>
 #include <QDataStream>
 
-enum class MessageType : quint32 {NEW_ACCOUNT, INFO_USER, MESSAGE, DELETE_MESSAGE,
-                                  LOGIN,USER_JOIN, JOIN, LEAVE, DISCONNECT,
+enum class MessageType : quint32 {NEW_ACCOUNT, EDIT_ACCOUNT, INFO_USER, MESSAGE, DELETE_MESSAGE,
+                                  LOGIN, USER_JOIN, JOIN, LEAVE, DISCONNECT,
                                   CONNECTED, SERVER_ERROR, ROOM, USER_ID, DELETE_ROOM};
 enum class ErrorType : quint32 {AUTH_ERROR, USER_CREATION, ROOM_CREATION};
 

@@ -10,6 +10,7 @@ class ControllerInput : public QObject
     
     public:
     virtual void createAccount(ModelUser& user, QObject* sender) {Q_UNUSED(user); Q_UNUSED(sender);}
+    virtual void editAccount(ModelUser& user, QObject* sender) {Q_UNUSED(user); Q_UNUSED(sender);}
     virtual void receiveMessage(ModelMessage& message, const bool edited, QObject* sender) = 0;
     virtual void deleteMessage(const quint32 messageId, QObject* sender) = 0;
     virtual void connected(const quint32 userId, QObject* sender) { Q_UNUSED(userId); Q_UNUSED(sender) }

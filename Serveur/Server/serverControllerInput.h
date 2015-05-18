@@ -14,6 +14,7 @@ class ServerControllerInput : public ControllerInput
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
     void createAccount(ModelUser& user, QObject* sender);
+    void editAccount(ModelUser& user, QObject* sender);
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void deleteMessage(const quint32 messageId, QObject* sender);
     void login(const QString& pseudo, const QString& hashedPWD, QObject* sender);

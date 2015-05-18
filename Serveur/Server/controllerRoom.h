@@ -19,6 +19,7 @@ class ControllerRoom
     void joinRoom(const quint32& idRoom, ChatorClient* client);
     void createRoom(ModelRoom& room, ChatorClient* client);
     void modifyRoom(ModelRoom& room, ChatorClient* client);
+    void deleteRoom(const quint32 roomId, ChatorClient* client);
     void deleteMessage(const quint32 messageId, ChatorClient* sender);
     
     QMap<quint32, ChatorRoom*>& getOnlineRooms();
