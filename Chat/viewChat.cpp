@@ -22,6 +22,10 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     connect(_ui->tre_messages, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMessage(const QPoint&)));
 
     _ui->ldt_message->setFocus();
+
+    _nbTotalNotifications = 0;
+    for (quint32 i = 0; i < (quint32)NotificationType::NBR_ITEMS; ++i)
+        _nbNotifications.append(0);
 }
 
 ViewChat::~ViewChat()
@@ -309,6 +313,22 @@ void ViewChat::deleteRoom(const quint32 roomId) const
             break;
         }
     }
+}
+
+void ViewChat::newNotification(const NotificationType notifType) const
+{
+    /*switch(notifType)
+    {
+        case NotificationType::NEW_MEMBERSHIP_APPLICATION:
+        {
+            _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion") + " (" +
+                                                    ++_nbNotifications[(quint32)NotificationType::NEW_MEMBERSHIP_APPLICATION] +
+                                                    ")");
+        }
+        break;
+    }
+
+    _ui->action*/
 }
 
 void ViewChat::on_btn_send_clicked()

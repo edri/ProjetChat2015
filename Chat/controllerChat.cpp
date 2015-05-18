@@ -60,6 +60,11 @@ void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnec
     _view->userStatusChanged(userId, isConnected);
 }
 
+void ControllerChat::newNotification(const NotificationType notifType) const
+{
+    _view->newNotification(notifType);
+}
+
 void ControllerChat::openRoomModule() const
 {
     _controllerRoom->showRoom();

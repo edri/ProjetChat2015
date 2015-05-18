@@ -36,6 +36,7 @@ public:
     void loadRoom(ModelRoom& room) const;
     void receiveMessage(ModelMessage& message, const bool edited) const;
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
+    void newNotification(const NotificationType notifType) const;
 
 public slots :
     void loadUserRooms() const;

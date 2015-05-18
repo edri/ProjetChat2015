@@ -38,6 +38,7 @@ QString ViewProfilEedition::getLastName() const
 QString ViewProfilEedition::getUserName() const
 {
     //return ui->ldt_userName->text();
+    return "";
 }
 
 QString ViewProfilEedition::getPassword() const
