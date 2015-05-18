@@ -219,7 +219,7 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     return true;
 }
 
-bool ControllerDB::createAccount(ModelUser& user)
+bool ControllerDB::createAccount(ModelUser& user, QString& password)
 {
     
     QFile profilePicture;
@@ -240,7 +240,7 @@ bool ControllerDB::createAccount(ModelUser& user)
     
     if (query.first()) {return false;}
     
-    query.exec("INSERT INTO user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", 0, 0, 0, 0, 0)");
+    query.exec("INSERT INTO user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \""+ password + "\", 0, 0, 0, 0, 0)");
     
     user.setIdUser(query.lastInsertId().toUInt());
     

@@ -15,7 +15,7 @@ class ControllerDB
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
     void logout(const quint32 userId);
-    bool createAccount(ModelUser& user);
+    bool createAccount(ModelUser& user, QString& password);
     bool userExists(const QString& pseudo, quint32& id);
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);

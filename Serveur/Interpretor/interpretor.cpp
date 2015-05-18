@@ -31,13 +31,13 @@ QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
     return data;
 }
 
-QByteArray Interpretor::createAccount(const ModelUser& user)
+QByteArray Interpretor::createAccount(const ModelUser& user, const QString& password)
 {
     // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::NEW_ACCOUNT << user;
+    stream << (quint32) MessageType::NEW_ACCOUNT << user << password;
     return data;
 }
 
@@ -152,10 +152,11 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::NEW_ACCOUNT:
         {
             ModelUser user;
-            stream >> user;
+            QString password;
+            stream >> user >> password;
             // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
             // Envoyer cet objet quelque part
-            _dispatcher.createAccount(user, sender());
+            _dispatcher.createAccount(user, password, sender());
         }
         break;
         

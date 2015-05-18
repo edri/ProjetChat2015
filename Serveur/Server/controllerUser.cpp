@@ -90,18 +90,18 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
     return _connectedUsers;
 }
 
-void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
+void ControllerUser::createAccount(ModelUser& user, QString& password, ChatorClient* client)
 {
     qDebug() << "Enregistrement";
     
-    if (!_db.createAccount(user))
+    if (!_db.createAccount(user, password))
     {
         client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::USER_CREATION, "Cannot create the user")));
         return;
     }
     
     // Appeler login
-    login(user.getUserName(), "password", client);
+    login(user.getUserName(), password, client);
 }
 
 void ControllerUser::disconnect(ChatorClient* client)

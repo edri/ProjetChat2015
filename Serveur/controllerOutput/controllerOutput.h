@@ -18,7 +18,7 @@ class ControllerOutput
     void deleteMessage(const quint32 messageId);
 
     void login(const QString& pseudo, const QString& hashedPwd);
-    void createAccount(const ModelUser& user);
+    void createAccount(const ModelUser& user, const QString& password);
     void sendInfoUser(const ModelUser& user);
     void join(const quint32 idUser, const quint32 idRoom);
     void leave(const quint32 idUser, const quint32 idRoom);
