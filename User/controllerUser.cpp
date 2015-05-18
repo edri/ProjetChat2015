@@ -16,7 +16,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
-    //connect(_viewInscription, SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServeur()));
+    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(InscriptionToServer()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
 
 
@@ -80,7 +80,7 @@ void ControllerUser::InscriptionToServer() const
     QString firstName = _view->getViewInscription()->getFirstName();
     QString lastName = _view->getViewInscription()->getLastName();
     QString userName = _view->getViewInscription()->getUserName();
-    QString password = _view->getViewInscription()->getPassword();
+    //QString password = _view->getViewInscription()->getPassword();
     QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());

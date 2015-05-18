@@ -34,6 +34,13 @@ void ClientControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerChat->receiveMessage(message, edited);
 }
 
+void ClientControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+{
+    Q_UNUSED(sender);
+
+    _controllerChat->deleteMessageInModel(messageId);
+}
+
 void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
     // Sender is unused in the client controller.
@@ -103,4 +110,19 @@ void ClientControllerInput::disconnect(const quint32 userId, QObject* sender)
     Q_UNUSED(sender);
 
     _controllerChat->userStatusChanged(userId, false);
+}
+
+void ClientControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
+{
+    Q_UNUSED(sender);
+
+    _controllerChat->deleteRoomInModel(roomId);
+}
+
+void ClientControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject *sender)
+{
+    Q_UNUSED(userId);
+    Q_UNUSED(sender);
+
+    _controllerChat->leaveRoomInModel(roomId);
 }

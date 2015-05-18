@@ -114,6 +114,11 @@ void ModelRoom::addUser(const quint32 idUser)
     _members.insert(idUser);
 }
 
+void ModelRoom::removeUser(const quint32 userId)
+{
+    _members.remove(userId);
+}
+
 void ModelRoom::addAdmin(const quint32 idUser)
 {
     _members.insert(idUser);
@@ -192,6 +197,9 @@ void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const qu
 
 void ModelChator::deleteRoom(const quint32 idRoom)
 {
+    for (ModelMessage message : _rooms[idRoom].getMessages())
+        _rooms[idRoom].deleteMessage(message.getIdMessage());
+
     _rooms.remove(idRoom);
 }
 
@@ -208,6 +216,11 @@ void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, c
 void ModelChator::deleteMessage(const quint32 idRoom, const quint32 idMessage)
 {
     _rooms[idRoom].deleteMessage(idMessage);
+}
+
+void ModelChator::removeUser(const quint32 userId, const quint32 roomId)
+{
+    _rooms[roomId].removeUser(userId);
 }
 
 ModelMessage& ModelRoom::getMessage(const quint32 idMessage)

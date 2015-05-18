@@ -7,6 +7,13 @@ void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerRoom.processMessage(message, edited, (ChatorClient*) sender);
 }
 
+void ServerControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+{
+    Q_UNUSED(messageId);
+    Q_UNUSED(sender);
+    // IL FAUT FAIRE QQCH ICI.
+}
+
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
@@ -51,4 +58,19 @@ void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
 void ServerControllerInput::createAccount(ModelUser& user, QObject* sender)
 {
     _controllerUser.createAccount(user, (ChatorClient*) sender);
+}
+
+void ServerControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
+{
+    Q_UNUSED(roomId);
+    Q_UNUSED(sender);
+    // IL FAUT FAIRE QQCH ICI.
+}
+
+void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender)
+{
+    Q_UNUSED(userId);
+    Q_UNUSED(roomId);
+    Q_UNUSED(sender);
+    // IL FAUT FAIRE QQCH ICI.
 }

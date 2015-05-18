@@ -4,3 +4,6 @@ Gestion :
 	- Application du modèle MVC.
 	- Etablissement de la communication entre le serveur et le client.
 	- Installation des librairies SSL.
+	
+Technique :
+	- Chargement des messages beaucoup trop lent.

@@ -13,6 +13,15 @@ QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edit
     return data;
 }
 
+QByteArray Interpretor::deleteMessage(const quint32 messageId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::DELETE_MESSAGE << messageId;
+    return data;
+}
+
 QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
     QByteArray data;
@@ -114,6 +123,24 @@ QByteArray Interpretor::userId(const QString& userName, bool exists, quint32 use
     return data;
 }
 
+QByteArray Interpretor::deleteRoom(const quint32 roomId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::DELETE_ROOM << roomId;
+    return data;
+}
+
+QByteArray Interpretor::leaveRoom(const quint32 roomId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::LEAVE << roomId;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -128,6 +155,7 @@ void Interpretor::processData(const QByteArray& data)
             stream >> user;
             // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
             // Envoyer cet objet quelque part
+            _dispatcher.createAccount(user, sender());
         }
         break;
         
@@ -151,6 +179,13 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
+        case MessageType::DELETE_MESSAGE:
+        {
+            quint32 messageId;
+            stream >> messageId;
+            _dispatcher.deleteMessage(messageId, sender());
+        }
+
         case MessageType::LOGIN:
         {
             QString pseudo;
@@ -181,10 +216,10 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::LEAVE:
         {
-            quint32 idUser;
-            quint32 idRoom;
-            stream >> idUser >> idRoom;
-            // Envoyer ces objets quelque part
+            quint32 userId;
+            quint32 roomId;
+            stream >> userId >> roomId;
+            _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;
         
@@ -212,7 +247,8 @@ void Interpretor::processData(const QByteArray& data)
             stream >> room;
             _dispatcher.room(room, edited, sender());
         }
-        
+        break;
+
         case MessageType::USER_ID:
         {
             QString userName;
@@ -223,7 +259,16 @@ void Interpretor::processData(const QByteArray& data)
             stream >> userId;
             _dispatcher.userId(userName, exists, userId, sender());
         }
-        
+        break;
+
+        case MessageType::DELETE_ROOM:
+        {
+            quint32 roomId;
+            stream >> roomId;
+            _dispatcher.deleteRoom(roomId, sender());
+        }
+        break;
+
         case MessageType::SERVER_ERROR:
         {
             ModelError error;

@@ -8,6 +8,11 @@ void ControllerOutput::sendMessage(const ModelMessage& message, const bool edite
     _connector.send(_interpretor.sendMessage(message, edited));
 }
 
+void ControllerOutput::deleteMessage(const quint32 messageId)
+{
+    _connector.send(_interpretor.deleteMessage(messageId));
+}
+
 void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)
 {
     _connector.send(_interpretor.login(pseudo, hashedPwd));
@@ -51,6 +56,10 @@ void ControllerOutput::userId(const QString& userName, bool exists, quint32 user
 
 void ControllerOutput::deleteRoom(const quint32 roomId)
 {
-    // UN TRUC DU GENRE
-    //_connector.send(_interpretor.deleteRoom(roomId));
+    _connector.send(_interpretor.deleteRoom(roomId));
+}
+
+void ControllerOutput::leaveRoom(const quint32 roomId)
+{
+    _connector.send(_interpretor.leaveRoom(roomId));
 }
