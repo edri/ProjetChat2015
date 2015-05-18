@@ -183,10 +183,58 @@ Hash Cryptor::generateHash(const string& password, Salt& salt,
     return hash;
 }
 
-int Cryptor::cypherAES(char* clearMessage, unsigned messageLength, char* cypherMessage, unsigned cypherLength, const AESKey& encryptionKey)
-{return 1;}
-int Cryptor::decypherAES(char* cypherMessage, unsigned cypherLength, char* clearMessage, unsigned messageLength, const AESKey& encryptionKey)
-{return 1;}
+CypherText Cryptor::cypherAES(const string& message, const AESKey& encryptionKey)
+{
+    // Initialize encryption.
+    EVP_CIPHER_CTX encrypt;
+    EVP_CIPHER_CTX_init(&encrypt);
+    EVP_EncryptInit_ex(&encrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
+    
+    /* max ciphertext len for a n bytes of plaintext is n + AES_BLOCK_SIZE -1 bytes */
+    int cypherLength = (int) message.length() + AES_BLOCK_SIZE;
+    int finalEncryptLength = 0;
+    unsigned char *cypher = new unsigned char[cypherLength];
+
+    /* allows reusing of 'encrypt' for multiple encryption cycles */
+    EVP_EncryptInit_ex(&encrypt, NULL, NULL, NULL, NULL);
+
+    /* update ciphertext, c_len is filled with the length of ciphertext generated,
+    *len is the size of plaintext in bytes */
+    EVP_EncryptUpdate(&encrypt, cypher, &cypherLength, (unsigned char*)message.data(), (int) message.length());
+
+    /* update ciphertext with the final remaining bytes */
+    EVP_EncryptFinal_ex(&encrypt, cypher + cypherLength, &finalEncryptLength);
+
+    CypherText cypherMessage(cypherLength + finalEncryptLength);
+    memcpy(cypherMessage.data(), cypher, cypherLength + finalEncryptLength);
+    
+    delete[] cypher;
+    EVP_CIPHER_CTX_cleanup(&encrypt);
+    
+    return cypherMessage;
+}
+string Cryptor::decypherAES(const CypherText& cypherMessage, const AESKey& encryptionKey)
+{
+    EVP_CIPHER_CTX decrypt;
+    EVP_CIPHER_CTX_init(&decrypt);
+    EVP_DecryptInit_ex(&decrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
+    
+    /* plaintext will always be equal to or lesser than length of ciphertext*/
+    int plainLength = (int) cypherMessage.size();
+    int finalLength = 0;
+    unsigned char *plainText = new unsigned char[plainLength];
+
+    EVP_DecryptInit_ex(&decrypt, NULL, NULL, NULL, NULL);
+    EVP_DecryptUpdate(&decrypt, plainText, &plainLength, cypherMessage.data(), (int) cypherMessage.size());
+    EVP_DecryptFinal_ex(&decrypt, plainText + plainLength, &finalLength);
+    
+    string message((char*)plainText, plainLength + finalLength);
+    
+    delete[] plainText;
+    EVP_CIPHER_CTX_cleanup(&decrypt);
+    
+    return message;
+}
 int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
 {return 1;}
 int Cryptor::decypherAES(RSAPair& key, const AESKey& encryptionKey)
