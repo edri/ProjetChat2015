@@ -145,5 +145,19 @@ void ControllerUser::disconnect(ChatorClient* client)
 
 void ControllerUser::modifyUser(const ModelUser& user, ChatorClient* client)
 {
+    _db.modifyUser(user);
+    QSet<quint32> upToDateClients;
+    QByteArray data = _interpretor->editAccount(user);
     
+    for (ChatorRoom* currentRoom : client->rooms)
+    {
+        for (ChatorClient* currentClient : currentRoom->clients)
+        {
+            if (!upToDateClients.contains(currentClient->id))
+            {
+                currentClient->socket.sendBinaryMessage(data);
+                upToDateClients.insert(currentClient->id);
+            }
+        }
+    }
 }

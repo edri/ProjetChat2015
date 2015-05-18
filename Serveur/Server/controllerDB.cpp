@@ -130,10 +130,18 @@ void ControllerDB::editMessage(const ModelMessage& message)
     query.exec("UPDATE message SET contents = \"" + message.getContent() + "\", lastUpdated = datetime('NOW') WHERE idMessage = " + QString::number(message.getIdMessage()));
 }
 
-void ControllerDB::deleteMessage(const ModelMessage& message)
+void ControllerDB::deleteMessage(const quint32 id)
 {
     QSqlQuery query(_db);
-    query.exec("DELETE FROM message WHERE idMessage = " + QString::number(message.getIdMessage()));
+    query.exec("DELETE FROM message WHERE idMessage = " + QString::number(id));
+}
+
+ModelMessage ControllerDB::infoMessage(const quint32 id)
+{
+    QSqlQuery query(_db);
+    query.exec("SELECT contents, date, idUser, idRoom, lastUpdated FROM message WHERE idMessage = " + QString::number(id));
+    query.first();
+    return ModelMessage(id, query.record().value("idRoom").toUInt(), query.record().value("idUser").toUInt(), query.record().value("date").toDateTime(), query.record().value("lastUpdated").toDateTime(), query.record().value("contents").toString());
 }
 
 ModelRoom ControllerDB::infoRoom(const quint32 id)
@@ -240,7 +248,7 @@ bool ControllerDB::createAccount(ModelUser& user)
     
     if (query.first()) {return false;}
     
-    query.exec("INSERT INTO user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", 0, 0, 0, 0, 0)");
+    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, salt, masterKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
     
     user.setIdUser(query.lastInsertId().toUInt());
     
@@ -251,4 +259,18 @@ void ControllerDB::logout(const quint32 userId)
 {
     QSqlQuery query(_db);
     query.exec("UPDATE user SET isConnected = 0 WHERE idUser = " + QString::number(userId));
+}
+
+void ControllerDB::modifyUser(const ModelUser& user)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) SET VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", 1, 0, 0, 0, 0) WHERE idUser = " + QString::number(user.getIdUser()));
+    
+    query.exec("SELECT profilePicture FROM user WHERE idUser = " + QString::number(user.getIdUser()));
+    query.first();
+    
+    QFile profilePicture(query.record().value("profilePicture").toString());
+    profilePicture.open(QIODevice::WriteOnly);
+    user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
+    profilePicture.close();
 }

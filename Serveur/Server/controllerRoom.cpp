@@ -158,6 +158,25 @@ QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
     return _onlineRooms;
 }
 
+void ControllerRoom::deleteMessage(const quint32 messageId, ChatorClient* sender)
+{
+    ModelMessage message = _db.infoMessage(messageId);
+    if (sender->logged && message.getIdUser() == sender->id)
+    {
+        _db.deleteMessage(messageId);
+        ChatorRoom* room = _onlineRooms[message.getIdRoom()];
+        if (room)
+        {
+            QByteArray data = _interpretor->deleteMessage(messageId);
+            
+            for (ChatorClient* client : room->clients)
+            {
+                client->socket.sendBinaryMessage(data);
+            }
+        }
+    }
+}
+
 void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
 {
     
@@ -169,6 +188,11 @@ void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
 }
 
 void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
+{
+    
+}
+
+void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
 {
     
 }
