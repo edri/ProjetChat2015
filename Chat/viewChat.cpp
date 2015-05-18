@@ -445,7 +445,8 @@ void ViewChat::showContextMessage(const QPoint &pos)
         }
         else if (act == delAct)
         {
-            emit requestDeleteMessage(_ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toInt());
+            emit requestDeleteMessage(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt(),
+                                      _ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toInt());
             delete editAct;
         }
         else

@@ -13,12 +13,12 @@ QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edit
     return data;
 }
 
-QByteArray Interpretor::deleteMessage(const quint32 messageId)
+QByteArray Interpretor::deleteMessage(const quint32 roomId, const quint32 messageId)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::DELETE_MESSAGE << messageId;
+    stream << (quint32) MessageType::DELETE_MESSAGE << roomId << messageId;
     return data;
 }
 
@@ -204,10 +204,12 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::DELETE_MESSAGE:
         {
             qDebug() << "Déserialisation deletemessage";
+            quint32 roomId;
             quint32 messageId;
-            stream >> messageId;
-            _dispatcher.deleteMessage(messageId, sender());
+            stream >> roomId >> messageId;
+            _dispatcher.deleteMessage(roomId, messageId, sender());
         }
+        break;
 
         case MessageType::LOGIN:
         {

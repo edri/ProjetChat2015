@@ -19,9 +19,9 @@ class Interpretor : public QObject
     // Serialize a message and the flag indicating if the message was edited or created.
     // Last edited by Miguel Santamaria on 08.05.2015 07:21
     QByteArray sendMessage(const ModelMessage& message, const bool edited = false);
-    // Serialize a message's id in the purpose of delete it.
-    // Last edited by Miguel Santamaria on 16.05.2015 21:19
-    QByteArray deleteMessage(const quint32 messageId);
+    // Serialize a message's id and its room's id, in the purpose of delete it.
+    // Last edited by Miguel Santamaria on 18.05.2015 16:47
+    QByteArray deleteMessage(const quint32 roomId, const quint32 messageId);
 
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
     QByteArray createAccount(const ModelUser& user);

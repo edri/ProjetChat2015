@@ -65,9 +65,7 @@ private slots:
     void on_btn_edit_clicked();
     void on_btn_delete_clicked();
     void showContextMessage(const QPoint& pos);
-
     void on_btn_expandAll_clicked();
-
     void on_btn_collapseAll_clicked();
 
 signals:
@@ -75,7 +73,7 @@ signals:
     void requestOpenRoomModule() const;
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
-    void requestDeleteMessage(const quint32 messageId) const;
+    void requestDeleteMessage(const quint32 roomId, const quint32 messageId) const;
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
 };

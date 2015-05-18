@@ -7,9 +7,9 @@ void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerRoom.processMessage(message, edited, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+void ServerControllerInput::deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender)
 {
-    _controllerRoom.deleteMessage(messageId, (ChatorClient*) sender);
+    _controllerRoom.deleteMessage(roomId, messageId, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)

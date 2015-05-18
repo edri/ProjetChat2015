@@ -17,7 +17,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
     connect(_view, SIGNAL(requestEditMessage(const QTreeWidgetItem*)), this, SLOT(editMessage(const QTreeWidgetItem*)));
-    connect(_view, SIGNAL(requestDeleteMessage(quint32)), this, SLOT(askServerToDeleteMessage(quint32)));
+    connect(_view, SIGNAL(requestDeleteMessage(quint32, quint32)), this, SLOT(askServerToDeleteMessage(quint32, quint32)));
     connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(askServerToDeleteRoom(quint32)));
     connect(_view, SIGNAL(requestLeaveRoom(quint32)), this, SLOT(askServerToLeaveRoom(quint32)));
 }
@@ -112,13 +112,14 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
     _co->sendMessage(message, true);
 }
 
-void ControllerChat::askServerToDeleteMessage(const quint32 messageId) const
+void ControllerChat::askServerToDeleteMessage(const quint32 roomId, const quint32 messageId) const
 {
-    _co->deleteMessage(messageId);
+    _co->deleteMessage(roomId, messageId);
 }
 
-void ControllerChat::deleteMessageInModel(const quint32 messageId) const
+void ControllerChat::deleteMessageInModel(const quint32 roomId, const quint32 messageId) const
 {
+    _model->deleteMessage(roomId, messageId);
     _view->deleteMessage(messageId);
 }
 
