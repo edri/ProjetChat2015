@@ -153,7 +153,6 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             stream >> user;
-            qDebug() << "Déserialisation inscription";
             // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
             // Envoyer cet objet quelque part
             _dispatcher.createAccount(user, sender());

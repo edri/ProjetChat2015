@@ -1,6 +1,7 @@
 #include "viewInscription.h"
 #include "ui_viewInscription.h"
 #include <QDebug>
+#include <QStandardPaths>
 
 ViewInscription::ViewInscription(QWidget *parent) :
     QMainWindow(parent),
@@ -21,7 +22,7 @@ ViewInscription::~ViewInscription()
 void ViewInscription::on_btn_path_clicked()
 {
     // Browse the files in order to find a picture
-    QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Images (*.png *.gif *.jpg *.jpeg)");
+    QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), "Images (*.png *.gif *.jpg *.jpeg);;Autres (*.*)");
 
     ui->ldt_profilPicture->setText(fichier);
     // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
@@ -107,10 +108,13 @@ bool ViewInscription::verifyFields()
 
 bool ViewInscription::verifyProfileImage()
 {
-    QString extension = ui->ldt_profilPicture->text().right(4).toLower();
+    /*QString extension = ui->ldt_profilPicture->text().right(4).toLower();
     QFile file(ui->ldt_profilPicture->text());
 
-    return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));
+    return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));*/
+    
+    QImage image(ui->ldt_profilPicture->text());
+    return !image.isNull();
 }
 
 void ViewInscription::closeEvent(QCloseEvent *)

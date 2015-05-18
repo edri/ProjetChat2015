@@ -101,7 +101,7 @@ void ControllerUser::createAccount(ModelUser& user, ChatorClient* client)
     }
     
     // Appeler login
-    //login(user.);
+    login(user.getUserName(), "password", client);
 }
 
 void ControllerUser::disconnect(ChatorClient* client)
