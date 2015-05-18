@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>img/delete.png</file>
-        <file>img/edit.png</file>
-        <file>img/chator.gif</file>
-        <file>img/collapse.png</file>
-        <file>img/expand.png</file>
-    </qresource>
-</RCC>
