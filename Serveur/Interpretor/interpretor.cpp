@@ -208,6 +208,7 @@ void Interpretor::processData(const QByteArray& data)
             stream >> messageId;
             _dispatcher.deleteMessage(messageId, sender());
         }
+        break;
 
         case MessageType::LOGIN:
         {
