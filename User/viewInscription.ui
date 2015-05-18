@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>394</width>
-    <height>435</height>
+	<height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -212,7 +212,10 @@
            </font>
           </property>
           <property name="text">
-           <string>C:\Users\User\Pictures</string>
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>chemin vers l'image...</string>
           </property>
          </widget>
         </item>
@@ -277,7 +280,7 @@
      <x>0</x>
      <y>0</y>
      <width>394</width>
-     <height>26</height>
+	 <height>20</height>
     </rect>
    </property>
   </widget>
