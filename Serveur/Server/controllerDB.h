@@ -25,6 +25,7 @@ class ControllerDB
     quint32 createRoom(const ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
     void modifyUser(const ModelUser& user);
+    void deleteRoom(const quint32 roomId);
     
     private :
     QSqlDatabase _db;
