@@ -197,13 +197,18 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
     ChatorRoom* room = _onlineRooms[roomId];
     if (room && _db.infoRoom(roomId).getAdmins().contains(client->id))
     {
+        qDebug() << "suppression de la salle " << roomId;
         _db.deleteRoom(roomId);
         QByteArray data = _interpretor->deleteRoom(roomId);
         
         for (ChatorClient* currentClient : room->clients)
         {
+            qDebug() << "Envoi de l'information a " << currentClient->id;
             currentClient->socket.sendBinaryMessage(data);
             currentClient->rooms.remove(room);
         }
+        
+        _onlineRooms.remove(roomId);
+        delete room;
     }
 }
