@@ -194,5 +194,16 @@ void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
 
 void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
 {
-    
+    ChatorRoom* room = _onlineRooms[roomId];
+    if (room && _db.infoRoom(roomId).getAdmins().contains(client->id))
+    {
+        _db.deleteRoom(roomId);
+        QByteArray data = _interpretor->deleteRoom(roomId);
+        
+        for (ChatorClient* currentClient : room->clients)
+        {
+            currentClient->socket.sendBinaryMessage(data);
+            currentClient->rooms.remove(room);
+        }
+    }
 }

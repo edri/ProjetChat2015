@@ -274,3 +274,12 @@ void ControllerDB::modifyUser(const ModelUser& user)
     user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
     profilePicture.close();
 }
+
+void ControllerDB::deleteRoom(const quint32 roomId)
+{
+    QSqlQuery query(_db);
+    query.exec("DELETE FROM message WHERE idRoom = " + QString::number(roomId));
+    query.exec("DELETE FROM roomMembership WHERE idRoom = " + QString::number(roomId));
+    query.exec("DELETE FROM banning WHERE idRoom = " + QString::number(roomId));
+    query.exec("DELETE FROM room WHERE idRoom = " + QString::number(roomId));
+}
