@@ -9,6 +9,7 @@
 #include <openssl/rand.h>
 #include <vector>
 #include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -83,8 +84,8 @@ class Cryptor
     Hash generateHash(const string& password, Salt& salt,
          const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
     
-    int cypherAES(char* clearMessage, unsigned messageLength, char* cypherMessage, unsigned cypherLength, const AESKey& encryptionKey);
-    int decypherAES(char* cypherMessage, unsigned cypherLength, char* clearMessage, unsigned messageLength, const AESKey& encryptionKey);
+    CypherText cypherAES(const string& message, const AESKey& encryptionKey);
+    string decypherAES(const CypherText& cypherMessage, const AESKey& encryptionKey);
     int cypherAES(RSAPair& key, const AESKey& encryptionKey);
     int decypherAES(RSAPair& key, const AESKey& encryptionKey);    
     int cypherRSA(AESKey& key, const RSAPair& encryptionKey);

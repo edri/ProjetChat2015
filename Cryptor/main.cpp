@@ -5,17 +5,6 @@
 
 int main()
 {
-    const char* str1 = "poulet\0lolilol";
-    string lol;
-    lol.assign(str1, 14);
-    cout << "Message : " << lol << " Taille : " << lol.size() << endl;
-    const char* str2 = lol.data();
-    for (size_t i = 0; i < lol.size(); ++i)
-    {
-        cout << str2[i] << endl;
-    }
-    
-    /*
     Cryptor* cryptor = new Cryptor();
     
     Salt salt = cryptor->generateSalt();
@@ -54,19 +43,62 @@ int main()
     }
     cout << endl << endl;
     
-    RSAPair rsaPair = cryptor->generateRSAPair();
+    /*RSAPair rsaPair = cryptor->generateRSAPair();
     cout << "Generated RSA private key : " << endl << rsaPair.privateKey.data() << endl;
-    cout << "Generated RSA public key : " << endl << rsaPair.publicKey.data() << endl << endl;
+    cout << "Generated RSA public key : " << endl << rsaPair.publicKey.data() << endl << endl;*/
     
-    cout << "Simulation création utilisateur" << endl;
+    string msg = "Je suis un premier message.";
+    CypherText cypherText = cryptor->cypherAES(msg, aesKey);
+    
+    cout << "Message : " << msg << endl;
+    cout << "Message chiffré : ";
+    for (unsigned i = 0; i < cypherText.size(); ++i)
+    {
+        printf("%02X", cypherText.at(i));
+    }
+    cout << endl;
+    
+    string decypher = cryptor->decypherAES(cypherText, aesKey);
+    cout << "Message déchiffré : " << decypher << endl << endl;
+    
+    msg = "Français : Les fougères mangent les petits garçons. Chinois : 蕨類植物吃小男孩。";
+    cypherText = cryptor->cypherAES(msg, aesKey);
+    
+    cout << "Message : " << msg << endl;
+    cout << "Message chiffré : ";
+    for (unsigned i = 0; i < cypherText.size(); ++i)
+    {
+        printf("%02X", cypherText.at(i));
+    }
+    cout << endl;
+    
+    decypher = cryptor->decypherAES(cypherText, aesKey);
+    cout << "Message déchiffré : " << decypher << endl << endl;
+    
+    
+    msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    cypherText = cryptor->cypherAES(msg, aesKey);
+    
+    cout << "Message : " << msg << endl;
+    cout << "Message chiffré : ";
+    for (unsigned i = 0; i < cypherText.size(); ++i)
+    {
+        printf("%02X", cypherText.at(i));
+    }
+    cout << endl;
+    
+    decypher = cryptor->decypherAES(cypherText, aesKey);
+    cout << "Message déchiffré : " << decypher << endl << endl;
+    
+    /*cout << "Simulation création utilisateur" << endl;
     
     string password = "mot de passe";
     Salt saltPassword = cryptor->generateSalt();
     Hash hashPassword = cryptor->generateHash(password, saltPassword);
     RSAPair userRSAKeys = cryptor->generateRSAPair();
     Salt saltKey = cryptor->generateSalt();
-    Hash masterKey = cryptor->generateHash(password, saltKey);
+    Hash masterKey = cryptor->generateHash(password, saltKey);*/
     
-    delete cryptor;*/
+    delete cryptor;
     return 0;
 } 
