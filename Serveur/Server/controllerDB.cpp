@@ -158,7 +158,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Récupération des messages
     QMap<quint32, ModelMessage> messages;
     
-    query.exec("SELECT idMessage, idRoom, idUser, date, lastUpdated, contents FROM message WHERE idRoom = " + QString::number(id) + " ORDER BY date");
+    query.exec("SELECT idMessage, idRoom, idUser, date, lastUpdated, contents FROM message WHERE idRoom = " + QString::number(id) + " ORDER BY date desc LIMIT 50");
     
     while(query.next())
     {
