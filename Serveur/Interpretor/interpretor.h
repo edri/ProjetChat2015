@@ -24,7 +24,7 @@ class Interpretor : public QObject
     QByteArray deleteMessage(const quint32 roomId, const quint32 messageId);
 
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
-    QByteArray createAccount(const ModelUser& user);
+    QByteArray createAccount(const ModelUser& user, const QString& password);
     QByteArray editAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);
     QByteArray sendError(const ModelError& error);

@@ -227,8 +227,9 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     return true;
 }
 
-bool ControllerDB::createAccount(ModelUser& user)
+bool ControllerDB::createAccount(ModelUser& user, QString& password)
 {
+    qDebug() << "Appel DB create Account";
     
     QFile profilePicture;
     quint64 msecs = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -247,8 +248,8 @@ bool ControllerDB::createAccount(ModelUser& user)
     query.exec("SELECT idUser FROM user WHERE login = \"" + user.getUserName() + "\"");
     
     if (query.first()) {return false;}
-    
-    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \"password\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
+
+    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \""+ password + "\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
     
     user.setIdUser(query.lastInsertId().toUInt());
     

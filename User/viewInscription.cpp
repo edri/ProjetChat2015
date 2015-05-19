@@ -43,22 +43,10 @@ void ViewInscription::on_btn_inscription_clicked()
         emit requestGetNewUser();
 
         /* TODO
-
-        //Warn the controler that data are ready to be send to the server
-        // send a signal
-
         //The server verify if the username is already used
         if(true) {
           ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est déjà utilisé.</font>");
         }
-
-        // User added succesfully
-        // Connecter l'utilisateur
-
-        QMessageBox info;
-        info.setText("Votre compte a été créé avec succès");
-        info.exec();
-
         */
         ui->lbl_info->setText("Prêt à être envoyé au serveur");
     }

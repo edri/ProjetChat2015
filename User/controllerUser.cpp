@@ -80,10 +80,10 @@ void ControllerUser::InscriptionToServer() const
     QString firstName = _view->getViewInscription()->getFirstName();
     QString lastName = _view->getViewInscription()->getLastName();
     QString userName = _view->getViewInscription()->getUserName();
-    //QString password = _view->getViewInscription()->getPassword();
+    QString password = _view->getViewInscription()->getPassword();
     QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
-    co->createAccount(myUser);
+    co->createAccount(myUser, password);
 }
