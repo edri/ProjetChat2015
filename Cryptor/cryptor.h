@@ -17,7 +17,7 @@ using namespace std;
 const unsigned AES_KEY_LENGTH = 256; 
 const unsigned AES_BLOCK_SIZE = 128;
 const unsigned SALT_LENGTH = 64;
-const unsigned RSA_KEY_LENGTH = 4096;
+const int RSA_KEY_LENGTH = 4096;
 const int HASH_LENGTH = 512;
 
 
@@ -45,6 +45,9 @@ struct RSAPair
 {
     vector<char> privateKey;
     vector<char> publicKey;
+    int blockSize;
+    int publicKeyLength;
+    int privateKeyLength;
 };
 
 class Cryptor
