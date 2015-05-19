@@ -116,6 +116,9 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     int privateKeyLength = BIO_pending(privateKeyBuffer);
     int publicKeyLength = BIO_pending(publicKeyBuffer);
     
+    keys.privateKeyLength = privateKeyLength;
+    keys.publicKeyLength = publicKeyLength;
+    
     // Resize the vectors.
     keys.privateKey.resize(privateKeyLength + 1);
     keys.publicKey.resize(publicKeyLength + 1);
@@ -127,6 +130,8 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     // Add ending character to the strings.
     keys.privateKey[privateKeyLength] = '\0';
     keys.publicKey[publicKeyLength] = '\0';
+    
+    keys.blockSize = RSA_size(keypair);
     
     // Cleanup
     BIO_free(privateKeyBuffer);
@@ -236,10 +241,108 @@ string Cryptor::decypherAES(const CypherText& cypherMessage, const AESKey& encry
     return message;
 }
 int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
-{return 1;}
+{
+     // Initialize encryption.
+    EVP_CIPHER_CTX encrypt;
+    EVP_CIPHER_CTX_init(&encrypt);
+    EVP_EncryptInit_ex(&encrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
+    
+    /* max ciphertext len for a n bytes of plaintext is n + AES_BLOCK_SIZE -1 bytes */
+    int cypherLength = (int) key.privateKey.size() + AES_BLOCK_SIZE;
+    int finalEncryptLength = 0;
+    vector<char> cypher(cypherLength);
+
+    /* allows reusing of 'encrypt' for multiple encryption cycles */
+    EVP_EncryptInit_ex(&encrypt, NULL, NULL, NULL, NULL);
+
+    /* update ciphertext, c_len is filled with the length of ciphertext generated,
+    *len is the size of plaintext in bytes */
+    EVP_EncryptUpdate(&encrypt, (unsigned char*)cypher.data(), &cypherLength, (unsigned char*)key.privateKey.data(), (int) key.privateKey.size());
+
+    /* update ciphertext with the final remaining bytes */
+    EVP_EncryptFinal_ex(&encrypt, (unsigned char*)cypher.data() + cypherLength, &finalEncryptLength);
+
+    key.privateKey = cypher;
+    
+    EVP_CIPHER_CTX_cleanup(&encrypt);
+    
+    return 0;
+}
 int Cryptor::decypherAES(RSAPair& key, const AESKey& encryptionKey)
-{return 1;}
+{
+    EVP_CIPHER_CTX decrypt;
+    EVP_CIPHER_CTX_init(&decrypt);
+    EVP_DecryptInit_ex(&decrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
+    
+    /* plaintext will always be equal to or lesser than length of ciphertext*/
+    int plainLength = (int) key.privateKey.size();
+    int finalLength = 0;
+    vector<char> plainKey(plainLength);
+
+    EVP_DecryptInit_ex(&decrypt, NULL, NULL, NULL, NULL);
+    EVP_DecryptUpdate(&decrypt, (unsigned char*)plainKey.data(), &plainLength, (unsigned char*)key.privateKey.data(), (int) key.privateKey.size());
+    EVP_DecryptFinal_ex(&decrypt, (unsigned char*)plainKey.data() + plainLength, &finalLength);
+    
+    key.privateKey = plainKey;
+    EVP_CIPHER_CTX_cleanup(&decrypt);
+    
+    return 0;
+}
+
 int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
-{return 1;}
+{
+    vector<unsigned char> encryptedKey(encryptionKey.blockSize);
+    vector<unsigned char> encryptedIV(encryptionKey.blockSize);
+    int encryptedSize;
+    
+    BIO* publicKey = BIO_new(BIO_s_mem());
+    
+    BIO_write(publicKey, encryptionKey.publicKey.data(), encryptionKey.publicKeyLength);
+    RSA *keypair = PEM_read_bio_RSAPublicKey(publicKey,NULL,0,NULL);
+    
+    encryptedSize = RSA_public_encrypt((int)key.key.size() + 1, key.key.data(), encryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
+    if(encryptedSize == -1 || encryptedSize > RSA_KEY_LENGTH/8)
+    {
+        return -1;
+    }
+    
+    encryptedSize = RSA_public_encrypt((int)key.initializationVector.size() + 1, key.initializationVector.data(), encryptedIV.data(), keypair, RSA_PKCS1_OAEP_PADDING);
+    if(encryptedSize == -1 || encryptedSize > RSA_KEY_LENGTH/8)
+    {
+        return -1;
+    }
+    
+    key.key = encryptedKey;
+    key.initializationVector = encryptedIV;
+    
+    return 0;
+}
 int Cryptor::decypherRSA(AESKey& key, const RSAPair& encryptionKey)
-{return 1;}
+{
+    vector<unsigned char> decryptedKey(encryptionKey.blockSize);
+    vector<unsigned char> decryptedIV(encryptionKey.blockSize);
+    int decryptedSize;
+    
+    BIO* privateKey = BIO_new(BIO_s_mem());
+    
+    BIO_write(privateKey, encryptionKey.privateKey.data(), encryptionKey.privateKeyLength);
+    
+    RSA *keypair = PEM_read_bio_RSAPrivateKey(privateKey,NULL,0,NULL);
+    
+    decryptedSize = RSA_private_decrypt((int)key.key.size(), key.key.data(), decryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
+    if(decryptedSize == -1)
+    {
+        return -1;
+    }
+    
+    decryptedSize = RSA_private_decrypt((int)key.initializationVector.size(), key.initializationVector.data(), decryptedIV.data(), keypair, RSA_PKCS1_OAEP_PADDING);
+    if(decryptedSize == -1)
+    {
+        return -1;
+    }
+    
+    key.key = decryptedKey;
+    key.initializationVector = decryptedIV;
+    
+    return 0;
+}
