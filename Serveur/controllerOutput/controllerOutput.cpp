@@ -8,9 +8,9 @@ void ControllerOutput::sendMessage(const ModelMessage& message, const bool edite
     _connector.send(_interpretor.sendMessage(message, edited));
 }
 
-void ControllerOutput::deleteMessage(const quint32 messageId)
+void ControllerOutput::deleteMessage(const quint32 roomId, const quint32 messageId)
 {
-    _connector.send(_interpretor.deleteMessage(messageId));
+    _connector.send(_interpretor.deleteMessage(roomId, messageId));
 }
 
 void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)

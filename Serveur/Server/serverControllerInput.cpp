@@ -7,11 +7,9 @@ void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edi
     _controllerRoom.processMessage(message, edited, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::deleteMessage(const quint32 messageId, QObject* sender)
+void ServerControllerInput::deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender)
 {
-    Q_UNUSED(messageId);
-    Q_UNUSED(sender);
-    // IL FAUT FAIRE QQCH ICI.
+    _controllerRoom.deleteMessage(roomId, messageId, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
@@ -22,9 +20,7 @@ void ServerControllerInput::login(const QString& pseudo, const QString& hashedPW
 
 void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
 {
-    //ChatorClient* client = (ChatorClient*) sender;
-    Q_UNUSED(user);
-    Q_UNUSED(sender);
+    _controllerUser.modifyUser(user, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
@@ -57,14 +53,18 @@ void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
 
 void ServerControllerInput::createAccount(ModelUser& user, QString& password, QObject* sender)
 {
+    qDebug() << "ServerControllerInput CreateAccount";
     _controllerUser.createAccount(user, password, (ChatorClient*) sender);
+}
+
+void ServerControllerInput::editAccount(ModelUser& user, QObject* sender)
+{
+    _controllerUser.modifyUser(user, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
 {
-    Q_UNUSED(roomId);
-    Q_UNUSED(sender);
-    // IL FAUT FAIRE QQCH ICI.
+    _controllerRoom.deleteRoom(roomId, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender)

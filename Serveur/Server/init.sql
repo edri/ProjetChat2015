@@ -1,4 +1,4 @@
--- Script de création de la DB langueDeChat - PRO 2015
+- Script de création de la DB langueDeChat - PRO 2015
 
 CREATE TABLE IF NOT EXISTS user (
   idUser INTEGER PRIMARY KEY AUTOINCREMENT,

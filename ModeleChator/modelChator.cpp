@@ -286,12 +286,12 @@ const QString& ModelUser::getUserName() const
     return _userName;
 }
 
-QString& ModelUser::getFirstName()
+const QString& ModelUser::getFirstName() const
 {
     return _firstName;
 }
 
-QString& ModelUser::getLastName()
+const QString& ModelUser::getLastName() const
 {
     return _lastName;
 }
@@ -301,7 +301,7 @@ bool ModelUser::isConnected() const
     return _isConnected;
 }
 
-QImage& ModelUser::getImage()
+const QImage& ModelUser::getImage() const
 {
     return _image;
 }

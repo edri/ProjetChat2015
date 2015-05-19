@@ -15,7 +15,7 @@ class ControllerOutput
      * - messageId : the message's id we want to delete.
      * Created by Miguel Santamaria on 16.05.2015 21:30
      */
-    void deleteMessage(const quint32 messageId);
+    void deleteMessage(const quint32 roomId, const quint32 messageId);
 
     void login(const QString& pseudo, const QString& hashedPwd);
     void createAccount(const ModelUser& user, const QString& password);

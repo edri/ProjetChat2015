@@ -13,17 +13,19 @@ QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edit
     return data;
 }
 
-QByteArray Interpretor::deleteMessage(const quint32 messageId)
+QByteArray Interpretor::deleteMessage(const quint32 roomId, const quint32 messageId)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::DELETE_MESSAGE << messageId;
+    stream << (quint32) MessageType::DELETE_MESSAGE << roomId << messageId;
     return data;
 }
 
 QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
 {
+    qDebug() << "Envoi de login";
+    
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
@@ -38,6 +40,16 @@ QByteArray Interpretor::createAccount(const ModelUser& user, const QString& pass
     QDataStream stream(&data, QIODevice::WriteOnly);
     
     stream << (quint32) MessageType::NEW_ACCOUNT << user << password;
+    return data;
+}
+
+QByteArray Interpretor::editAccount(const ModelUser& user)
+{
+    // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    
+    stream << (quint32) MessageType::EDIT_ACCOUNT << user;
     return data;
 }
 
@@ -153,10 +165,21 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             QString password;
-            stream >> user >> password;
+            stream >> user;
+            stream >> password;
             // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
             // Envoyer cet objet quelque part
             _dispatcher.createAccount(user, password, sender());
+        }
+        break;
+        
+        case MessageType::EDIT_ACCOUNT:
+        {
+            ModelUser user;
+            stream >> user;
+            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
+            // Envoyer cet objet quelque part
+            _dispatcher.editAccount(user, sender());
         }
         break;
         
@@ -182,13 +205,17 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::DELETE_MESSAGE:
         {
+            qDebug() << "Déserialisation deletemessage";
+            quint32 roomId;
             quint32 messageId;
-            stream >> messageId;
-            _dispatcher.deleteMessage(messageId, sender());
+            stream >> roomId >> messageId;
+            _dispatcher.deleteMessage(roomId, messageId, sender());
         }
+        break;
 
         case MessageType::LOGIN:
         {
+            qDebug() << "Déserialisation login";
             QString pseudo;
             QString hashedPwd;
             stream >> pseudo >> hashedPwd;

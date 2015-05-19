@@ -14,8 +14,8 @@
    <string>Chat</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
-    <normaloff>:/icons/img/chator.gif</normaloff>:/icons/img/chator.gif</iconset>
+   <iconset resource="../User/icons.qrc">
+    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -795,7 +795,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="../User/icons.qrc">
             <normaloff>:/icons/img/expand.png</normaloff>:/icons/img/expand.png</iconset>
           </property>
           <property name="shortcut">
@@ -821,7 +821,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="../User/icons.qrc">
             <normaloff>:/icons/img/collapse.png</normaloff>:/icons/img/collapse.png</iconset>
           </property>
           <property name="shortcut">
@@ -873,8 +873,15 @@
     </property>
     <addaction name="actionA_propos"/>
    </widget>
+   <widget class="QMenu" name="menuNotifications">
+    <property name="title">
+     <string>Notifications</string>
+    </property>
+    <addaction name="actionDemandes_d_adh_sion"/>
+   </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuEdition"/>
+   <addaction name="menuNotifications"/>
    <addaction name="menu"/>
   </widget>
   <action name="actionQuitter">
@@ -909,10 +916,15 @@
     <string>F1</string>
    </property>
   </action>
+  <action name="actionDemandes_d_adh_sion">
+   <property name="text">
+    <string>Demandes d'adhésion</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="../User/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
