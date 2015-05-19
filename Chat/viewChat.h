@@ -14,6 +14,8 @@ namespace Ui
     class viewChat;
 }
 
+enum class NotificationType : quint32 {NEW_MEMBERSHIP_APPLICATION, NBR_ITEMS};
+
 class ViewChat : public QMainWindow
 {
     Q_OBJECT
@@ -24,6 +26,9 @@ private:
     quint32 _selectedRoomId;
     bool _isEditingMessage;
     QMenu* _menu;
+    quint32 _nbTotalNotifications;
+    QList<quint32> _nbNotifications;
+
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
 public:
@@ -45,6 +50,7 @@ public:
     void updateButtons(const bool isAdmin) const;
     void deleteMessage(const quint32 messageId) const;
     void deleteRoom(const quint32 roomId) const;
+    void newNotification(const NotificationType notifType) const;
 
 private slots:
     void on_btn_send_clicked();
@@ -59,9 +65,7 @@ private slots:
     void on_btn_edit_clicked();
     void on_btn_delete_clicked();
     void showContextMessage(const QPoint& pos);
-
     void on_btn_expandAll_clicked();
-
     void on_btn_collapseAll_clicked();
 
 signals:
@@ -69,7 +73,7 @@ signals:
     void requestOpenRoomModule() const;
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
-    void requestDeleteMessage(const quint32 messageId) const;
+    void requestDeleteMessage(const quint32 roomId, const quint32 messageId) const;
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
 };

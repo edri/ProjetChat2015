@@ -158,6 +158,25 @@ QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
     return _onlineRooms;
 }
 
+void ControllerRoom::deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* sender)
+{
+    ModelMessage message = _db.infoMessage(messageId);
+    if (sender->logged && message.getIdUser() == sender->id)
+    {
+        _db.deleteMessage(messageId);
+        ChatorRoom* room = _onlineRooms[roomId];
+        if (room)
+        {
+            QByteArray data = _interpretor->deleteMessage(roomId, messageId);
+            
+            for (ChatorClient* client : room->clients)
+            {
+                client->socket.sendBinaryMessage(data);
+            }
+        }
+    }
+}
+
 void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
 {
     
@@ -171,4 +190,25 @@ void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
 void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
 {
     
+}
+
+void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
+{
+    ChatorRoom* room = _onlineRooms[roomId];
+    if (room && _db.infoRoom(roomId).getAdmins().contains(client->id))
+    {
+        qDebug() << "suppression de la salle " << roomId;
+        _db.deleteRoom(roomId);
+        QByteArray data = _interpretor->deleteRoom(roomId);
+        
+        for (ChatorClient* currentClient : room->clients)
+        {
+            qDebug() << "Envoi de l'information a " << currentClient->id;
+            currentClient->socket.sendBinaryMessage(data);
+            currentClient->rooms.remove(room);
+        }
+        
+        _onlineRooms.remove(roomId);
+        delete room;
+    }
 }

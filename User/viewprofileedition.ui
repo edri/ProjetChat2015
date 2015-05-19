@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icons.qrc">
+    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
@@ -20,7 +24,7 @@
       <x>9</x>
       <y>9</y>
       <width>431</width>
-      <height>361</height>
+      <height>400</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -292,11 +296,13 @@
      <x>0</x>
      <y>0</y>
      <width>452</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
