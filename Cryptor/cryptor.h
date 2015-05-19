@@ -86,6 +86,8 @@ class Cryptor
      * number of round avoid brute force attack.*/
     Hash generateHash(const string& password, Salt& salt,
          const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
+         
+    AESKey generateAESKeyFromHash(const Hash& hash);
     
     CypherText cypherAES(const string& message, const AESKey& encryptionKey);
     string decypherAES(const CypherText& cypherMessage, const AESKey& encryptionKey);

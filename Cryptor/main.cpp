@@ -43,9 +43,9 @@ int main()
     }
     cout << endl << endl;
     
-    /*RSAPair rsaPair = cryptor->generateRSAPair();
+    RSAPair rsaPair = cryptor->generateRSAPair();
     cout << "Generated RSA private key : " << endl << rsaPair.privateKey.data() << endl;
-    cout << "Generated RSA public key : " << endl << rsaPair.publicKey.data() << endl << endl;*/
+    cout << "Generated RSA public key : " << endl << rsaPair.publicKey.data() << endl << endl;
     
     string msg = "Je suis un premier message.";
     CypherText cypherText = cryptor->cypherAES(msg, aesKey);
@@ -89,6 +89,95 @@ int main()
     
     decypher = cryptor->decypherAES(cypherText, aesKey);
     cout << "Message déchiffré : " << decypher << endl << endl;
+    
+    cout << "Clé AES : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
+    cout << "Vecteur d'initialisation AES : ";
+    for (unsigned i = 0; i < aesKey.initializationVector.size(); ++i)
+    {
+        printf("%02X", aesKey.initializationVector.at(i));
+    }
+    cout << endl;
+    
+    cryptor->cypherRSA(aesKey, rsaPair);
+    
+    cout << "Clé AES chiffrée : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
+    cout << "Vecteur d'initialisation AES chiffré : ";
+    for (unsigned i = 0; i < aesKey.initializationVector.size(); ++i)
+    {
+        printf("%02X", aesKey.initializationVector.at(i));
+    }
+    cout << endl;
+    
+    cryptor->decypherRSA(aesKey, rsaPair);
+    
+    cout << "Clé AES déchiffrée : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
+    cout << "Vecteur d'initialisation AES déchiffré : ";
+    for (unsigned i = 0; i < aesKey.initializationVector.size(); ++i)
+    {
+        printf("%02X", aesKey.initializationVector.at(i));
+    }
+    cout << endl << endl;
+    
+    cout << "Clé RSA privée : " << rsaPair.privateKey.data();
+    
+    AESKey hashKey = cryptor->generateAESKeyFromHash(hash);
+    
+    cout << "Aes Key : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
+    cryptor->cypherAES(rsaPair, hashKey);
+    
+    cryptor->cypherRSA(aesKey, rsaPair);
+    
+    cout << "Clé RSA privée chiffrée : ";
+    for (unsigned i = 0; i < rsaPair.privateKey.size(); ++i)
+    {
+        printf("%02X", rsaPair.privateKey.at(i));
+    }
+    cout << endl;
+    
+    cout << "Aes Key : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
+    cryptor->decypherAES(rsaPair, hashKey);
+    
+    cout << "Clé RSA privée déchiffrée : " << rsaPair.privateKey.data() << endl;
+    
+    cryptor->decypherRSA(aesKey, rsaPair);
+    
+    cout << "Aes Key : ";
+    for (unsigned i = 0; i < aesKey.key.size(); ++i)
+    {
+        printf("%02X", aesKey.key.at(i));
+    }
+    cout << endl;
+    
     
     /*cout << "Simulation création utilisateur" << endl;
     
