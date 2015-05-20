@@ -331,7 +331,7 @@ const QString& ModelRoom::getName() const
     return _name;
 }
 
-QImage& ModelRoom::getPicture()
+const QImage& ModelRoom::getPicture() const
 {
     return _picture;
 }

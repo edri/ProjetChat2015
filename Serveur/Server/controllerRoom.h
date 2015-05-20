@@ -15,8 +15,8 @@ class ControllerRoom
     ControllerRoom(ControllerDB& db);
     void processMessage(ModelMessage& message, const bool edited, ChatorClient* client);
     void userConnected(const ModelUser& user, ChatorClient* client);
-    void leaveRoom(const quint32& idRoom, ChatorClient* client);
-    void joinRoom(const quint32& idRoom, ChatorClient* client);
+    void leaveRoom(const quint32 idRoom, ChatorClient* client);
+    void joinRoom(const quint32 idRoom, ChatorClient* client);
     void createRoom(ModelRoom& room, ChatorClient* client);
     void modifyRoom(ModelRoom& room, ChatorClient* client);
     void deleteRoom(const quint32 roomId, ChatorClient* client);

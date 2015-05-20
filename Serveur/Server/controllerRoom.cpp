@@ -177,12 +177,35 @@ void ControllerRoom::deleteMessage(const quint32 roomId, const quint32 messageId
     }
 }
 
-void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
+void ControllerRoom::leaveRoom(const quint32 idRoom, ChatorClient* client)
 {
+    _db.leaveRoom(client->id, idRoom);
     
+    for (ChatorRoom* room : client->rooms)
+    {
+        if (room->id == idRoom)
+        {
+            QByteArray data = _interpretor->leave(client->id, idRoom);
+            
+            room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
+            
+            for (ChatorClient* member : room->clients)
+            {
+                member->socket.sendBinaryMessage(data);
+            }
+            
+            if (room->clients.empty())
+            {
+                _onlineRooms.remove(idRoom);
+                delete room;
+            }
+            
+            return;
+        }
+    }
 }
 
-void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
+void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
 {
     
 }

@@ -26,6 +26,8 @@ class ControllerDB
     ModelMessage infoMessage(const quint32 id);
     void modifyUser(const ModelUser& user);
     void deleteRoom(const quint32 roomId);
+    quint64 saveImage(const QImage& image);
+    void leaveRoom(const quint32 idUser, const quint32 idRoom);
     
     private :
     QSqlDatabase _db;
