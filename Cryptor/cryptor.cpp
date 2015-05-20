@@ -43,7 +43,15 @@ void Cryptor::handleRANDError(const int RANDResult)
             cerr << "RAND_bytes returned an unexpected value" << endl;
             break;
     }
-    
+}
+
+AESKey Cryptor::generateAESKeyFromHash(const Hash& hash)
+{
+    AESKey key;
+    key.key.resize(AES_KEY_LENGTH/8);
+    memcpy(key.key.data(), hash.data(), AES_KEY_LENGTH/8);
+    key.initializationVector.resize(AES_BLOCK_SIZE/8, 0);
+    return key;
 }
 
 AESKey Cryptor::generateAESKey(const unsigned keyLength)
@@ -242,7 +250,7 @@ string Cryptor::decypherAES(const CypherText& cypherMessage, const AESKey& encry
 }
 int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
 {
-     // Initialize encryption.
+    // Initialize encryption.
     EVP_CIPHER_CTX encrypt;
     EVP_CIPHER_CTX_init(&encrypt);
     EVP_EncryptInit_ex(&encrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
@@ -298,7 +306,7 @@ int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
     BIO* publicKey = BIO_new(BIO_s_mem());
     
     BIO_write(publicKey, encryptionKey.publicKey.data(), encryptionKey.publicKeyLength);
-    RSA *keypair = PEM_read_bio_RSAPublicKey(publicKey,NULL,0,NULL);
+    RSA* keypair = PEM_read_bio_RSAPublicKey(publicKey,NULL,0,NULL);
     
     encryptedSize = RSA_public_encrypt((int)key.key.size() + 1, key.key.data(), encryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(encryptedSize == -1 || encryptedSize > RSA_KEY_LENGTH/8)
@@ -314,6 +322,10 @@ int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
     
     key.key = encryptedKey;
     key.initializationVector = encryptedIV;
+    key.key.shrink_to_fit();
+    key.initializationVector.shrink_to_fit();
+    BIO_free(publicKey);
+    RSA_free(keypair);
     
     return 0;
 }
@@ -334,6 +346,7 @@ int Cryptor::decypherRSA(AESKey& key, const RSAPair& encryptionKey)
     {
         return -1;
     }
+    decryptedKey.resize(decryptedSize-1);
     
     decryptedSize = RSA_private_decrypt((int)key.initializationVector.size(), key.initializationVector.data(), decryptedIV.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(decryptedSize == -1)
@@ -341,8 +354,13 @@ int Cryptor::decypherRSA(AESKey& key, const RSAPair& encryptionKey)
         return -1;
     }
     
+    decryptedIV.resize(decryptedSize-1);
+    
     key.key = decryptedKey;
     key.initializationVector = decryptedIV;
+    
+    BIO_free(privateKey);
+    RSA_free(keypair);
     
     return 0;
 }
