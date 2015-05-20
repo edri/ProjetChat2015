@@ -145,6 +145,12 @@ void ControllerUser::disconnect(ChatorClient* client)
 
 void ControllerUser::modifyUser(const ModelUser& user, ChatorClient* client)
 {
+    if (user.getIdUser() == client->id)
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect user")));
+        return;
+    }
+    
     _db.modifyUser(user);
     QSet<quint32> upToDateClients;
     QByteArray data = _interpretor->editAccount(user);

@@ -24,6 +24,7 @@ class ControllerDB
     ModelRoom infoRoom(const quint32 id);
     quint32 createRoom(const ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
+    void modifyRoom(const ModelRoom& room);
     void modifyUser(const ModelUser& user);
     void deleteRoom(const quint32 roomId);
     quint64 saveImage(const QImage& image);

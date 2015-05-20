@@ -263,6 +263,8 @@ quint64 ControllerDB::saveImage(const QImage& image)
     picture.open(QIODevice::WriteOnly);
     image.save(&picture, PROFILE_PICTURE_FORMAT);
     picture.close();
+    
+    return msecs;
 }
 
 void ControllerDB::logout(const quint32 userId)
@@ -282,6 +284,20 @@ void ControllerDB::modifyUser(const ModelUser& user)
     QFile profilePicture(query.record().value("profilePicture").toString());
     profilePicture.open(QIODevice::WriteOnly);
     user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
+    profilePicture.close();
+}
+
+void ControllerDB::modifyRoom(const ModelRoom& room)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE room (name, limitOfStoredMessages) VALUES (\"" + room.getName() + "\", " + QString::number(room.getLimit()) + ")");
+    
+    query.exec("SELECT picture FROM room WHERE idRoom = " + QString::number(room.getIdRoom()));
+    query.first();
+    
+    QFile profilePicture(query.record().value("picture").toString());
+    profilePicture.open(QIODevice::WriteOnly);
+    room.getPicture().save(&profilePicture, PROFILE_PICTURE_FORMAT);
     profilePicture.close();
 }
 
