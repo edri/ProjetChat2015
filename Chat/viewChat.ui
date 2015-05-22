@@ -575,6 +575,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="btn_leaveRoom">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -684,6 +687,9 @@
              </property>
              <item>
               <widget class="QLineEdit" name="ldt_message">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -700,12 +706,15 @@
                 <bool>true</bool>
                </property>
                <property name="placeholderText">
-                <string>Entrez un message.</string>
+                <string>Veuillez sélectionner une salle.</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="btn_send">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>Envoyer</string>
                </property>

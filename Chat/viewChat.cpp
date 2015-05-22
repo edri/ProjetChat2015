@@ -348,13 +348,17 @@ void ViewChat::on_ldt_message_returnPressed()
 
 void ViewChat::on_btn_leaveRoom_clicked()
 {
-    int ret = QMessageBox::warning(this, tr("Attention"),
-                                   tr("Êtes-vous sûr de vouloir quitter cette salle ?"),
-                                   tr("Oui"), tr("Non"));
+    // An item must be selected.
+    if (_ui->tre_rooms->selectedItems().count())
+    {
+        int ret = QMessageBox::warning(this, tr("Attention"),
+                                       tr("Êtes-vous sûr de vouloir quitter cette salle ?"),
+                                       tr("Oui"), tr("Non"));
 
-    // "Yes" pressed.
-    if (ret == 0)
-        emit requestLeaveRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+        // "Yes" pressed.
+        if (ret == 0)
+            emit requestLeaveRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+    }
 }
 
 void ViewChat::on_btn_joinRoom_clicked()
@@ -369,26 +373,43 @@ void ViewChat::on_btn_newRoom_clicked()
 
 void ViewChat::on_tre_rooms_itemSelectionChanged()
 {
-    for (int i = 0; i < _ui->tre_rooms->topLevelItemCount(); ++i)
+    quint32 nbItems = _ui->tre_rooms->topLevelItemCount();
+
+    if (!nbItems)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->isSelected())
+        _ui->btn_leaveRoom->setDisabled(true);
+        _ui->btn_send->setDisabled(true);
+        _ui->ldt_message->setDisabled(true);
+        _ui->ldt_message->setPlaceholderText(tr("Veuillez sélectionner une salle."));
+    }
+    else
+    {
+        _ui->btn_leaveRoom->setDisabled(false);
+        _ui->btn_send->setDisabled(false);
+        _ui->ldt_message->setDisabled(false);
+        _ui->ldt_message->setPlaceholderText(tr("Entrez un message."));
+
+        for (int i = 0; i < nbItems; ++i)
         {
-            _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt();
+            if (_ui->tre_rooms->topLevelItem(i)->isSelected())
+            {
+                _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt();
 
-            _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
-            _ui->tre_rooms->topLevelItem(i)->setForeground(0, QBrush(Qt::black));
-            _ui->tre_rooms->topLevelItem(i)->setText(1, "");
-            _ui->tre_rooms->topLevelItem(i)->setData(1, Qt::UserRole, 0);
-            _ui->tre_rooms->expandItem(_ui->tre_rooms->topLevelItem(i));
-            _ui->tre_rooms->resizeColumnToContents(1);
+                _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
+                _ui->tre_rooms->topLevelItem(i)->setForeground(0, QBrush(Qt::black));
+                _ui->tre_rooms->topLevelItem(i)->setText(1, "");
+                _ui->tre_rooms->topLevelItem(i)->setData(1, Qt::UserRole, 0);
+                _ui->tre_rooms->expandItem(_ui->tre_rooms->topLevelItem(i));
+                _ui->tre_rooms->resizeColumnToContents(1);
 
-            _ui->tre_messages->clear();
+                _ui->tre_messages->clear();
 
-            // Request the controller to load the selected room's messages.
-            emit requestLoadRoomMessages(_selectedRoomId);
+                // Request the controller to load the selected room's messages.
+                emit requestLoadRoomMessages(_selectedRoomId);
+            }
+            else
+                _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Normal));
         }
-        else
-            _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Normal));
     }
 }
 
