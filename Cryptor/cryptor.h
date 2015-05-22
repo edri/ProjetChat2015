@@ -18,6 +18,7 @@ const unsigned AES_KEY_LENGTH = 256;
 const unsigned AES_BLOCK_SIZE = 128;
 const unsigned SALT_LENGTH = 64;
 const int RSA_KEY_LENGTH = 4096;
+const int RSA_BLOCK_LENGTH = 512;
 const int HASH_LENGTH = 512;
 
 
@@ -89,12 +90,12 @@ class Cryptor
          
     AESKey generateAESKeyFromHash(const Hash& hash);
     
-    CypherText cypherAES(const string& message, const AESKey& encryptionKey);
-    string decypherAES(const CypherText& cypherMessage, const AESKey& encryptionKey);
-    int cypherAES(RSAPair& key, const AESKey& encryptionKey);
-    int decypherAES(RSAPair& key, const AESKey& encryptionKey);    
-    int cypherRSA(AESKey& key, const RSAPair& encryptionKey);
-    int decypherRSA(AESKey& key, const RSAPair& encryptionKey);
+    CypherText encryptWithAES(const string& message, const AESKey& encryptionKey);
+    string decryptWithAES(const CypherText& cypherMessage, const AESKey& encryptionKey);
+    int encryptWithAES(RSAPair& key, const AESKey& encryptionKey);
+    int decryptWithAES(RSAPair& key, const AESKey& encryptionKey);    
+    int encryptWithRSA(AESKey& key, const RSAPair& encryptionKey);
+    int decryptWithRSA(AESKey& key, const RSAPair& encryptionKey);
     
     private :
     void handleRANDError(const int RANDResult);
