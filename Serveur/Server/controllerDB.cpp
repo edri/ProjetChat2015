@@ -190,7 +190,9 @@ quint32 ControllerDB::createRoom(const ModelRoom& room)
 {
     QSqlQuery query(_db);
     
-    query.exec("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (\"" + room.getName() + "\", " + room.getLimit() + ", " + QString::number(room.isPrivate()? 1 : 0) + ", " + QString::number(room.isVisible()? 1 : 0) + ", \"\")");
+    quint64 img = saveImage(room.getPicture());
+    
+    query.exec("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (\"" + room.getName() + "\", " + room.getLimit() + ", " + QString::number(room.isPrivate()? 1 : 0) + ", " + QString::number(room.isVisible()? 1 : 0) + ", \"" + QString::number(img) + "\")");
     
     quint32 idRoom = query.lastInsertId().toUInt();
     
@@ -231,17 +233,7 @@ bool ControllerDB::createAccount(ModelUser& user, QString& password)
 {
     qDebug() << "Appel DB create Account";
     
-    QFile profilePicture;
-    quint64 msecs = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    
-    do
-    {
-        profilePicture.setFileName(PROFILE_PICTURE_FOLDER + QString::number(msecs));
-    } while (profilePicture.exists() && msecs++);
-    
-    profilePicture.open(QIODevice::WriteOnly);
-    user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
-    profilePicture.close();
+    quint64 img = saveImage(user.getImage());
     
     QSqlQuery query(_db);
     
@@ -249,13 +241,30 @@ bool ControllerDB::createAccount(ModelUser& user, QString& password)
     
     if (query.first()) {return false;}
 
-    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \""+ password + "\", \"" + QString::number(msecs) + "\", 0, 0, 0, 0, 0)");
+    query.exec("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (\"" + user.getUserName() + "\", \"" + user.getFirstName() + "\", \"" + user.getLastName() + "\", \""+ password + "\", \"" + QString::number(img) + "\", 0, 0, 0, 0, 0)");
     
     user.setIdUser(query.lastInsertId().toUInt());
     
     qDebug() << "Inscription faite dans la db: " << query.lastError().text();
     
     return true;
+}
+
+quint64 ControllerDB::saveImage(const QImage& image)
+{
+    QFile picture;
+    quint64 msecs = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    
+    do
+    {
+        picture.setFileName(PROFILE_PICTURE_FOLDER + QString::number(msecs));
+    } while (picture.exists() && msecs++);
+    
+    picture.open(QIODevice::WriteOnly);
+    image.save(&picture, PROFILE_PICTURE_FORMAT);
+    picture.close();
+    
+    return msecs;
 }
 
 void ControllerDB::logout(const quint32 userId)
@@ -278,6 +287,20 @@ void ControllerDB::modifyUser(const ModelUser& user)
     profilePicture.close();
 }
 
+void ControllerDB::modifyRoom(const ModelRoom& room)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE room (name, limitOfStoredMessages) VALUES (\"" + room.getName() + "\", " + QString::number(room.getLimit()) + ")");
+    
+    query.exec("SELECT picture FROM room WHERE idRoom = " + QString::number(room.getIdRoom()));
+    query.first();
+    
+    QFile profilePicture(query.record().value("picture").toString());
+    profilePicture.open(QIODevice::WriteOnly);
+    room.getPicture().save(&profilePicture, PROFILE_PICTURE_FORMAT);
+    profilePicture.close();
+}
+
 void ControllerDB::deleteRoom(const quint32 roomId)
 {
     QSqlQuery query(_db);
@@ -285,4 +308,13 @@ void ControllerDB::deleteRoom(const quint32 roomId)
     query.exec("DELETE FROM roomMembership WHERE idRoom = " + QString::number(roomId));
     query.exec("DELETE FROM banning WHERE idRoom = " + QString::number(roomId));
     query.exec("DELETE FROM room WHERE idRoom = " + QString::number(roomId));
+}
+
+void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
+{
+    QSqlQuery query(_db);
+    query.exec("DELETE FROM roomMembership WHERE idUser = " + QString::number(idUser) + " AND idRoom = " + QString::number(idRoom));
+    query.exec("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = " + QString::number(idRoom));
+    query.first();
+    if (query.record().value("nbMembers").toUInt() == 0) {deleteRoom(idRoom);}
 }

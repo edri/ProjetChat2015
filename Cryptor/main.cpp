@@ -48,7 +48,7 @@ int main()
     cout << "Generated RSA public key : " << endl << rsaPair.publicKey.data() << endl << endl;
     
     string msg = "Je suis un premier message.";
-    CypherText cypherText = cryptor->cypherAES(msg, aesKey);
+    CypherText cypherText = cryptor->encryptWithAES(msg, aesKey);
     
     cout << "Message : " << msg << endl;
     cout << "Message chiffré : ";
@@ -58,11 +58,11 @@ int main()
     }
     cout << endl;
     
-    string decypher = cryptor->decypherAES(cypherText, aesKey);
+    string decypher = cryptor->decryptWithAES(cypherText, aesKey);
     cout << "Message déchiffré : " << decypher << endl << endl;
     
     msg = "Français : Les fougères mangent les petits garçons. Chinois : 蕨類植物吃小男孩。";
-    cypherText = cryptor->cypherAES(msg, aesKey);
+    cypherText = cryptor->encryptWithAES(msg, aesKey);
     
     cout << "Message : " << msg << endl;
     cout << "Message chiffré : ";
@@ -72,12 +72,12 @@ int main()
     }
     cout << endl;
     
-    decypher = cryptor->decypherAES(cypherText, aesKey);
+    decypher = cryptor->decryptWithAES(cypherText, aesKey);
     cout << "Message déchiffré : " << decypher << endl << endl;
     
     
     msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    cypherText = cryptor->cypherAES(msg, aesKey);
+    cypherText = cryptor->encryptWithAES(msg, aesKey);
     
     cout << "Message : " << msg << endl;
     cout << "Message chiffré : ";
@@ -87,7 +87,7 @@ int main()
     }
     cout << endl;
     
-    decypher = cryptor->decypherAES(cypherText, aesKey);
+    decypher = cryptor->decryptWithAES(cypherText, aesKey);
     cout << "Message déchiffré : " << decypher << endl << endl;
     
     cout << "Clé AES : ";
@@ -104,7 +104,7 @@ int main()
     }
     cout << endl;
     
-    cryptor->cypherRSA(aesKey, rsaPair);
+    cryptor->encryptWithRSA(aesKey, rsaPair);
     
     cout << "Clé AES chiffrée : ";
     for (unsigned i = 0; i < aesKey.key.size(); ++i)
@@ -120,7 +120,7 @@ int main()
     }
     cout << endl;
     
-    cryptor->decypherRSA(aesKey, rsaPair);
+    cryptor->decryptWithRSA(aesKey, rsaPair);
     
     cout << "Clé AES déchiffrée : ";
     for (unsigned i = 0; i < aesKey.key.size(); ++i)
@@ -147,9 +147,9 @@ int main()
     }
     cout << endl;
     
-    cryptor->cypherAES(rsaPair, hashKey);
+    cryptor->encryptWithAES(rsaPair, hashKey);
     
-    cryptor->cypherRSA(aesKey, rsaPair);
+    cryptor->encryptWithRSA(aesKey, rsaPair);
     
     cout << "Clé RSA privée chiffrée : ";
     for (unsigned i = 0; i < rsaPair.privateKey.size(); ++i)
@@ -165,11 +165,11 @@ int main()
     }
     cout << endl;
     
-    cryptor->decypherAES(rsaPair, hashKey);
+    cryptor->decryptWithAES(rsaPair, hashKey);
     
     cout << "Clé RSA privée déchiffrée : " << rsaPair.privateKey.data() << endl;
     
-    cryptor->decypherRSA(aesKey, rsaPair);
+    cryptor->decryptWithRSA(aesKey, rsaPair);
     
     cout << "Aes Key : ";
     for (unsigned i = 0; i < aesKey.key.size(); ++i)

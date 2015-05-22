@@ -196,7 +196,7 @@ Hash Cryptor::generateHash(const string& password, Salt& salt,
     return hash;
 }
 
-CypherText Cryptor::cypherAES(const string& message, const AESKey& encryptionKey)
+CypherText Cryptor::encryptWithAES(const string& message, const AESKey& encryptionKey)
 {
     // Initialize encryption.
     EVP_CIPHER_CTX encrypt;
@@ -226,7 +226,7 @@ CypherText Cryptor::cypherAES(const string& message, const AESKey& encryptionKey
     
     return cypherMessage;
 }
-string Cryptor::decypherAES(const CypherText& cypherMessage, const AESKey& encryptionKey)
+string Cryptor::decryptWithAES(const CypherText& cypherMessage, const AESKey& encryptionKey)
 {
     EVP_CIPHER_CTX decrypt;
     EVP_CIPHER_CTX_init(&decrypt);
@@ -248,7 +248,7 @@ string Cryptor::decypherAES(const CypherText& cypherMessage, const AESKey& encry
     
     return message;
 }
-int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
+int Cryptor::encryptWithAES(RSAPair& key, const AESKey& encryptionKey)
 {
     // Initialize encryption.
     EVP_CIPHER_CTX encrypt;
@@ -276,7 +276,7 @@ int Cryptor::cypherAES(RSAPair& key, const AESKey& encryptionKey)
     
     return 0;
 }
-int Cryptor::decypherAES(RSAPair& key, const AESKey& encryptionKey)
+int Cryptor::decryptWithAES(RSAPair& key, const AESKey& encryptionKey)
 {
     EVP_CIPHER_CTX decrypt;
     EVP_CIPHER_CTX_init(&decrypt);
@@ -297,7 +297,7 @@ int Cryptor::decypherAES(RSAPair& key, const AESKey& encryptionKey)
     return 0;
 }
 
-int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
+int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
 {
     vector<unsigned char> encryptedKey(encryptionKey.blockSize);
     vector<unsigned char> encryptedIV(encryptionKey.blockSize);
@@ -329,7 +329,7 @@ int Cryptor::cypherRSA(AESKey& key, const RSAPair& encryptionKey)
     
     return 0;
 }
-int Cryptor::decypherRSA(AESKey& key, const RSAPair& encryptionKey)
+int Cryptor::decryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
 {
     vector<unsigned char> decryptedKey(encryptionKey.blockSize);
     vector<unsigned char> decryptedIV(encryptionKey.blockSize);
