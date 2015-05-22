@@ -41,7 +41,7 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
     messageItem->setData(1, Qt::UserRole, message.getIdMessage());
     messageItem->setData(2, Qt::UserRole, isCurrentUserMessage);
     messageItem->setText(0, "[" + message.getDate().toString("HH:mm") + "] <" + _model->getUser(message.getIdUser()).getUserName() + ">");
-    messageItem->setText(1, message.getContent());
+    messageItem->setText(1, QString::fromUtf8(message.getContent()));
 
     if (message.getEditionDate() != message.getDate())
     {
@@ -192,7 +192,7 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
                             if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole) == message.getIdMessage())
                             {
                                 _isEditingMessage = true;
-                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(1, message.getContent());
+                                _ui->tre_messages->topLevelItem(i)->child(j)->setText(1, QString::fromUtf8(message.getContent()));
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + message.getEditionDate().toString("dd.MM.yyyy à HH:mm") + "]");
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setTextColor(2, QColor(192, 192, 192));
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));

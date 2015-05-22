@@ -2,21 +2,31 @@
 
 ModelChator::ModelChator() {}
 
+void ModelChator::setRsaKeyPair(const RSAPair& rsaKeyPair)
+{
+    _rsaKeyPair = rsaKeyPair;
+}
+
+RSAPair ModelChator::getRsaKeyPair() const
+{
+    return _rsaKeyPair;
+}
+
 ModelMessage::ModelMessage() : _idMessage(0), _idRoom(0), _idUser(0), _date(QDateTime::currentDateTime()), _lastEditionDate(QDateTime::currentDateTime()), _content("") {}
 
 ModelMessage::ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser,
-                           const QDateTime& date, const QDateTime& lastEditionDate, const QString& content) :
+                           const QDateTime& date, const QDateTime& lastEditionDate, const QByteArray& content) :
     _idMessage(idMessage), _idRoom(idRoom), _idUser(idUser), _date(date), _lastEditionDate(lastEditionDate), _content(content) {}
 
 ModelMessage::~ModelMessage(){}
 
-void ModelMessage::modify(const QString& content, const QDateTime lastEditionDate)
+void ModelMessage::modify(const QByteArray& content, const QDateTime lastEditionDate)
 {
     _content = content;
     _lastEditionDate = lastEditionDate;
 }
 
-const QString& ModelMessage::getContent() const
+const QByteArray& ModelMessage::getContent() const
 {
     return _content;
 }
@@ -59,6 +69,11 @@ void ModelMessage::setDate(const QDateTime& date)
 void ModelMessage::setEditionDate(const QDateTime& date)
 {
     _lastEditionDate = date;
+}
+
+void ModelMessage::setContent(const QByteArray& content)
+{
+    _content = content;
 }
 
 ModelUser::ModelUser() : _idUser(0), _userName(""), _firstName(""), _lastName(""), _isConnected(false), _lastConnection(QDateTime()), _image(QImage()) {}
@@ -208,9 +223,9 @@ ModelMessage& ModelChator::getMessage(const quint32 idRoom, const quint32 idMess
     return _rooms[idRoom].getMessage(idMessage);
 }
 
-void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
+void ModelChator::modifyMessage(const quint32 idRoom, const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate)
 {
-    _rooms[idRoom].modifyMessage(idMessage, contents, lastEditionDate);
+    _rooms[idRoom].modifyMessage(idMessage, content, lastEditionDate);
 }
 
 void ModelChator::deleteMessage(const quint32 idRoom, const quint32 idMessage)
@@ -228,7 +243,7 @@ ModelMessage& ModelRoom::getMessage(const quint32 idMessage)
     return _messages[idMessage];
 }
 
-void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime &date, const QDateTime &lastEditionDate, const QString &content)
+void ModelRoom::addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QByteArray& content)
 {
     _messages.insert(idMessage, ModelMessage(idMessage, idRoom, idUser, date, lastEditionDate, content));
 }
@@ -238,9 +253,9 @@ void ModelRoom::addMessage(const ModelMessage& message)
     _messages.insert(message.getIdMessage(), ModelMessage(message));
 }
 
-void ModelRoom::modifyMessage(const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate)
+void ModelRoom::modifyMessage(const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate)
 {
-    _messages[idMessage].modify(contents, lastEditionDate);
+    _messages[idMessage].modify(content, lastEditionDate);
 }
 
 void ModelRoom::deleteMessage(const quint32 idMessage)
@@ -345,10 +360,17 @@ bool ModelRoom::isPrivate() const
 {
     return _private;
 }
+
 bool ModelRoom::isVisible() const
 {
     return _visible;
 }
+
+AESKey& ModelRoom::getSecretKey()
+{
+    return _secretKey;
+}
+
 void ModelRoom::setIdRoom(const quint32 id)
 {
     _idRoom = id;
