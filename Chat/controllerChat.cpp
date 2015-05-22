@@ -44,7 +44,9 @@ void ControllerChat::loadUser(ModelUser& user) const
 
 void ControllerChat::loadRoom(ModelRoom& room) const
 {
-    _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+    if (room.isPrivate())
+        _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+
     _model->addRoom(room);
 }
 
