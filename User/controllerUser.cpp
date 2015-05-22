@@ -1,17 +1,18 @@
 #include "controllerUser.h"
 
 ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i, ClientConnector* cc,
-                               ControllerOutput* co, ControllerChat* controllerChat)
+                               ControllerOutput* co, ControllerChat* controllerChat, Cryptor* cryptor)
 {
-    this->cci = cci;
-    this->i = i;
-    this->cc = cc;
-    this->co = co;
+    _cci = cci;
+    _i = i;
+    _cc = cc;
+    _co = co;
+    _cryptor = cryptor;
     // Initialize a new view for the connection
-    this->_view = new ViewUser();
-    this->_model = new ModelChator();
-    this->_currentUser = currentUser;
-    this->_controllerChat = controllerChat;
+    _view = new ViewUser();
+    _model = new ModelChator();
+    _currentUser = currentUser;
+    _controllerChat = controllerChat;
 
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
@@ -41,19 +42,19 @@ void ControllerUser::connectToServer(bool fromBtnConnection)
     QString server = _view->getIpAddress();
     QString port = _view->getPort();   //
 
-    this->fromBtnConnection = fromBtnConnection;
+    this->_fromBtnConnection = fromBtnConnection;
 
     // Connection to the servers
-    cc->connectToServer(server + ":" + port);
+    _cc->connectToServer(server + ":" + port);
 }
 
 void ControllerUser::auth() const
 {
-    if(fromBtnConnection)
+    if(_fromBtnConnection)
     {
         QString username = _view->getUsername();
         QString password = _view->getPassword();
-        co->login(username, password);
+        _co->login(username, password);
     }
     else  // button inscription
     {
@@ -85,5 +86,5 @@ void ControllerUser::InscriptionToServer() const
 
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
-    co->createAccount(myUser, password);
+    _co->createAccount(myUser, password);
 }

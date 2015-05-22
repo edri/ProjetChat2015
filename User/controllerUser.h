@@ -9,6 +9,7 @@
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
 #include "../Chat/controllerChat.h"
+#include "../Cryptor/cryptor.h"
 
 class ClientControllerInput;
 class ControllerChat;
@@ -25,20 +26,22 @@ private:
     ViewUser* _viewInscription;
     ModelChator* _model;
 
-    ClientControllerInput* cci;
-    Interpretor* i;
-    ClientConnector* cc;
-    ControllerOutput* co;
+    ClientControllerInput* _cci;
+    Interpretor* _i;
+    ClientConnector* _cc;
+    ControllerOutput* _co;
     ControllerChat* _controllerChat;
+
+    Cryptor* _cryptor;
 
     ModelUser* _currentUser;
 
-    bool fromBtnConnection;
+    bool _fromBtnConnection;
 
 
 public:
     ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i,
-                   ClientConnector* cc, ControllerOutput* co, ControllerChat* controllerChat);
+                   ClientConnector* cc, ControllerOutput* co, ControllerChat* controllerChat, Cryptor* cryptor);
     ~ControllerUser();
 
     // Afficher la vue
@@ -51,7 +54,7 @@ public:
 
 
 public slots:
-    void connectToServer(bool fromBtnConnection);
+    void connectToServer(bool _fromBtnConnection);
     void auth() const;
     void InscriptionToServer() const;
 

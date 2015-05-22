@@ -1,7 +1,8 @@
 #include "controllerChat.h"
 
 ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
-                               Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom)
+                               Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom,
+                               Cryptor* cryptor)
 {
     _model = model;
     _view = new ViewChat(_model);
@@ -12,6 +13,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     _cc = cc;
     _co = co;
     _controllerRoom = controllerRoom;
+    _cryptor = cryptor;
 
     connect(_view, SIGNAL(requestOpenRoomModule()), this, SLOT(openRoomModule()));
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
