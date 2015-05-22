@@ -36,10 +36,19 @@ void ViewUser::on_btn_connexion_clicked()
 
 void ViewUser::on_btn_inscription_clicked()
 {
-    ui->lbl_info->setText("Connexion au serveur...");
+    // Vérifier que les champs ne soient pas vides
+    if(ui->ldt_server->text().isEmpty() || ui->spn_port->text().isEmpty())
+    {
+        // Afficher un message d'erreur
+        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez un serveur et un port.</font>");
+    }
+    else
+    {
+        ui->lbl_info->setText("Connexion au serveur...");
 
-    // Send the data
-    emit requestGetIds(false);
+        // Send the data
+        emit requestGetIds(false);
+    }
 }
 
 
@@ -55,7 +64,7 @@ QString ViewUser::getPassword() const
 
 QString ViewUser::getPort() const
 {
-    return ui->spinBox->text();
+    return ui->spn_port->text();
 
 }
 

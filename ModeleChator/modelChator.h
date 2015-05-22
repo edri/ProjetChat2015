@@ -183,7 +183,7 @@ class ModelRoom
         const QSet<quint32>& getUsers() const;
         const QSet<quint32>& getAdmins() const;
         const QString& getName() const;
-        QImage& getPicture();
+        const QImage& getPicture() const;
         quint32 getLimit() const;
         bool isPrivate() const ;
         bool isVisible() const;

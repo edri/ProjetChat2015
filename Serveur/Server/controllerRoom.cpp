@@ -177,19 +177,65 @@ void ControllerRoom::deleteMessage(const quint32 roomId, const quint32 messageId
     }
 }
 
-void ControllerRoom::leaveRoom(const quint32& idRoom, ChatorClient* client)
+void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, ChatorClient* client)
 {
+    if (idUser != client->id)
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::ROOM_CREATION, "Who are you?")));
+        return;
+    }
     
+    _db.leaveRoom(client->id, idRoom);
+    
+    for (ChatorRoom* room : client->rooms)
+    {
+        if (room->id == idRoom)
+        {
+            QByteArray data = _interpretor->leave(client->id, idRoom);
+            
+            room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
+            
+            for (ChatorClient* member : room->clients)
+            {
+                member->socket.sendBinaryMessage(data);
+            }
+            
+            if (room->clients.empty())
+            {
+                _onlineRooms.remove(idRoom);
+                delete room;
+            }
+            
+            return;
+        }
+    }
 }
 
-void ControllerRoom::joinRoom(const quint32& idRoom, ChatorClient* client)
+void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
 {
-    
+    Q_UNUSED(idRoom);
+    Q_UNUSED(client);
 }
 
 void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
 {
+    ChatorRoom* onlineRoom = _onlineRooms[room.getIdRoom()];
     
+    if (!onlineRoom || !_db.infoRoom(onlineRoom->id).getAdmins().contains(client->id))
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect user")));
+    }
+    
+    _db.modifyRoom(room);
+    
+    // Le paquet n'existe pas encore
+    //QByteArray data = _interpretor->modifyRoom(room);
+    QByteArray data;
+    
+    for (ChatorClient* currentClient : onlineRoom->clients)
+    {
+        currentClient->socket.sendBinaryMessage(data);
+    }
 }
 
 void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)

@@ -109,7 +109,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QSpinBox" name="spinBox">
+       <widget class="QSpinBox" name="spn_port">
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -215,7 +215,7 @@
      <x>0</x>
      <y>0</y>
      <width>315</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -225,7 +225,7 @@
   <tabstop>ldt_userName</tabstop>
   <tabstop>ldt_password</tabstop>
   <tabstop>ldt_server</tabstop>
-  <tabstop>spinBox</tabstop>
+  <tabstop>spn_port</tabstop>
   <tabstop>btn_connexion</tabstop>
   <tabstop>btn_inscription</tabstop>
  </tabstops>

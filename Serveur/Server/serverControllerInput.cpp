@@ -69,8 +69,5 @@ void ServerControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
 
 void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender)
 {
-    Q_UNUSED(userId);
-    Q_UNUSED(roomId);
-    Q_UNUSED(sender);
-    // IL FAUT FAIRE QQCH ICI.
+    _controllerRoom.leaveRoom(userId, roomId, (ChatorClient*) sender);
 }
