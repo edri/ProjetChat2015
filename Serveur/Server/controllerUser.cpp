@@ -181,3 +181,9 @@ void ControllerUser::getSalt(const QString& pseudo, ChatorClient* client)
         client->socket.sendBinaryMessage(_interpretor->salt(pseudo, salt));
     }
 }
+
+void ControllerUser::getPublicKey(const quint32 idUser, ChatorClient* client)
+{
+    QByteArray key = _db.getPublicKey(idUser);
+    client->socket.sendBinaryMessage(_interpretor->publicKey(idUser, key));
+}

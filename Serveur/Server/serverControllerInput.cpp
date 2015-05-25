@@ -77,3 +77,9 @@ void ServerControllerInput::salt(const QString& pseudo, const QByteArray& salt, 
     Q_UNUSED(salt);
     _controllerUser.getSalt(pseudo, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::publicKey(const quint32 idUser, const QByteArray& key, QObject* sender)
+{
+    Q_UNUSED(key);
+    _controllerUser.getPublicKey(idUser, (ChatorClient*) sender);
+}

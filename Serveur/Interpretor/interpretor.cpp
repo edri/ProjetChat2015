@@ -162,6 +162,15 @@ QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
     return data;
 }
 
+QByteArray Interpretor::publicKey(const quint32 idUser, const QByteArray& key)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::PUBLIC_KEY << idUser << key;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -313,6 +322,16 @@ void Interpretor::processData(const QByteArray& data)
             stream >> pseudo;
             stream >> salt;
             _dispatcher.salt(pseudo, salt, sender());
+        }
+        break;
+        
+        case MessageType::PUBLIC_KEY:
+        {
+            quint32 idUser;
+            QByteArray key;
+            stream >> idUser;
+            stream >> key;
+            _dispatcher.publicKey(idUser, key, sender());
         }
         break;
 

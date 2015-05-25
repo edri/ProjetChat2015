@@ -30,6 +30,7 @@ class ControllerDB
     quint64 saveImage(const QImage& image);
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
     QByteArray getSalt(const QString& pseudo);
+    QByteArray getPublicKey(const quint32 idUser);
     
     private :
     QSqlDatabase _db;

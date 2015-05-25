@@ -25,6 +25,7 @@ class ServerControllerInput : public ControllerInput
     void deleteRoom(const quint32 roomId, QObject* sender);
     void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender);
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
+    void publicKey(const quint32 idUser, const QByteArray& key, QObject* sender);
     
     private:
     ControllerUser& _controllerUser;

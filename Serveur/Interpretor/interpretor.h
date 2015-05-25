@@ -34,6 +34,7 @@ class Interpretor : public QObject
     QByteArray connected(const ModelUser& user);
     QByteArray disconnect(const quint32 idUser);
     QByteArray salt(const QString& pseudo, const QByteArray& salt = QByteArray());
+    QByteArray publicKey(const quint32 idUser, const QByteArray& key = QByteArray());
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.
