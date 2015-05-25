@@ -47,6 +47,7 @@ class ClientControllerInput : public ControllerInput
     // Method called when an user want to leave a room.
     void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender);
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
+    void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender);
 };
 
 #endif // CLIENT_CONTROLLER_INPUT_H

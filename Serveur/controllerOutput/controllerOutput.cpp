@@ -44,9 +44,9 @@ void ControllerOutput::disconnect(const quint32 idUser)
     _connector.send(_interpretor.disconnect(idUser));
 }
 
-void ControllerOutput::room(const ModelRoom& room, bool edited)
+void ControllerOutput::room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited)
 {
-    _connector.send(_interpretor.room(room, edited));
+    _connector.send(_interpretor.room(room, usersIds, cryptedKeys, edited));
 }
 
 void ControllerOutput::userId(const QString& userName, bool exists, quint32 userId)
@@ -62,4 +62,9 @@ void ControllerOutput::deleteRoom(const quint32 roomId)
 void ControllerOutput::leaveRoom(const quint32 roomId)
 {
     _connector.send(_interpretor.leaveRoom(roomId));
+}
+
+void ControllerOutput::publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey)
+{
+    _connector.send(_interpretor.publicKey(usersIdAndKey));
 }

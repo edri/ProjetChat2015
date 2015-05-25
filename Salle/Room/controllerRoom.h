@@ -72,6 +72,7 @@ public slots :
     // Creation of a room. Get the data from the viewRoom and send them
     // to the server
     void createRoom();
+    void createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys);
     
     // Edition of the loaded room.Get the data from the viewRoom and send them
     // to the server

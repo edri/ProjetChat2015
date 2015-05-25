@@ -87,12 +87,12 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
-    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages;
+    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages << r._secretKey;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 {
-    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages;
+    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages >> r._secretKey;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
@@ -115,12 +115,12 @@ QDataStream& operator >> (QDataStream& ds, ModelUser& u)
     return ds >> u._idUser >> u._userName >> u._firstName >> u._lastName >> u._isConnected >> u._lastConnection >> u._image >> u._roomsIds;
 }
 
-ModelRoom::ModelRoom() : _idRoom(0), _name(""), _private(false), _visible(false), _picture(QImage()), _limitOfStoredMessage(0), _admins(QSet<quint32>()), _members(QSet<quint32>()){}
+ModelRoom::ModelRoom() : _idRoom(0), _name(""), _private(false), _visible(false), _picture(QImage()), _limitOfStoredMessage(0), _admins(QSet<quint32>()), _members(QSet<quint32>()), _secretKey(AESKey()){}
 
 ModelRoom::ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
-          const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages) :
+          const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey) :
     _idRoom(idRoom), _name(name), _private(isPrivate), _visible(isVisible),
-    _picture(picture), _limitOfStoredMessage(limitOfStoredMessage), _admins(adminsIds), _members(usersIds), _messages(messages) {}
+    _picture(picture), _limitOfStoredMessage(limitOfStoredMessage), _admins(adminsIds), _members(usersIds), _messages(messages), _secretKey(secretKey) {}
 
 ModelRoom::~ModelRoom(){}
 
@@ -190,9 +190,9 @@ void ModelChator::addUser(const ModelUser& user)
     _users.insert(user.getIdUser(), ModelUser(user));
 }
 
-void ModelChator::addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage &picture, const QSet<quint32>& admins, const QSet<quint32>& users, const QMap<quint32, ModelMessage>& messages)
+void ModelChator::addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage &picture, const QSet<quint32>& admins, const QSet<quint32>& users, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey)
 {
-    _rooms.insert(idRoom, ModelRoom(idRoom, name, limitOfStoredMessage, isPrivate, isVisible, picture, admins, users, messages));
+    _rooms.insert(idRoom, ModelRoom(idRoom, name, limitOfStoredMessage, isPrivate, isVisible, picture, admins, users, messages, secretKey));
 }
 
 void ModelChator::addRoom(const ModelRoom& room)
