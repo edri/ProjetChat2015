@@ -124,9 +124,6 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     int privateKeyLength = BIO_pending(privateKeyBuffer);
     int publicKeyLength = BIO_pending(publicKeyBuffer);
     
-    keys.privateKeyLength = privateKeyLength;
-    keys.publicKeyLength = publicKeyLength;
-    
     // Resize the vectors.
     keys.privateKey.resize(privateKeyLength + 1);
     keys.publicKey.resize(publicKeyLength + 1);
@@ -138,8 +135,6 @@ RSAPair Cryptor::generateRSAPair(const unsigned keyLength)
     // Add ending character to the strings.
     keys.privateKey[privateKeyLength] = '\0';
     keys.publicKey[publicKeyLength] = '\0';
-    
-    keys.blockSize = RSA_size(keypair);
     
     // Cleanup
     BIO_free(privateKeyBuffer);
@@ -299,13 +294,13 @@ int Cryptor::decryptWithAES(RSAPair& key, const AESKey& encryptionKey)
 
 int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
 {
-    vector<unsigned char> encryptedKey(encryptionKey.blockSize);
-    vector<unsigned char> encryptedIV(encryptionKey.blockSize);
+    vector<unsigned char> encryptedKey(RSA_BLOCK_LENGTH);
+    vector<unsigned char> encryptedIV(RSA_BLOCK_LENGTH);
     int encryptedSize;
     
     BIO* publicKey = BIO_new(BIO_s_mem());
     
-    BIO_write(publicKey, encryptionKey.publicKey.data(), encryptionKey.publicKeyLength);
+    BIO_write(publicKey, encryptionKey.publicKey.data(), (int) encryptionKey.publicKey.size() - 1);
     RSA* keypair = PEM_read_bio_RSAPublicKey(publicKey,NULL,0,NULL);
     
     encryptedSize = RSA_public_encrypt((int)key.key.size() + 1, key.key.data(), encryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
@@ -331,13 +326,13 @@ int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
 }
 int Cryptor::decryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
 {
-    vector<unsigned char> decryptedKey(encryptionKey.blockSize);
-    vector<unsigned char> decryptedIV(encryptionKey.blockSize);
+    vector<unsigned char> decryptedKey(RSA_BLOCK_LENGTH);
+    vector<unsigned char> decryptedIV(RSA_BLOCK_LENGTH);
     int decryptedSize;
     
     BIO* privateKey = BIO_new(BIO_s_mem());
     
-    BIO_write(privateKey, encryptionKey.privateKey.data(), encryptionKey.privateKeyLength);
+    BIO_write(privateKey, encryptionKey.privateKey.data(), (int)encryptionKey.privateKey.size() - 1);
     
     RSA *keypair = PEM_read_bio_RSAPrivateKey(privateKey,NULL,0,NULL);
     

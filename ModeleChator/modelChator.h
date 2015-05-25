@@ -4,6 +4,7 @@
 
 #include <QtWidgets>
 #include <QString>
+#include "../Cryptor/cryptor.h"
 
 using namespace std;
 
@@ -274,5 +275,11 @@ QDataStream& operator<< (QDataStream& ds, const ModelMessage& m);
 QDataStream& operator>> (QDataStream& ds, ModelMessage& m);
 QDataStream& operator<< (QDataStream& ds, const ModelUser& u);
 QDataStream& operator>> (QDataStream& ds, ModelUser& u);
+QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v);
+QDataStream& operator>> (QDataStream& ds, const vector<unsigned char>& v);
+QDataStream& operator<< (QDataStream& ds, const RSAPair& p);
+QDataStream& operator>> (QDataStream& ds, const AESKey& k);QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v);
+QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
+QDataStream& operator>> (QDataStream& ds, const AESKey& k);
 
 #endif // MODELCHATOR

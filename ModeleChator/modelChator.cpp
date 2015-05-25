@@ -353,3 +353,38 @@ void ModelRoom::setIdRoom(const quint32 id)
 {
     _idRoom = id;
 }
+
+QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v)
+{
+    QByteArray ba((char*)v.data(), v.size());
+    return ds << ba;
+}
+
+QDataStream& operator>> (QDataStream& ds, const vector<unsigned char>& v)
+{
+    QByteArray ba();
+    ds >> ba;
+    v.resize(ba.size());
+    memcpy(v.data(), ba.data(), ba.size());
+    return ds;
+}
+
+QDataStream& operator<< (QDataStream& ds, const RSAPair& p)
+{
+    return ds << p.privateKey << p.publicKey;
+}
+
+QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
+{
+    return ds >> p.privateKey >> p.publicKey;
+}
+
+QDataStream& operator<< (QDataStream& ds, const AESKey& k)
+{
+    return ds << k.key << k.initializationVector;
+}
+
+QDataStream& operator>> (QDataStream& ds, const AESKey& k)
+{
+    return ds >> k.key >> k.initializationVector;
+}

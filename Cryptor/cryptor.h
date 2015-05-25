@@ -46,9 +46,6 @@ struct RSAPair
 {
     vector<char> privateKey;
     vector<char> publicKey;
-    int blockSize;
-    int publicKeyLength;
-    int privateKeyLength;
 };
 
 class Cryptor
