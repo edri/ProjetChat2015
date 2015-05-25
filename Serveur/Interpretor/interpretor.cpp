@@ -33,7 +33,7 @@ QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
     return data;
 }
 
-QByteArray Interpretor::createAccount(const ModelUser& user, const QString& password)
+QByteArray Interpretor::createAccount(const ModelUser& user, const QByteArray& password)
 {
     // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
@@ -153,6 +153,15 @@ QByteArray Interpretor::leaveRoom(const quint32 roomId)
     return data;
 }
 
+QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::SALT << pseudo << salt;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -164,7 +173,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::NEW_ACCOUNT:
         {
             ModelUser user;
-            QString password;
+            QByteArray password;
             stream >> user;
             stream >> password;
             // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
@@ -294,6 +303,16 @@ void Interpretor::processData(const QByteArray& data)
             quint32 roomId;
             stream >> roomId;
             _dispatcher.deleteRoom(roomId, sender());
+        }
+        break;
+        
+        case MessageType::SALT:
+        {
+            QString pseudo;
+            QByteArray salt;
+            stream >> pseudo;
+            stream >> salt;
+            _dispatcher.salt(pseudo, salt, sender());
         }
         break;
 

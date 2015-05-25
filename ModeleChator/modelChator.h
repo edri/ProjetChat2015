@@ -6,6 +6,8 @@
 #include <QString>
 #include "../Cryptor/cryptor.h"
 
+#include "../Cryptor/cryptor.h"
+
 using namespace std;
 
 class ModelUser;
@@ -19,6 +21,8 @@ class ModelChator
         // respective rooms.
         QMap<quint32, ModelRoom> _rooms;
         QMap<quint32, ModelUser> _users;
+
+        RSAPair _rsaKeyPair;
 	
 	public :
     
@@ -103,8 +107,11 @@ class ModelChator
         ModelMessage& getMessage(const quint32 idRoom, const quint32 idMessage);
         // Last edited by Miguel Santamaria on 09.05.2015 18:46
         // Adding last edition's date.
-        void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate);
-		void deleteMessage(const quint32 idRoom, const quint32 idMessage);	
+        void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate);
+        void deleteMessage(const quint32 idRoom, const quint32 idMessage);
+
+        void setRsaKeyPair(const RSAPair& rsaKeyPair);
+        RSAPair getRsaKeyPair() const;
 };
 
 
@@ -130,6 +137,9 @@ class ModelRoom
         
         // Room messages are stocked here.
         QMap<quint32, ModelMessage> _messages;
+
+        // The private room's secret key.
+        AESKey _secretKey;
 	
 	public :
         ModelRoom();
@@ -145,12 +155,12 @@ class ModelRoom
          *
          * Last edited by Jan Purro, on 24.04.2015 15:45
         */
-        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime &lastEditionDate, const QString& content);
+        void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime &lastEditionDate, const QByteArray& content);
         void addMessage(const ModelMessage& message);
         
         // Last edited by Miguel Santamaria, on 09.05.2015 18:47
         // Adding the last edition's date.
-        void modifyMessage(const quint32 idMessage, const QString& contents, const QDateTime lastEditionDate);
+        void modifyMessage(const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate);
 		void deleteMessage(const quint32 idMessage);
 		
         /*
@@ -188,12 +198,14 @@ class ModelRoom
         quint32 getLimit() const;
         bool isPrivate() const ;
         bool isVisible() const;
+        AESKey& getSecretKey();
         
         ModelMessage& getMessage(const quint32 idMessage);
 
         // Setters
         void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
         void setIdRoom(const quint32 id);
+        void setPicture(const QImage& picture);
 };
 
 class ModelMessage
@@ -207,14 +219,14 @@ class ModelMessage
         quint32 _idUser;
         QDateTime _date;
         QDateTime _lastEditionDate;
-        QString _content;
+        QByteArray _content;
 	
 	public :
         ModelMessage();
-        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QString& content);
+        ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QByteArray& content);
 		~ModelMessage();
 		
-        void modify(const QString& content, const QDateTime lastEditionDate);
+        void modify(const QByteArray& content, const QDateTime lastEditionDate);
 
         // Getters
         quint32 getIdMessage() const;
@@ -222,12 +234,13 @@ class ModelMessage
         quint32 getIdRoom() const;
         QDateTime& getDate();
         QDateTime& getEditionDate();
-        const QString& getContent() const;
+        const QByteArray& getContent() const;
         
         // Setters
         void setIdMessage(const quint32 id);
         void setDate(const QDateTime& date);
         void setEditionDate(const QDateTime& date);
+        void setContent(const QByteArray& content);
 };
 
 class ModelUser
@@ -265,7 +278,7 @@ class ModelUser
         // Setters
         void setIdUser(const quint32 id);
         void setConnected(const bool connected);
-        
+        void setImage(const QImage& image);
         
 };
 

@@ -51,7 +51,7 @@ void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
     _controllerUser.disconnect((ChatorClient*) sender);
 }
 
-void ServerControllerInput::createAccount(ModelUser& user, QString& password, QObject* sender)
+void ServerControllerInput::createAccount(ModelUser& user, const QByteArray& password, QObject* sender)
 {
     qDebug() << "ServerControllerInput CreateAccount";
     _controllerUser.createAccount(user, password, (ChatorClient*) sender);
@@ -70,4 +70,10 @@ void ServerControllerInput::deleteRoom(const quint32 roomId, QObject* sender)
 void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender)
 {
     _controllerRoom.leaveRoom(userId, roomId, (ChatorClient*) sender);
+}
+
+void ServerControllerInput::salt(const QString& pseudo, const QByteArray& salt, QObject* sender)
+{
+    Q_UNUSED(salt);
+    _controllerUser.getSalt(pseudo, (ChatorClient*) sender);
 }

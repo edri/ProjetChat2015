@@ -24,7 +24,7 @@ class Interpretor : public QObject
     QByteArray deleteMessage(const quint32 roomId, const quint32 messageId);
 
     QByteArray login(const QString& pseudo, const QString& hashedPwd);
-    QByteArray createAccount(const ModelUser& user, const QString& password);
+    QByteArray createAccount(const ModelUser& user, const QByteArray& password);
     QByteArray editAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);
     QByteArray sendError(const ModelError& error);
@@ -33,6 +33,7 @@ class Interpretor : public QObject
     QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray connected(const ModelUser& user);
     QByteArray disconnect(const quint32 idUser);
+    QByteArray salt(const QString& pseudo, const QByteArray& salt = QByteArray());
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.

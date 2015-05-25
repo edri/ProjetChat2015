@@ -15,20 +15,21 @@ class ControllerDB
     bool init();
     bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
     void logout(const quint32 userId);
-    bool createAccount(ModelUser& user, QString& password);
+    bool createAccount(ModelUser& user, const QByteArray& hashedPWD);
     bool userExists(const QString& pseudo, quint32& id);
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);
     void editMessage(const ModelMessage& message);
     void deleteMessage(const quint32 id);
     ModelRoom infoRoom(const quint32 id);
-    quint32 createRoom(const ModelRoom& room);
+    quint32 createRoom(ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
     void modifyRoom(const ModelRoom& room);
     void modifyUser(const ModelUser& user);
     void deleteRoom(const quint32 roomId);
     quint64 saveImage(const QImage& image);
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
+    QByteArray getSalt(const QString& pseudo);
     
     private :
     QSqlDatabase _db;

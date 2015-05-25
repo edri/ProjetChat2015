@@ -1,7 +1,8 @@
 #include "controllerChat.h"
 
 ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
-                               Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom)
+                               Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom,
+                               Cryptor* cryptor)
 {
     _model = model;
     _view = new ViewChat(_model);
@@ -12,6 +13,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     _cc = cc;
     _co = co;
     _controllerRoom = controllerRoom;
+    _cryptor = cryptor;
 
     connect(_view, SIGNAL(requestOpenRoomModule()), this, SLOT(openRoomModule()));
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
@@ -42,15 +44,29 @@ void ControllerChat::loadUser(ModelUser& user) const
 
 void ControllerChat::loadRoom(ModelRoom& room) const
 {
+    if (room.isPrivate())
+        _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+
     _model->addRoom(room);
 }
 
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
+    QString messageContent;
+    ModelRoom& room = _model->getRoom(message.getIdRoom());
+
+    if (room.isPrivate())
+    {
+        CypherText cypher(message.getContent().size());
+        memcpy(cypher.data(), message.getContent().data(), message.getContent().size());
+        messageContent = QString::fromStdString(_cryptor->decryptWithAES(cypher, room.getSecretKey()));
+        message.setContent(messageContent.toUtf8());
+    }
+
     if (!edited)
-        _model->getRoom(message.getIdRoom()).addMessage(message);
+        _model->getRoom(room.getIdRoom()).addMessage(message);
     else
-        _model->modifyMessage(message.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
+        _model->modifyMessage(room.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
 
     _view->loadRoomMessage(message, edited);
 }
@@ -100,14 +116,40 @@ void ControllerChat::loadUserRooms() const
 
 void ControllerChat::sendMessage() const
 {
-    ModelMessage message(0, _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), _view->getMessageText());
+    QByteArray messageContent;
+    ModelRoom& room = _model->getRoom(_view->getSelectedRoomId());
+
+    if (room.isPrivate())
+    {
+        CypherText cypher(_cryptor->encryptWithAES(_view->getMessageText().toStdString(), room.getSecretKey()));
+        messageContent = QByteArray((char*)cypher.data(), cypher.size());
+    }
+    else
+    {
+        messageContent = QByteArray::fromStdString(_view->getMessageText().toStdString());
+    }
+
+    ModelMessage message(0, room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);
 
     _co->sendMessage(message, false);
 }
 
 void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 {
-    ModelMessage message(item->data(1, Qt::UserRole).toInt(), _view->getSelectedRoomId(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), item->text(1));
+    QByteArray messageContent;
+    ModelRoom& room = _model->getRoom(_view->getSelectedRoomId());
+
+    if (room.isPrivate())
+    {
+        CypherText cypher(_cryptor->encryptWithAES(item->text(1).toStdString(), room.getSecretKey()));
+        messageContent = QByteArray((char*)cypher.data(), cypher.size());
+    }
+    else
+    {
+        messageContent = QByteArray::fromStdString(item->text(1).toStdString());
+    }
+
+    ModelMessage message(item->data(1, Qt::UserRole).toInt(), room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);
 
     _co->sendMessage(message, true);
 }

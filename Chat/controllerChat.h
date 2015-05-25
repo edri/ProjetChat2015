@@ -10,6 +10,7 @@
 #include "../Serveur/ServerConnector/connector.h"
 #include "../Serveur/controllerOutput/controllerOutput.h"
 #include "../Salle/Room/controllerRoom.h"
+#include "../Cryptor/cryptor.h"
 
 class ClientControllerInput;
 
@@ -25,10 +26,12 @@ private:
     ClientConnector* _cc;
     ControllerOutput* _co;
     ControllerRoom* _controllerRoom;
+    Cryptor* _cryptor;
 
 public:
     ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,
-                   Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom);
+                   Interpretor* i, ClientConnector* cc, ControllerOutput* co, ControllerRoom* controllerRoom,
+                   Cryptor* cryptor);
     ~ControllerChat();
 
     void showView() const;

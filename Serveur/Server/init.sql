@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS user (
   login VARCHAR(16) NOT NULL,
   firstName VARCHAR(32),
   lastName VARCHAR(32),
-  password VARCHAR(64) NOT NULL,
+  password BINARY(64) NOT NULL,
   profilePicture VARCHAR(16),
   isConnected TINYINT(1) NOT NULL,
   lastConnection DATETIME,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS privilege (
 
 CREATE TABLE IF NOT EXISTS message (
   idMessage INTEGER PRIMARY KEY AUTOINCREMENT,
-  contents LONGTEXT NOT NULL,
+  contents BLOB NOT NULL,
   date DATETIME NOT NULL,
   idUser INT NOT NULL,
   idRoom INT NOT NULL,

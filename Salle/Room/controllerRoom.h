@@ -26,6 +26,7 @@
 #include "../../ModeleChator/modelChator.h"
 #include "../Join/viewJoin.h"
 #include "../../Serveur/controllerOutput/controllerOutput.h"
+#include "../Cryptor/cryptor.h"
 
 class ControllerRoom : public QObject
 {
@@ -33,14 +34,15 @@ class ControllerRoom : public QObject
 private:
     
     // Pointers on the view(s) and the model.
-    ModelChator* model;
-    ViewRoom* viewRoom;
-    ViewJoin* viewJoin;
-    ControllerOutput* controllerOutput;
+    ModelChator* _model;
+    ViewRoom* _viewRoom;
+    ViewJoin* _viewJoin;
+    ControllerOutput* _controllerOutput;
     
+    Cryptor* _cryptor;
     
     // Pinter on the current user.
-    ModelUser* currentUser;
+    ModelUser* _currentUser;
     
     // Connect the viewRoom signals with the controller's slots. Should only
     // be called when the viewRoom is a valid pointer(seg fault otherwise).
@@ -55,7 +57,7 @@ private:
 public:
 
     // Constructor.
-    ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOutput);
+    ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOutput, Cryptor* cryptor);
     
     // Open the room's creation window.
     void showRoom();

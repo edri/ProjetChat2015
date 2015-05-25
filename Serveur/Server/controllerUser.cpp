@@ -90,7 +90,7 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
     return _connectedUsers;
 }
 
-void ControllerUser::createAccount(ModelUser& user, QString& password, ChatorClient* client)
+void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, ChatorClient* client)
 {
     qDebug() << "Enregistrement";
     
@@ -165,5 +165,19 @@ void ControllerUser::modifyUser(const ModelUser& user, ChatorClient* client)
                 upToDateClients.insert(currentClient->id);
             }
         }
+    }
+}
+
+void ControllerUser::getSalt(const QString& pseudo, ChatorClient* client)
+{
+    QByteArray salt = _db.getSalt(pseudo);
+    
+    if (salt.isEmpty())
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
+    }
+    else
+    {
+        client->socket.sendBinaryMessage(_interpretor->salt(pseudo, salt));
     }
 }

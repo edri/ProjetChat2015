@@ -123,6 +123,13 @@ void ClientControllerInput::leaveRoom(const quint32 userId, const quint32 roomId
 {
     Q_UNUSED(userId);
     Q_UNUSED(sender);
-
+// QUOI???
     _controllerChat->leaveRoomInModel(roomId);
+}
+
+void salt(const QString& pseudo, const QByteArray& salt, QObject* sender)
+{
+    Q_UNUSED(pseudo);
+    Q_UNUSED(salt);
+    Q_UNUSED(sender);
 }
