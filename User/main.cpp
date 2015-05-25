@@ -10,8 +10,9 @@
 
 int main(int argc, char *argv[])
 {
+
+    qDebug() << " coucou";
     QApplication a(argc, argv);
-    
     ModelChator* model = new ModelChator();
     ModelUser* currentUser = new ModelUser();
     ClientControllerInput* controllerInput = new ClientControllerInput();

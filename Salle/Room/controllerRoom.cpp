@@ -8,8 +8,7 @@
  */
 
 #include "controllerRoom.h"
-#include <vector>
-#include <cstring>
+#include <iostream>
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput, Cryptor* cryptor)
 {

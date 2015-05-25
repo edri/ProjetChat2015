@@ -13,14 +13,14 @@ void ControllerOutput::deleteMessage(const quint32 roomId, const quint32 message
     _connector.send(_interpretor.deleteMessage(roomId, messageId));
 }
 
-void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)
+void ControllerOutput::login(const QString& pseudo, const Hash& hashedPwd)
 {
     _connector.send(_interpretor.login(pseudo, hashedPwd));
 }
 
-void ControllerOutput::createAccount(const ModelUser& user, const QString& password)
+void ControllerOutput::createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys)
 {
-    _connector.send(_interpretor.createAccount(user, password));
+    _connector.send(_interpretor.createAccount(user, password, passwordSalt, keySalt, asymKeys));
 }
 
 void ControllerOutput::sendInfoUser(const ModelUser& user)
@@ -62,6 +62,11 @@ void ControllerOutput::deleteRoom(const quint32 roomId)
 void ControllerOutput::leaveRoom(const quint32 roomId)
 {
     _connector.send(_interpretor.leaveRoom(roomId));
+}
+
+void ControllerOutput::editAccount(const ModelUser& user)
+{
+    _connector.send(_interpretor.editAccount(user));
 }
 
 void ControllerOutput::publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey)

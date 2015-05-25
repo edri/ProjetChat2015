@@ -23,8 +23,8 @@ class Interpretor : public QObject
     // Last edited by Miguel Santamaria on 18.05.2015 16:47
     QByteArray deleteMessage(const quint32 roomId, const quint32 messageId);
 
-    QByteArray login(const QString& pseudo, const QString& hashedPwd);
-    QByteArray createAccount(const ModelUser& user, const QString& password);
+    QByteArray login(const QString& pseudo, const Hash& hashedPwd);
+    QByteArray createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys);
     QByteArray editAccount(const ModelUser& user);
     QByteArray sendInfoUser(const ModelUser& user);
     QByteArray sendError(const ModelError& error);
@@ -39,7 +39,7 @@ class Interpretor : public QObject
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.
     // The flag is written first, the room second.
-    // Created Jan Purro 26.04.2015 14:55
+    // Created Jan Purro 26.04.2015 14:55 modified by Jan Purro 26.05.2015 00:36
     QByteArray room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited);
     
     // Serialize a user name (packet is used to ask the server if a username is used and obtain the user's id if he exists).

@@ -23,7 +23,6 @@ class ControllerUser : public QObject
 private:
 
     ViewUser* _view;
-    ViewUser* _viewInscription;
     ModelChator* _model;
 
     ClientControllerInput* _cci;
@@ -56,7 +55,10 @@ public:
 public slots:
     void connectToServer(bool _fromBtnConnection);
     void auth() const;
-    void InscriptionToServer() const;
+    void inscriptionToServer() const;
+    void editUser() const;
+
+    void receiveSalt(Salt salt) const;
 
 };
 

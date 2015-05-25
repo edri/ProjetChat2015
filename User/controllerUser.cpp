@@ -17,10 +17,9 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
-    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(InscriptionToServer()));
+    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServer()));
+    connect(_controllerChat->getViewEdition(), SIGNAL(requestEditUser()), this, SLOT(editUser()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
-
-
 }
 
 ControllerUser::~ControllerUser()
@@ -33,7 +32,6 @@ void ControllerUser::showView() const
 {
     _view->show();
 }
-
 
 
 void ControllerUser::connectToServer(bool fromBtnConnection)
@@ -53,8 +51,11 @@ void ControllerUser::auth() const
     if(_fromBtnConnection)
     {
         QString username = _view->getUsername();
-        QString password = _view->getPassword();
-        _co->login(username, password);
+
+        // Désactivation de la vue et Récupération de "passwordSalt"
+        // le retour du sel se fera dans receiveSalt
+        _view->setDisabled(true);
+        //_co->askForSalt(username);
     }
     else  // button inscription
     {
@@ -66,6 +67,13 @@ void ControllerUser::auth() const
     }
 }
 
+void ControllerUser::receiveSalt(Salt salt) const
+{
+   //string password = _view->getPassword().toStdString();
+   //Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
+
+   //_co->login(username, hashPassword);
+}
 
 void ControllerUser::infoUser(ModelUser& user) {
     _model->addUser(user);
@@ -74,17 +82,45 @@ void ControllerUser::infoUser(ModelUser& user) {
     _view->close();
 }
 
-void ControllerUser::InscriptionToServer() const
+void ControllerUser::inscriptionToServer() const
 {
-    //pour l'instant on récupère seulement username et password
     // Get user information
-    QString firstName = _view->getViewInscription()->getFirstName();
-    QString lastName = _view->getViewInscription()->getLastName();
-    QString userName = _view->getViewInscription()->getUserName();
-    QString password = _view->getViewInscription()->getPassword();
-    QImage profilePicture = _view->getViewInscription()->getProfileImage();
+    const QString firstName = _view->getViewInscription()->getFirstName();
+    const QString lastName = _view->getViewInscription()->getLastName();
+    const QString userName = _view->getViewInscription()->getUserName();
+    string password = _view->getViewInscription()->getPassword().toStdString();
 
+
+    Salt passwordSalt = _cryptor->generateSalt();
+    Hash hashPassword = _cryptor->generateHash(password, passwordSalt, 3);
+    RSAPair keyPair = _cryptor->generateRSAPair();
+    Salt keySalt = _cryptor->generateSalt();
+    Hash keyHash = _cryptor->generateHash(password, keySalt);
+
+
+    const QImage profilePicture = _view->getViewInscription()->getProfileImage();
+    profilePicture.scaledToWidth(200);
+
+    //Store information into a ModelUser
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
-    _co->createAccount(myUser, password);
+    //send data to the server
+    _co->createAccount(myUser, hashPassword, hashPassword, keyHash, keyPair);
+}
+
+void ControllerUser::editUser() const
+{
+    const QString firstName = _controllerChat->getViewEdition()->getFirstName();
+    const QString lastName = _controllerChat->getViewEdition()->getLastName();
+    //QString password = _controllerChat->getViewEdition()->getPassword();
+    const QImage profilePicture = _controllerChat->getViewEdition()->getProfileImage();
+
+    ModelUser myUser(_currentUser->getIdUser(), "", firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
+
+    //Modification are sent to the server
+    _co->editAccount(myUser);
+
+    //Local current user is updated
+    _currentUser->setFirstName(firstName);
+    _currentUser->setLastName(lastName);
 }

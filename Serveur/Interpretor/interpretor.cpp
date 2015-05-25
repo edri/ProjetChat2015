@@ -22,7 +22,7 @@ QByteArray Interpretor::deleteMessage(const quint32 roomId, const quint32 messag
     return data;
 }
 
-QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
+QByteArray Interpretor::login(const QString& pseudo, const Hash& hashedPwd)
 {
     qDebug() << "Envoi de login";
     
@@ -33,13 +33,13 @@ QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
     return data;
 }
 
-QByteArray Interpretor::createAccount(const ModelUser& user, const QString& password)
+QByteArray Interpretor::createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys)
 {
     // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::NEW_ACCOUNT << user << password;
+    stream << (quint32) MessageType::NEW_ACCOUNT << user << password << passwordSalt << keySalt << asymKeys;
     return data;
 }
 
@@ -117,12 +117,12 @@ QByteArray Interpretor::connected(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited)
+QByteArray Interpretor::room(const ModelRoom& room, bool edited)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::ROOM << edited << room << usersIds << cryptedKeys;
+    stream << (quint32) MessageType::ROOM << edited << room;
     return data;
 }
 
@@ -331,7 +331,7 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::PUBLIC_KEY:
         {
-            QList<QPair<quint32, AESKey>> idsAndKeys;
+            QList<QPair<quint32, QByteArray>> idsAndKeys;
             stream >> idsAndKeys;
             _dispatcher.publicKey(idsAndKeys, sender());
         }

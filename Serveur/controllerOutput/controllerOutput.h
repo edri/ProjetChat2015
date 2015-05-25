@@ -17,8 +17,9 @@ class ControllerOutput
      */
     void deleteMessage(const quint32 roomId, const quint32 messageId);
 
-    void login(const QString& pseudo, const QString& hashedPwd);
-    void createAccount(const ModelUser& user, const QString& password);
+    void login(const QString& pseudo, const Hash& hashedPwd);
+    void createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys);
+    void editAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
     void join(const quint32 idUser, const quint32 idRoom);
     void leave(const quint32 idUser, const quint32 idRoom);
@@ -30,7 +31,7 @@ class ControllerOutput
      * - edited : false if the room is created, true if the room is an already existing modfied room.
      * 
      * Oui je sais le nom est peut être pas le plus génial qui soit. Mais bon createRoom ou editRoom c'est pas cool non plus, alors tant que c'est le seul truc qui concerne directement les salles autant le garder.
-     * Created by Jan Purro on 26.04.2015 14:46
+     * Created by Jan Purro on 26.04.2015 14:46 Etided by Jan 26.05.2015 00:15
      */
     void room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited = false);
     
@@ -52,7 +53,15 @@ class ControllerOutput
      * Created by Miguel Santamaria on 14.05.2015 18:31
      */
     void leaveRoom(const quint32 roomId);
-    
+
+    /* Called when a user need a salt in order to hash his password
+     * when he is trying to connect to the server
+     * - pseudo : userName
+     * Create by Bastien Rouiller on 25.05.2015
+     */
+    //void askForSalt(const QString& pseudo);
+
+
     private:
     Connector& _connector;
     Interpretor& _interpretor;

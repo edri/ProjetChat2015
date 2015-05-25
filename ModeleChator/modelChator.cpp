@@ -87,12 +87,12 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
-    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages << r._secretKey;
+    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 {
-    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages >> r._secretKey;
+    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
@@ -309,6 +309,16 @@ const QString& ModelUser::getFirstName() const
 const QString& ModelUser::getLastName() const
 {
     return _lastName;
+}
+
+void ModelUser::setFirstName(const QString firstName)
+{
+    _firstName = firstName;
+}
+
+void ModelUser::setLastName(const QString lastName)
+{
+    _lastName = lastName;
 }
 
 bool ModelUser::isConnected() const
