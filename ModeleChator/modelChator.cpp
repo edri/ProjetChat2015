@@ -376,7 +376,12 @@ void ModelRoom::setIdRoom(const quint32 id)
     _idRoom = id;
 }
 
-void ModelUser::setImage(const QImage& other)
+void ModelUser::setImage(const QImage& image)
 {
-    _image = other;
+    _image = image;
+}
+
+void ModelRoom::setPicture(const QImage& picture)
+{
+    _picture = picture;
 }

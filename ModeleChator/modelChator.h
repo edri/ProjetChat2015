@@ -204,6 +204,7 @@ class ModelRoom
         // Setters
         void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
         void setIdRoom(const quint32 id);
+        void setPicture(const QImage& picture);
 };
 
 class ModelMessage
@@ -276,7 +277,7 @@ class ModelUser
         // Setters
         void setIdUser(const quint32 id);
         void setConnected(const bool connected);
-        void setImage(const QImage& other);
+        void setImage(const QImage& image);
         
 };
 

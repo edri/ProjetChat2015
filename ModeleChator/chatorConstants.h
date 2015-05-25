@@ -20,7 +20,10 @@ const quint16 PORT_TO_LISTEN = 1234;
 const QString PROFILE_PICTURE_FOLDER = "img/";
 
 // The default profile picture displaying an outline profile
-const QString DEFAULT_PROFILE_PICTURE = "default.png";
+const QString DEFAULT_PROFILE_PICTURE = "defaultprofile.png";
+
+// The default profile picture displaying an outline sofa
+const QString DEFAULT_ROOM_PICTURE = "defaultroom.png";
 
 // The image format to use to save pictures
 const char PROFILE_PICTURE_FORMAT[] = "JPG";

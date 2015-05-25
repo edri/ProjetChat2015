@@ -204,14 +204,17 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     return room;
 }
 
-quint32 ControllerDB::createRoom(const ModelRoom& room)
+quint32 ControllerDB::createRoom(ModelRoom& room)
 {
+    if (room.getPicture().isNull()) {room.setPicture(QImage(DEFAULT_ROOM_PICTURE));}
+    
     QSqlQuery query(_db);
-	query.prepare("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (:nameRoom, :limitRoom, :isPrivate, :isVisible)");
+	query.prepare("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (:nameRoom, :limitRoom, :isPrivate, :isVisible, :picture)");
     query.bindValue(":nameRoom", room.getName());
 	query.bindValue(":limitRoom", room.getLimit());
 	query.bindValue(":isPrivate", QString::number(room.isPrivate()? 1 : 0));
 	query.bindValue(":isVisible", QString::number(room.isVisible()? 1 : 0));
+	query.bindValue(":picture", saveImage(room.getPicture()));
 	query.exec();
     
     quint32 idRoom = query.lastInsertId().toUInt();
@@ -257,19 +260,8 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
 
 bool ControllerDB::createAccount(ModelUser& user, const QByteArray& hashedPWD)
 {
-    
-    QFile profilePicture;
-    quint64 msecs = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    
-    do
-    {
-        profilePicture.setFileName(PROFILE_PICTURE_FOLDER + QString::number(msecs));
-    } while (profilePicture.exists() && msecs++);
-    
-    profilePicture.open(QIODevice::WriteOnly);
     if (user.getImage().isNull()) {user.setImage(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_PROFILE_PICTURE));}
-    user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
-    profilePicture.close();
+    quint64 msecs = saveImage(user.getImage());
     
     QSqlQuery query(_db);
 	

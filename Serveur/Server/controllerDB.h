@@ -22,7 +22,7 @@ class ControllerDB
     void editMessage(const ModelMessage& message);
     void deleteMessage(const quint32 id);
     ModelRoom infoRoom(const quint32 id);
-    quint32 createRoom(const ModelRoom& room);
+    quint32 createRoom(ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
     void modifyRoom(const ModelRoom& room);
     void modifyUser(const ModelUser& user);
