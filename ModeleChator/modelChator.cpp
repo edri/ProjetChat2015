@@ -382,9 +382,24 @@ QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v)
     return ds << ba;
 }
 
-QDataStream& operator>> (QDataStream& ds, const vector<unsigned char>& v)
+QDataStream& operator>> (QDataStream& ds, vector<unsigned char>& v)
 {
-    QByteArray ba();
+    QByteArray ba;
+    ds >> ba;
+    v.resize(ba.size());
+    memcpy(v.data(), ba.data(), ba.size());
+    return ds;
+}
+
+QDataStream& operator<< (QDataStream& ds, const vector<char>& v)
+{
+    QByteArray ba((char*)v.data(), v.size());
+    return ds << ba;
+}
+
+QDataStream& operator>> (QDataStream& ds, vector<char>& v)
+{
+    QByteArray ba;
     ds >> ba;
     v.resize(ba.size());
     memcpy(v.data(), ba.data(), ba.size());
@@ -396,7 +411,7 @@ QDataStream& operator<< (QDataStream& ds, const RSAPair& p)
     return ds << p.privateKey << p.publicKey;
 }
 
-QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
+QDataStream& operator>> (QDataStream& ds, RSAPair& p)
 {
     return ds >> p.privateKey >> p.publicKey;
 }
@@ -406,7 +421,7 @@ QDataStream& operator<< (QDataStream& ds, const AESKey& k)
     return ds << k.key << k.initializationVector;
 }
 
-QDataStream& operator>> (QDataStream& ds, const AESKey& k)
+QDataStream& operator>> (QDataStream& ds, AESKey& k)
 {
     return ds >> k.key >> k.initializationVector;
 }

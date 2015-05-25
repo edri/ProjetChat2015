@@ -290,9 +290,11 @@ QDataStream& operator<< (QDataStream& ds, const ModelUser& u);
 QDataStream& operator>> (QDataStream& ds, ModelUser& u);
 QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v);
 QDataStream& operator>> (QDataStream& ds, const vector<unsigned char>& v);
+QDataStream& operator<< (QDataStream& ds, const vector<char>& v);
+QDataStream& operator>> (QDataStream& ds, const vector<char>& v);
 QDataStream& operator<< (QDataStream& ds, const RSAPair& p);
-QDataStream& operator>> (QDataStream& ds, const AESKey& k);QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v);
 QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
+QDataStream& operator<< (QDataStream& ds, const AESKey& k);
 QDataStream& operator>> (QDataStream& ds, const AESKey& k);
 
 #endif // MODELCHATOR
