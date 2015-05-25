@@ -129,7 +129,8 @@ void ControllerChat::sendMessage() const
     }
     else
     {
-        messageContent = QByteArray::fromStdString(_view->getMessageText().toStdString());
+        //messageContent = QByteArray::fromStdString(_view->getMessageText().toStdString());
+        messageContent = _view->getMessageText().toUtf8();
     }
 
     ModelMessage message(0, room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);
@@ -149,7 +150,8 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
     }
     else
     {
-        messageContent = QByteArray::fromStdString(item->text(1).toStdString());
+        //messageContent = QByteArray::fromStdString(item->text(1).toStdString());
+        messageContent = item->text(1).toUtf8();
     }
 
     ModelMessage message(item->data(1, Qt::UserRole).toInt(), room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);

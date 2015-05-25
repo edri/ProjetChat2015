@@ -18,9 +18,9 @@ void ControllerOutput::login(const QString& pseudo, const Hash& hashedPwd)
     _connector.send(_interpretor.login(pseudo, hashedPwd));
 }
 
-void ControllerOutput::createAccount(const ModelUser& user, const Hash& password)
+void ControllerOutput::createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys)
 {
-    _connector.send(_interpretor.createAccount(user, password));
+    _connector.send(_interpretor.createAccount(user, password, passwordSalt, keySalt, asymKeys));
 }
 
 void ControllerOutput::sendInfoUser(const ModelUser& user)

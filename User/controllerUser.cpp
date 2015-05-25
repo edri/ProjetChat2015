@@ -105,7 +105,7 @@ void ControllerUser::inscriptionToServer() const
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
     //send data to the server
-    _co->createAccount(myUser, hashPassword);
+    _co->createAccount(myUser, hashPassword, hashPassword, keyHash, keyPair);
 }
 
 void ControllerUser::editUser() const
