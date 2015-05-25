@@ -22,7 +22,7 @@ QByteArray Interpretor::deleteMessage(const quint32 roomId, const quint32 messag
     return data;
 }
 
-QByteArray Interpretor::login(const QString& pseudo, const QString& hashedPwd)
+QByteArray Interpretor::login(const QString& pseudo, const Hash& hashedPwd)
 {
     qDebug() << "Envoi de login";
     

@@ -51,8 +51,11 @@ void ControllerUser::auth() const
     if(_fromBtnConnection)
     {
         QString username = _view->getUsername();
-        QString password = _view->getPassword();
-        _co->login(username, password);
+
+        // Désactivation de la vue et Récupération de "passwordSalt"
+        // le retour du sel se fera dans receiveSalt
+        _view->setDisabled(true);
+        //_co->askForSalt(username);
     }
     else  // button inscription
     {
@@ -64,6 +67,13 @@ void ControllerUser::auth() const
     }
 }
 
+void ControllerUser::receiveSalt(Salt salt) const
+{
+   //string password = _view->getPassword().toStdString();
+   //Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
+
+   //_co->login(username, hashPassword);
+}
 
 void ControllerUser::infoUser(ModelUser& user) {
     _model->addUser(user);

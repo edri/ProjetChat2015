@@ -58,6 +58,8 @@ public slots:
     void inscriptionToServer() const;
     void editUser() const;
 
+    void receiveSalt(Salt salt) const;
+
 };
 
 #endif // CONTROLLERUSER_H

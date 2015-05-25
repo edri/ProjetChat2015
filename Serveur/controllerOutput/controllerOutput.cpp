@@ -13,7 +13,7 @@ void ControllerOutput::deleteMessage(const quint32 roomId, const quint32 message
     _connector.send(_interpretor.deleteMessage(roomId, messageId));
 }
 
-void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)
+void ControllerOutput::login(const QString& pseudo, const Hash& hashedPwd)
 {
     _connector.send(_interpretor.login(pseudo, hashedPwd));
 }

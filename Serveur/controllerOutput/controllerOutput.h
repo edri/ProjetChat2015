@@ -17,7 +17,7 @@ class ControllerOutput
      */
     void deleteMessage(const quint32 roomId, const quint32 messageId);
 
-    void login(const QString& pseudo, const QString& hashedPwd);
+    void login(const QString& pseudo, const Hash& hashedPwd);
     void createAccount(const ModelUser& user, const Hash& password);
     void editAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
@@ -52,7 +52,15 @@ class ControllerOutput
      * Created by Miguel Santamaria on 14.05.2015 18:31
      */
     void leaveRoom(const quint32 roomId);
-    
+
+    /* Called when a user need a salt in order to hash his password
+     * when he is trying to connect to the server
+     * - pseudo : userName
+     * Create by Bastien Rouiller on 25.05.2015
+     */
+    //void askForSalt(const QString& pseudo);
+
+
     private:
     Connector& _connector;
     Interpretor& _interpretor;
