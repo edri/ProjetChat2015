@@ -22,4 +22,7 @@ const QString PROFILE_PICTURE_FOLDER = "img/";
 // The image format to use to save pictures
 const char PROFILE_PICTURE_FORMAT[] = "JPG";
 
+// The maximum number of messages to fetch at login
+const quint16 NB_MESSAGES_TO_FETCH = 50;
+
 #endif

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS user (
   login VARCHAR(16) NOT NULL,
   firstName VARCHAR(32),
   lastName VARCHAR(32),
-  password VARCHAR(64) NOT NULL,
+  password BINARY(64) NOT NULL,
   profilePicture VARCHAR(16),
   isConnected TINYINT(1) NOT NULL,
   lastConnection DATETIME,

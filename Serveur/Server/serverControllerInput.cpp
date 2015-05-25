@@ -51,7 +51,7 @@ void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
     _controllerUser.disconnect((ChatorClient*) sender);
 }
 
-void ServerControllerInput::createAccount(ModelUser& user, QString& password, QObject* sender)
+void ServerControllerInput::createAccount(ModelUser& user, const QByteArray& password, QObject* sender)
 {
     qDebug() << "ServerControllerInput CreateAccount";
     _controllerUser.createAccount(user, password, (ChatorClient*) sender);

@@ -90,7 +90,7 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
     return _connectedUsers;
 }
 
-void ControllerUser::createAccount(ModelUser& user, QString& password, ChatorClient* client)
+void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, ChatorClient* client)
 {
     qDebug() << "Enregistrement";
     
