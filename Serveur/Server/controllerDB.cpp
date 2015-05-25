@@ -258,25 +258,26 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     return true;
 }
 
-bool ControllerDB::createAccount(ModelUser& user, const QByteArray& hashedPWD)
+bool ControllerDB::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey)
 {
     if (user.getImage().isNull()) {user.setImage(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_PROFILE_PICTURE));}
     quint64 msecs = saveImage(user.getImage());
     
+    quint32 id;
+    if (userExists(user.getUserName(), id)) {return  false;}
+    
     QSqlQuery query(_db);
-	
-	query.prepare("SELECT idUser FROM user WHERE login = :userName");
-	query.bindValue(":userName", user.getUserName());
-	query.exec();
     
-    if (query.first()) {return false;}
-    
-	query.prepare("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (:userName, :userFirstName, :userLastName, :password, :msecs, 0, 0, 0, 0, 0)");
+	query.prepare("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (:userName, :userFirstName, :userLastName, :password, :msecs, 0, :pubKey, :privKey, :pwdSalt, :keySalt)");
 	query.bindValue(":userName", user.getUserName());
 	query.bindValue(":userFirstName", user.getFirstName());
 	query.bindValue(":userLastName", user.getLastName());
-	query.bindValue(":password", hashedPWD);
+	query.bindValue(":password", password);
 	query.bindValue(":msecs", msecs);
+	query.bindValue(":pubKey", publicKey);
+	query.bindValue(":privKey", privateKey);
+	query.bindValue(":pwdSalt", passwordSalt);
+	query.bindValue(":keySalt", keySalt);
 	query.exec();
 	 
     user.setIdUser(query.lastInsertId().toUInt());

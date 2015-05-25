@@ -13,7 +13,7 @@ class ServerControllerInput : public ControllerInput
     public:
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
-    void createAccount(ModelUser& user, const QByteArray& password, QObject* sender);
+    void createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, QObject* sender);
     void editAccount(ModelUser& user, QObject* sender);
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender);

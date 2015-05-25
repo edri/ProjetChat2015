@@ -97,9 +97,7 @@ void ControllerUser::inscriptionToServer() const
     Salt keySalt = _cryptor->generateSalt();
     Hash keyHash = _cryptor->generateHash(password, keySalt);
 
-
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
-    profilePicture.scaledToWidth(200);
 
     //Store information into a ModelUser
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());

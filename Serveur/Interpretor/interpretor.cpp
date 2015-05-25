@@ -183,11 +183,13 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             QByteArray password;
-            stream >> user;
-            stream >> password;
-            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
-            // Envoyer cet objet quelque part
-            _dispatcher.createAccount(user, password, sender());
+            QByteArray passwordSalt;
+            QByteArray keySalt;
+            QByteArray privateKey;
+            QByteArray publicKey;
+            
+            stream >> user >> password >> passwordSalt >> keySalt >> privateKey >> publicKey;
+            _dispatcher.createAccount(user, password, passwordSalt, keySalt, privateKey, publicKey, sender());
         }
         break;
         

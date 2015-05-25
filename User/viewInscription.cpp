@@ -120,7 +120,7 @@ bool ViewInscription::verifyFields()
         return true;
 }
 
-bool ViewInscription::verifyProfileImage()
+bool ViewInscription::verifyProfileImage() const
 {
     /*QString extension = ui->ldt_profilPicture->text().right(4).toLower();
     QFile file(ui->ldt_profilPicture->text());
@@ -128,6 +128,7 @@ bool ViewInscription::verifyProfileImage()
     return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));*/
     
     QImage image(ui->ldt_profilPicture->text());
+    
     return !image.isNull();
 }
 
@@ -160,7 +161,9 @@ QString ViewInscription::getPassword() const
 
 QImage ViewInscription::getProfileImage() const
 {
-    return QImage(ui->ldt_profilPicture->text());
+    if (!verifyProfileImage()){return QImage();}
+    
+    return QImage(ui->ldt_profilPicture->text()).scaledToWidth(PICTURE_WIDTH, Qt::SmoothTransformation);
 }
 
 ModelUser* ViewInscription::getCurrentUser()

@@ -14,7 +14,7 @@ class ControllerUser
     ControllerUser(ControllerDB& db);
     void login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client);
     void userId(const QString& userName, ChatorClient* client);
-    void createAccount(ModelUser& user, const QByteArray& password, ChatorClient* client);
+    void createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, ChatorClient* client);
     void disconnect(ChatorClient* client);
     void modifyUser(const ModelUser& user, ChatorClient* client);
     void getSalt(const QString& pseudo, ChatorClient* client);

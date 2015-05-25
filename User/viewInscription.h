@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "../ModeleChator/modelChator.h"
+#include "../ModeleChator/chatorConstants.h"
 //#include <QCloseEvent>
 
 namespace Ui {
@@ -38,7 +39,7 @@ private:
     Ui::viewInscription *ui;
     void closeEvent(QCloseEvent *);
     bool verifyFields();
-    bool verifyProfileImage();
+    bool verifyProfileImage() const;
     QString passwordRequirement;
     bool edition;
     ModelUser* currentUser;
