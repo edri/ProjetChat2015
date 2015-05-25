@@ -340,6 +340,7 @@ void ControllerDB::modifyUser(const ModelUser& user)
     profilePicture.close();
 }
 
+// A FAIRE AVEC LES PREPARED
 void ControllerDB::modifyRoom(const ModelRoom& room)
 {
     QSqlQuery query(_db);
@@ -374,6 +375,7 @@ void ControllerDB::deleteRoom(const quint32 roomId)
 	query.exec();
 }
 
+// A FAIRE AVEC LES PREPARED
 void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
@@ -381,4 +383,18 @@ void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
     query.exec("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = " + QString::number(idRoom));
     query.first();
     if (query.record().value("nbMembers").toUInt() == 0) {deleteRoom(idRoom);}
+}
+
+QByteArray ControllerDB::getSalt(const QString& pseudo)
+{
+    quint32 id;
+    if (!userExists(pseudo, id)) {return QByteArray();}
+    
+    QSqlQuery query(_db);
+    query.prepare("SELECT password FROM user WHERE idUser = :idUser");
+    query.bindValue(":idUser", id);
+    query.exec();
+    
+    query.first();
+    return query.record().value("password").toByteArray();
 }

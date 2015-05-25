@@ -29,6 +29,7 @@ class ControllerDB
     void deleteRoom(const quint32 roomId);
     quint64 saveImage(const QImage& image);
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
+    QByteArray getSalt(const QString& pseudo);
     
     private :
     QSqlDatabase _db;

@@ -167,3 +167,17 @@ void ControllerUser::modifyUser(const ModelUser& user, ChatorClient* client)
         }
     }
 }
+
+void ControllerUser::getSalt(const QString& pseudo, ChatorClient* client)
+{
+    QByteArray salt = _db.getSalt(pseudo);
+    
+    if (salt.isEmpty())
+    {
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
+    }
+    else
+    {
+        client->socket.sendBinaryMessage(_interpretor->salt(pseudo, salt));
+    }
+}

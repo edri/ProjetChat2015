@@ -71,3 +71,9 @@ void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId
 {
     _controllerRoom.leaveRoom(userId, roomId, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::salt(const QString& pseudo, const QByteArray& salt, QObject* sender)
+{
+    Q_UNUSED(salt);
+    _controllerUser.getSalt(pseudo, (ChatorClient*) sender);
+}

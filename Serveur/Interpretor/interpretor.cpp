@@ -153,6 +153,15 @@ QByteArray Interpretor::leaveRoom(const quint32 roomId)
     return data;
 }
 
+QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::SALT << pseudo << salt;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -294,6 +303,16 @@ void Interpretor::processData(const QByteArray& data)
             quint32 roomId;
             stream >> roomId;
             _dispatcher.deleteRoom(roomId, sender());
+        }
+        break;
+        
+        case MessageType::SALT:
+        {
+            QString pseudo;
+            QByteArray salt;
+            stream >> pseudo;
+            stream >> salt;
+            _dispatcher.salt(pseudo, salt, sender());
         }
         break;
 
