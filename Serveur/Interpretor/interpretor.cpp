@@ -117,12 +117,12 @@ QByteArray Interpretor::connected(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::room(const ModelRoom& room, bool edited)
+QByteArray Interpretor::room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::ROOM << edited << room;
+    stream << (quint32) MessageType::ROOM << edited << room << usersIds << cryptedKeys;
     return data;
 }
 
