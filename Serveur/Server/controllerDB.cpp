@@ -391,3 +391,14 @@ QByteArray ControllerDB::getSalt(const QString& pseudo)
     query.first();
     return query.record().value("password").toByteArray();
 }
+
+QByteArray ControllerDB::getPublicKey(const quint32 idUser)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT publicKey FROM user WHERE idUser = :idUser");
+    query.bindValue(":idUser", idUser);
+    query.exec();
+    
+    query.first();
+    return query.record().value("publicKey").toByteArray();
+}
