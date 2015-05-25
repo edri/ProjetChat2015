@@ -267,6 +267,7 @@ bool ControllerDB::createAccount(ModelUser& user, const QByteArray& hashedPWD)
     } while (profilePicture.exists() && msecs++);
     
     profilePicture.open(QIODevice::WriteOnly);
+    if (user.getImage().isNull()) {user.setImage(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_PROFILE_PICTURE));}
     user.getImage().save(&profilePicture, PROFILE_PICTURE_FORMAT);
     profilePicture.close();
     

@@ -276,7 +276,7 @@ class ModelUser
         // Setters
         void setIdUser(const quint32 id);
         void setConnected(const bool connected);
-        
+        void setImage(const QImage& other);
         
 };
 

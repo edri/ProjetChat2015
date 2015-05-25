@@ -19,6 +19,9 @@ const quint16 PORT_TO_LISTEN = 1234;
 // The folder where the profile pictures are stored
 const QString PROFILE_PICTURE_FOLDER = "img/";
 
+// The default profile picture displaying an outline profile
+const QString DEFAULT_PROFILE_PICTURE = "default.png";
+
 // The image format to use to save pictures
 const char PROFILE_PICTURE_FORMAT[] = "JPG";
 
