@@ -134,9 +134,8 @@ void ClientControllerInput::salt(const QString& pseudo, const QByteArray& salt, 
     Q_UNUSED(sender);
 }
 
-void ClientControllerInput::publicKey(const quint32 idUser, const QByteArray& key, QObject* sender)
+void ClientControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender)
 {
-    Q_UNUSED(idUser);
-    Q_UNUSED(key);
     Q_UNUSED(sender);
+    _controllerRoom->createRoom(usersIdAndKey);
 }

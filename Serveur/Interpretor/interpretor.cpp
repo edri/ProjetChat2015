@@ -117,12 +117,12 @@ QByteArray Interpretor::connected(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::room(const ModelRoom& room, bool edited)
+QByteArray Interpretor::room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::ROOM << edited << room;
+    stream << (quint32) MessageType::ROOM << edited << room << usersIds << cryptedKeys;
     return data;
 }
 
@@ -162,12 +162,12 @@ QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
     return data;
 }
 
-QByteArray Interpretor::publicKey(const quint32 idUser, const QByteArray& key)
+QByteArray Interpretor::publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::PUBLIC_KEY << idUser << key;
+    stream << (quint32) MessageType::PUBLIC_KEY << usersIdAndKey;
     return data;
 }
 
@@ -291,9 +291,13 @@ void Interpretor::processData(const QByteArray& data)
         {
             bool edited;
             ModelRoom room;
+            QList<quint32> usersIds; 
+            QList<QPair<QByteArray, QByteArray>> cryptedKeys;
             stream >> edited;
             stream >> room;
-            _dispatcher.room(room, edited, sender());
+            stream >> usersIds;
+            stream >> cryptedKeys;
+            _dispatcher.room(room, edited, usersIds, cryptedKeys, sender());
         }
         break;
 
@@ -329,11 +333,9 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::PUBLIC_KEY:
         {
-            quint32 idUser;
-            QByteArray key;
-            stream >> idUser;
-            stream >> key;
-            _dispatcher.publicKey(idUser, key, sender());
+            QList<QPair<quint32, QByteArray>> idsAndKeys;
+            stream >> idsAndKeys;
+            _dispatcher.publicKey(idsAndKeys, sender());
         }
         break;
 

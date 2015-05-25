@@ -34,13 +34,13 @@ class Interpretor : public QObject
     QByteArray connected(const ModelUser& user);
     QByteArray disconnect(const quint32 idUser);
     QByteArray salt(const QString& pseudo, const QByteArray& salt = QByteArray());
-    QByteArray publicKey(const quint32 idUser, const QByteArray& key = QByteArray());
+    QByteArray publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey);
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.
     // The flag is written first, the room second.
-    // Created Jan Purro 26.04.2015 14:55
-    QByteArray room(const ModelRoom& room, bool edited);
+    // Created Jan Purro 26.04.2015 14:55 modified by Jan Purro 26.05.2015 00:36
+    QByteArray room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited);
     
     // Serialize a user name (packet is used to ask the server if a username is used and obtain the user's id if he exists).
     // userId and exists are not used by the client, the server use them to answer the clien request.

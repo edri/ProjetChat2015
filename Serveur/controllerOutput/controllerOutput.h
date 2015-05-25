@@ -24,15 +24,16 @@ class ControllerOutput
     void join(const quint32 idUser, const quint32 idRoom);
     void leave(const quint32 idUser, const quint32 idRoom);
     void disconnect(const quint32 idUser);
+    void publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey);
     
     /* Called when creating or editing a room.
      * - room : the created or edited room.
      * - edited : false if the room is created, true if the room is an already existing modfied room.
      * 
      * Oui je sais le nom est peut être pas le plus génial qui soit. Mais bon createRoom ou editRoom c'est pas cool non plus, alors tant que c'est le seul truc qui concerne directement les salles autant le garder.
-     * Created by Jan Purro on 26.04.2015 14:46
+     * Created by Jan Purro on 26.04.2015 14:46 Etided by Jan 26.05.2015 00:15
      */
-    void room(const ModelRoom& room, bool edited = false);
+    void room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited = false);
     
     /* Called when asking the server for the ID corresponding to a user name, provided the user exists.
      *  - userName : the inquired user name.

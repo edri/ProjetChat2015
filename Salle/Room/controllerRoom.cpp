@@ -119,6 +119,13 @@ void ControllerRoom::addUser()
 
 void ControllerRoom::createRoom()
 {
+    QList<QPair<quint32, QByteArray>> idsAndKeys;
+    createRoom(idsAndKeys);
+}
+
+
+void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
+{
     // Disable the view again
     _viewRoom->setDisabled(true);
     
@@ -171,11 +178,54 @@ void ControllerRoom::createRoom()
         logo.load(_viewRoom->roomName());
     }
     
+    AESKey roomKey;
+    QList<QPair<QByteArray, QByteArray>> cryptedKeys;
+    QList<quint32> usersIds;
+    // If the room is private, the key must be encrypted by the public key of each added memebers.
+    // We need those key and demands them to the server.
+    if(_viewRoom->isRoomPrivate() && idsAndKeys.isEmpty())
+    {
+        QByteArray emptyKey;
+        QPair<quint32, QByteArray> idAndKey;
+        idAndKey.second = emptyKey;
+        for(quint32 id : _viewRoom->roomUsers())
+        {
+           idAndKey.first = id;
+           idsAndKeys.append(idAndKey);
+        }
+         _controllerOutput->publicKey(idsAndKeys);
+    }
+    
+    else if (_viewRoom->isRoomPrivate())
+    {
+        roomKey = _cryptor->generateAESKey();
+        AESKey cryptedKey;
+        
+        QPair<QByteArray, QByteArray> newPair;
+        RSAPair rsaKeys;
+        for(QPair<quint32, QByteArray> pair : idsAndKeys)
+        {
+            if(pair.first != _currentUser->getIdUser())
+            {
+                cryptedKey = roomKey;
+                usersIds.append(pair.first);
+                rsaKeys.publicKey.resize(pair.second.size());
+                memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
+                _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
+                newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
+                newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
+                cryptedKeys.append(newPair);
+            }
+        }
+        
+        //_cryptor->encryptWithRSA(roomKey, _currentUser->getRSAPair());
+    }
+    
     // Construct a ModelRoom object.
     QMap<quint32, ModelMessage> messages;
-    ModelRoom newRoom(0, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages);
+    ModelRoom newRoom(0, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
-    _controllerOutput->room(newRoom);
+    _controllerOutput->room(newRoom, usersIds, cryptedKeys);
     
     _viewRoom->setDisabled(false);
 }
