@@ -2,6 +2,7 @@
 #define VIEWCHAT_H
 
 #include "../ModeleChator/modelChator.h"
+#include "../User/viewInscription.h"
 #include <QMainWindow>
 #include <QBitmap>
 #include <QDate>
@@ -68,6 +69,8 @@ private slots:
     void on_btn_expandAll_clicked();
     void on_btn_collapseAll_clicked();
 
+    void on_actionCompte_triggered();
+
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule() const;
@@ -76,6 +79,7 @@ signals:
     void requestDeleteMessage(const quint32 roomId, const quint32 messageId) const;
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
+    void requestShowEditionView() const;
 };
 
 #endif // VIEWCHAT_H

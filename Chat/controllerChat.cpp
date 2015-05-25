@@ -6,6 +6,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
 {
     _model = model;
     _view = new ViewChat(_model);
+    _viewEdition = new ViewInscription(_view, currentUser);
 
     _currentUser = currentUser;
     _cci = cci;
@@ -22,12 +23,14 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestDeleteMessage(quint32, quint32)), this, SLOT(askServerToDeleteMessage(quint32, quint32)));
     connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(askServerToDeleteRoom(quint32)));
     connect(_view, SIGNAL(requestLeaveRoom(quint32)), this, SLOT(askServerToLeaveRoom(quint32)));
+    connect(_view, SIGNAL(requestShowEditionView()), this, SLOT(showViewEdition()));
 }
 
 ControllerChat::~ControllerChat()
 {
     delete _view;
     delete _model;
+    delete _viewEdition;
 }
 
 void ControllerChat::showView() const
@@ -187,4 +190,19 @@ void ControllerChat::leaveRoomInModel(const quint32 roomId) const
 {
     _model->removeUser(_currentUser->getIdUser(), roomId);
     _view->deleteRoom(roomId);
+}
+
+void ControllerChat::showViewEdition()
+{
+    //Récupération de l'utilisateur
+    _viewEdition->setCurrentUser(_currentUser);
+
+    // Open the inscription window
+    _viewEdition->show();
+    _viewEdition->setEnabled(true);
+}
+
+ViewInscription* ControllerChat::getViewEdition()
+{
+    return _viewEdition;
 }

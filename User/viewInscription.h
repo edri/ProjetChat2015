@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
+#include "../ModeleChator/modelChator.h"
 //#include <QCloseEvent>
 
 namespace Ui {
@@ -15,7 +16,9 @@ class ViewInscription : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ViewInscription(QWidget *parent = 0);
+    ViewInscription(QWidget *parent = 0);
+    ViewInscription(QWidget *parent, ModelUser* currentUser);
+
     ~ViewInscription();
 
     QString getFirstName() const;
@@ -23,6 +26,8 @@ public:
     QString getUserName() const;
     QString getPassword() const;
     QImage getProfileImage() const;
+    ModelUser* getCurrentUser();
+    void setCurrentUser(ModelUser* currentUser);
 
 private slots:
     void on_btn_path_clicked();
@@ -35,13 +40,14 @@ private:
     bool verifyFields();
     bool verifyProfileImage();
     QString passwordRequirement;
+    bool edition;
+    ModelUser* currentUser;
 
 signals:
     // Ask to get the information of the user inscription
     void requestGetNewUser() const;
 
-
-
+    void requestEditUser() const;
 };
 
 #endif // VIEWINSCRIPTION_H

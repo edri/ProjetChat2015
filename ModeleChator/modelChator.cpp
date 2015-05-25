@@ -311,6 +311,16 @@ const QString& ModelUser::getLastName() const
     return _lastName;
 }
 
+void ModelUser::setFirstName(const QString firstName)
+{
+    _firstName = firstName;
+}
+
+void ModelUser::setLastName(const QString lastName)
+{
+    _lastName = lastName;
+}
+
 bool ModelUser::isConnected() const
 {
     return _isConnected;

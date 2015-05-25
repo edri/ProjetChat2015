@@ -18,7 +18,7 @@ void ControllerOutput::login(const QString& pseudo, const QString& hashedPwd)
     _connector.send(_interpretor.login(pseudo, hashedPwd));
 }
 
-void ControllerOutput::createAccount(const ModelUser& user, const QString& password)
+void ControllerOutput::createAccount(const ModelUser& user, const Hash& password)
 {
     _connector.send(_interpretor.createAccount(user, password));
 }
@@ -62,4 +62,9 @@ void ControllerOutput::deleteRoom(const quint32 roomId)
 void ControllerOutput::leaveRoom(const quint32 roomId)
 {
     _connector.send(_interpretor.leaveRoom(roomId));
+}
+
+void ControllerOutput::editAccount(const ModelUser& user)
+{
+    _connector.send(_interpretor.editAccount(user));
 }

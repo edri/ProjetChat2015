@@ -19,6 +19,7 @@ class ControllerChat : public QObject
     Q_OBJECT
 private:
     ViewChat* _view;
+    ViewInscription* _viewEdition;
     ModelChator* _model;
     ModelUser* _currentUser;
     ClientControllerInput* _cci;
@@ -40,6 +41,7 @@ public:
     void receiveMessage(ModelMessage& message, const bool edited) const;
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
     void newNotification(const NotificationType notifType) const;
+    ViewInscription* getViewEdition();
 
 public slots :
     void loadUserRooms() const;
@@ -53,6 +55,7 @@ public slots :
     void deleteRoomInModel(const quint32 roomId) const;
     void askServerToLeaveRoom(const quint32 roomId) const;
     void leaveRoomInModel(const quint32 roomId) const;
+    void showViewEdition();
 
 };
 

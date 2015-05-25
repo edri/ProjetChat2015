@@ -7,11 +7,34 @@ ViewInscription::ViewInscription(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::viewInscription)
 {
+    edition = false;
     passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
 
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
     ui->btn_question->setToolTip(passwordRequirement);
+}
+
+ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
+    QMainWindow(parent),
+    ui(new Ui::viewInscription)
+{
+    //We modify the original View in order to have the edition view
+    edition = true;
+    //this->currentUser = currentUser;
+
+    ui->setupUi(this);
+
+    ui->btn_question->setVisible(false);
+    ui->btn_inscription->setText("Editer");
+
+    ui->lbl_userName->setText("Nom d'utilisateur");
+    ui->ldt_userName->setDisabled(true);
+
+    ui->lbl_password->setText("Mot de passe");
+    ui->lbl_passwordConf->setText("Retapez le mot de passe");
+
+    ui->lbl_mendatory->setText("Veuillez ne modifier seulement les champs désirés,");
 }
 
 ViewInscription::~ViewInscription()
@@ -26,7 +49,6 @@ void ViewInscription::on_btn_path_clicked()
 
     ui->ldt_profilPicture->setText(fichier);
     // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
-
 }
 
 void ViewInscription::on_btn_inscription_clicked()
@@ -37,19 +59,23 @@ void ViewInscription::on_btn_inscription_clicked()
     */
     ui->lbl_info->setText("");
 
-    if(verifyFields())
+    if(edition)
     {
-        // Send the data
-        emit requestGetNewUser();
+        emit requestEditUser();
+        ui->lbl_info->setText("Modification envoyée au serveur");
 
-        /* TODO
-        //The server verify if the username is already used
-        if(true) {
-          ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est déjà utilisé.</font>");
-        }
-        */
+    }
+    else if(verifyFields())
+    {
+        emit requestGetNewUser();
         ui->lbl_info->setText("Prêt à être envoyé au serveur");
     }
+    /* TODO
+    //The server verify if the username is already used
+    if(true) {
+      ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est déjà utilisé.</font>");
+    }
+    */
 }
 
 bool ViewInscription::verifyFields()
@@ -135,4 +161,20 @@ QString ViewInscription::getPassword() const
 QImage ViewInscription::getProfileImage() const
 {
     return QImage(ui->ldt_profilPicture->text());
+}
+
+ModelUser* ViewInscription::getCurrentUser()
+{
+    return currentUser;
+}
+
+void ViewInscription::setCurrentUser(ModelUser* currentUser)
+{
+    //Uptade the view with the information about the user
+    this->currentUser = currentUser;
+
+    ui->ldt_userName->setText(currentUser->getUserName());
+    ui->ldt_firstName->setText(currentUser->getFirstName());
+    ui->ldt_lastName->setText(currentUser->getLastName());
+    ui->lbl_profilPicture->setPixmap(QPixmap::fromImage(currentUser->getImage()));
 }

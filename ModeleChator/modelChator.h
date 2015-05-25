@@ -270,6 +270,8 @@ class ModelUser
         const QString& getUserName()const ;
         const QString& getFirstName() const;
         const QString& getLastName() const;
+        void setFirstName(const QString firstName);
+        void setLastName(const QString lastName);
         bool isConnected() const;
         const QImage& getImage() const;
         const QSet<quint32>& getRooms() const;

@@ -46,7 +46,7 @@ void ViewUser::on_btn_inscription_clicked()
     {
         ui->lbl_info->setText("Connexion au serveur...");
 
-        // Send the data
+        // Connect to server in order to create a new account
         emit requestGetIds(false);
     }
 }

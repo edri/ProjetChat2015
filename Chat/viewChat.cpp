@@ -496,3 +496,8 @@ void ViewChat::on_btn_collapseAll_clicked()
 {
     _ui->tre_messages->collapseAll();
 }
+
+void ViewChat::on_actionCompte_triggered()
+{
+    emit requestShowEditionView();
+}
