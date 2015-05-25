@@ -12,7 +12,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2837"
    sodipodi:docname="defaultprofile.svg"
-   viewBox="0 0 180 180"
+   viewBox="0 0 181.5 181.5"
    version="1.1"
    inkscape:version="0.48.5 r10040"
    width="100%"
@@ -49,23 +49,27 @@
      pagecolor="#ffffff"
      gridtolerance="10"
      inkscape:window-maximized="1"
-     inkscape:zoom="2.631383"
+     inkscape:zoom="5.9822848"
      objecttolerance="10"
      borderopacity="1"
      inkscape:current-layer="g2974"
-     inkscape:cx="144.86831"
-     inkscape:cy="88.100937"
+     inkscape:cx="145.99834"
+     inkscape:cy="88.717521"
      inkscape:window-y="26"
      inkscape:window-x="-2"
      inkscape:window-width="1366"
      showgrid="false"
      inkscape:pageopacity="0"
-     inkscape:window-height="722" />
+     inkscape:window-height="722"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <g
      id="g2974"
-     transform="translate(-13.007,-283.78)">
+     transform="translate(-11.876972,-282.89658)">
     <rect
-       style="opacity:1;fill:url(#radialGradient3766);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.50000000000000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:url(#radialGradient3766);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2988"
        width="180"
        height="180"
