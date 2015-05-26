@@ -12,7 +12,7 @@ class ControllerUser
 {
     public:
     ControllerUser(ControllerDB& db);
-    void login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client);
+    void login(const QString& pseudo, const QByteArray& hashedPWD, ChatorClient* client);
     void userId(const QString& userName, ChatorClient* client);
     void createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, ChatorClient* client);
     void disconnect(ChatorClient* client);

@@ -50,12 +50,11 @@ void ControllerUser::auth() const
 {
     if(_fromBtnConnection)
     {
-        QString username = _view->getUsername();
-
+        qDebug() << "Demande du sel";
         // Désactivation de la vue et Récupération de "passwordSalt"
         // le retour du sel se fera dans receiveSalt
         _view->setDisabled(true);
-        //_co->askForSalt(username);
+        _co->askForSalt(_view->getUsername());
     }
     else  // button inscription
     {
@@ -67,12 +66,12 @@ void ControllerUser::auth() const
     }
 }
 
-void ControllerUser::receiveSalt(Salt salt) const
+void ControllerUser::receiveSalt(const Salt& salt) const
 {
-   //string password = _view->getPassword().toStdString();
-   //Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
+   qDebug() << "Reception du sel";
+   Hash hashPassword = _cryptor->generateHash(_view->getPassword().toStdString(), salt);
 
-   //_co->login(username, hashPassword);
+   _co->login(_view->getUsername(), hashPassword);
 }
 
 void ControllerUser::infoUser(ModelUser& user) {
@@ -90,12 +89,11 @@ void ControllerUser::inscriptionToServer() const
     const QString userName = _view->getViewInscription()->getUserName();
     string password = _view->getViewInscription()->getPassword().toStdString();
 
-
     Salt passwordSalt = _cryptor->generateSalt();
-    Hash hashPassword = _cryptor->generateHash(password, passwordSalt, 3);
+    Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
-    Hash keyHash = _cryptor->generateHash(password, keySalt);
+    //Hash keyHash = _cryptor->generateHash(password, keySalt);
 
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
@@ -103,7 +101,7 @@ void ControllerUser::inscriptionToServer() const
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
     //send data to the server
-    _co->createAccount(myUser, hashPassword, hashPassword, keyHash, keyPair);
+    _co->createAccount(myUser, hashPassword, passwordSalt, keySalt, keyPair);
 }
 
 void ControllerUser::editUser() const

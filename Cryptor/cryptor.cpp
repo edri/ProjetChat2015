@@ -167,7 +167,7 @@ Salt Cryptor::generateSalt(const unsigned saltLength)
     return salt;
 }
 
-Hash Cryptor::generateHash(const string& password, Salt& salt,
+Hash Cryptor::generateHash(const string& password, const Salt& salt,
                            const unsigned numberOfRounds)
 {
     Hash hash;

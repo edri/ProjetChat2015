@@ -74,7 +74,7 @@ bool ControllerDB::init()
     return true;
 }
 
-bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint32& id)
+bool ControllerDB::login(const QString& pseudo, const QByteArray& hashedPWD, quint32& id)
 {    
     QSqlQuery query(_db);
     query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
@@ -382,15 +382,15 @@ void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
 QByteArray ControllerDB::getSalt(const QString& pseudo)
 {
     quint32 id;
-    if (!userExists(pseudo, id)) {return QByteArray();}
+    if (!userExists(pseudo, id)) {qDebug() << "Non existant"; return QByteArray();}
     
     QSqlQuery query(_db);
-    query.prepare("SELECT password FROM user WHERE idUser = :idUser");
+    query.prepare("SELECT saltPassword FROM user WHERE idUser = :idUser");
     query.bindValue(":idUser", id);
     query.exec();
     
     query.first();
-    return query.record().value("password").toByteArray();
+    return query.record().value("saltPassword").toByteArray();
 }
 
 QByteArray ControllerDB::getPublicKey(const quint32 idUser)

@@ -3,9 +3,9 @@
 
 ControllerUser::ControllerUser(ControllerDB& db) : _db(db) {}
 
-void ControllerUser::login(const QString& pseudo, const QString& hashedPWD, ChatorClient* client)
+void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, ChatorClient* client)
 {
-    qDebug() << "tentative de login depuis " << client->socket.peerAddress().toString() << pseudo << ", " << hashedPWD;
+    qDebug() << "tentative de login depuis " << client->socket.peerAddress().toString();
     
     if (_db.login(pseudo, hashedPWD, client->id))
     {
@@ -185,5 +185,5 @@ void ControllerUser::getSalt(const QString& pseudo, ChatorClient* client)
 void ControllerUser::getPublicKey(const quint32 idUser, ChatorClient* client)
 {
     QByteArray key = _db.getPublicKey(idUser);
-    client->socket.sendBinaryMessage(_interpretor->publicKey(idUser, key));
+    //client->socket.sendBinaryMessage(_interpretor->publicKey(idUser, key));
 }

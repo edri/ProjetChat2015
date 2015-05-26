@@ -237,7 +237,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             qDebug() << "Déserialisation login";
             QString pseudo;
-            QString hashedPwd;
+            QByteArray hashedPwd;
             stream >> pseudo >> hashedPwd;
             _dispatcher.login(pseudo, hashedPwd, sender());
         }

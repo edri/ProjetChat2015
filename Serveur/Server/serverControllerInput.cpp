@@ -12,7 +12,7 @@ void ServerControllerInput::deleteMessage(const quint32 roomId, const quint32 me
     _controllerRoom.deleteMessage(roomId, messageId, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::login(const QString& pseudo, const QString& hashedPWD, QObject* sender)
+void ServerControllerInput::login(const QString& pseudo, const QByteArray& hashedPWD, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
     _controllerUser.login(pseudo, hashedPWD, client);

@@ -15,7 +15,7 @@ class ControllerInput : public QObject
     virtual void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender) = 0;
     virtual void connected(const quint32 userId, QObject* sender) { Q_UNUSED(userId); Q_UNUSED(sender) }
     virtual void disconnect(const quint32 userId, QObject* sender) = 0;
-    virtual void login(const QString& pseudo, const QString& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
+    virtual void login(const QString& pseudo, const QByteArray& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
     virtual void salt(const QString& pseudo, const QByteArray& salt, QObject* sender) = 0;
     virtual void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender) {Q_UNUSED(usersIdAndKey); Q_UNUSED(sender);}
     virtual void infoUser(ModelUser& user, QObject* sender) = 0;

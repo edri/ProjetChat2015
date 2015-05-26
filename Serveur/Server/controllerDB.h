@@ -13,7 +13,7 @@ class ControllerDB
     ControllerDB(const QString& dbName = DATABASE_FILE_NAME);
     bool connect();
     bool init();
-    bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
+    bool login(const QString& pseudo, const QByteArray& hashedPWD, quint32& id);
     void logout(const quint32 userId);
     bool createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey);
     bool userExists(const QString& pseudo, quint32& id);

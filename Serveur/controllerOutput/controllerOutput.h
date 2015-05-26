@@ -59,7 +59,7 @@ class ControllerOutput
      * - pseudo : userName
      * Create by Bastien Rouiller on 25.05.2015
      */
-    //void askForSalt(const QString& pseudo);
+    void askForSalt(const QString& pseudo);
 
 
     private:
