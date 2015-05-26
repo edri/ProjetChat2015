@@ -205,17 +205,15 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         RSAPair rsaKeys;
         for(QPair<quint32, QByteArray> pair : idsAndKeys)
         {
-            if(pair.first != _currentUser->getIdUser())
-            {
-                cryptedKey = roomKey;
-                usersIds.append(pair.first);
-                rsaKeys.publicKey.resize(pair.second.size());
-                memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
-                _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
-                newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
-                newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
-                cryptedKeys.append(newPair);
-            }
+            cryptedKey = roomKey;
+            usersIds.append(pair.first);
+            rsaKeys.publicKey.resize(pair.second.size());
+            memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
+            _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
+            newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
+            newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
+            cryptedKeys.append(newPair);
+        
         }
         
         _cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
@@ -244,7 +242,7 @@ bool ControllerRoom::isValidImage(const QString& path)
 
 void ControllerRoom::editRoom()
 {
-    // Edit the room. This means validating the changes and forwarding them to the server.
+    
 }
 
 void ControllerRoom::cancelRoom()
