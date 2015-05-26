@@ -119,7 +119,7 @@ ModelUser ControllerDB::info(const quint32 id)
 
     query.first();
     
-    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(query.record().value("profilePicture").toString()), rooms);
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("profilePicture").toString()), rooms);
     
     return user;
 }
@@ -205,7 +205,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     
     // Construction de la salle
     
-    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(query.record().value("picture").toString()), admins, users, messages);
+    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("picture").toString()), admins, users, messages);
     
     return room;
 }
