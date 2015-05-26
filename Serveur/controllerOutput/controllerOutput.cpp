@@ -65,10 +65,11 @@ void ControllerOutput::deleteRoom(const quint32 roomId)
     _connector.send(_interpretor.deleteRoom(roomId));
 }
 
-void ControllerOutput::leaveRoom(const quint32 roomId)
-{
-    _connector.send(_interpretor.leaveRoom(roomId));
-}
+//void ControllerOutput::leaveRoom(const quint32 userId, const quint32 roomId)
+//{
+    //_connector.send(_interpretor.leaveRoom(roomId));
+    //_connector.send(_interpretor.leave(userId, roomId));
+//}
 
 void ControllerOutput::editAccount(const ModelUser& user)
 {

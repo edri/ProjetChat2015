@@ -194,7 +194,7 @@ void ControllerChat::deleteRoomInModel(const quint32 roomId) const
 
 void ControllerChat::askServerToLeaveRoom(const quint32 roomId) const
 {
-    _co->leaveRoom(roomId);
+    _co->leave(_currentUser->getIdUser(), roomId);
 }
 
 void ControllerChat::leaveRoomInModel(const quint32 roomId) const

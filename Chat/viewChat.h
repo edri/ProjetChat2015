@@ -48,18 +48,90 @@ public:
     ~ViewChat();
 
     void resizeEvent(QResizeEvent* event);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Set the label "Connected as ..." with the user name
+    // Param     : user - username of the current user
+    //----------------------------------------------------------------------------------
     void setConnectedAsText(const QString& user);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Add a room on the list of room in the chat's window.
+    // Param     : roomId - Identify the room that is added to the view.
+    //             roomName - Name of the room
+    //             roomPicture - Picture of the room
+    //----------------------------------------------------------------------------------
     void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Add a user in a room, below a room in the list of room.
+    // Param     : roomId - Identify the room where the message should be deleted.
+    //             userId - Identify the message that has to be deleted
+    //             userName - Username of the new user
+    //             image - User's profile image
+    //             isConnected - Inform if user is connected or not
+    //----------------------------------------------------------------------------------
     void addUserToRoom(const quint32 roomId, const quint32 userId, const QString& userName, const QImage& image, const bool isConnected);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : unknown
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void selectFirstRoom() const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : unknown
+    // Param     : messages -
+    //----------------------------------------------------------------------------------
     void loadRoomMessages(const QMap<quint32, ModelMessage>& messages);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : unknown
+    // Param     : message -
+    //             edited -
+    //----------------------------------------------------------------------------------
     void loadRoomMessage(ModelMessage& message, const bool edited = false);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Return the message the user has written (in the specified field).
+    // Param     : /
+    //----------------------------------------------------------------------------------
     QString getMessageText() const;
+
     quint32 getSelectedRoomId() const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Update the list of users. Connected users appeared with bold format.
+    // Param     : userId -
+    //             isConnected -
+    //----------------------------------------------------------------------------------
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Enable buttons when user is admin: edit and delete button when a room
+    //             is selected.
+    // Param     : isAdmin - Determine if user is admin
+    //----------------------------------------------------------------------------------
     void updateButtons(const bool isAdmin) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Called when a message has been deleted, remove the message from the
+    //             windows.
+    // Param     : message -
+    //             edited -
+    //----------------------------------------------------------------------------------
     void deleteMessage(const quint32 messageId) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Remove a room from the list
+    // Param     : roomId - Identify the room where the room should be removed.
+    //----------------------------------------------------------------------------------
     void deleteRoom(const quint32 roomId) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Show a notification
+    // Param     : notifyType - The kind of notification
+    //----------------------------------------------------------------------------------
     void newNotification(const NotificationType notifType) const;
 
 private slots:

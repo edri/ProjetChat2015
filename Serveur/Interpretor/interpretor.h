@@ -37,11 +37,11 @@ class Interpretor : public QObject
     QByteArray sendError(const ModelError& error);
     QByteArray userJoin(const quint32 idUser, const quint32 idRoom);
     QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);
-    QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray connected(const ModelUser& user);
     QByteArray disconnect(const quint32 idUser);
     QByteArray salt(const QString& pseudo, const QByteArray& salt = QByteArray());
     QByteArray publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey);
+    QByteArray leave(const quint32 idUser, const quint32 idRoom);
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.
@@ -58,7 +58,7 @@ class Interpretor : public QObject
     // Serialize a room's id.
     // Created by Miguel Santamaria on 13.05.2015 09:04
     QByteArray deleteRoom(const quint32 roomId);
-    QByteArray leaveRoom(const quint32 roomId);
+    //QByteArray leaveRoom(const quint32 roomId);
     
     public slots:
     void processData(const QByteArray& data);

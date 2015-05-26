@@ -148,6 +148,7 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
         // If this user is online
         if (connectedUsers.contains(idUser))
         {
+            qDebug() << "Oui, il est online";
             // We add it in the room and link it to it
             currentClient = connectedUsers[idUser];
             currentClient->rooms.insert(newRoom);
@@ -178,6 +179,7 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
             roomToSend.first().setKey(aesKey);
             data = _interpretor->join(roomToSend, usersData);
         }
+        qDebug() << "Envoi de la notif qui fait " << data.size();
         client->socket.sendBinaryMessage(data);
     }
 }
@@ -214,7 +216,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         return;
     }
     
-    _db.leaveRoom(client->id, idRoom);
+    _db.leaveRoom(idUser, idRoom);
     
     for (ChatorRoom* room : client->rooms)
     {
@@ -222,7 +224,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         {
             QByteArray data = _interpretor->leave(client->id, idRoom);
             
-            room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
+            //room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
             
             for (ChatorClient* member : room->clients)
             {
