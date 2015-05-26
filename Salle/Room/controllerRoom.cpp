@@ -123,7 +123,6 @@ void ControllerRoom::createRoom()
     createRoom(idsAndKeys);
 }
 
-
 void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
 {
     // Disable the view again
@@ -194,6 +193,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
            idsAndKeys.append(idAndKey);
         }
          _controllerOutput->publicKey(idsAndKeys);
+         return;
     }
     
     else if (_viewRoom->isRoomPrivate())
@@ -218,7 +218,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
             }
         }
         
-        //_cryptor->encryptWithRSA(roomKey, _currentUser->getRSAPair());
+        _cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
     }
     
     // Construct a ModelRoom object.
