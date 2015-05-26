@@ -59,13 +59,12 @@ QByteArray Interpretor::editAccount(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::sendInfoUser(const ModelUser& user)
+QByteArray Interpretor::sendInfoUser(const ModelUser& user, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey)
 {
-    // Il y aura aussi les clés à gérer ici (envoi de la clé publique et éventuellement de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     qDebug() << "serialisation de " << user.getUserName();
-    stream << (quint32) MessageType::INFO_USER << user;
+    stream << (quint32) MessageType::INFO_USER << user << keySalt << privateKey << publicKey;
     return data;
 }
 
@@ -221,9 +220,11 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::INFO_USER:
         {
             ModelUser user;
-            stream >> user;
+            QByteArray keySalt;
+            QByteArray privateKey;
+            QByteArray publicKey;
+            stream >> user >> keySalt >> privateKey >> publicKey;
             qDebug() << "Déserialisation info user";
-            // Il y aura aussi les clés à gérer ici (récupération de la masterkey chiffrée)
             _dispatcher.infoUser(user, sender());
         }
         break;

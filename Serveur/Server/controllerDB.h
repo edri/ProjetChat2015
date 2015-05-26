@@ -41,6 +41,7 @@ class ControllerDB
     void setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey);
     QList<QPair<quint32, QString>> listPublicRooms();
     QList<QPair<quint32, QString>> listPrivateVisibleRooms();
+    void getCryptoData(const quint32 id, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey);
     
     private :
     QSqlDatabase _db;

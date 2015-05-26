@@ -18,8 +18,14 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         client->logged = true;
         ModelUser user = _db.info(id);
         qDebug() << "User: " << user.getUserName();
-        client->socket.sendBinaryMessage(_interpretor->sendInfoUser(user));
         // Clés?
+        
+        QByteArray keySalt;
+        QByteArray publicKey;
+        QByteArray privateKey;
+        _db.getCryptoData(id, keySalt, publicKey, privateKey);
+        
+        client->socket.sendBinaryMessage(_interpretor->sendInfoUser(user, keySalt, privateKey, publicKey));
         
         QMap<quint32, ModelRoom> rooms;
         QMap<quint32, ModelUser> users;

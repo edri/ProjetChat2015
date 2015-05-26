@@ -33,7 +33,7 @@ class Interpretor : public QObject
     QByteArray login(const QString& pseudo, const Hash& hashedPwd);
     QByteArray createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys);
     QByteArray editAccount(const ModelUser& user);
-    QByteArray sendInfoUser(const ModelUser& user);
+    QByteArray sendInfoUser(const ModelUser& user, const QByteArray& keySalt = QByteArray(), const QByteArray& privateKey = QByteArray(), const QByteArray& publicKey = QByteArray());
     QByteArray sendError(const ModelError& error);
     QByteArray userJoin(const quint32 idUser, const quint32 idRoom);
     QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);

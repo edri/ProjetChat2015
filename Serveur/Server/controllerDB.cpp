@@ -469,3 +469,16 @@ QList<QPair<quint32, QString>> ControllerDB::listPrivateVisibleRooms()
     
     return rooms;
 }
+
+void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT saltKey, publicKey, privateKey FROM user WHERE idUser = :idUser");
+    query.bindValue("idUser", id);
+    query.exec();
+    
+    query.first();
+    keySalt = query.record().value("saltKey").toByteArray();
+    publicKey = query.record().value("publicKey").toByteArray();
+    privateKey = query.record().value("privateKey").toByteArray();
+}
