@@ -5,6 +5,7 @@
 */
 
 #include "modelChator.h"
+#include <iostream>
 
 ModelChator::ModelChator() {}
 
@@ -403,7 +404,7 @@ QDataStream& operator>> (QDataStream& ds, vector<unsigned char>& v)
     QByteArray ba;
     ds >> ba;
     v.resize(ba.size());
-    memcpy(v.data(), ba.data(), ba.size());
+    memcpy(v.data(), ba.data(), v.size());
     return ds;
 }
 
@@ -418,7 +419,7 @@ QDataStream& operator>> (QDataStream& ds, vector<char>& v)
     QByteArray ba;
     ds >> ba;
     v.resize(ba.size());
-    memcpy(v.data(), ba.data(), ba.size());
+    memcpy(v.data(), ba.data(), v.size());
     return ds;
 }
 

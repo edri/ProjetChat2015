@@ -68,7 +68,7 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
     {
         _controllerChat->loadUser(user);
     }
-
+   
     for (ModelRoom room : rooms)
     {
         _controllerChat->loadRoom(room);
@@ -89,9 +89,9 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
             qDebug() << "Administré par " << mu.getIdUser() << ": " << mu.getUserName();
         }*/
     }
-
+    
     _controllerChat->loadUserRooms();
-
+    
     Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
 }
 

@@ -303,7 +303,6 @@ int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
     vector<unsigned char> encryptedKey(RSA_BLOCK_LENGTH);
     vector<unsigned char> encryptedIV(RSA_BLOCK_LENGTH);
     int encryptedSize;
-    
     BIO* publicKey = BIO_new(BIO_s_mem());
     
     BIO_write(publicKey, encryptionKey.publicKey.data(), (int) encryptionKey.publicKey.size() - 1);
@@ -327,7 +326,6 @@ int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
     key.initializationVector.shrink_to_fit();
     BIO_free(publicKey);
     RSA_free(keypair);
-    
     return 0;
 }
 int Cryptor::decryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
