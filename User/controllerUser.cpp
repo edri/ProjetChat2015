@@ -76,7 +76,8 @@ void ControllerUser::auth() const
 
 void ControllerUser::receiveSalt(const Salt& salt) const
 {
-   qDebug() << "Reception du sel";
+    QByteArray tmp((const char*) salt.data(), salt.size());
+    qDebug() << "Reception du sel: " << QString::fromUtf8(tmp.toHex());
    Hash hashPassword = _cryptor->generateHash(_view->getPassword().toStdString(), salt);
 
    _co->login(_view->getUsername(), hashPassword);

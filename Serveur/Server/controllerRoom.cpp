@@ -126,10 +126,13 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     bool isPrivate = room.isPrivate();
     quint32 idUser;
     
+    qDebug() << "Création de la salle " << room.getName() << " avec users: " << usersIds.size();
+    
     //for (quint32 idUser : usersIds)
     for (int i = 0; i < size; i++)
     {
         idUser = usersIds[i];
+         qDebug() << "Traitement de l'user " << idUser;
         
         if (isPrivate)
         {

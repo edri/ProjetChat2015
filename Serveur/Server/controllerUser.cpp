@@ -5,7 +5,7 @@ ControllerUser::ControllerUser(ControllerDB& db) : _db(db) {}
 
 void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, ChatorClient* client)
 {
-    qDebug() << "tentative de login depuis " << client->socket.peerAddress().toString();
+    qDebug() << "tentative de login depuis " << client->socket.peerAddress().toString() << ", pseudo: " << pseudo << " avec hash: " << QString::fromUtf8(hashedPWD.toHex());
     
     if (_db.login(pseudo, hashedPWD, client->id))
     {
@@ -92,14 +92,14 @@ QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
 
 void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, ChatorClient* client)
 {
-    qDebug() << "Enregistrement";
+    qDebug() << "Enregistrement de " << user.getUserName() << ", avec hash: " << QString::fromUtf8(password.toHex()) << ", avec sel: " << QString::fromUtf8(passwordSalt.toHex());
     
     if (!_db.createAccount(user, password, passwordSalt, keySalt, privateKey, publicKey))
     {
         client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::USER_CREATION, "Cannot create the user")));
         return;
     }
-    
+
     // Appeler login
     login(user.getUserName(), password, client);
 }
@@ -178,6 +178,7 @@ void ControllerUser::getSalt(const QString& pseudo, ChatorClient* client)
     }
     else
     {
+        qDebug() << "Envoi du sel pour " << pseudo << ": " << QString::fromUtf8(salt.toHex());
         client->socket.sendBinaryMessage(_interpretor->salt(pseudo, salt));
     }
 }
