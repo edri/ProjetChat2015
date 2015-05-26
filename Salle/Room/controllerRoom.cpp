@@ -8,7 +8,6 @@
  */
 
 #include "controllerRoom.h"
-#include <iostream>
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput, Cryptor* cryptor)
 {
@@ -16,6 +15,7 @@ ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOu
     _currentUser = user;
     _controllerOutput = controllerOuput;
     _cryptor = cryptor;
+    _currentRoomId = 0;
     
     // Initialize the view at nullptr. They will be constructed when needed
     // and destroyed when closed.
@@ -42,6 +42,7 @@ void ControllerRoom::connectViewJoin()
 void ControllerRoom::showRoom()
 {
     _viewRoom = new ViewRoom();
+    _currentRoomId = 0;
     // Connect the view's signals
     connectViewRoom();
     
@@ -59,6 +60,7 @@ void ControllerRoom::showRoom()
 void ControllerRoom::showRoom(const quint32 idRoom)
 {
     _viewRoom = new ViewRoom(true);
+    _currentRoomId = idRoom;
     // Connect the view signals
     connectViewRoom();
     
@@ -67,7 +69,7 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     // Set the label and button to have the texts corresponding to edition
     _viewRoom->setTitle(tr("Edition Salle"));
     _viewRoom->setAction(tr("Editer"));
-    _viewRoom->setRemove(tr("Bannir"));
+    _viewRoom->setRemove(tr("Enlever")); // Should be ban, but it isn't implemented yet.
     
     // Initialize the fields with the values of the room.
     _viewRoom->setRoomName(room.getName());
@@ -82,6 +84,9 @@ void ControllerRoom::showRoom(const quint32 idRoom)
         _viewRoom->setRoomVisibility(room.isVisible());
         _viewRoom->setInvitation(!room.isVisible());
     }
+    
+    // Disable the possibility to change the privacy and visibility of the room.
+    _viewRoom->disablePrivacy();
     
     // Load the users and admins.
     ModelUser user;
@@ -172,9 +177,9 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     // Construit l'image
     QImage logo;
-    if (!_viewRoom->roomName().isEmpty())
+    if (!_viewRoom->roomLogo().isEmpty())
     {
-        logo.load(_viewRoom->roomName());
+        logo.load(_viewRoom->roomLogo());
     }
     
     AESKey roomKey;
@@ -192,8 +197,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
            idAndKey.first = id;
            idsAndKeys.append(idAndKey);
         }
-        std::cerr << "Demande des Clés" << std::endl;
-         _controllerOutput->publicKey(idsAndKeys);
+        _controllerOutput->publicKey(idsAndKeys);
          return;
     }
     
@@ -216,8 +220,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
             cryptedKeys.append(newPair);
         
         }
-        
-        _cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
+        //_cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
     }
     
     else
@@ -230,12 +233,13 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     // Construct a ModelRoom object.
     QMap<quint32, ModelMessage> messages;
-    ModelRoom newRoom(0, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
+    roomKey = AESKey();
+    ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
-    std::cerr << "Nb Users : " << _viewRoom->roomUsers().size() << std::endl;
-    _controllerOutput->room(newRoom, usersIds, cryptedKeys);
+    _controllerOutput->room(newRoom, usersIds, cryptedKeys, _viewRoom->isEditing());
     
-    _viewRoom->setDisabled(false);
+    //_viewRoom->setDisabled(false);
+    // Faut que qqun ferme cette fenêtre à ce moment...
 }
 
 bool ControllerRoom::isValidImage(const QString& path)
@@ -252,7 +256,7 @@ bool ControllerRoom::isValidImage(const QString& path)
 
 void ControllerRoom::editRoom()
 {
-    
+    createRoom();
 }
 
 void ControllerRoom::cancelRoom()
