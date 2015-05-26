@@ -1,5 +1,7 @@
 #include <QtCore/QDebug>
+#include <QDataStream>
 #include "clientControllerInput.h"
+#include <cstring>
 
 ClientControllerInput::ClientControllerInput()
 {
@@ -130,8 +132,13 @@ void ClientControllerInput::leaveRoom(const quint32 userId, const quint32 roomId
 void ClientControllerInput::salt(const QString& pseudo, const QByteArray& salt, QObject* sender)
 {
     Q_UNUSED(pseudo);
-    Q_UNUSED(salt);
     Q_UNUSED(sender);
+    
+    Salt s;
+    QDataStream stream(salt);
+    stream >> s;
+    
+    _controllerUser->receiveSalt(s);
 }
 
 void ClientControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender)

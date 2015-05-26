@@ -74,7 +74,7 @@ bool ControllerDB::init()
     return true;
 }
 
-bool ControllerDB::login(const QString& pseudo, const QString& hashedPWD, quint32& id)
+bool ControllerDB::login(const QString& pseudo, const QByteArray& hashedPWD, quint32& id)
 {    
     QSqlQuery query(_db);
     query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
@@ -258,25 +258,26 @@ bool ControllerDB::userExists(const QString& pseudo, quint32& id)
     return true;
 }
 
-bool ControllerDB::createAccount(ModelUser& user, const QByteArray& hashedPWD)
+bool ControllerDB::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey)
 {
     if (user.getImage().isNull()) {user.setImage(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_PROFILE_PICTURE));}
     quint64 msecs = saveImage(user.getImage());
     
+    quint32 id;
+    if (userExists(user.getUserName(), id)) {return  false;}
+    
     QSqlQuery query(_db);
-	
-	query.prepare("SELECT idUser FROM user WHERE login = :userName");
-	query.bindValue(":userName", user.getUserName());
-	query.exec();
     
-    if (query.first()) {return false;}
-    
-	query.prepare("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (:userName, :userFirstName, :userLastName, :password, :msecs, 0, 0, 0, 0, 0)");
+	query.prepare("INSERT INTO user (login, firstName, lastName, password, profilePicture, isConnected, publicKey, privateKey, saltPassword, saltKey) VALUES (:userName, :userFirstName, :userLastName, :password, :msecs, 0, :pubKey, :privKey, :pwdSalt, :keySalt)");
 	query.bindValue(":userName", user.getUserName());
 	query.bindValue(":userFirstName", user.getFirstName());
 	query.bindValue(":userLastName", user.getLastName());
-	query.bindValue(":password", hashedPWD);
+	query.bindValue(":password", password);
 	query.bindValue(":msecs", msecs);
+	query.bindValue(":pubKey", publicKey);
+	query.bindValue(":privKey", privateKey);
+	query.bindValue(":pwdSalt", passwordSalt);
+	query.bindValue(":keySalt", keySalt);
 	query.exec();
 	 
     user.setIdUser(query.lastInsertId().toUInt());
@@ -381,15 +382,15 @@ void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
 QByteArray ControllerDB::getSalt(const QString& pseudo)
 {
     quint32 id;
-    if (!userExists(pseudo, id)) {return QByteArray();}
+    if (!userExists(pseudo, id)) {qDebug() << "Non existant"; return QByteArray();}
     
     QSqlQuery query(_db);
-    query.prepare("SELECT password FROM user WHERE idUser = :idUser");
+    query.prepare("SELECT saltPassword FROM user WHERE idUser = :idUser");
     query.bindValue(":idUser", id);
     query.exec();
     
     query.first();
-    return query.record().value("password").toByteArray();
+    return query.record().value("saltPassword").toByteArray();
 }
 
 QByteArray ControllerDB::getPublicKey(const quint32 idUser)
@@ -401,4 +402,13 @@ QByteArray ControllerDB::getPublicKey(const quint32 idUser)
     
     query.first();
     return query.record().value("publicKey").toByteArray();
+}
+
+void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
+{
+    QSqlQuery query(_db);
+    query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = request))");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
 }

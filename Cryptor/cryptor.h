@@ -82,7 +82,7 @@ class Cryptor
      * salt : the added salt to avoid tables attack.
      * numberOfRounds : the number of rounds to generate the hash. Using a high
      * number of round avoid brute force attack.*/
-    Hash generateHash(const string& password, Salt& salt,
+    Hash generateHash(const string& password, const Salt& salt,
          const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
          
     AESKey generateAESKeyFromHash(const Hash& hash);

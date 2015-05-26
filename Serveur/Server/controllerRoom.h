@@ -20,7 +20,8 @@ class ControllerRoom
     void createRoom(ModelRoom& room, ChatorClient* client);
     void modifyRoom(ModelRoom& room, ChatorClient* client);
     void deleteRoom(const quint32 roomId, ChatorClient* client);
-    void deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* sender);
+    void deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* client);
+    void getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client);
     
     QMap<quint32, ChatorRoom*>& getOnlineRooms();
     Interpretor* _interpretor;

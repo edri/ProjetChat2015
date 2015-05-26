@@ -144,7 +144,7 @@ class ModelRoom
 	public :
         ModelRoom();
         
-        ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey);
+        ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey = AESKey());
 		~ModelRoom();
 
         /*
@@ -291,9 +291,9 @@ QDataStream& operator>> (QDataStream& ds, ModelMessage& m);
 QDataStream& operator<< (QDataStream& ds, const ModelUser& u);
 QDataStream& operator>> (QDataStream& ds, ModelUser& u);
 QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v);
-QDataStream& operator>> (QDataStream& ds, const vector<unsigned char>& v);
+QDataStream& operator>> (QDataStream& ds, vector<unsigned char>& v);
 QDataStream& operator<< (QDataStream& ds, const vector<char>& v);
-QDataStream& operator>> (QDataStream& ds, const vector<char>& v);
+QDataStream& operator>> (QDataStream& ds, vector<char>& v);
 QDataStream& operator<< (QDataStream& ds, const RSAPair& p);
 QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
 QDataStream& operator<< (QDataStream& ds, const AESKey& k);

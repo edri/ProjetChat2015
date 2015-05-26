@@ -58,7 +58,7 @@ public slots:
     void inscriptionToServer() const;
     void editUser() const;
 
-    void receiveSalt(Salt salt) const;
+    void receiveSalt(const Salt& salt) const;
 
 };
 

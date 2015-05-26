@@ -183,11 +183,13 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelUser user;
             QByteArray password;
-            stream >> user;
-            stream >> password;
-            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
-            // Envoyer cet objet quelque part
-            _dispatcher.createAccount(user, password, sender());
+            QByteArray passwordSalt;
+            QByteArray keySalt;
+            QByteArray privateKey;
+            QByteArray publicKey;
+            
+            stream >> user >> password >> passwordSalt >> keySalt >> privateKey >> publicKey;
+            _dispatcher.createAccount(user, password, passwordSalt, keySalt, privateKey, publicKey, sender());
         }
         break;
         
@@ -235,7 +237,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             qDebug() << "Déserialisation login";
             QString pseudo;
-            QString hashedPwd;
+            QByteArray hashedPwd;
             stream >> pseudo >> hashedPwd;
             _dispatcher.login(pseudo, hashedPwd, sender());
         }
@@ -252,7 +254,6 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::JOIN:
         {
-            qDebug() << "Déserialisation join";
             QMap<quint32, ModelRoom> rooms;
             QMap<quint32, ModelUser> users;
             stream >> rooms >> users;

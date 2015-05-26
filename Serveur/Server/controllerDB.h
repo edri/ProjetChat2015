@@ -13,9 +13,9 @@ class ControllerDB
     ControllerDB(const QString& dbName = DATABASE_FILE_NAME);
     bool connect();
     bool init();
-    bool login(const QString& pseudo, const QString& hashedPWD, quint32& id);
+    bool login(const QString& pseudo, const QByteArray& hashedPWD, quint32& id);
     void logout(const quint32 userId);
-    bool createAccount(ModelUser& user, const QByteArray& hashedPWD);
+    bool createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey);
     bool userExists(const QString& pseudo, quint32& id);
     ModelUser info(const quint32 id);
     quint32 storeMessage(const ModelMessage& message);
@@ -31,6 +31,7 @@ class ControllerDB
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
     QByteArray getSalt(const QString& pseudo);
     QByteArray getPublicKey(const quint32 idUser);
+    void requestAccess(const quint32 idUser, const quint32 idRoom);
     
     private :
     QSqlDatabase _db;

@@ -158,10 +158,10 @@ QMap<quint32, ChatorRoom*>& ControllerRoom::getOnlineRooms()
     return _onlineRooms;
 }
 
-void ControllerRoom::deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* sender)
+void ControllerRoom::deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* client)
 {
     ModelMessage message = _db.infoMessage(messageId);
-    if (sender->logged && message.getIdUser() == sender->id)
+    if (client->logged && message.getIdUser() == client->id)
     {
         _db.deleteMessage(messageId);
         ChatorRoom* room = _onlineRooms[roomId];
@@ -215,6 +215,72 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
 {
     Q_UNUSED(idRoom);
     Q_UNUSED(client);
+    
+    ModelRoom room = _db.infoRoom(idRoom);
+    /*if (room.getUsers().contains(client->id)) {client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "You are already registered")));}*/
+    if (!room.isPrivate())
+    {
+        ChatorRoom* currentRoom;
+        
+        if (!_onlineRooms.contains(idRoom))
+        {
+            qDebug() << "Mise en ligne de la salle " << idRoom;
+            // If it is not, we add it
+            currentRoom = new ChatorRoom;
+            currentRoom->id = idRoom;
+            _onlineRooms.insert(idRoom, currentRoom);
+        }
+        else
+        {
+            qDebug() << "Salle déjà en ligne " << idRoom;
+            // If this room is already online, we insert the user in it
+            currentRoom = _onlineRooms[idRoom];
+        }
+        
+        // Then, we store the pointer to this client and bind it to the room
+        client->rooms.insert(currentRoom);
+        currentRoom->clients.insert(client);
+        
+        QMap<quint32, ModelRoom> rooms;
+        rooms.insert(idRoom, room);
+        
+        QMap<quint32, ModelUser> users;
+        users.insert(client->id, _db.info(client->id));
+        
+        QByteArray data = _interpretor->join(rooms, users);
+        
+        for (ChatorClient* c : currentRoom->clients)
+        {
+            c->socket.sendBinaryMessage(data);
+        }
+    }
+    else
+    {
+        // Les ennuis commencent
+        ChatorRoom* currentRoom = _onlineRooms[idRoom];
+        
+        if (currentRoom)
+        {
+            const QSet<quint32>& admins = room.getAdmins();
+            // Le paquet n'existe pas encore
+            //QByteArray data = _interpretor->notif(room);
+            QByteArray data;
+            
+            for (ChatorClient* c : currentRoom->clients)
+            {
+                if (admins.contains(c->id))
+                {
+                    // ENVOYER UNE NOTIF
+                    c->socket.sendBinaryMessage(data);
+                }
+            }
+        }
+        else
+        {
+            // Placer une demande dans la base de données
+            _db.requestAccess(client->id, idRoom);
+        }
+    }
 }
 
 void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
@@ -257,4 +323,14 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
         _onlineRooms.remove(roomId);
         delete room;
     }
+}
+
+void ControllerRoom::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client)
+{
+    for (QPair<quint32, QByteArray>& userIdAndKey : usersIdAndKey)
+    {
+        userIdAndKey.second = _db.getPublicKey(userIdAndKey.first);
+    }
+    
+    client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
 }

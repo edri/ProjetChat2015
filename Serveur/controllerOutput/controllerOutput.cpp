@@ -73,3 +73,8 @@ void ControllerOutput::publicKey(const QList<QPair<quint32, QByteArray>>& usersI
 {
     _connector.send(_interpretor.publicKey(usersIdAndKey));
 }
+
+void ControllerOutput::askForSalt(const QString& pseudo)
+{
+    _connector.send(_interpretor.salt(pseudo));
+}
