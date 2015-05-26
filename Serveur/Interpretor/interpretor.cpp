@@ -150,14 +150,14 @@ QByteArray Interpretor::deleteRoom(const quint32 roomId)
     return data;
 }
 
-QByteArray Interpretor::leaveRoom(const quint32 roomId)
-{
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+//QByteArray Interpretor::leaveRoom(const quint32 roomId)
+//{
+    //QByteArray data;
+    //QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::LEAVE << roomId;
-    return data;
-}
+    //stream << (quint32) MessageType::LEAVE << roomId;
+    //return data;
+//}
 
 QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
 {
@@ -269,9 +269,10 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::LEAVE:
         {
-            quint32 userId;
             quint32 roomId;
+            quint32 userId;
             stream >> userId >> roomId;
+            qDebug() << "Quittage d'une salle " << userId << ", " << roomId;
             _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;

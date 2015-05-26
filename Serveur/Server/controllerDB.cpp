@@ -379,9 +379,20 @@ void ControllerDB::deleteRoom(const quint32 roomId)
 void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
-    query.exec("DELETE FROM roomMembership WHERE idUser = " + QString::number(idUser) + " AND idRoom = " + QString::number(idRoom));
-    query.exec("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = " + QString::number(idRoom));
+    
+    query.prepare("DELETE FROM roomMembership WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
+    qDebug() << "Suppression des memberships: " << query.lastError().text();
+    
+    query.prepare("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = :idRoom");
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
     query.first();
+    qDebug() << "Users restants: " << query.record().value("nbMembers").toUInt();
     if (query.record().value("nbMembers").toUInt() == 0) {deleteRoom(idRoom);}
 }
 

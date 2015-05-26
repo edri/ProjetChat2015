@@ -216,7 +216,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         return;
     }
     
-    _db.leaveRoom(client->id, idRoom);
+    _db.leaveRoom(idUser, idRoom);
     
     for (ChatorRoom* room : client->rooms)
     {
@@ -224,7 +224,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         {
             QByteArray data = _interpretor->leave(client->id, idRoom);
             
-            room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
+            //room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
             
             for (ChatorClient* member : room->clients)
             {
