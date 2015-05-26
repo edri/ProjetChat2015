@@ -1,3 +1,13 @@
+/*
+     * Created by Jan Purro
+     *
+     * This is the main programm for the client. His reponsability is to initialize
+     * the different elements of the application such as models and
+     * controllers. It's controller responsability to create the
+     * corresponding views.
+     *
+*/
+
 #include "viewUser.h"
 #include "controllerUser.h"
 #include "../ModeleChator/modelChator.h"

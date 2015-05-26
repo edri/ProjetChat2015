@@ -1,3 +1,12 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Handle display of informations such as messages and rooms received
+     * through controllerInput into viewChat.
+     * Sent user requests such as room's suppressions or message's modifcation
+     * to the controllerOutput.
+*/
+
 #ifndef CONTROLLERCHAT
 #define CONTROLLERCHAT
 

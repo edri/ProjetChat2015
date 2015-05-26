@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Contains methods used to interact with the SQLite database.
+*/
+
 #ifndef CONTROLLER_DB_H
 #define CONTROLLER_DB_H
 
@@ -32,6 +38,7 @@ class ControllerDB
     QByteArray getSalt(const QString& pseudo);
     QByteArray getPublicKey(const quint32 idUser);
     void requestAccess(const quint32 idUser, const quint32 idRoom);
+    void setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey);
     
     private :
     QSqlDatabase _db;

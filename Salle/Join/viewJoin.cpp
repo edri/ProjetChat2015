@@ -1,3 +1,10 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Implements viewJoin.h and configure element
+     * in the GUI.
+*/
+
 #include <QVBoxLayout>
 #include <QStandardItem>
 #include <QFont>

@@ -1,3 +1,11 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Implements viewUser.h
+     *
+*/
+
 #include "viewUser.h"
 #include "ui_viewUser.h"
 

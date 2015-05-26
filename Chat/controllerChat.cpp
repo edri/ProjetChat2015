@@ -1,3 +1,9 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Implements controllerChat.h
+*/
+
 #include "controllerChat.h"
 
 ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci,

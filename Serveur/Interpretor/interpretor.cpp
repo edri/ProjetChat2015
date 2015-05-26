@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements interpretor.h.
+*/
+
 #include "interpretor.h"
 #include <QByteArray>
 #include <QDataStream>

@@ -1,3 +1,9 @@
+/*
+     * Created by Jan Purro
+     *
+     * Contains fonctions required for security aspect of the chat
+     * such as encryption.
+*/
 
 #ifndef CRYPTOR_H
 #define CRYPTOR_H

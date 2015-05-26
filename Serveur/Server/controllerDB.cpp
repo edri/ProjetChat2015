@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements controllerDB.h
+*/
+
 #include "controllerDB.h"
 #include <QtCore/QDebug>
 #include <QFile>
@@ -408,6 +414,16 @@ void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
     query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = request))");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+}
+
+void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE roomMembership SET roomKey = :key WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.bindValue(":key", aesKey);
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();

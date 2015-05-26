@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Listen for new clients and allow connection and disconnection.
+*/
+
 #include "listener.h"
 #include <QFile>
 #include <QWebSocket>

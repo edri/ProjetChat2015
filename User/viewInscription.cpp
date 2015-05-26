@@ -1,3 +1,11 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Implements viewInscription.h
+     *
+*/
+
 #include "viewInscription.h"
 #include "ui_viewInscription.h"
 #include <QDebug>

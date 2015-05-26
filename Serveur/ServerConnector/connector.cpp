@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements connector.h
+*/
+
 #include <QtCore/QDebug>
 #include "connector.h"
 #include <QUrl>

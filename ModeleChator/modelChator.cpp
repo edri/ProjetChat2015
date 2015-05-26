@@ -1,3 +1,9 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Implements modelChator.h
+*/
+
 #include "modelChator.h"
 
 ModelChator::ModelChator() {}
@@ -444,4 +450,9 @@ void ModelUser::setImage(const QImage& image)
 void ModelRoom::setPicture(const QImage& picture)
 {
     _picture = picture;
+}
+
+void ModelRoom::setKey(const AESKey& aeskey)
+{
+    _secretKey = aeskey;
 }

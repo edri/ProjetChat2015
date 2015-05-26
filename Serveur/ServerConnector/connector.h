@@ -1,3 +1,11 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Handle customers connection between server and customer
+     * by using sockets. And allows transmissions of packets previously
+     * serilalized by the interpretor.
+*/
+
 #ifndef CONNECTOR_H
 #define CONNECTOR_H
 

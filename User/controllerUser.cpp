@@ -1,3 +1,11 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Implements controllerUser.h
+     *
+*/
+
 #include "controllerUser.h"
 
 ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i, ClientConnector* cc,

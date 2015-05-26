@@ -1,3 +1,10 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * This model is used to store any information received from the
+     * server such as room, users and messages
+*/
+
 //Contain any informations related to the chat
 #ifndef MODELCHATOR
 #define MODELCHATOR
@@ -206,6 +213,7 @@ class ModelRoom
         void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
         void setIdRoom(const quint32 id);
         void setPicture(const QImage& picture);
+        void setKey(const AESKey& aeskey);
 };
 
 class ModelMessage
@@ -295,8 +303,8 @@ QDataStream& operator>> (QDataStream& ds, vector<unsigned char>& v);
 QDataStream& operator<< (QDataStream& ds, const vector<char>& v);
 QDataStream& operator>> (QDataStream& ds, vector<char>& v);
 QDataStream& operator<< (QDataStream& ds, const RSAPair& p);
-QDataStream& operator>> (QDataStream& ds, const RSAPair& p);
+QDataStream& operator>> (QDataStream& ds, RSAPair& p);
 QDataStream& operator<< (QDataStream& ds, const AESKey& k);
-QDataStream& operator>> (QDataStream& ds, const AESKey& k);
+QDataStream& operator>> (QDataStream& ds, AESKey& k);
 
 #endif // MODELCHATOR

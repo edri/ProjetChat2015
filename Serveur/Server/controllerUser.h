@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Processed requests sent by users and related to users such
+     * as login, salt request in order to hash his password.
+*/
+
 #ifndef CONTROLLER_USER_H
 #define CONTROLLER_USER_H
 
@@ -18,7 +25,7 @@ class ControllerUser
     void disconnect(ChatorClient* client);
     void modifyUser(const ModelUser& user, ChatorClient* client);
     void getSalt(const QString& pseudo, ChatorClient* client);
-    void getPublicKey(const quint32 idUser, ChatorClient* client);
+    void getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client);
     
     QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;

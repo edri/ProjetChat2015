@@ -1,3 +1,12 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * This is the main programm for the server. His reponsability is to
+     * initialize the different elements of the application such as the
+     * controllers and the listener.
+     *
+*/
+
 #include <QApplication>
 #include <QString>
 #include "listener.h"

@@ -1,3 +1,12 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Show information in the GUI received from the controllerChat:
+     * - Messages receives
+     * - Available rooms
+     * - Members in the room
+*/
+
 #ifndef VIEWCHAT_H
 #define VIEWCHAT_H
 
