@@ -177,6 +177,15 @@ QByteArray Interpretor::publicKey(const QList<QPair<quint32, QByteArray>>& users
     return data;
 }
 
+QByteArray Interpretor::listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::LIST_ROOMS << publicRooms << privateVisibleRooms;
+    return data;
+}
+
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
@@ -342,6 +351,16 @@ void Interpretor::processData(const QByteArray& data)
             QList<QPair<quint32, QByteArray>> idsAndKeys;
             stream >> idsAndKeys;
             _dispatcher.publicKey(idsAndKeys, sender());
+        }
+        break;
+        
+        case MessageType::LIST_ROOMS:
+        {
+            QList<QPair<quint32, QString>> publicRooms;
+            QList<QPair<quint32, QString>> privateVisibleRooms;
+            stream >> publicRooms >> privateVisibleRooms;
+            _dispatcher.listRooms(publicRooms, privateVisibleRooms, sender());
+            //_dispatcher.publicKey(idsAndKeys, sender());
         }
         break;
 

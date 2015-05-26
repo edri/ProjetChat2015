@@ -39,6 +39,8 @@ class ControllerDB
     QByteArray getPublicKey(const quint32 idUser);
     void requestAccess(const quint32 idUser, const quint32 idRoom);
     void setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey);
+    QList<QPair<quint32, QString>> listPublicRooms();
+    QList<QPair<quint32, QString>> listPrivateVisibleRooms();
     
     private :
     QSqlDatabase _db;

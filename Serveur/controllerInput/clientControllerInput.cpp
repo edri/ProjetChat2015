@@ -152,3 +152,10 @@ void ClientControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersId
     Q_UNUSED(sender);
     _controllerRoom->createRoom(usersIdAndKey);
 }
+
+void ClientControllerInput::listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender)
+{
+    Q_UNUSED(publicRooms);
+    Q_UNUSED(privateVisibleRooms);
+    Q_UNUSED(sender);
+}

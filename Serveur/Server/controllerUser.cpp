@@ -192,3 +192,8 @@ void ControllerUser::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAnd
     
     client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
 }
+
+void ControllerUser::getAvalaibleRooms(ChatorClient* client)
+{
+    client->socket.sendBinaryMessage(_interpretor->listRooms(_db.listPublicRooms(), _db.listPrivateVisibleRooms()));
+}

@@ -424,7 +424,7 @@ QByteArray ControllerDB::getPublicKey(const quint32 idUser)
 void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
-    query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = request))");
+    query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = 'request'))");
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
@@ -438,4 +438,34 @@ void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByt
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
+}
+
+QList<QPair<quint32, QString>> ControllerDB::listPublicRooms()
+{
+    QList<QPair<quint32, QString>> rooms;
+    
+    QSqlQuery query(_db);
+    query.exec("SELECT idRoom, name FROM room WHERE private = 0");
+    
+    while (query.next())
+    {
+        rooms.append(QPair<quint32, QString>(query.record().value("idRoom").toUInt(), query.record().value("name").toString()));
+    }
+    
+    return rooms;
+}
+
+QList<QPair<quint32, QString>> ControllerDB::listPrivateVisibleRooms()
+{
+    QList<QPair<quint32, QString>> rooms;
+    
+    QSqlQuery query(_db);
+    query.exec("SELECT idRoom, name FROM room WHERE private = 1 AND visible = 1");
+    
+    while (query.next())
+    {
+        rooms.append(QPair<quint32, QString>(query.record().value("idRoom").toUInt(), query.record().value("name").toString()));
+    }
+    
+    return rooms;
 }

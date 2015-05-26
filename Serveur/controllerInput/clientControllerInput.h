@@ -55,6 +55,7 @@ class ClientControllerInput : public ControllerInput
     void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender);
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
     void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender);
+    void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender);
 };
 
 #endif // CLIENT_CONTROLLER_INPUT_H
