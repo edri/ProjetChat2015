@@ -222,14 +222,9 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     else
     {
-        QByteArray emptyKey;
-        QPair<quint32, QByteArray> idAndKey;
-        idAndKey.second = emptyKey;
-        
         for(quint32 id : _viewRoom->roomUsers())
         {
-           idAndKey.first = id;
-           idsAndKeys.append(idAndKey);
+           usersIds.append(id);
         }
     }
     
