@@ -100,7 +100,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
     }
 }
 
-void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
+void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
 {
     // The client must be logged in to create a room
     if (!client->logged)
@@ -112,8 +112,6 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     // Create the room in the database
     room.setIdRoom(_db.createRoom(room));
     
-    QSet<quint32> users = room.getUsers();
-    
     // Create the room in the onlineRooms structure
     ChatorRoom* newRoom = new ChatorRoom;
     newRoom->id = room.getIdRoom();
@@ -124,7 +122,7 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     QMap<quint32, ModelUser> usersData;
     ChatorClient* currentClient;
     
-    for (quint32 idUser : users)
+    for (quint32 idUser : usersIds)
     {
         // For every user in the new room, we have to fetch its ModelUser
         usersData.insert(idUser, _db.info(idUser));
@@ -283,7 +281,7 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
 }
 
-void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
+void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
 {
     ChatorRoom* onlineRoom = _onlineRooms[room.getIdRoom()];
     
@@ -323,14 +321,4 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
         _onlineRooms.remove(roomId);
         delete room;
     }
-}
-
-void ControllerRoom::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client)
-{
-    for (QPair<quint32, QByteArray>& userIdAndKey : usersIdAndKey)
-    {
-        userIdAndKey.second = _db.getPublicKey(userIdAndKey.first);
-    }
-    
-    client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
 }

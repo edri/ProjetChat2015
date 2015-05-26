@@ -23,17 +23,16 @@ void ServerControllerInput::infoUser(ModelUser& user, QObject* sender)
     _controllerUser.modifyUser(user, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::room(ModelRoom& room, bool edited, QObject* sender)
+void ServerControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
     if (edited)
     {
-        int i = 0; // Instruction caca pour combler le vide abyssal de la non implémentation de la modification de salle
-        Q_UNUSED(i);
+        _controllerRoom.modifyRoom(room, usersIds, cryptedKeys, client);
     }
     else
     {
-        _controllerRoom.createRoom(room, client);
+        _controllerRoom.createRoom(room, usersIds, cryptedKeys, client);
     }
 }
 
@@ -78,8 +77,7 @@ void ServerControllerInput::salt(const QString& pseudo, const QByteArray& salt, 
     _controllerUser.getSalt(pseudo, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::publicKey(const quint32 idUser, const QByteArray& key, QObject* sender)
+void ServerControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender)
 {
-    Q_UNUSED(key);
-    _controllerUser.getPublicKey(idUser, (ChatorClient*) sender);
+    _controllerUser.getPublicKeys(usersIdAndKey, (ChatorClient*) sender);
 }
