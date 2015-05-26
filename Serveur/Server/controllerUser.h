@@ -25,7 +25,7 @@ class ControllerUser
     void disconnect(ChatorClient* client);
     void modifyUser(const ModelUser& user, ChatorClient* client);
     void getSalt(const QString& pseudo, ChatorClient* client);
-    void getPublicKey(const quint32 idUser, ChatorClient* client);
+    void getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client);
     
     QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;

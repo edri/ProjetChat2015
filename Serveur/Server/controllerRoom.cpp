@@ -100,7 +100,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
     }
 }
 
-void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
+void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
 {
     // The client must be logged in to create a room
     if (!client->logged)
@@ -112,8 +112,6 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     // Create the room in the database
     room.setIdRoom(_db.createRoom(room));
     
-    QSet<quint32> users = room.getUsers();
-    
     // Create the room in the onlineRooms structure
     ChatorRoom* newRoom = new ChatorRoom;
     newRoom->id = room.getIdRoom();
@@ -124,14 +122,33 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     QMap<quint32, ModelUser> usersData;
     ChatorClient* currentClient;
     
-    for (quint32 idUser : users)
+    int size = usersIds.size();
+    bool isPrivate = room.isPrivate();
+    quint32 idUser;
+    
+    qDebug() << "Création de la salle " << room.getName() << " avec users: " << usersIds.size();
+    
+    //for (quint32 idUser : usersIds)
+    for (int i = 0; i < size; i++)
     {
+        idUser = usersIds[i];
+         qDebug() << "Traitement de l'user " << idUser;
+        
+        if (isPrivate)
+        {
+            QByteArray aesKey;
+            QDataStream stream(&aesKey, QIODevice::WriteOnly);
+            stream << cryptedKeys[i].first << cryptedKeys[i].second;
+            _db.setKey(idUser, newRoom->id, aesKey);
+        }
+        
         // For every user in the new room, we have to fetch its ModelUser
         usersData.insert(idUser, _db.info(idUser));
         
         // If this user is online
         if (connectedUsers.contains(idUser))
         {
+            qDebug() << "Oui, il est online";
             // We add it in the room and link it to it
             currentClient = connectedUsers[idUser];
             currentClient->rooms.insert(newRoom);
@@ -146,9 +163,23 @@ void ControllerRoom::createRoom(ModelRoom& room, ChatorClient* client)
     // Build the packet
     QByteArray data = _interpretor->join(roomToSend, usersData);
     
+    int clientIndex;
     // Send the packet to every client
     for (ChatorClient* client : newRoom->clients)
     {
+        if (isPrivate)
+        {
+            QByteArray aesKeyAndIV;
+            QDataStream stream(&aesKeyAndIV, QIODevice::WriteOnly);
+            clientIndex = usersIds.indexOf(client->id);
+            stream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
+            
+            AESKey aesKey;
+            stream >> aesKey;
+            roomToSend.first().setKey(aesKey);
+            data = _interpretor->join(roomToSend, usersData);
+        }
+        qDebug() << "Envoi de la notif qui fait " << data.size();
         client->socket.sendBinaryMessage(data);
     }
 }
@@ -185,7 +216,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         return;
     }
     
-    _db.leaveRoom(client->id, idRoom);
+    _db.leaveRoom(idUser, idRoom);
     
     for (ChatorRoom* room : client->rooms)
     {
@@ -193,7 +224,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         {
             QByteArray data = _interpretor->leave(client->id, idRoom);
             
-            room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
+            //room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
             
             for (ChatorClient* member : room->clients)
             {
@@ -283,7 +314,7 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
 }
 
-void ControllerRoom::modifyRoom(ModelRoom& room, ChatorClient* client)
+void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
 {
     ChatorRoom* onlineRoom = _onlineRooms[room.getIdRoom()];
     
@@ -323,14 +354,4 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
         _onlineRooms.remove(roomId);
         delete room;
     }
-}
-
-void ControllerRoom::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client)
-{
-    for (QPair<quint32, QByteArray>& userIdAndKey : usersIdAndKey)
-    {
-        userIdAndKey.second = _db.getPublicKey(userIdAndKey.first);
-    }
-    
-    client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
 }

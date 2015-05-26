@@ -59,7 +59,7 @@ class ControllerOutput
      * - roomId : the room's id the user want to leave.
      * Created by Miguel Santamaria on 14.05.2015 18:31
      */
-    void leaveRoom(const quint32 roomId);
+    //void leaveRoom(const quint32 roomId);
 
     /* Called when a user need a salt in order to hash his password
      * when he is trying to connect to the server
