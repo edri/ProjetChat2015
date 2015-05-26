@@ -33,15 +33,16 @@ class Interpretor : public QObject
     QByteArray login(const QString& pseudo, const Hash& hashedPwd);
     QByteArray createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys);
     QByteArray editAccount(const ModelUser& user);
-    QByteArray sendInfoUser(const ModelUser& user);
+    QByteArray sendInfoUser(const ModelUser& user, const QByteArray& keySalt = QByteArray(), const QByteArray& privateKey = QByteArray(), const QByteArray& publicKey = QByteArray());
     QByteArray sendError(const ModelError& error);
     QByteArray userJoin(const quint32 idUser, const quint32 idRoom);
     QByteArray join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users);
-    QByteArray leave(const quint32 idUser, const quint32 idRoom);
     QByteArray connected(const ModelUser& user);
     QByteArray disconnect(const quint32 idUser);
     QByteArray salt(const QString& pseudo, const QByteArray& salt = QByteArray());
     QByteArray publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey);
+    QByteArray leave(const quint32 idUser, const quint32 idRoom);
+    QByteArray listRooms(const QList<QPair<quint32, QString>>& publicRooms = QList<QPair<quint32, QString>>(), const QList<QPair<quint32, QString>>& privateVisibleRooms = QList<QPair<quint32, QString>>());
     
     // Serialize a room and the flage indicating if the room was edited or created.
     // The message type will be ROOM.
@@ -58,7 +59,7 @@ class Interpretor : public QObject
     // Serialize a room's id.
     // Created by Miguel Santamaria on 13.05.2015 09:04
     QByteArray deleteRoom(const quint32 roomId);
-    QByteArray leaveRoom(const quint32 roomId);
+    //QByteArray leaveRoom(const quint32 roomId);
     
     public slots:
     void processData(const QByteArray& data);

@@ -38,10 +38,10 @@ private:
     ViewRoom* _viewRoom;
     ViewJoin* _viewJoin;
     ControllerOutput* _controllerOutput;
-    
     Cryptor* _cryptor;
+    quint32 _currentRoomId;
     
-    // Pinter on the current user.
+    // Pointer on the current user.
     ModelUser* _currentUser;
     
     // Connect the viewRoom signals with the controller's slots. Should only

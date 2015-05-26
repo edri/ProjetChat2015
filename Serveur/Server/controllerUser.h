@@ -26,6 +26,7 @@ class ControllerUser
     void modifyUser(const ModelUser& user, ChatorClient* client);
     void getSalt(const QString& pseudo, ChatorClient* client);
     void getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client);
+    void getAvalaibleRooms(ChatorClient* client);
     
     QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;

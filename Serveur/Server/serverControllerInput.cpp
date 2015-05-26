@@ -88,3 +88,10 @@ void ServerControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersId
 {
     _controllerUser.getPublicKeys(usersIdAndKey, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender)
+{
+    Q_UNUSED(publicRooms);
+    Q_UNUSED(privateVisibleRooms);
+    _controllerUser.getAvalaibleRooms((ChatorClient*) sender);
+}

@@ -70,6 +70,8 @@ public:
     // Remove the specified user from the room.
     void removeUser(const quint32 userId);
     
+    void disablePrivacy();
+    
 public slots:
     // If the radio buttons for the visibility of private rooms are enabled will
     // disable them. Otherwise will enable them.

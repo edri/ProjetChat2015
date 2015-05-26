@@ -59,13 +59,12 @@ QByteArray Interpretor::editAccount(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::sendInfoUser(const ModelUser& user)
+QByteArray Interpretor::sendInfoUser(const ModelUser& user, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey)
 {
-    // Il y aura aussi les clés à gérer ici (envoi de la clé publique et éventuellement de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     qDebug() << "serialisation de " << user.getUserName();
-    stream << (quint32) MessageType::INFO_USER << user;
+    stream << (quint32) MessageType::INFO_USER << user << keySalt << privateKey << publicKey;
     return data;
 }
 
@@ -150,14 +149,14 @@ QByteArray Interpretor::deleteRoom(const quint32 roomId)
     return data;
 }
 
-QByteArray Interpretor::leaveRoom(const quint32 roomId)
-{
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+//QByteArray Interpretor::leaveRoom(const quint32 roomId)
+//{
+    //QByteArray data;
+    //QDataStream stream(&data, QIODevice::WriteOnly);
 
-    stream << (quint32) MessageType::LEAVE << roomId;
-    return data;
-}
+    //stream << (quint32) MessageType::LEAVE << roomId;
+    //return data;
+//}
 
 QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
 {
@@ -174,6 +173,15 @@ QByteArray Interpretor::publicKey(const QList<QPair<quint32, QByteArray>>& users
     QDataStream stream(&data, QIODevice::WriteOnly);
 
     stream << (quint32) MessageType::PUBLIC_KEY << usersIdAndKey;
+    return data;
+}
+
+QByteArray Interpretor::listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::LIST_ROOMS << publicRooms << privateVisibleRooms;
     return data;
 }
 
@@ -212,9 +220,11 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::INFO_USER:
         {
             ModelUser user;
-            stream >> user;
+            QByteArray keySalt;
+            QByteArray privateKey;
+            QByteArray publicKey;
+            stream >> user >> keySalt >> privateKey >> publicKey;
             qDebug() << "Déserialisation info user";
-            // Il y aura aussi les clés à gérer ici (récupération de la masterkey chiffrée)
             _dispatcher.infoUser(user, sender());
         }
         break;
@@ -269,9 +279,10 @@ void Interpretor::processData(const QByteArray& data)
         
         case MessageType::LEAVE:
         {
-            quint32 userId;
             quint32 roomId;
+            quint32 userId;
             stream >> userId >> roomId;
+            qDebug() << "Quittage d'une salle " << userId << ", " << roomId;
             _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;
@@ -341,6 +352,16 @@ void Interpretor::processData(const QByteArray& data)
             QList<QPair<quint32, QByteArray>> idsAndKeys;
             stream >> idsAndKeys;
             _dispatcher.publicKey(idsAndKeys, sender());
+        }
+        break;
+        
+        case MessageType::LIST_ROOMS:
+        {
+            QList<QPair<quint32, QString>> publicRooms;
+            QList<QPair<quint32, QString>> privateVisibleRooms;
+            stream >> publicRooms >> privateVisibleRooms;
+            _dispatcher.listRooms(publicRooms, privateVisibleRooms, sender());
+            //_dispatcher.publicKey(idsAndKeys, sender());
         }
         break;
 

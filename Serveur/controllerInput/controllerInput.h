@@ -31,6 +31,7 @@ class ControllerInput : public QObject
     virtual void userId(const QString& userName, bool exists, quint32 userId, QObject* sender) {Q_UNUSED(userName); Q_UNUSED(exists); Q_UNUSED(userId); Q_UNUSED(sender);}
     virtual void deleteRoom(const quint32 roomId, QObject* sender) = 0;
     virtual void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender) = 0;
+    virtual void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender) = 0;
 };
 
 #endif

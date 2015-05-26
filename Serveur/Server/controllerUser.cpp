@@ -18,8 +18,14 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         client->logged = true;
         ModelUser user = _db.info(id);
         qDebug() << "User: " << user.getUserName();
-        client->socket.sendBinaryMessage(_interpretor->sendInfoUser(user));
         // Clés?
+        
+        QByteArray keySalt;
+        QByteArray publicKey;
+        QByteArray privateKey;
+        _db.getCryptoData(id, keySalt, publicKey, privateKey);
+        
+        client->socket.sendBinaryMessage(_interpretor->sendInfoUser(user, keySalt, privateKey, publicKey));
         
         QMap<quint32, ModelRoom> rooms;
         QMap<quint32, ModelUser> users;
@@ -191,4 +197,9 @@ void ControllerUser::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAnd
     }
     
     client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
+}
+
+void ControllerUser::getAvalaibleRooms(ChatorClient* client)
+{
+    client->socket.sendBinaryMessage(_interpretor->listRooms(_db.listPublicRooms(), _db.listPrivateVisibleRooms()));
 }

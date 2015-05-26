@@ -420,5 +420,13 @@ void ViewRoom::remove()
     else
     {
         // Add to the banned users.
+        // Will not be implemented...
     }
+}
+
+void ViewRoom::disablePrivacy()
+{
+    chk_private->setDisabled(true);
+    rbt_visible->setDisabled(true);
+    rbt_onInvitation->setDisabled(true);
 }

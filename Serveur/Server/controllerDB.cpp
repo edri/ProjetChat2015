@@ -119,7 +119,7 @@ ModelUser ControllerDB::info(const quint32 id)
 
     query.first();
     
-    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(query.record().value("profilePicture").toString()), rooms);
+    ModelUser user(query.record().value("idUser").toUInt(), query.record().value("login").toString(), query.record().value("firstName").toString(), query.record().value("lastName").toString(), query.record().value("isConnected").toBool(), query.record().value("lastConnection").toDateTime(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("profilePicture").toString()), rooms);
     
     return user;
 }
@@ -205,7 +205,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     
     // Construction de la salle
     
-    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(query.record().value("picture").toString()), admins, users, messages);
+    ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("picture").toString()), admins, users, messages);
     
     return room;
 }
@@ -379,9 +379,20 @@ void ControllerDB::deleteRoom(const quint32 roomId)
 void ControllerDB::leaveRoom(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
-    query.exec("DELETE FROM roomMembership WHERE idUser = " + QString::number(idUser) + " AND idRoom = " + QString::number(idRoom));
-    query.exec("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = " + QString::number(idRoom));
+    
+    query.prepare("DELETE FROM roomMembership WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
+    qDebug() << "Suppression des memberships: " << query.lastError().text();
+    
+    query.prepare("SELECT COUNT(idUser) AS nbMembers FROM roomMembership WHERE idRoom = :idRoom");
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
     query.first();
+    qDebug() << "Users restants: " << query.record().value("nbMembers").toUInt();
     if (query.record().value("nbMembers").toUInt() == 0) {deleteRoom(idRoom);}
 }
 
@@ -413,7 +424,7 @@ QByteArray ControllerDB::getPublicKey(const quint32 idUser)
 void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
-    query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = request))");
+    query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = 'request'))");
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
@@ -427,4 +438,47 @@ void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByt
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
+}
+
+QList<QPair<quint32, QString>> ControllerDB::listPublicRooms()
+{
+    QList<QPair<quint32, QString>> rooms;
+    
+    QSqlQuery query(_db);
+    query.exec("SELECT idRoom, name FROM room WHERE private = 0");
+    
+    while (query.next())
+    {
+        rooms.append(QPair<quint32, QString>(query.record().value("idRoom").toUInt(), query.record().value("name").toString()));
+    }
+    
+    return rooms;
+}
+
+QList<QPair<quint32, QString>> ControllerDB::listPrivateVisibleRooms()
+{
+    QList<QPair<quint32, QString>> rooms;
+    
+    QSqlQuery query(_db);
+    query.exec("SELECT idRoom, name FROM room WHERE private = 1 AND visible = 1");
+    
+    while (query.next())
+    {
+        rooms.append(QPair<quint32, QString>(query.record().value("idRoom").toUInt(), query.record().value("name").toString()));
+    }
+    
+    return rooms;
+}
+
+void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT saltKey, publicKey, privateKey FROM user WHERE idUser = :idUser");
+    query.bindValue("idUser", id);
+    query.exec();
+    
+    query.first();
+    keySalt = query.record().value("saltKey").toByteArray();
+    publicKey = query.record().value("publicKey").toByteArray();
+    privateKey = query.record().value("privateKey").toByteArray();
 }
