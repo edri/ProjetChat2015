@@ -51,9 +51,9 @@ public:
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
     void newNotification(const NotificationType notifType) const;
     ViewInscription* getViewEdition();
+    void loadUserRooms() const;
 
 public slots :
-    void loadUserRooms() const;
     void openRoomModule() const;
     void loadRoomMessages(const quint32 idRoom) const;
     void sendMessage() const;
