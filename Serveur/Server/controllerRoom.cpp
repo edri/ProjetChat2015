@@ -148,6 +148,7 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
         // If this user is online
         if (connectedUsers.contains(idUser))
         {
+            qDebug() << "Oui, il est online";
             // We add it in the room and link it to it
             currentClient = connectedUsers[idUser];
             currentClient->rooms.insert(newRoom);
@@ -178,6 +179,7 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
             roomToSend.first().setKey(aesKey);
             data = _interpretor->join(roomToSend, usersData);
         }
+        qDebug() << "Envoi de la notif qui fait " << data.size();
         client->socket.sendBinaryMessage(data);
     }
 }

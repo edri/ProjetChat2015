@@ -105,7 +105,7 @@ ModelUser ControllerDB::info(const quint32 id)
     QSet<quint32> rooms;
     
     query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id");
-	query.bindValue("id", id);
+	query.bindValue(":id", id);
 	query.exec();
     
     while(query.next())
@@ -231,17 +231,17 @@ quint32 ControllerDB::createRoom(ModelRoom& room)
     for (quint32 idAdmin : admins)
     {
 		
-		query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idAdmin, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = admin))");
+		query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idAdmin, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = 'admin'))");
 		query.bindValue(":idAdmin", idAdmin);
 		query.bindValue(":idRoom", idRoom);
 		query.exec();
-
+        
         users.remove(idAdmin);
     }
     
     for (quint32 idUser : users)
     {
-		query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = user))");
+		query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = 'user'))");
         query.bindValue(":idUser", idUser);
 		query.bindValue(":idRoom", idRoom);
 		query.exec(); 

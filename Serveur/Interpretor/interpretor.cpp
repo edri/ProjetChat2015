@@ -127,7 +127,7 @@ QByteArray Interpretor::room(const ModelRoom& room, QList<quint32> usersIds, QLi
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
-    
+    qDebug() << "Envoi de " << usersIds.size();
     stream << (quint32) MessageType::ROOM << edited << room << usersIds << cryptedKeys;
     return data;
 }
