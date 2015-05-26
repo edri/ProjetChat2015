@@ -324,3 +324,13 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
         delete room;
     }
 }
+
+void ControllerRoom::getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client)
+{
+    for (QPair<quint32, QByteArray>& userIdAndKey : usersIdAndKey)
+    {
+        userIdAndKey.second = _db.getPublicKey(userIdAndKey.first);
+    }
+    
+    client->socket.sendBinaryMessage(_interpretor->publicKey(usersIdAndKey));
+}
