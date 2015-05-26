@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements controllerDB.h
+*/
+
 #include "controllerDB.h"
 #include <QtCore/QDebug>
 #include <QFile>

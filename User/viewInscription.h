@@ -1,3 +1,11 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Verify user input's in the forms and inform ControllerUser
+     * when user's information can be processed.
+*/
+
 #ifndef VIEWINSCRIPTION_H
 #define VIEWINSCRIPTION_H
 

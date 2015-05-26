@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     *
+     *
+*/
+
 #ifndef CHATOR_MODEL_H
 #define CHATOR_MODEL_H
 

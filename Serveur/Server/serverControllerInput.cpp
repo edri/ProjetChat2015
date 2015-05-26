@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements serverControllerInput.h
+     *
+*/
+
 #include "serverControllerInput.h"
 
 ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom) : _controllerUser(controllerUser), _controllerRoom(controllerRoom) {}

@@ -1,3 +1,9 @@
+/*
+     * Created by Jan Purro
+     *
+     * Interface used in order to join a room
+*/
+
 #ifndef CHAT_JOIN_H
 #define CHAT_JOIN_H
 

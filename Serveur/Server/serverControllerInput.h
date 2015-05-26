@@ -1,3 +1,11 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Contains methods called everytime the server receive instruction from
+     * the client
+     *
+*/
+
 #ifndef SERVER_CONTROLLER_INPUT_H
 #define SERVER_CONTROLLER_INPUT_H
 

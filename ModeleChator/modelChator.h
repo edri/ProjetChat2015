@@ -1,3 +1,10 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * This model is used to store any information received from the
+     * server such as room, users and messages
+*/
+
 //Contain any informations related to the chat
 #ifndef MODELCHATOR
 #define MODELCHATOR

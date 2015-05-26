@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements clientControllerInput.h
+*/
+
 #include <QtCore/QDebug>
 #include <QDataStream>
 #include "clientControllerInput.h"

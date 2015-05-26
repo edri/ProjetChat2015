@@ -1,3 +1,12 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Handle user's interactions with the connection's windows and
+     * interact with controllerOutput to send request to the server.
+     *
+*/
+
 #ifndef CONTROLLERUSER_H
 #define CONTROLLERUSER_H
 

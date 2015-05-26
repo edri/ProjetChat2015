@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Contains constants values in order to facilitate the server's configuration.
+     *
+*/
+
 #ifndef CHATOR_CONSTANTS_H
 #define CHATOR_CONSTANTS_H
 

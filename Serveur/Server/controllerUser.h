@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Processed requests sent by users and related to users such
+     * as login, salt request in order to hash his password.
+*/
+
 #ifndef CONTROLLER_USER_H
 #define CONTROLLER_USER_H
 

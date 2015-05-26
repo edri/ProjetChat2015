@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements controllerOutput.h
+*/
+
 #include "controllerOutput.h"
 #include "../../ModeleChator/modelChator.h"
 

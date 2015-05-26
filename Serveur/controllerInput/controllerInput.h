@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Abstract method which contains every methods a programm should
+     * implements in order to receive informations from distant sender.
+*/
+
 #ifndef CONTROLLER_INPUT_H
 #define CONTROLLER_INPUT_H
 

@@ -1,3 +1,12 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Contains ID of every packet's kind so the server and the user
+     * know what kind of packet it will process because this ID is
+     * the first element sent (and received).
+     * Also overload streams operator in order to ease de serialization.
+*/
+
 #ifndef PACKET_H
 #define PACKET_H
 
