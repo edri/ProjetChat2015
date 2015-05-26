@@ -418,3 +418,13 @@ void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
     query.bindValue(":idRoom", idRoom);
     query.exec();
 }
+
+void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey)
+{
+    QSqlQuery query(_db);
+    query.exec("UPDATE roomMembership SET roomKey = :key WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.bindValue(":key", aesKey);
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+}

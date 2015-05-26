@@ -451,3 +451,8 @@ void ModelRoom::setPicture(const QImage& picture)
 {
     _picture = picture;
 }
+
+void ModelRoom::setKey(const AESKey& aeskey)
+{
+    _secretKey = aeskey;
+}

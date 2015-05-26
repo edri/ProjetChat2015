@@ -122,8 +122,23 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     QMap<quint32, ModelUser> usersData;
     ChatorClient* currentClient;
     
-    for (quint32 idUser : usersIds)
+    int size = usersIds.size();
+    bool isPrivate = room.isPrivate();
+    quint32 idUser;
+    
+    //for (quint32 idUser : usersIds)
+    for (int i = 0; i < size; i++)
     {
+        idUser = usersIds[i];
+        
+        if (isPrivate)
+        {
+            QByteArray aesKey;
+            QDataStream stream(&aesKey, QIODevice::WriteOnly);
+            stream << cryptedKeys[i].first << cryptedKeys[i].second;
+            _db.setKey(idUser, newRoom->id, aesKey);
+        }
+        
         // For every user in the new room, we have to fetch its ModelUser
         usersData.insert(idUser, _db.info(idUser));
         
@@ -144,9 +159,22 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     // Build the packet
     QByteArray data = _interpretor->join(roomToSend, usersData);
     
+    int clientIndex;
     // Send the packet to every client
     for (ChatorClient* client : newRoom->clients)
     {
+        if (isPrivate)
+        {
+            QByteArray aesKeyAndIV;
+            QDataStream stream(&aesKeyAndIV, QIODevice::WriteOnly);
+            clientIndex = usersIds.indexOf(client->id);
+            stream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
+            
+            AESKey aesKey;
+            stream >> aesKey;
+            roomToSend.first().setKey(aesKey);
+            data = _interpretor->join(roomToSend, usersData);
+        }
         client->socket.sendBinaryMessage(data);
     }
 }

@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS roomMembership (
   idUser INT NOT NULL,
   idRoom INT NOT NULL,
   idPrivilege INT NOT NULL,
-  keyRM BINARY(32),
+  roomKey BLOB,
     FOREIGN KEY (idUser)
     REFERENCES user (idUser),
     FOREIGN KEY (idRoom)
