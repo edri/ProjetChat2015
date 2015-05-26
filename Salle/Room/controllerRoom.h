@@ -26,7 +26,7 @@
 #include "../../ModeleChator/modelChator.h"
 #include "../Join/viewJoin.h"
 #include "../../Serveur/controllerOutput/controllerOutput.h"
-#include "../Cryptor/cryptor.h"
+#include "../../Cryptor/cryptor.h"
 
 class ControllerRoom : public QObject
 {

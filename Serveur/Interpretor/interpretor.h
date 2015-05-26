@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Serialize any request made by the user in ControlerOutput in order
+     * to be sent to the server.
+*/
+
 #ifndef INTERPRETOR_H
 #define INTERPRETOR_H
 

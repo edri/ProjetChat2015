@@ -1,3 +1,12 @@
+/*
+     * Created by Mélanie Huck
+     * Edited by Bastien Rouiller
+     *
+     * Inform controllerUser when the user finish completing
+     * the connection forms or want to create a new account.
+     *
+*/
+
 #ifndef VIEWUSER_H
 #define VIEWUSER_H
 

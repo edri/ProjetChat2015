@@ -1,3 +1,9 @@
+/*
+     * Created by Jan Purro
+     *
+     * Implements cryptor.h
+*/
+
 #include "cryptor.h"
 #include <iostream>
 #include <openssl/err.h>

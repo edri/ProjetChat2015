@@ -1,3 +1,9 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Contains methods used to interact with the SQLite database.
+*/
+
 #ifndef CONTROLLER_DB_H
 #define CONTROLLER_DB_H
 

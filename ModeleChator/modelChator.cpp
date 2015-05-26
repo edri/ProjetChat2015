@@ -1,3 +1,9 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Implements modelChator.h
+*/
+
 #include "modelChator.h"
 
 ModelChator::ModelChator() {}

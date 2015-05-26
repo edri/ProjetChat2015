@@ -1,3 +1,9 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Implements viewChat.h
+*/
+
 #include "viewChat.h"
 #include "ui_viewChat.h"
 

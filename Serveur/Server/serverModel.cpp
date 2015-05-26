@@ -1,3 +1,10 @@
+/*
+     * Created by Benoist Wolleb
+     *
+     * Implements serverModel.h
+     *
+*/
+
 #include "serverModel.h"
 
 ChatorClient::ChatorClient(QWebSocket& socket) : socket(socket)

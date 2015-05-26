@@ -1,3 +1,10 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Contains methods called everytime a user want to communicate with
+     * the server.
+*/
+
 #ifndef CONTROLLER_OUTPUT_H
 #define CONTROLLER_OUTPUT_H
 
