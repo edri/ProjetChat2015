@@ -31,6 +31,7 @@ class ControllerDB
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
     QByteArray getSalt(const QString& pseudo);
     QByteArray getPublicKey(const quint32 idUser);
+    void requestAccess(const quint32 idUser, const quint32 idRoom);
     
     private :
     QSqlDatabase _db;

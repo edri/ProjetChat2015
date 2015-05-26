@@ -29,6 +29,11 @@ CREATE TABLE IF NOT EXISTS privilege (
   idPrivilege INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(16) NOT NULL
   );
+  
+INSERT INTO privilege (name)
+	VALUES	('user'),
+			('admin'),
+			('request');
 
 
 CREATE TABLE IF NOT EXISTS message (
