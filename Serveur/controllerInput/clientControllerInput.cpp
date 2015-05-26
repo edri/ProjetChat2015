@@ -134,14 +134,9 @@ void ClientControllerInput::salt(const QString& pseudo, const QByteArray& salt, 
     Q_UNUSED(pseudo);
     Q_UNUSED(sender);
     
-    /*Salt s;
-    QDataStream stream(salt);
-    stream >> s;*/
-    
-    // Ohlala qu'est-ce que c'est moooooche
     Salt s;
-    s.resize(salt.size());
-    memcpy(s.data(), salt.data(), salt.size());
+    QDataStream stream(salt);
+    stream >> s;
     
     _controllerUser->receiveSalt(s);
 }
