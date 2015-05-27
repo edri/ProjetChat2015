@@ -55,8 +55,7 @@ void ControllerChat::loadRoom(ModelRoom& room) const
 {
     if (room.isPrivate())
     {
-        // Marchera pas tant que le champ clé sera vide du moèle sera vide...
-        //_cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+        _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
     }
 
     _model->addRoom(room);

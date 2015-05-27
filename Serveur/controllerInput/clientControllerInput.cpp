@@ -53,14 +53,22 @@ void ClientControllerInput::infoUser(ModelUser& user, QByteArray& keySalt, QByte
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
-    Q_UNUSED(keySalt);
-    Q_UNUSED(publicKey);
-    Q_UNUSED(privateKey);
     
     qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
     
     //ControllerUser
-    _controllerUser->infoUser(user);
+    Salt salt;
+    RSAPair rsaKeys;
+    
+    salt.resize(keySalt.size());
+    memcpy(salt.data(), keySalt.data(), salt.size());
+    
+    rsaKeys.privateKey.resize(privateKey.size());
+    rsaKeys.publicKey.resize(publicKey.size());
+    memcpy(rsaKeys.privateKey.data(), privateKey.data(), rsaKeys.privateKey.size());
+    memcpy(rsaKeys.publicKey.data(), publicKey.data(), rsaKeys.publicKey.size());
+    
+    _controllerUser->infoUser(user, salt, rsaKeys);
 }
 
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
