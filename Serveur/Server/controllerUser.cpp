@@ -91,11 +91,6 @@ void ControllerUser::userId(const QString& userName, ChatorClient* client)
     client->socket.sendBinaryMessage(_interpretor->userId(userName, exists, userId));
 }
 
-QMap<quint32, ChatorClient*>& ControllerUser::getConnectedUsers()
-{
-    return _connectedUsers;
-}
-
 void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, ChatorClient* client)
 {
     qDebug() << "Enregistrement de " << user.getUserName() << ", avec hash: " << QString::fromUtf8(password.toHex()) << ", avec sel: " << QString::fromUtf8(passwordSalt.toHex());
@@ -132,7 +127,7 @@ void ControllerUser::disconnect(ChatorClient* client)
         // If the room is now empty, this client was the last one so we have to disconnect the room
         if (room->clients.empty())
         {
-            _room->getOnlineRooms().remove(room->id);
+            _room->_onlineRooms.remove(room->id);
             delete room;
         }
     }

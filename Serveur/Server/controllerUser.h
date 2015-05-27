@@ -17,6 +17,8 @@ class ControllerRoom;
 
 class ControllerUser
 {
+    friend class ControllerRoom;
+    
     public:
     ControllerUser(ControllerDB& db);
     void login(const QString& pseudo, const QByteArray& hashedPWD, ChatorClient* client);
@@ -28,7 +30,6 @@ class ControllerUser
     void getPublicKeys(QList<QPair<quint32, QByteArray>>& usersIdAndKey, ChatorClient* client);
     void getAvalaibleRooms(ChatorClient* client);
     
-    QMap<quint32, ChatorClient*>& getConnectedUsers();
     Interpretor* _interpretor;
     ControllerRoom* _room;
     
