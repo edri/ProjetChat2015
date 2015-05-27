@@ -318,13 +318,14 @@ void ControllerDB::logout(const quint32 userId)
     query.exec();
 }
 
-void ControllerDB::modifyUser(const ModelUser& user)
+void ControllerDB::modifyUser(const ModelUser& user, const QByteArray& password)
 {
     QSqlQuery query(_db);
-	query.prepare("UPDATE user (login, firstName, lastName, password, isConnected, publicKey, privateKey, salt, masterKey) SET VALUES (:userName, :userFirstName, :userLastName, password, 1, 0, 0, 0, 0) WHERE idUser = :idUser");
+	query.prepare("UPDATE user (login, firstName, lastName, password, isConnected) SET VALUES (:userName, :userFirstName, :userLastName, :password, 1) WHERE idUser = :idUser");
 	query.bindValue(":userName", user.getUserName());
 	query.bindValue(":userFirstName", user.getFirstName());
 	query.bindValue(":userLastName", user.getLastName());
+	query.bindValue(":password", password);
 	query.bindValue(":idUser", user.getIdUser());
 	query.exec();
 	
@@ -481,4 +482,9 @@ void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArr
     keySalt = query.record().value("saltKey").toByteArray();
     publicKey = query.record().value("publicKey").toByteArray();
     privateKey = query.record().value("privateKey").toByteArray();
+}
+
+void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys)
+{
+    
 }

@@ -40,7 +40,7 @@ class ClientControllerInput : public ControllerInput
     // Method called when an user want to delete its message.
     void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender);
     // Method called when user's info are received by the client when loging in.
-    void infoUser(ModelUser& user, QObject* sender);
+    void infoUser(ModelUser& user, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey, QObject* sender);
     // Method called when the client has to add a room and its users
     void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
     // Method called when a requested user ID is returned by the server after a client request.
@@ -56,6 +56,7 @@ class ClientControllerInput : public ControllerInput
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
     void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender);
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender);
+    void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender);
 };
 
 #endif // CLIENT_CONTROLLER_INPUT_H

@@ -91,7 +91,7 @@ public:
     // Return    : ViewInscription - viewEdition based on viewInscription
     //----------------------------------------------------------------------------------
     ViewInscription* getViewEdition();
-
+	
     //----------------------------------------------------------------------------------
     // Goal      :
     // Param     :
@@ -99,7 +99,7 @@ public:
     void loadUserRooms() const;
 
 public slots :
-// Method called when the controller received signal from the viewChat.
+// Methods called when the controller received signal from the viewChat.
 // The controller will then ask the controllerOutput to send request to the server
 // or interact with other controllers.
 
