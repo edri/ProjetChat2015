@@ -361,7 +361,6 @@ void Interpretor::processData(const QByteArray& data)
             QList<QPair<quint32, QString>> privateVisibleRooms;
             stream >> publicRooms >> privateVisibleRooms;
             _dispatcher.listRooms(publicRooms, privateVisibleRooms, sender());
-            //_dispatcher.publicKey(idsAndKeys, sender());
         }
         break;
 

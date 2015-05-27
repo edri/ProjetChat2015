@@ -83,9 +83,11 @@ void ControllerUser::receiveSalt(const Salt& salt) const
    _co->login(_view->getUsername(), hashPassword);
 }
 
-void ControllerUser::infoUser(ModelUser& user) {
+void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys) {
     _model->addUser(user);
     *_currentUser = _model->getUser(user.getIdUser());
+    _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(_view->getViewInscription()->getPassword().toStdString(), keySalt)));
+    _model->setRsaKeyPair(rsaKeys);
     _controllerChat->showView();
     _view->close();
 }
@@ -102,7 +104,8 @@ void ControllerUser::inscriptionToServer() const
     Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
-    //Hash keyHash = _cryptor->generateHash(password, keySalt);
+    
+    _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
 
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
 

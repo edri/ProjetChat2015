@@ -56,7 +56,7 @@ public:
     void showView() const;
 
     //
-    void infoUser(ModelUser& user);
+    void infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys);
     void createUser(ModelUser& user);
 
 
