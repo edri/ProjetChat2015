@@ -32,6 +32,7 @@ class ControllerInput : public QObject
     virtual void deleteRoom(const quint32 roomId, QObject* sender) = 0;
     virtual void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender) = 0;
     virtual void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender) = 0;
+    virtual void request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender) = 0;
 };
 
 #endif

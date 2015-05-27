@@ -532,3 +532,21 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     
     query.execBatch();
 }
+
+void ControllerDB::acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted)
+{
+    QSqlQuery query(_db);
+    
+    if (accepted)
+    {
+        query.prepare("UPDATE roomMembership SET idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'user'), roomKey = :key WHERE idUser = :idUser AND idRoom = :idRoom");
+        query.bindValue(":key", key);
+    }
+    else
+    {
+        query.prepare("DELETE FROM roomMembership WHERE idUser = :idUser AND idRoom = :idRoom");
+    }
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+}

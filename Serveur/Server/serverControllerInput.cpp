@@ -90,3 +90,8 @@ void ServerControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
     Q_UNUSED(privateVisibleRooms);
     _controllerUser.getAvalaibleRooms((ChatorClient*) sender);
 }
+
+void ServerControllerInput::request(const quint32 roomId, const ModelUser& user, const QByteArray& key, const bool accepted, QObject* sender)
+{
+    _controllerRoom.acceptOrDeny(roomId, user.getIdUser(), key, accepted, (ChatorClient*) sender);
+}

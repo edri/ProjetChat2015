@@ -58,6 +58,7 @@ class ClientControllerInput : public ControllerInput
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender);
     void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender);
     void editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender);
+    void request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender);
 };
 
 #endif // CLIENT_CONTROLLER_INPUT_H
