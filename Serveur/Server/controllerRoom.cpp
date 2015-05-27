@@ -170,7 +170,7 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
         if (isPrivate)
         {
             QByteArray aesKeyAndIV;
-            QDataStream stream(&aesKeyAndIV, QIODevice::WriteOnly);
+            QDataStream stream(&aesKeyAndIV, QIODevice::ReadWrite);
             clientIndex = usersIds.indexOf(client->id);
             stream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
             

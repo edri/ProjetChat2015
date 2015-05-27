@@ -84,16 +84,24 @@ void ControllerUser::receiveSalt(const Salt& salt) const
 }
 
 void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys) {
+    qDebug() << "Réception de l'utilisateur : " << user.getUserName();
+    qDebug() << "Ajout de l'utilisateur au modèle";
     _model->addUser(user);
     *_currentUser = _model->getUser(user.getIdUser());
+    qDebug() << "Déchiffrage de la clé privée";
     _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(_view->getViewInscription()->getPassword().toStdString(), keySalt)));
+    qDebug() << "Ajout de la clé dans le modèle";
     _model->setRsaKeyPair(rsaKeys);
+    qDebug() << "Affichage de l'interface prinicpale";
     _controllerChat->showView();
     _view->close();
+    qDebug() << "Utilisateur Reçu !";
+    
 }
 
 void ControllerUser::inscriptionToServer() const
 {
+    qDebug() << "Inscription to server";
     // Get user information
     const QString firstName = _view->getViewInscription()->getFirstName();
     const QString lastName = _view->getViewInscription()->getLastName();
@@ -105,8 +113,14 @@ void ControllerUser::inscriptionToServer() const
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
     
+    QByteArray tmp((const char*) keyPair.privateKey.data(), keyPair.privateKey.size());
+    qDebug() << "Clé privée : " << QString::fromUtf8(tmp.toHex());
+    
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
 
+    QByteArray tmp2((const char*) keyPair.privateKey.data(), keyPair.privateKey.size());
+    qDebug() << "Clé privée : " << QString::fromUtf8(tmp2.toHex());
+    
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
     //Store information into a ModelUser

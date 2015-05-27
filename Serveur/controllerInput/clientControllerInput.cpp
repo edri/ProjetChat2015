@@ -73,13 +73,16 @@ void ClientControllerInput::infoUser(ModelUser& user, QByteArray& keySalt, QByte
 
 void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender)
 {
-    qDebug() << "dans join";
+    Q_UNUSED(sender);
+    qDebug() << "Dans Join";
 
+    qDebug() << "Ajout des utilisateurs";
     for (ModelUser user : users)
     {
         _controllerChat->loadUser(user);
     }
-   
+    
+    qDebug() << "Ajout des salles";
     for (ModelRoom room : rooms)
     {
         _controllerChat->loadRoom(room);
@@ -100,10 +103,9 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
             qDebug() << "Administré par " << mu.getIdUser() << ": " << mu.getUserName();
         }*/
     }
-    
+    qDebug() << "Chargement des salles";
     _controllerChat->loadUserRooms();
-    
-    Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);
+    qDebug() << "Sort Join";
 }
 
 void ClientControllerInput::userId(const QString& userName, bool exists, quint32 userId, QObject* sender)
