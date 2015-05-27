@@ -31,8 +31,8 @@ class ControllerDB
     quint32 createRoom(ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
     void modifyRoom(const ModelRoom& room);
-    void modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys);//////////////////////////////////////////////////////////////////////
-    void modifyUser(const ModelUser& user, const QByteArray& password);
+    void modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys);
+    void modifyUser(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey);
     void deleteRoom(const quint32 roomId);
     quint64 saveImage(const QImage& image);
     void leaveRoom(const quint32 idUser, const quint32 idRoom);

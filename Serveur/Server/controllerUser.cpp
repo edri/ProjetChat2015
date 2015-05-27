@@ -149,7 +149,7 @@ void ControllerUser::disconnect(ChatorClient* client)
     delete client;
 }
 
-void ControllerUser::modifyUser(const ModelUser& user, const QByteArray& password, ChatorClient* client)
+void ControllerUser::modifyUser(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey, ChatorClient* client)
 {
     if (user.getIdUser() == client->id)
     {
@@ -157,7 +157,7 @@ void ControllerUser::modifyUser(const ModelUser& user, const QByteArray& passwor
         return;
     }
     
-    _db.modifyUser(user, password);
+    _db.modifyUser(user, password, privateKey);
     QSet<quint32> upToDateClients;
     QByteArray data = _interpretor->editAccount(user);
     

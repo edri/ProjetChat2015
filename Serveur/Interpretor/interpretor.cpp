@@ -49,13 +49,13 @@ QByteArray Interpretor::createAccount(const ModelUser& user, const Hash& passwor
     return data;
 }
 
-QByteArray Interpretor::editAccount(const ModelUser& user)
+QByteArray Interpretor::editAccount(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey)
 {
     // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
-    stream << (quint32) MessageType::EDIT_ACCOUNT << user;
+    stream << (quint32) MessageType::EDIT_ACCOUNT << user << password << privateKey;
     return data;
 }
 
@@ -210,10 +210,10 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::EDIT_ACCOUNT:
         {
             ModelUser user;
-            stream >> user;
-            // Il y aura aussi les clés à gérer ici (récupération des deux clés asymétriques et de la masterkey chiffrée)
-            // Envoyer cet objet quelque part
-            _dispatcher.editAccount(user, sender());
+            QByteArray password;
+            QByteArray privateKey;
+            stream >> user >> password >> privateKey;
+            _dispatcher.editAccount(user, password, privateKey, sender());
         }
         break;
         

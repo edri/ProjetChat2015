@@ -25,11 +25,9 @@ void ServerControllerInput::login(const QString& pseudo, const QByteArray& hashe
     _controllerUser.login(pseudo, hashedPWD, client);
 }
 
-void ServerControllerInput::infoUser(ModelUser& user, QByteArray& password, QByteArray& publicKey, QByteArray& privateKey, QObject* sender)
+void ServerControllerInput::editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender)
 {
-    Q_UNUSED(publicKey);
-    Q_UNUSED(privateKey);
-    _controllerUser.modifyUser(user, password, (ChatorClient*) sender);
+    _controllerUser.modifyUser(user, password, privateKey, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)

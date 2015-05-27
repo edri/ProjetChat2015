@@ -224,8 +224,6 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
         {
             QByteArray data = _interpretor->leave(client->id, idRoom);
             
-            //room->clients.remove(client); // OU METTRE CA??????? (FAUT-IL NOTIFIER LE CLIENT?)
-            
             for (ChatorClient* member : room->clients)
             {
                 member->socket.sendBinaryMessage(data);
@@ -287,6 +285,8 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
     else
     {
+        _db.requestAccess(client->id, idRoom);
+        
         // Les ennuis commencent
         ChatorRoom* currentRoom = _onlineRooms[idRoom];
         
@@ -305,11 +305,6 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
                     c->socket.sendBinaryMessage(data);
                 }
             }
-        }
-        else
-        {
-            // Placer une demande dans la base de données
-            _db.requestAccess(client->id, idRoom);
         }
     }
 }
