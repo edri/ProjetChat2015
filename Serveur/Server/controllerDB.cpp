@@ -477,11 +477,12 @@ void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArr
     query.prepare("SELECT saltKey, publicKey, privateKey FROM user WHERE idUser = :idUser");
     query.bindValue("idUser", id);
     query.exec();
-    
+    qDebug() << "Crypto data : " << query.lastError().text() ;
     query.first();
     keySalt = query.record().value("saltKey").toByteArray();
     publicKey = query.record().value("publicKey").toByteArray();
     privateKey = query.record().value("privateKey").toByteArray();
+    qDebug() << "clé privée : "<< QString::fromUtf8(privateKey.toHex());
 }
 
 void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys)

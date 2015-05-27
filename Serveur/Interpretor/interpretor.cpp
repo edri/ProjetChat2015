@@ -225,6 +225,7 @@ void Interpretor::processData(const QByteArray& data)
             QByteArray publicKey;
             stream >> user >> keySalt >> privateKey >> publicKey;
             qDebug() << "Déserialisation info user";
+            qDebug() << "Clé privée : " << QString::fromUtf8(privateKey.toHex()) ;
             _dispatcher.infoUser(user, keySalt, publicKey, privateKey, sender());
         }
         break;

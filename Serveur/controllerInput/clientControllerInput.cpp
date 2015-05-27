@@ -55,7 +55,8 @@ void ClientControllerInput::infoUser(ModelUser& user, QByteArray& keySalt, QByte
     Q_UNUSED(sender);
     
     qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
-    
+    qDebug() << "Clé privée : " << QString::fromUtf8(privateKey.toHex()) ; 
+        
     //ControllerUser
     Salt salt;
     RSAPair rsaKeys;

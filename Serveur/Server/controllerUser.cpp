@@ -93,7 +93,7 @@ void ControllerUser::userId(const QString& userName, ChatorClient* client)
 
 void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, ChatorClient* client)
 {
-    qDebug() << "Enregistrement de " << user.getUserName() << ", avec hash: " << QString::fromUtf8(password.toHex()) << ", avec sel: " << QString::fromUtf8(passwordSalt.toHex());
+    qDebug() << "Enregistrement de " << user.getUserName() << ", avec hash: " << QString::fromUtf8(password.toHex()) << ", avec sel: " << QString::fromUtf8(passwordSalt.toHex()) ;//<< ", avec clé privée : " << QString::fromUtf8(privateKey.toHex()) ;
     
     if (!_db.createAccount(user, password, passwordSalt, keySalt, privateKey, publicKey))
     {
