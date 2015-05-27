@@ -290,9 +290,9 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
         if (currentRoom)
         {
             const QSet<quint32>& admins = room.getAdmins();
-            // Le paquet n'existe pas encore
-            //QByteArray data = _interpretor->notif(room);
-            QByteArray data;
+            QByteArray keySalt, publicKey, privateKey;
+            _db.getCryptoData(client->id, keySalt, publicKey, privateKey);
+            QByteArray data = _interpretor->request(idRoom, _db.info(client->id), publicKey, false);
             
             for (ChatorClient* c : currentRoom->clients)
             {
@@ -373,12 +373,6 @@ void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<
             onlineRoom->clients.insert(onlineClient);
             onlineClient->rooms.insert(onlineRoom);
             onlineClient->socket.sendBinaryMessage(data);
-            
-            QByteArray dataConnected = _interpretor->connected(users[onlineClient->id]);
-            for (ChatorClient* currentClient : onlineRoom->clients)
-            {
-                currentClient->socket.sendBinaryMessage(dataConnected);
-            }
         }
     }
 }
@@ -401,5 +395,44 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
         
         _onlineRooms.remove(roomId);
         delete room;
+    }
+}
+
+void ControllerRoom::acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted, ChatorClient* client)
+{
+    _db.acceptOrDeny(idRoom, idUser, key, accepted);
+    
+    if (accepted)
+    {
+        ModelRoom room = _db.infoRoom(idRoom);
+        QMap<quint32, ModelRoom> rooms;
+        rooms.insert(room.getIdRoom(), room);
+        QMap<quint32, ModelUser> users;
+        
+        for (quint32 idUser : room.getUsers())
+        {
+            if (!users.contains(idUser))
+            {
+                // Get the informations of the user
+                users.insert(idUser, _db.info(idUser));
+            }
+        }
+        
+        ChatorRoom* onlineRoom = _onlineRooms[idRoom];
+        
+        for (ChatorClient* onlineClient : _user->_connectedUsers)
+        {
+            if (onlineClient->id == idUser)
+            {
+                onlineRoom->clients.insert(onlineClient);
+                onlineClient->rooms.insert(onlineRoom);
+                break;
+            }
+        }
+        
+        for (ChatorClient* onlineClient : onlineRoom->clients)
+        {
+            onlineClient->socket.sendBinaryMessage(_interpretor->join(rooms, users));
+        }
     }
 }

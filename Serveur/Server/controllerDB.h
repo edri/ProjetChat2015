@@ -43,6 +43,7 @@ class ControllerDB
     QList<QPair<quint32, QString>> listPublicRooms();
     QList<QPair<quint32, QString>> listPrivateVisibleRooms();
     void getCryptoData(const quint32 id, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey);
+    void acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted);
     
     private :
     QSqlDatabase _db;

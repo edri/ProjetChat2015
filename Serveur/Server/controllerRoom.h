@@ -30,6 +30,7 @@ class ControllerRoom
     void modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client);
     void deleteRoom(const quint32 roomId, ChatorClient* client);
     void deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* client);
+    void acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted, ChatorClient* client);
     
     Interpretor* _interpretor;
     ControllerUser* _user;

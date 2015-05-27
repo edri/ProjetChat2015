@@ -182,3 +182,11 @@ void ClientControllerInput::room(ModelRoom& room, bool edited, QList<quint32> us
 
 void ClientControllerInput::editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender)
 {Q_UNUSED(user); Q_UNUSED(password); Q_UNUSED(privateKey); Q_UNUSED(sender);}
+
+void ClientControllerInput::request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender)
+{
+    Q_UNUSED(roomId);
+    Q_UNUSED(user);
+    Q_UNUSED(accepted);
+    Q_UNUSED(sender);
+}
