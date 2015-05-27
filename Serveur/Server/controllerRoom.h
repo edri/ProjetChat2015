@@ -18,6 +18,8 @@ class ControllerUser;
 
 class ControllerRoom
 {
+    friend class ControllerUser;
+    
     public:
     ControllerRoom(ControllerDB& db);
     void processMessage(ModelMessage& message, const bool edited, ChatorClient* client);
@@ -29,7 +31,6 @@ class ControllerRoom
     void deleteRoom(const quint32 roomId, ChatorClient* client);
     void deleteMessage(const quint32 roomId, const quint32 messageId, ChatorClient* client);
     
-    QMap<quint32, ChatorRoom*>& getOnlineRooms();
     Interpretor* _interpretor;
     ControllerUser* _user;
     

@@ -12,6 +12,9 @@
 #include "packet.h"
 //#include <QObject>
 #include <QByteArray>
+#include <QByteArray>
+#include <QList>
+#include <QPair>
 #include "../controllerInput/controllerInput.h"
 #include "../ServerConnector/connector.h"
 
@@ -48,7 +51,7 @@ class Interpretor : public QObject
     // The message type will be ROOM.
     // The flag is written first, the room second.
     // Created Jan Purro 26.04.2015 14:55 modified by Jan Purro 26.05.2015 00:36
-    QByteArray room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited);
+    QByteArray room(const ModelRoom& room, QList<quint32>& usersIds, QList<QPair<QByteArray, QByteArray>>& cryptedKeys , bool edited);
     
     // Serialize a user name (packet is used to ask the server if a username is used and obtain the user's id if he exists).
     // userId and exists are not used by the client, the server use them to answer the clien request.
