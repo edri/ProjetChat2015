@@ -475,13 +475,16 @@ void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArr
 {
     QSqlQuery query(_db);
     query.prepare("SELECT saltKey, publicKey, privateKey FROM user WHERE idUser = :idUser");
-    query.bindValue("idUser", id);
+    query.bindValue(":idUser", id);
     query.exec();
     qDebug() << "Crypto data : " << query.lastError().text() ;
     query.first();
     keySalt = query.record().value("saltKey").toByteArray();
     publicKey = query.record().value("publicKey").toByteArray();
     privateKey = query.record().value("privateKey").toByteArray();
+    qDebug() << "Suis-je vide ? " << query.record().isEmpty();
+    qDebug() << "Suis-je nul ? " << query.record().value("privateKey").isNull();
+    qDebug() << "Suis-je valide ? " << query.record().value("privateKey").isValid();
     qDebug() << "clé privée : "<< QString::fromUtf8(privateKey.toHex());
 }
 

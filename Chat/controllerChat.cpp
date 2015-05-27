@@ -60,6 +60,7 @@ void ControllerChat::loadRoom(ModelRoom& room) const
         {
             qDebug() << "Pas de clé privée";
         }
+        
         if(room.getSecretKey().key.empty())
         {
             qDebug() << "Pas de clé secrète";

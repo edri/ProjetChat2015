@@ -12,10 +12,22 @@ ModelChator::ModelChator() {}
 void ModelChator::setRsaKeyPair(const RSAPair& rsaKeyPair)
 {
     _rsaKeyPair = rsaKeyPair;
+    if(_rsaKeyPair.privateKey.empty())
+    {
+        std::cerr << "Je suis vide !" << std::endl;
+    }
+    else
+    {
+        std::cerr << "Je ne suis pas vide !" << std::endl;
+    }
 }
 
 RSAPair ModelChator::getRsaKeyPair() const
 {
+    if(_rsaKeyPair.privateKey.empty())
+    {
+        std::cerr << "J'ai été initialisée mais je suis vide !" << std::endl;
+    }
     return _rsaKeyPair;
 }
 

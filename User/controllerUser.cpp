@@ -18,7 +18,8 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     _cryptor = cryptor;
     // Initialize a new view for the connection
     _view = new ViewUser();
-    _model = new ModelChator();
+    // _model = new ModelChator(); <==== Pourquoi ?!
+    _model = model;
     _currentUser = currentUser;
     _controllerChat = controllerChat;
 
@@ -91,7 +92,20 @@ void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsa
     qDebug() << "Déchiffrage de la clé privée";
     QByteArray tmp2((const char*) rsaKeys.privateKey.data(), rsaKeys.privateKey.size());
     qDebug() << "Clé privée chiffrée : " << QString::fromUtf8(tmp2.toHex());
-    _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(_view->getViewInscription()->getPassword().toStdString(), keySalt)));
+    
+    QString password (_view->getViewInscription()->getPassword());
+    if (password.isEmpty())
+    {
+        _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(_view->getPassword().toStdString(), keySalt)));
+    }
+    
+    else
+    {
+        _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password.toStdString(), keySalt)));
+    }
+    
+    QByteArray tmp3((const char*) keySalt.data(), keySalt.size());
+    qDebug() << "Sel : " << QString::fromUtf8(tmp3.toHex());
     QByteArray tmp((const char*) rsaKeys.privateKey.data(), rsaKeys.privateKey.size());
     qDebug() << "Clé privée : " << QString::fromUtf8(tmp.toHex());
     qDebug() << "Ajout de la clé dans le modèle";

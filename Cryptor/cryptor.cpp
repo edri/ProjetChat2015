@@ -270,6 +270,8 @@ int Cryptor::encryptWithAES(RSAPair& key, const AESKey& encryptionKey)
 
     /* update ciphertext with the final remaining bytes */
     EVP_EncryptFinal_ex(&encrypt, (unsigned char*)cypher.data() + cypherLength, &finalEncryptLength);
+    
+    cypher.resize(cypherLength + finalEncryptLength);
 
     key.privateKey = cypher;
     
@@ -287,11 +289,12 @@ int Cryptor::decryptWithAES(RSAPair& key, const AESKey& encryptionKey)
     int plainLength = (int) key.privateKey.size();
     int finalLength = 0;
     vector<char> plainKey(plainLength);
-
+    
     EVP_DecryptInit_ex(&decrypt, NULL, NULL, NULL, NULL);
     EVP_DecryptUpdate(&decrypt, (unsigned char*)plainKey.data(), &plainLength, (unsigned char*)key.privateKey.data(), (int) key.privateKey.size());
     EVP_DecryptFinal_ex(&decrypt, (unsigned char*)plainKey.data() + plainLength, &finalLength);
     
+    plainKey.resize(plainLength + finalLength);
     key.privateKey = plainKey;
     EVP_CIPHER_CTX_cleanup(&decrypt);
     

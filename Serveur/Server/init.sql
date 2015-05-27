@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS user (
   profilePicture VARCHAR(16),
   isConnected TINYINT(1) NOT NULL,
   lastConnection DATETIME,
-  publicKey BLOB NOT NULL,
-  privateKey BLOB NOT NULL,
+  publicKey VARBINARY NOT NULL,
+  privateKey VARBINARY NOT NULL,
   saltPassword BINARY(8) NOT NULL,
   saltKey BINARY(8) NOT NULL
   );

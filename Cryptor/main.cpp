@@ -136,7 +136,11 @@ int main()
     }
     cout << endl << endl;
     
-    cout << "Clé RSA privée : " << rsaPair.privateKey.data();
+    cout << "Clé RSA privée : ";// << rsaPair.privateKey.data();
+    for (unsigned i = 0; i < rsaPair.privateKey.size(); ++i)
+    {
+        printf("%02X", rsaPair.privateKey.at(i));
+    }
     
     AESKey hashKey = cryptor->generateAESKeyFromHash(hash);
     
@@ -167,7 +171,12 @@ int main()
     
     cryptor->decryptWithAES(rsaPair, hashKey);
     
-    cout << "Clé RSA privée déchiffrée : " << rsaPair.privateKey.data() << endl;
+    cout << "Clé RSA privée déchiffrée : "; //<< rsaPair.privateKey.data() << endl;
+    for (unsigned i = 0; i < rsaPair.privateKey.size(); ++i)
+    {
+        printf("%02X", rsaPair.privateKey.at(i));
+    }
+    
     
     cryptor->decryptWithRSA(aesKey, rsaPair);
     
