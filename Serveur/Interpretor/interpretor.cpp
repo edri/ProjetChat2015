@@ -225,7 +225,7 @@ void Interpretor::processData(const QByteArray& data)
             QByteArray publicKey;
             stream >> user >> keySalt >> privateKey >> publicKey;
             qDebug() << "Déserialisation info user";
-            _dispatcher.infoUser(user, sender());
+            _dispatcher.infoUser(user, keySalt, publicKey, privateKey, sender());
         }
         break;
         

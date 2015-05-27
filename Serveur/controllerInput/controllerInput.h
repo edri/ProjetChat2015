@@ -25,8 +25,8 @@ class ControllerInput : public QObject
     virtual void login(const QString& pseudo, const QByteArray& hashedPWD, QObject* sender) {Q_UNUSED(pseudo); Q_UNUSED(hashedPWD); Q_UNUSED(sender);}
     virtual void salt(const QString& pseudo, const QByteArray& salt, QObject* sender) = 0;
     virtual void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender) {Q_UNUSED(usersIdAndKey); Q_UNUSED(sender);}
-    virtual void infoUser(ModelUser& user, QObject* sender) = 0;
-    virtual void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender) {Q_UNUSED(room); Q_UNUSED(usersIds); Q_UNUSED(cryptedKeys); Q_UNUSED(edited); Q_UNUSED(sender);}
+    virtual void infoUser(ModelUser& user, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey, QObject* sender) = 0;
+    virtual void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender) = 0;
     virtual void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender) {Q_UNUSED(rooms); Q_UNUSED(users); Q_UNUSED(sender);}
     virtual void userId(const QString& userName, bool exists, quint32 userId, QObject* sender) {Q_UNUSED(userName); Q_UNUSED(exists); Q_UNUSED(userId); Q_UNUSED(sender);}
     virtual void deleteRoom(const quint32 roomId, QObject* sender) = 0;

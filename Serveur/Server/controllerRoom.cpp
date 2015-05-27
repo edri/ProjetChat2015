@@ -314,8 +314,19 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
 }
 
+// IL FAUDRAIT PLUTÔT UNE QMAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// USERSIDS NE SERT À RIEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!¨¨
 void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
 {
+    // Construction moche d'une Qmap
+    // BERK BERK BERK
+    QMap<quint32, QPair<QByteArray, QByteArray>> usersAndKeys;
+    for (int i = 0; i < usersIds.size(); i++)
+    {
+        usersAndKeys.insert(usersIds[i], cryptedKeys[i]);
+    }
+    // -------
+    
     ChatorRoom* onlineRoom = _onlineRooms[room.getIdRoom()];
     
     if (!onlineRoom || !_db.infoRoom(onlineRoom->id).getAdmins().contains(client->id))
@@ -323,7 +334,15 @@ void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<
         client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect user")));
     }
     
+    ModelRoom oldRoom = _db.infoRoom(room.getIdRoom());
+    
+    QSet<quint32> newUsers = room.getUsers() - oldRoom.getUsers();
+    QSet<quint32> removedUsers = oldRoom.getUsers() - room.getUsers();
+    QSet<quint32> newAdmins = room.getAdmins() - oldRoom.getAdmins();
+    QSet<quint32> removedAdmins = oldRoom.getAdmins() - room.getAdmins();
+    
     _db.modifyRoom(room);
+    _db.modifyMembership(room.getIdRoom(), newUsers, removedUsers, newAdmins, removedAdmins, usersAndKeys);
     
     // Le paquet n'existe pas encore
     //QByteArray data = _interpretor->modifyRoom(room);

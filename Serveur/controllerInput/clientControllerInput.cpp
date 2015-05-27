@@ -49,10 +49,13 @@ void ClientControllerInput::deleteMessage(const quint32 roomId, const quint32 me
     _controllerChat->deleteMessageInModel(roomId, messageId);
 }
 
-void ClientControllerInput::infoUser(ModelUser& user, QObject* sender)
+void ClientControllerInput::infoUser(ModelUser& user, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey, QObject* sender)
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
+    Q_UNUSED(keySalt);
+    Q_UNUSED(publicKey);
+    Q_UNUSED(privateKey);
     
     qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
     
@@ -157,5 +160,14 @@ void ClientControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
 {
     Q_UNUSED(publicRooms);
     Q_UNUSED(privateVisibleRooms);
+    Q_UNUSED(sender);
+}
+
+void ClientControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)
+{
+    Q_UNUSED(room);
+    Q_UNUSED(usersIds);
+    Q_UNUSED(cryptedKeys);
+    Q_UNUSED(edited);
     Q_UNUSED(sender);
 }
