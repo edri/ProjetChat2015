@@ -53,20 +53,10 @@ void ControllerChat::loadUser(ModelUser& user) const
 
 void ControllerChat::loadRoom(ModelRoom& room) const
 {
+    qDebug() << "Réception d'une salle";
     if (room.isPrivate())
     {
-        qDebug() << "Ajout d'une salle privée";
-        if(_model->getRsaKeyPair().privateKey.empty())
-        {
-            qDebug() << "Pas de clé privée";
-        }
-        
-        if(room.getSecretKey().key.empty())
-        {
-            qDebug() << "Pas de clé secrète";
-        }
         _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
-        qDebug() << "Fini d'ajouter";
     }
 
     _model->addRoom(room);
