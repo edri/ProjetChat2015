@@ -85,13 +85,9 @@ void ControllerUser::receiveSalt(const Salt& salt) const
 }
 
 void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys) {
-    qDebug() << "Réception de l'utilisateur : " << user.getUserName();
-    qDebug() << "Ajout de l'utilisateur au modèle";
+    
     _model->addUser(user);
     *_currentUser = _model->getUser(user.getIdUser());
-    qDebug() << "Déchiffrage de la clé privée";
-    QByteArray tmp2((const char*) rsaKeys.privateKey.data(), rsaKeys.privateKey.size());
-    qDebug() << "Clé privée chiffrée : " << QString::fromUtf8(tmp2.toHex());
     
     QString password (_view->getViewInscription()->getPassword());
     if (password.isEmpty())
@@ -104,11 +100,6 @@ void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsa
         _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password.toStdString(), keySalt)));
     }
     
-    QByteArray tmp3((const char*) keySalt.data(), keySalt.size());
-    qDebug() << "Sel : " << QString::fromUtf8(tmp3.toHex());
-    QByteArray tmp((const char*) rsaKeys.privateKey.data(), rsaKeys.privateKey.size());
-    qDebug() << "Clé privée : " << QString::fromUtf8(tmp.toHex());
-    qDebug() << "Ajout de la clé dans le modèle";
     _model->setRsaKeyPair(rsaKeys);
     qDebug() << "Affichage de l'interface prinicpale";
     _controllerChat->showView();
@@ -131,13 +122,10 @@ void ControllerUser::inscriptionToServer() const
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
     
-    QByteArray tmp((const char*) keyPair.privateKey.data(), keyPair.privateKey.size());
-    qDebug() << "Clé privée : " << QString::fromUtf8(tmp.toHex());
+    QByteArray tmp((const char*) keyPair.publicKey.data(), keyPair.publicKey.size());
+    qDebug() << "Clé publique : " << QString::fromUtf8(tmp.toHex());
     
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
-
-    QByteArray tmp2((const char*) keyPair.privateKey.data(), keyPair.privateKey.size());
-    qDebug() << "Clé privée chiffrée : " << QString::fromUtf8(tmp2.toHex());
     
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
 

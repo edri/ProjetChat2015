@@ -12,22 +12,10 @@ ModelChator::ModelChator() {}
 void ModelChator::setRsaKeyPair(const RSAPair& rsaKeyPair)
 {
     _rsaKeyPair = rsaKeyPair;
-    if(_rsaKeyPair.privateKey.empty())
-    {
-        std::cerr << "Je suis vide !" << std::endl;
-    }
-    else
-    {
-        std::cerr << "Je ne suis pas vide !" << std::endl;
-    }
 }
 
 RSAPair ModelChator::getRsaKeyPair() const
 {
-    if(_rsaKeyPair.privateKey.empty())
-    {
-        std::cerr << "J'ai été initialisée mais je suis vide !" << std::endl;
-    }
     return _rsaKeyPair;
 }
 
@@ -106,12 +94,13 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
-    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages;
+    qDebug() << "Serialisation de la salle, contient une clé de " << r._secretKey.key.size() << "|" << r._secretKey.initializationVector.size();
+    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages << r._secretKey;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 {
-    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages;
+    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages >> r._secretKey;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
@@ -468,4 +457,6 @@ void ModelRoom::setPicture(const QImage& picture)
 void ModelRoom::setKey(const AESKey& aeskey)
 {
     _secretKey = aeskey;
+    qDebug() << "SETKEEEY: " << aeskey.key.size() << "|" << aeskey.initializationVector.size();
+    qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }

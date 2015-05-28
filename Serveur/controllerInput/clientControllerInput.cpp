@@ -53,9 +53,6 @@ void ClientControllerInput::infoUser(ModelUser& user, QByteArray& keySalt, QByte
 {
     // Sender is unused in the client controller.
     Q_UNUSED(sender);
-    
-    qDebug() << "Info recue: " << user.getIdUser() << ", " << user.getUserName();
-    qDebug() << "Clé privée : " << QString::fromUtf8(privateKey.toHex()) ; 
         
     //ControllerUser
     Salt salt;
