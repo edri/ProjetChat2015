@@ -152,7 +152,7 @@ void ControllerUser::editUser() const
 {
     const QString firstName = _controllerChat->getViewEdition()->getFirstName();
     const QString lastName = _controllerChat->getViewEdition()->getLastName();
-    //QString password = _controllerChat->getViewEdition()->getPassword();
+    QString previousPassword = _controllerChat->getViewEdition()->getPassword();
     const QImage profilePicture = _controllerChat->getViewEdition()->getProfileImage();
 
     ModelUser myUser(_currentUser->getIdUser(), "", firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
