@@ -42,10 +42,12 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
             ModelRoom room = _db.infoRoom(idRoom);
             
             QByteArray aesKeyAndIV = _db.getAesKey(user.getIdUser(), idRoom);
+            qDebug() << "La clé de la salle " << idRoom << " fait " << aesKeyAndIV.size();
             QDataStream stream(&aesKeyAndIV, QIODevice::ReadOnly);
             
             AESKey aesKey;
             stream >> aesKey;
+            qDebug() << "L'aeskey contient: " << aesKey.key.size() << "|" << aesKey.initializationVector.size();
             room.setKey(aesKey);
             
             rooms.insert(idRoom, _db.infoRoom(idRoom));

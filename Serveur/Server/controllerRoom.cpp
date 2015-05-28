@@ -141,6 +141,8 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
             QByteArray aesKey;
             QDataStream stream(&aesKey, QIODevice::WriteOnly);
             stream << cryptedKeys[i].first << cryptedKeys[i].second;
+            qDebug() << "A la creation, le truc fait " << aesKey.size();
+            qDebug() << "La clé originale fait " << cryptedKeys[i].first.size() << "|" << cryptedKeys[i].first.size();
             _db.setKey(idUser, newRoom->id, aesKey);
         }
         
@@ -172,12 +174,19 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
         if (isPrivate)
         {
             QByteArray aesKeyAndIV;
-            QDataStream stream(&aesKeyAndIV, QIODevice::ReadWrite);
+            QDataStream writeStream(&aesKeyAndIV, QIODevice::WriteOnly);
             clientIndex = usersIds.indexOf(client->id);
-            stream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
+            qDebug() << "Index de l'utilisateur actuel" << clientIndex;
+            qDebug() << "Clé de l'utilisateur actuel" << cryptedKeys[clientIndex].first.size();
+            qDebug() << "IV de l'utilisateur actuel" << cryptedKeys[clientIndex].second.size();
+            writeStream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
             
+            qDebug() << "La chose contient " << aesKeyAndIV.size();
+            
+            QDataStream readStream(aesKeyAndIV);
             AESKey aesKey;
-            stream >> aesKey;
+            readStream >> aesKey;
+            qDebug() << "L'aeskey contient: " << aesKey.key.size() << "|" << aesKey.initializationVector.size();
             roomToSend.first().setKey(aesKey);
             data = _interpretor->join(roomToSend, usersData);
         }
