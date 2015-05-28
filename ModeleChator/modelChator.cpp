@@ -106,6 +106,7 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
+    qDebug() << "Serialisation de la salle, contient une clé de " << r._secretKey.key.size() << "|" << r._secretKey.initializationVector.size();
     return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages << r._secretKey;
 }
 
@@ -468,4 +469,6 @@ void ModelRoom::setPicture(const QImage& picture)
 void ModelRoom::setKey(const AESKey& aeskey)
 {
     _secretKey = aeskey;
+    qDebug() << "SETKEEEY: " << aeskey.key.size() << "|" << aeskey.initializationVector.size();
+    qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }

@@ -50,7 +50,7 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
             qDebug() << "L'aeskey contient: " << aesKey.key.size() << "|" << aesKey.initializationVector.size();
             room.setKey(aesKey);
             
-            rooms.insert(idRoom, _db.infoRoom(idRoom));
+            rooms.insert(idRoom, room);
             
             
             // Test
