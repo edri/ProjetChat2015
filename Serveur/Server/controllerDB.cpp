@@ -553,3 +553,16 @@ void ControllerDB::acceptOrDeny(const quint32 idRoom, const quint32 idUser, cons
     query.bindValue(":idRoom", idRoom);
     query.exec();
 }
+
+QByteArray ControllerDB::getAesKey(const quint32 idUser, const quint32 idRoom)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT roomKey FROM roomMembership WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
+    query.first();
+    
+    return query.record().value("roomKey").toByteArray();
+}
