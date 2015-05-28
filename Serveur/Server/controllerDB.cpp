@@ -206,13 +206,13 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Construction de la salle
     
     ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("picture").toString()), admins, users, messages);
-    
+
     return room;
 }
 
 quint32 ControllerDB::createRoom(ModelRoom& room)
 {
-    if (room.getPicture().isNull()) {room.setPicture(QImage(DEFAULT_ROOM_PICTURE));}
+    if (room.getPicture().isNull()) {room.setPicture(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_ROOM_PICTURE));}
     
     QSqlQuery query(_db);
 	query.prepare("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (:nameRoom, :limitRoom, :isPrivate, :isVisible, :picture)");
@@ -433,12 +433,16 @@ void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
 
 void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey)
 {
+    qDebug() << "Je m'apprete à stocker " << aesKey.size() << " dans u" << idUser << ", r" << idRoom;
     QSqlQuery query(_db);
-    query.exec("UPDATE roomMembership SET roomKey = :key WHERE idUser = :idUser AND idRoom = :idRoom");
+    query.prepare("UPDATE roomMembership SET roomKey = :key WHERE idUser = :idUser AND idRoom = :idRoom");
     query.bindValue(":key", aesKey);
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
+    
+    qDebug() << "Erreur sql? " << query.lastError().text();
+    qDebug() << "Erreur sql? " << query.lastQuery();
 }
 
 QList<QPair<quint32, QString>> ControllerDB::listPublicRooms()
@@ -563,6 +567,10 @@ QByteArray ControllerDB::getAesKey(const quint32 idUser, const quint32 idRoom)
     query.exec();
     
     query.first();
+    
+    qDebug() << "Suis-je vide? " << query.record().isEmpty();
+    qDebug() << "Suis-je nul? " << query.record().value("roomKey").isNull();
+    qDebug() << "Suis-je nul2? " << query.record().value("roomKey").toByteArray().size();
     
     return query.record().value("roomKey").toByteArray();
 }
