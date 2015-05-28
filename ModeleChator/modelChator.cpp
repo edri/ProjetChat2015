@@ -106,12 +106,12 @@ ModelUser::~ModelUser(){};
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
-    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages;
+    return ds << r._idRoom << r._name << r._private << r._visible << r._picture << r._limitOfStoredMessage << r._admins << r._members << r._messages << r._secretKey;
 }
 
 QDataStream& operator >> (QDataStream& ds, ModelRoom& r)
 {
-    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages;
+    return ds >> r._idRoom >> r._name >> r._private >> r._visible >> r._picture >> r._limitOfStoredMessage >> r._admins >> r._members >> r._messages >> r._secretKey;
 }
 
 QDataStream& operator << (QDataStream& ds, const ModelMessage& m)
