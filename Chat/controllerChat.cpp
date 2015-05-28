@@ -56,12 +56,7 @@ void ControllerChat::loadRoom(ModelRoom& room) const
     qDebug() << "Réception d'une salle";
     if (room.isPrivate())
     {
-        QByteArray tmp((const char*) room.getSecretKey().key.data(), room.getSecretKey().key.size());
-        qDebug() << "Clé secrète chiffrée : " << QString::fromUtf8(tmp.toHex());
         _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
-        
-        QByteArray tmp3((const char*) room.getSecretKey().key.data(), room.getSecretKey().key.size());
-        qDebug() << "Clé secrète déchiffrée : " << QString::fromUtf8(tmp3.toHex());
     }
 
     _model->addRoom(room);

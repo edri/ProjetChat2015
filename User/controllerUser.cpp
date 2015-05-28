@@ -100,11 +100,6 @@ void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsa
         _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password.toStdString(), keySalt)));
     }
     
-    QByteArray tmp3((const char*) keySalt.data(), keySalt.size());
-    qDebug() << "Sel : " << QString::fromUtf8(tmp3.toHex());
-    QByteArray tmp((const char*) rsaKeys.publicKey.data(), rsaKeys.publicKey.size());
-    qDebug() << "Clé publique : " << QString::fromUtf8(tmp.toHex());
-    qDebug() << "Ajout de la clé dans le modèle";
     _model->setRsaKeyPair(rsaKeys);
     qDebug() << "Affichage de l'interface prinicpale";
     _controllerChat->showView();
