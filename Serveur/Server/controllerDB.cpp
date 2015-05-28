@@ -206,13 +206,13 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     // Construction de la salle
     
     ModelRoom room(query.record().value("idRoom").toUInt(), query.record().value("name").toString(), query.record().value("limitOfStoredMessages").toUInt(), query.record().value("private").toBool(), query.record().value("visible").toBool(), QImage(PROFILE_PICTURE_FOLDER + query.record().value("picture").toString()), admins, users, messages);
-    
+
     return room;
 }
 
 quint32 ControllerDB::createRoom(ModelRoom& room)
 {
-    if (room.getPicture().isNull()) {room.setPicture(QImage(DEFAULT_ROOM_PICTURE));}
+    if (room.getPicture().isNull()) {room.setPicture(QImage(PROFILE_PICTURE_FOLDER + DEFAULT_ROOM_PICTURE));}
     
     QSqlQuery query(_db);
 	query.prepare("INSERT INTO room (name, limitOfStoredMessages, private, visible, picture) VALUES (:nameRoom, :limitRoom, :isPrivate, :isVisible, :picture)");
