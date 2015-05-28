@@ -203,7 +203,17 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     else if (_viewRoom->isRoomPrivate())
     {
-        roomKey = _cryptor->generateAESKey();
+        if(_currentRoomId)
+        {
+            roomKey = _model->getRoom(_currentRoomId).getSecretKey();
+        }
+        
+        else
+        {
+            roomKey = _cryptor->generateAESKey();
+            QByteArray tmp((const char*) roomKey.key.data(), roomKey.key.size());
+            qDebug() << "Clé secrète : " << QString::fromUtf8(tmp.toHex());
+        }
         AESKey cryptedKey;
         
         QPair<QByteArray, QByteArray> newPair;
@@ -214,7 +224,15 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
             usersIds.append(pair.first);
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
+            
+            QByteArray tmp3((const char*) rsaKeys.publicKey.data(), rsaKeys.publicKey.size());
+            qDebug() << "Clé public : " << QString::fromUtf8(tmp3.toHex());
+            
             _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
+            
+            QByteArray tmp2((const char*) cryptedKey.key.data(), cryptedKey.key.size());
+            qDebug() << "Clé secrète chiffrée : " << QString::fromUtf8(tmp2.toHex());
+            
             newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
             newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
             cryptedKeys.append(newPair);
