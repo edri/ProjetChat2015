@@ -105,9 +105,10 @@ public slots :
 
     //----------------------------------------------------------------------------------
     // Goal      : Ask the controllerRoom to open a windows for room creation
-    // Param     : /
+    // Param     : editRoomm - indicate if the room module should open for editing a
+    //             room (true) or for creating a new one (false).
     //----------------------------------------------------------------------------------
-    void openRoomModule() const;
+    void openRoomModule(const bool editRoom) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Load the messages from a room and send the information to the view
@@ -173,7 +174,7 @@ public slots :
     // Param     : roomId - Identify the room where the message should be deleted.
     //             messageId - Identify the message that has to be deleted
     //----------------------------------------------------------------------------------
-    void leaveRoomInModel(const quint32 roomId) const;
+    void leaveRoomInModel(const quint32 userId, const quint32 roomId) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Open the edition's view.
