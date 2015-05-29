@@ -30,6 +30,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(askServerToDeleteRoom(quint32)));
     connect(_view, SIGNAL(requestLeaveRoom(quint32)), this, SLOT(askServerToLeaveRoom(quint32)));
     connect(_view, SIGNAL(requestShowEditionView()), this, SLOT(showViewEdition()));
+    connect(_view, SIGNAL(requestOpenRoomMembership()), this, SLOT(openRoomMembership()));
 }
 
 ControllerChat::~ControllerChat()
@@ -229,6 +230,11 @@ void ControllerChat::showViewEdition()
     // Open the inscription window
     _viewEdition->show();
     _viewEdition->setEnabled(true);
+}
+
+void ControllerChat::openRoomMembership()
+{
+    _controllerRoom->showJoin();
 }
 
 ViewInscription* ControllerChat::getViewEdition()

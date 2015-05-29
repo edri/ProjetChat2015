@@ -399,7 +399,7 @@ void ViewChat::on_btn_leaveRoom_clicked()
 
 void ViewChat::on_btn_joinRoom_clicked()
 {
-
+    emit requestOpenRoomMembership();
 }
 
 void ViewChat::on_btn_newRoom_clicked()

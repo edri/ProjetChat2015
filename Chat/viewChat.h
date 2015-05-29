@@ -168,6 +168,7 @@ signals:
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
     void requestShowEditionView() const;
+    void requestOpenRoomMembership() const;
 };
 
 #endif // VIEWCHAT_H
