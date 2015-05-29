@@ -66,9 +66,9 @@ public:
     //             rsaKeys. Once the user has received it, he can use his password to
     //             decipher it and store it in the local app. It will allow him to
     //             decipher encrypted messages addressed to him.
-    // Param     : user -
-    //             keySalt -
-    //             rsaKeys -
+    // Param     : user - ModelUser of the current user
+    //             keySalt - salt used for key's encryption
+    //             rsaKeys - RSA Keys
     //----------------------------------------------------------------------------------
     void infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys);
 
