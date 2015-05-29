@@ -126,6 +126,13 @@ class ModelChator
          */
         void addMembershipRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 
+        /*
+         * Created by Miguel Santamario on 29.05.2015 21:35
+         *
+         * Get the users' membership requests in the model.
+         */
+        QList<ModelRequest> getRequests() const;
+
         void setRsaKeyPair(const RSAPair& rsaKeyPair);
         RSAPair getRsaKeyPair() const;
 };
@@ -304,12 +311,15 @@ class ModelUser
 class ModelRequest
 {
     private :
-        quint32 _roomId;
+        ModelRoom _room;
         ModelUser _user;
         QByteArray _publicKey;
 
     public :
-        ModelRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
+        ModelRequest(const ModelRoom& room, const ModelUser& user, const QByteArray& publicKey);
+
+        ModelRoom getRoom() const;
+        ModelUser getUser() const;
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

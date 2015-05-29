@@ -249,7 +249,12 @@ void ModelChator::removeUser(const quint32 userId, const quint32 roomId)
 void ModelChator::addMembershipRequest(const quint32 roomId, const ModelUser &user,
                                        const QByteArray &publicKey)
 {
-    _requests.append(ModelRequest(roomId, user, publicKey));
+    _requests.append(ModelRequest(_rooms[roomId], user, publicKey));
+}
+
+QList<ModelRequest> ModelChator::getRequests() const
+{
+    return _requests;
 }
 
 ModelMessage& ModelRoom::getMessage(const quint32 idMessage)
@@ -467,6 +472,16 @@ void ModelRoom::setKey(const AESKey& aeskey)
     qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }
 
-ModelRequest::ModelRequest(const quint32 roomId, const ModelUser& user,
+ModelRequest::ModelRequest(const ModelRoom& room, const ModelUser& user,
                            const QByteArray& publicKey) :
-    _roomId(roomId), _user(user), _publicKey(publicKey) {}
+    _room(room), _user(user), _publicKey(publicKey) {}
+
+ModelRoom ModelRequest::getRoom() const
+{
+    return _room;
+}
+
+ModelUser ModelRequest::getUser() const
+{
+    return _user;
+}

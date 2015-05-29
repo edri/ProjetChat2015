@@ -16,8 +16,10 @@ public:
     explicit ViewMembershipRequests(ModelChator* model, QWidget *parent = 0);
     ~ViewMembershipRequests();
 
+    void refresh(const QList<ModelRequest>& requests) const;
+
 private:
-    Ui::ViewMembershipRequests *ui;
+    Ui::ViewMembershipRequests *_ui;
      ModelChator* _model;
 };
 

@@ -244,6 +244,7 @@ void ControllerChat::openRoomMembership()
 void ControllerChat::showMembershipRequestsView()
 {
     _viewRequests->show();
+    _viewRequests->refresh(_model->getRequests());
 }
 
 ViewInscription* ControllerChat::getViewEdition()
