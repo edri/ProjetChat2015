@@ -35,6 +35,7 @@ class ServerControllerInput : public ControllerInput
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender);
     void editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender);
     void request(const quint32 roomId, const ModelUser& user, const QByteArray& key, const bool accepted, QObject* sender);
+    void joinRoom(const quint32 roomId, QObject* sender);
     
     
     private:

@@ -95,3 +95,8 @@ void ServerControllerInput::request(const quint32 roomId, const ModelUser& user,
 {
     _controllerRoom.acceptOrDeny(roomId, user.getIdUser(), key, accepted, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::joinRoom(const quint32 roomId, QObject* sender)
+{
+    _controllerRoom.joinRoom(roomId, (ChatorClient*) sender);
+}
