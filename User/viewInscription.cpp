@@ -177,11 +177,6 @@ QImage ViewInscription::getProfileImage() const
     return QImage(ui->ldt_profilPicture->text()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
-ModelUser* ViewInscription::getCurrentUser()
-{
-    return currentUser;
-}
-
 void ViewInscription::setCurrentUser(ModelUser* currentUser)
 {
     //Uptade the view with the information about the user

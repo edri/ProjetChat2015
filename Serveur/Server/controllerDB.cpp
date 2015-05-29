@@ -171,9 +171,11 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     QSet<quint32> users;
     
     QSqlQuery query(_db);
-	query.prepare("SELECT idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege WHERE idRoom = :idRoom ORDER BY login");
+	query.prepare("SELECT roomMembership.idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idRoom = :idRoom ORDER BY login");
 	query.bindValue(":idRoom", id);
 	query.exec();
+    
+    qDebug() << "J'aime le fromage " << query.lastError().text();
     
     quint32 idUser;
     
