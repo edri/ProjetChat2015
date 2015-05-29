@@ -48,6 +48,7 @@ private:
     // false -> connection is made from inscription's
     bool _fromBtnConnection;
 
+    bool _connected;
 
 public:
     ControllerUser(ModelChator* model, ModelUser* currentUser, ClientControllerInput* cci, Interpretor* i,
@@ -80,6 +81,8 @@ public slots:
     //             server. Connection is also made when user is opening the
     //             inscription's window so he won't create an account if the server is
     //             unreachable.
+    //             If the user is already connected through a socket, we skip to next
+    //             step.
     // Param     : _fromBtnConnection - true -> connection is made from the login's
     //                                          window.
     //                                - false -> connection is made from inscription's
@@ -129,6 +132,13 @@ public slots:
     // Param     : /
     //----------------------------------------------------------------------------------
     void receiveSalt(const Salt& salt) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : This method is used when a user cancel the inscription. Enable
+    //             connection view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void cancelInscription();
 
 };
 

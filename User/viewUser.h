@@ -32,6 +32,11 @@ public:
     QString getIpAddress() const;
     ViewInscription* getViewInscription() const;
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Used by the controller to display information to the user.
+    //----------------------------------------------------------------------------------
+    void setInfoText(QString information);
+
 private slots:
 
     //----------------------------------------------------------------------------------

@@ -53,6 +53,7 @@ ViewInscription::~ViewInscription()
     delete ui;
 }
 
+
 void ViewInscription::on_btn_path_clicked()
 {
     // Browse the files in order to find a picture
@@ -64,10 +65,6 @@ void ViewInscription::on_btn_path_clicked()
 
 void ViewInscription::on_btn_inscription_clicked()
 {
-    /* TODO
-     * Regrouper dans une fonction les vérification des champs, cette dernière retourne true si tout est ok
-     * Envoi des données au serveur et réception de réponses de ce dernier
-    */
     ui->lbl_info->setText("");
 
     if(edition)
@@ -81,12 +78,6 @@ void ViewInscription::on_btn_inscription_clicked()
         emit requestGetNewUser();
         ui->lbl_info->setText("Prêt à être envoyé au serveur");
     }
-    /* TODO
-    //The server verify if the username is already used
-    if(true) {
-      ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est déjà utilisé.</font>");
-    }
-    */
 }
 
 bool ViewInscription::verifyFields()
@@ -146,7 +137,7 @@ bool ViewInscription::verifyProfileImage() const
 void ViewInscription::closeEvent(QCloseEvent *)
 {
     // Enable connexion window once you close the inscription window
-    //ViewInscription::QMainWindow.setDisabled(false);
+    emit requestCancelInscription();
 }
 
 

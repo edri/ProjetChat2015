@@ -102,6 +102,13 @@ signals:
     //----------------------------------------------------------------------------------
     void requestGetNewUser() const;
     void requestEditUser() const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : The view sent this signal when user cancel inscription. Enable
+    //             connection view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void requestCancelInscription() const;
 };
 
 #endif // VIEWINSCRIPTION_H

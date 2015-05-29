@@ -18,10 +18,10 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     _cryptor = cryptor;
     // Initialize a new view for the connection
     _view = new ViewUser();
-    // _model = new ModelChator(); <==== Pourquoi ?!
     _model = model;
     _currentUser = currentUser;
     _controllerChat = controllerChat;
+    _connected = false;
 
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
@@ -29,6 +29,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServer()));
     connect(_controllerChat->getViewEdition(), SIGNAL(requestEditUser()), this, SLOT(editUser()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
+    connect(_view->getViewInscription(), SIGNAL(requestCancelInscription()), this, SLOT(cancelInscription()));
 }
 
 ControllerUser::~ControllerUser()
@@ -45,14 +46,24 @@ void ControllerUser::showView() const
 
 void ControllerUser::connectToServer(bool fromBtnConnection)
 {
-    // Use the getter to retrieve the data
-    QString server = _view->getIpAddress();
-    QString port = _view->getPort();   //
-
     this->_fromBtnConnection = fromBtnConnection;
 
-    // Connection to the servers
-    _cc->connectToServer(server + ":" + port);
+    if(!_connected)
+    {
+        // Use the getter to retrieve the data
+        QString server = _view->getIpAddress();
+        QString port = _view->getPort();   //
+
+        // Connection to the servers
+        _cc->connectToServer(server + ":" + port);
+        _connected = true;
+    }
+    // if the user has already a socket open with the server, no need to
+    // open a connection again. We can skip to next step.
+    else
+    {
+        auth();
+    }
 }
 
 void ControllerUser::auth() const
@@ -60,9 +71,10 @@ void ControllerUser::auth() const
     if(_fromBtnConnection)
     {
         qDebug() << "Demande du sel";
-        // Désactivation de la vue et Récupération de "passwordSalt"
-        // le retour du sel se fera dans receiveSalt
+        // Disabling the view and retrieving of "passwordSalt"
+        // The salt will be received in the slot receiveSalt
         _view->setDisabled(true);
+        _view->setInfoText("");
         _co->askForSalt(_view->getUsername());
     }
     else  // button inscription
@@ -115,6 +127,7 @@ void ControllerUser::inscriptionToServer() const
     const QString firstName = _view->getViewInscription()->getFirstName();
     const QString lastName = _view->getViewInscription()->getLastName();
     const QString userName = _view->getViewInscription()->getUserName();
+    const QImage profilePicture = _view->getViewInscription()->getProfileImage();
     string password = _view->getViewInscription()->getPassword().toStdString();
 
     Salt passwordSalt = _cryptor->generateSalt();
@@ -126,8 +139,6 @@ void ControllerUser::inscriptionToServer() const
     qDebug() << "Clé publique : " << QString::fromUtf8(tmp.toHex());
     
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
-    
-    const QImage profilePicture = _view->getViewInscription()->getProfileImage();
 
     //Store information into a ModelUser
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
@@ -151,4 +162,10 @@ void ControllerUser::editUser() const
     //Local current user is updated
     _currentUser->setFirstName(firstName);
     _currentUser->setLastName(lastName);
+}
+
+void ControllerUser::cancelInscription()
+{
+    _fromBtnConnection = true;
+    _view->setEnabled(true);
 }
