@@ -44,6 +44,8 @@ private:
 
     ModelUser* _currentUser;
 
+    // true -> connection is made from the login's window.
+    // false -> connection is made from inscription's
     bool _fromBtnConnection;
 
 
@@ -52,21 +54,80 @@ public:
                    ClientConnector* cc, ControllerOutput* co, ControllerChat* controllerChat, Cryptor* cryptor);
     ~ControllerUser();
 
-    // Afficher la vue
+    //----------------------------------------------------------------------------------
+    // Goal      : Open the connection's windows. This is the first window that the user
+    //             see when launching the programm.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void showView() const;
 
-    //
+    //----------------------------------------------------------------------------------
+    // Goal      : Receives encrypted informations from the server such as keySalt and
+    //             rsaKeys. Once the user has received it, he can use his password to
+    //             decipher it and store it in the local app. It will allow him to
+    //             decipher encrypted messages addressed to him.
+    // Param     : user -
+    //             keySalt -
+    //             rsaKeys -
+    //----------------------------------------------------------------------------------
     void infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys);
-    void createUser(ModelUser& user);
-
 
 
 public slots:
+    //----------------------------------------------------------------------------------
+    // Goal      : Make a TCP connection with the server through the client connector.
+    //             It is ClientConnector's responsability's to open a socket with the
+    //             server. Connection is also made when user is opening the
+    //             inscription's window so he won't create an account if the server is
+    //             unreachable.
+    // Param     : _fromBtnConnection - true -> connection is made from the login's
+    //                                          window.
+    //                                - false -> connection is made from inscription's
+    //----------------------------------------------------------------------------------
     void connectToServer(bool _fromBtnConnection);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : This function is called during connectToServer.
+    //             If the user want to log in, ask the server for salt. Look for the
+    //             receiveSalt method for further information.
+    //             If the user want to create a new account, there is no check needed.
+    //             Inscription's window will open.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void auth() const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Retrieve the user's information from the view. And generate a certain
+    //             numbers of security related elements by using a Cryptor object :
+    //             passwordSalt - Used to generate the hash, generated
+    //             hashPassword - Made from passwordSalt and user password
+    //             keyPair - RSA Key pair
+    //             keySalt - Salt use to encrypt RSA Key pair.
+    //             Then these elements will be sent to the server alongside user's
+    //             information.
+    //             For further information on the security aspect, refer to Cryptor
+    //             source and developper's documentation.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void inscriptionToServer() const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Use to edit any information about current user information except
+    //             username. Send new information to server and update local current
+    //             user.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void editUser() const;
 
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Receiving salt used to hash user password. This method is
+    //             automatically called when we server answer to the requestSalt
+    //             request.
+    //             Finally we can log in to server and acces the chat if the username
+    //             and the password are correct.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void receiveSalt(const Salt& salt) const;
 
 };

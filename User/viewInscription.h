@@ -50,15 +50,6 @@ public:
     QImage getProfileImage() const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Add or modify a message in the corresponding room in the local
-    //             modelChator.
-    // Param     : message - message that will be stored or modified.
-    //             edited - true -> modifiy an existing message
-    //                      false-> adding a new message
-    //----------------------------------------------------------------------------------
-    ModelUser* getCurrentUser();
-
-    //----------------------------------------------------------------------------------
     // Goal      : This function is used to set the currentUser and display it on the
     //             edition view.
     // Param     : currentUser - Current user connected
@@ -74,7 +65,9 @@ private slots:
     void on_btn_path_clicked();
 
     //----------------------------------------------------------------------------------
-    // Goal      :
+    // Goal      : If the user is creating an account, verify the fields and ask the
+    //             controller to take further action such as interacting with cryptor
+    //             and the server in order to create securely.
     // Param     : /
     //----------------------------------------------------------------------------------
     void on_btn_inscription_clicked();
@@ -82,16 +75,32 @@ private slots:
 private:
     Ui::viewInscription *ui;
     void closeEvent(QCloseEvent *);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Make several field's verification such as password complexity and
+    //             required fields. Return false if one or many fields are incorrect.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     bool verifyFields();
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Validate the profile image. Return false if the image does not have
+    //             an appropriate format
+    // Param     : /
+    //----------------------------------------------------------------------------------
     bool verifyProfileImage() const;
+
     QString passwordRequirement;
     bool edition;
     ModelUser* currentUser;
 
 signals:
-    // Ask to get the information of the user inscription
+    //----------------------------------------------------------------------------------
+    // Goal      : These two signals are used to ask the controller to retrieves the values
+    //             from the forms and takes the lead.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void requestGetNewUser() const;
-
     void requestEditUser() const;
 };
 
