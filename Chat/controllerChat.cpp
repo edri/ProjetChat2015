@@ -56,7 +56,17 @@ void ControllerChat::loadRoom(ModelRoom& room) const
     qDebug() << "Réception d'une salle";
     if (room.isPrivate())
     {
+        QString messageContent;
+
         _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+
+        for (ModelMessage& message : room.getMessages())
+        {
+            CypherText cypher(message.getContent().size());
+            memcpy(cypher.data(), message.getContent().data(), message.getContent().size());
+            messageContent = QString::fromStdString(_cryptor->decryptWithAES(cypher, room.getSecretKey()));
+            message.setContent(messageContent.toUtf8());
+        }
     }
 
     _model->addRoom(room);
@@ -88,9 +98,10 @@ void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnec
     _view->userStatusChanged(userId, isConnected);
 }
 
-void ControllerChat::newNotification(const NotificationType notifType) const
+void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                                          const QByteArray& publicKey) const
 {
-    _view->newNotification(notifType);
+    _view->newMembershipRequest(roomId, user, publicKey);
 }
 
 void ControllerChat::openRoomModule(const bool editRoom) const
@@ -117,7 +128,7 @@ void ControllerChat::loadUserRooms() const
     for (quint32 roomId : userRooms)
     {
         ModelRoom& room = _model->getRoom(roomId);
-        _view->addRoom(roomId, room.getName(), room.getPicture());
+        _view->addRoom(roomId, room.getName(), room.getPicture(), room.isPrivate());
 
         for (quint32 userId : room.getUsers())
         {

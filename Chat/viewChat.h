@@ -24,8 +24,6 @@ namespace Ui
     class viewChat;
 }
 
-enum class NotificationType : quint32 {NEW_MEMBERSHIP_APPLICATION, NBR_ITEMS};
-
 class ViewChat : public QMainWindow
 {
     Q_OBJECT
@@ -60,8 +58,10 @@ public:
     // Param     : roomId - Identify the room that is added to the view.
     //             roomName - Name of the room
     //             roomPicture - Picture of the room
+    //             isPrivate - Indicate if the room is private (true) or not (false).
     //----------------------------------------------------------------------------------
-    void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
+    void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
+                 const bool isPrivate);
 
     //----------------------------------------------------------------------------------
     // Goal      : Add a user in a room, below a room in the list of room.
@@ -137,9 +137,10 @@ public:
 
     //----------------------------------------------------------------------------------
     // Goal      : Show a notification
-    // Param     : notifyType - The kind of notification
+    // Param     :
     //----------------------------------------------------------------------------------
-    void newNotification(const NotificationType notifType) const;
+    void newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                              const QByteArray& publicKey) const;
 
 private slots:
     void on_btn_send_clicked();

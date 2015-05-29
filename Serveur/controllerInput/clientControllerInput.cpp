@@ -184,8 +184,8 @@ void ClientControllerInput::editAccount(ModelUser& user, const QByteArray& passw
 
 void ClientControllerInput::request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender)
 {
-    Q_UNUSED(roomId);
-    Q_UNUSED(user);
     Q_UNUSED(accepted);
     Q_UNUSED(sender);
+
+    _controllerChat->newMembershipRequest(roomId, user, publicKey);
 }

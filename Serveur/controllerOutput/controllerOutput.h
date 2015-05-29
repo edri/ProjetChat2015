@@ -68,6 +68,17 @@ class ControllerOutput
      */
     void askForSalt(const QString& pseudo);
 
+    /* Called when a private room's administrator accept or reject an
+     * user's new membership request.
+     * - roomId : the private room's id
+     * - user : the object representing the membership-requester user
+     * - publicKey :
+     * - status : indicate whether the administrator accepted the user
+     *            (true), or not (false).
+     */
+    void changeRequestStatus(const quint32 roomId, const ModelUser& user,
+                             const QByteArray& publicKey, const bool accepted);
+
 
     private:
     Connector& _connector;

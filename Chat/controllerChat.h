@@ -80,10 +80,11 @@ public:
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Forward a notification to the view
-    // Param     : notifType - type of notification, for example a new membership
+    // Goal      : Forward a new private room's membership request to the view
+    // Param     :
     //----------------------------------------------------------------------------------
-    void newNotification(const NotificationType notifType) const;
+    void newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                              const QByteArray& publicKey) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Return the viewEdition which is based on viewInscription

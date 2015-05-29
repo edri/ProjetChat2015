@@ -30,8 +30,6 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     _ui->ldt_message->setFocus();
 
     _nbTotalNotifications = 0;
-    for (quint32 i = 0; i < (quint32)NotificationType::NBR_ITEMS; ++i)
-        _nbNotifications.append(0);
 }
 
 ViewChat::~ViewChat()
@@ -87,7 +85,8 @@ void ViewChat::setConnectedAsText(const QString& user)
     _ui->lbl_connectedAs->setText("Connecté en tant que <b>" + user + "</b>.");
 }
 
-void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
+void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
+                       const bool isPrivate)
 {
     bool alreadyExisting = false;
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
@@ -108,6 +107,12 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
         roomItem->setData(0, Qt::UserRole, roomId);
         roomItem->setText(0, roomName);
         roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+
+        if (isPrivate)
+        {
+            roomItem->setBackground(0, QBrush(QColor(255, 234, 153)));
+            roomItem->setBackground(1, QBrush(QColor(255, 234, 153)));
+        }
 
         roomItem->setData(1, Qt::UserRole, 0);
         roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
@@ -345,7 +350,8 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
     }
 }
 
-void ViewChat::newNotification(const NotificationType notifType) const
+void ViewChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                                    const QByteArray& publicKey) const
 {
     /*switch(notifType)
     {
