@@ -21,6 +21,9 @@ ViewInscription::ViewInscription(QWidget *parent) :
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
     ui->btn_question->setToolTip(passwordRequirement);
+
+    ui->lbl_newPassword->setVisible(false);
+    ui->ldt_newPassword->setVisible(false);
 }
 
 ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
@@ -39,8 +42,8 @@ ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
     ui->lbl_userName->setText("Nom d'utilisateur");
     ui->ldt_userName->setDisabled(true);
 
-    ui->lbl_password->setText("Mot de passe");
-    ui->lbl_passwordConf->setText("Retapez le mot de passe");
+    ui->lbl_password->setText("Nouveau mot de passe");
+    ui->lbl_passwordConf->setText("Veuillez retaper le nouveau mot de passe");
 
     ui->lbl_mendatory->setText("Veuillez ne modifier seulement les champs désirés,");
 }
@@ -171,7 +174,7 @@ QImage ViewInscription::getProfileImage() const
 {
     if (!verifyProfileImage()){return QImage();}
     
-    return QImage(ui->ldt_profilPicture->text()).scaledToWidth(PICTURE_WIDTH, Qt::SmoothTransformation);
+    return QImage(ui->ldt_profilPicture->text()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 ModelUser* ViewInscription::getCurrentUser()
