@@ -53,7 +53,8 @@ ViewJoin::ViewJoin()
     
     
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
-    connect(btn_join, SIGNAL(clicked()), this, SIGNAL(join()));
+    connect(btn_join, SIGNAL(clicked()), this, SLOT(checkRoom()));
+    connect(ledit_name, SIGNAL(textEdited(QString&)), this, SLOT(filterRooms(QString&)));
 }
 
 ViewJoin::~ViewJoin()
@@ -73,4 +74,77 @@ ViewJoin::~ViewJoin()
         delete l;
     }
     delete layouts;
+}
+
+void ViewJoin::setPublicRooms(const QList<QPair<quint32, QString>>& publicRooms)
+{
+    _publicRooms = publicRooms;
+}
+
+void ViewJoin::setPrivateRooms(const QList<QPair<quint32, QString>>& privateRooms)
+{
+    _privateRooms = privateRooms;
+}
+
+void ViewJoin::loadRooms()
+{
+    QStandardItem* item;
+    for (QPair<quint32, QString> pair : _publicRooms)
+    {
+        item = new QStandardItem(pair.second);
+        item->setEditable(false);
+        item->setData(pair.first);
+        model_rooms->appendRow(item);
+    }
+    
+    for (QPair<quint32, QString> pair : _publicRooms)
+    {
+        item = new QStandardItem(pair.second);
+        item->setEditable(false);
+        item->setData(pair.first);
+        item->setFont(QFont(this->font().family(), 
+                      this->font().pointSize(), QFont::Bold));
+        model_rooms->appendRow(item);
+    }
+}
+
+void ViewJoin::filterRooms(const QString& substring)
+{
+    model_rooms->clear();
+    QStandardItem* item;
+    for (QPair<quint32, QString> pair : _publicRooms)
+    {
+        if(pair.second.contains(substring, Qt::CaseInsensitive))
+        {
+            item = new QStandardItem(pair.second);
+            item->setEditable(false);
+            item->setData(pair.first);
+            model_rooms->appendRow(item);
+        }
+    }
+    
+    for (QPair<quint32, QString> pair : _publicRooms)
+    {
+        if(pair.second.contains(substring, Qt::CaseInsensitive))
+        {
+            item = new QStandardItem(pair.second);
+            item->setEditable(false);
+            item->setData(pair.first);
+            item->setFont(QFont(this->font().family(), 
+                          this->font().pointSize(), QFont::Bold));
+                                     model_rooms->appendRow(item);
+        }
+    }
+}
+
+void ViewJoin::checkRoom()
+{
+    // If no room was selected by the user, returns.
+    if(list_rooms->selectionModel()->selectedIndexes().isEmpty())
+    {
+        return;
+    }
+    
+    QStandardItem* item = model_rooms->item(list_rooms->currentIndex().row());
+    emit(join(item->data().toUInt()));
 }

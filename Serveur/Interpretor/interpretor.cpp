@@ -149,6 +149,15 @@ QByteArray Interpretor::deleteRoom(const quint32 roomId)
     return data;
 }
 
+QByteArray Interpretor::joinRoom(const quint32 roomId)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+
+    stream << (quint32) MessageType::JOIN_ROOM << roomId;
+    return data;
+}
+
 //QByteArray Interpretor::leaveRoom(const quint32 roomId)
 //{
     //QByteArray data;
@@ -383,7 +392,15 @@ void Interpretor::processData(const QByteArray& data)
             _dispatcher.listRooms(publicRooms, privateVisibleRooms, sender());
         }
         break;
-
+        
+        case MessageType::JOIN_ROOM:
+        {
+            quint32 roomId;
+            stream >> roomId;
+            _dispatcher.joinRoom(roomId, sender());
+        }
+        break;
+        
         case MessageType::SERVER_ERROR:
         {
             ModelError error;
@@ -391,6 +408,8 @@ void Interpretor::processData(const QByteArray& data)
             // Envoyer cet objet quelque part
         }
         break;
+        
+        
         
         default:
         break;

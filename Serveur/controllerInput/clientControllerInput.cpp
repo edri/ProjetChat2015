@@ -165,9 +165,8 @@ void ClientControllerInput::publicKey(QList<QPair<quint32, QByteArray>>& usersId
 
 void ClientControllerInput::listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender)
 {
-    Q_UNUSED(publicRooms);
-    Q_UNUSED(privateVisibleRooms);
     Q_UNUSED(sender);
+    _controllerRoom->listRooms(publicRooms, privateVisibleRooms);
 }
 
 void ClientControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)

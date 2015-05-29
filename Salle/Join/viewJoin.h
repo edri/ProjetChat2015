@@ -25,18 +25,26 @@ public:
     ViewJoin(); 
     ~ViewJoin();
     
+    void setPublicRooms(const QList<QPair<quint32, QString>>& publicRooms);
+    void setPrivateRooms(const QList<QPair<quint32, QString>>& privateRooms);
+    
 public slots:
+    void filterRooms(const QString& substring);
+    void checkRoom();
 
 signals:
     // Signal emited when the user wishes to cancel the operation.
     void cancel();
     // Signal emited when the user wishes to join a room.
-    void join();
+    void join(quint32 roomId);
 
 private:
+    void loadRooms();
     
     // Core elements
     QList<QLayout*>* layouts;
+    QList<QPair<quint32, QString>> _publicRooms;
+    QList<QPair<quint32, QString>> _privateRooms;
     
     // GUI elements
     QLabel* label_title;
