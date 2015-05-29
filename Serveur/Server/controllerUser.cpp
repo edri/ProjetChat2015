@@ -153,8 +153,6 @@ void ControllerUser::disconnect(ChatorClient* client)
         user->socket.sendBinaryMessage(data);
     }
     
-    qDebug() << "Suppression du client " << client->id;
-    delete client;
     qDebug() << "Fin Déconnexion...";
 }
 

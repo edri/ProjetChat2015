@@ -60,13 +60,15 @@ void Listener::disconnected()
     qDebug() << "Client disconnected";
     
     ChatorClient* client = (ChatorClient*) sender();
+    _clients.removeAll(client);
     
     if (client)
     {
-        _clients.removeAll(client);
-    }
+        
+        if (client->logged) {_controllerInput.disconnect(client->id, (QObject*) client);}
     
-    _controllerInput.disconnect(client->id, (QObject*) client);
+        delete client;
+    }
 }
 
 void Listener::SSLErrors(const QList<QSslError> &)
