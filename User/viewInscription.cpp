@@ -171,7 +171,7 @@ QImage ViewInscription::getProfileImage() const
 {
     if (!verifyProfileImage()){return QImage();}
     
-    return QImage(ui->ldt_profilPicture->text()).scaledToWidth(PICTURE_WIDTH, Qt::SmoothTransformation);
+    return QImage(ui->ldt_profilPicture->text()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 ModelUser* ViewInscription::getCurrentUser()
