@@ -74,7 +74,7 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
         dateItem->setText(0, message.getDate().toString("dd.MM.yyyy"));
         dateItem->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
 
-        _ui->tre_messages->insertTopLevelItem(nbTopMessageItems, dateItem);
+        _ui->tre_messages->insertTopLevelItem(  nbTopMessageItems, dateItem);
         _ui->tre_messages->topLevelItem(nbTopMessageItems)->insertChild(0, messageItem);
         _ui->tre_messages->expandItem(dateItem);
 
@@ -112,7 +112,7 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
         roomItem->setData(1, Qt::UserRole, 0);
         roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
         roomItem->setForeground(1, QBrush(QColor(255, 85, 0)));
-        roomItem->setTextAlignment(1, Qt::AlignHCenter);
+        roomItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     }
 }
 
@@ -143,7 +143,7 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
                 userItem->setData(0, Qt::UserRole, userId);
                 userItem->setText(0, userName);
                 userItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
-                userItem->setFlags(Qt::NoItemFlags);
+                userItem->setFlags(Qt::ItemIsEnabled);
 
                 if (isConnected)
                     userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
@@ -184,7 +184,7 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
     {
         if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == message.getIdRoom())
         {
-            if (_ui->tre_rooms->topLevelItem(k)->isSelected())
+            if (_selectedRoomId == message.getIdRoom())
             {
                 if (edited)
                 {
@@ -321,6 +321,30 @@ void ViewChat::deleteRoom(const quint32 roomId) const
     }
 }
 
+void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) const
+{
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        {
+            quint32 nbUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
+
+            for (quint32 j = 0; j < nbUsers; ++j)
+            {
+                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+                {
+                    _ui->tre_rooms->topLevelItem(i)->takeChild(j);
+                    break;
+                }
+            }
+
+            break;
+        }
+    }
+}
+
 void ViewChat::newNotification(const NotificationType notifType) const
 {
     /*switch(notifType)
@@ -363,7 +387,7 @@ void ViewChat::on_btn_leaveRoom_clicked()
 
         // "Yes" pressed.
         if (ret == 0)
-            emit requestLeaveRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+            emit requestLeaveRoom(_selectedRoomId);
     }
 }
 
@@ -374,11 +398,13 @@ void ViewChat::on_btn_joinRoom_clicked()
 
 void ViewChat::on_btn_newRoom_clicked()
 {
-    emit requestOpenRoomModule();
+    emit requestOpenRoomModule(false);
 }
 
 void ViewChat::on_tre_rooms_itemSelectionChanged()
 {
+    // Indicate if the user has selected a room (true) or an user (false).
+    bool aRoomIsSelected = false;
     quint32 nbItems = _ui->tre_rooms->topLevelItemCount();
 
     if (!nbItems)
@@ -399,6 +425,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
         {
             if (_ui->tre_rooms->topLevelItem(i)->isSelected())
             {
+                aRoomIsSelected = true;
                 _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt();
 
                 _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
@@ -415,6 +442,17 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
             }
             else
                 _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Normal));
+        }
+
+        // The user cannot select an user (impossible to do it natively in Qt...), so we select
+        // the last selected room known to avoid it.
+        if (!aRoomIsSelected)
+        {
+            for (int i = 0; i < nbItems; ++i)
+            {
+                if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == _selectedRoomId)
+                    _ui->tre_rooms->topLevelItem(i)->setSelected(true);
+            }
         }
     }
 }
@@ -441,7 +479,7 @@ void ViewChat::on_actionQuitter_triggered()
 
 void ViewChat::on_btn_edit_clicked()
 {
-
+    emit requestOpenRoomModule(true);
 }
 
 void ViewChat::on_btn_delete_clicked()
@@ -452,7 +490,7 @@ void ViewChat::on_btn_delete_clicked()
 
     // "Yes" pressed.
     if (ret == 0)
-        emit requestDeleteRoom(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt());
+        emit requestDeleteRoom(_selectedRoomId);
 }
 
 void ViewChat::showContextMessage(const QPoint &pos)
@@ -463,16 +501,18 @@ void ViewChat::showContextMessage(const QPoint &pos)
         QAction* editAct = _menu->addAction(QIcon(":/icons/img/edit.png"), tr("Editer"));
         QAction* delAct = _menu->addAction(QIcon(":/icons/img/delete.png"), tr("Supprimer"));
 
+        // Show the context menu in the messages tree at the cursor position.
         QAction* act = _menu->exec(_ui->tre_messages->viewport()->mapToGlobal(pos));
 
         if (act == editAct)
         {
+            // FAIRE QUELQUE CHOSE...
             _ui->tre_messages->editItem(_ui->tre_messages->selectedItems().at(0), 1);
             delete delAct;
         }
         else if (act == delAct)
         {
-            emit requestDeleteMessage(_ui->tre_rooms->selectedItems().at(0)->data(0, Qt::UserRole).toInt(),
+            emit requestDeleteMessage(_selectedRoomId,
                                       _ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toInt());
             delete editAct;
         }
