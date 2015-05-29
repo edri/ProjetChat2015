@@ -293,6 +293,7 @@ void ControllerRoom::joinRoom(quint32 roomId)
 {
    // Inform the server that the user wish to join a room.
    _controllerOutput->joinRoom(roomId);
+   _viewJoin->close();
 }
 
 void ControllerRoom::userId(bool exists, quint32 userId)
