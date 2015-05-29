@@ -15,8 +15,10 @@
 #include <QDataStream>
 
 enum class MessageType : quint32 {NEW_ACCOUNT, EDIT_ACCOUNT, INFO_USER, MESSAGE, DELETE_MESSAGE,
-                                  LOGIN, USER_JOIN, JOIN, LEAVE, DISCONNECT,
-                                  CONNECTED, SERVER_ERROR, ROOM, USER_ID, DELETE_ROOM, SALT, PUBLIC_KEY, LIST_ROOMS, REQUEST};
+                                  LOGIN, USER_JOIN, JOIN, LEAVE, DISCONNECT, CONNECTED,
+                                  SERVER_ERROR, ROOM, USER_ID, DELETE_ROOM, SALT, PUBLIC_KEY,
+                                  LIST_ROOMS, REQUEST, JOIN_ROOM};
+
 enum class ErrorType : quint32 {AUTH_ERROR, USER_CREATION, ROOM_CREATION};
 
 class ModelError

@@ -24,8 +24,6 @@ namespace Ui
     class viewChat;
 }
 
-enum class NotificationType : quint32 {NEW_MEMBERSHIP_APPLICATION, NBR_ITEMS};
-
 class ViewChat : public QMainWindow
 {
     Q_OBJECT
@@ -36,8 +34,7 @@ private:
     quint32 _selectedRoomId;
     bool _isEditingMessage;
     QMenu* _menu;
-    quint32 _nbTotalNotifications;
-    QList<quint32> _nbNotifications;
+    quint32 _nbNotifications;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
@@ -60,8 +57,10 @@ public:
     // Param     : roomId - Identify the room that is added to the view.
     //             roomName - Name of the room
     //             roomPicture - Picture of the room
+    //             isPrivate - Indicate if the room is private (true) or not (false).
     //----------------------------------------------------------------------------------
-    void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
+    void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
+                 const bool isPrivate);
 
     //----------------------------------------------------------------------------------
     // Goal      : Add a user in a room, below a room in the list of room.
@@ -137,9 +136,9 @@ public:
 
     //----------------------------------------------------------------------------------
     // Goal      : Show a notification
-    // Param     : notifyType - The kind of notification
+    // Param     :
     //----------------------------------------------------------------------------------
-    void newNotification(const NotificationType notifType) const;
+    void newMembershipRequest();
 
 private slots:
     void on_btn_send_clicked();
@@ -158,6 +157,8 @@ private slots:
     void on_btn_collapseAll_clicked();
     void on_actionCompte_triggered();
 
+    void on_actionDemandes_d_adh_sion_triggered();
+
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule(const bool editRoom) const;
@@ -167,6 +168,8 @@ signals:
     void requestDeleteRoom(const quint32 roomId) const;
     void requestLeaveRoom(const quint32 roomId) const;
     void requestShowEditionView() const;
+    void requestOpenRoomMembership() const;
+    void requestShowMembershipRequestsView() const;
 };
 
 #endif // VIEWCHAT_H

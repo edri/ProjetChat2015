@@ -20,6 +20,7 @@
 #include "../Serveur/controllerOutput/controllerOutput.h"
 #include "../Salle/Room/controllerRoom.h"
 #include "../Cryptor/cryptor.h"
+#include "viewmembershiprequests.h"
 
 class ClientControllerInput;
 
@@ -29,6 +30,7 @@ class ControllerChat : public QObject
 private:
     ViewChat* _view;
     ViewInscription* _viewEdition;
+    ViewMembershipRequests* _viewRequests;
     ModelChator* _model;
     ModelUser* _currentUser;
     ClientControllerInput* _cci;
@@ -80,10 +82,11 @@ public:
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Forward a notification to the view
-    // Param     : notifType - type of notification, for example a new membership
+    // Goal      : Forward a new private room's membership request to the view
+    // Param     :
     //----------------------------------------------------------------------------------
-    void newNotification(const NotificationType notifType) const;
+    void newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                              const QByteArray& publicKey) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Return the viewEdition which is based on viewInscription
@@ -181,6 +184,18 @@ public slots :
     // Param     : /
     //----------------------------------------------------------------------------------
     void showViewEdition();
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Open the room membership's view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void openRoomMembership();
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Open the membership requests' view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void showMembershipRequestsView();
 
 };
 

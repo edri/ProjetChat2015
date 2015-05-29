@@ -20,14 +20,16 @@ using namespace std;
 class ModelUser;
 class ModelMessage;
 class ModelRoom;
+class ModelRequest;
 
 class ModelChator
 {
 	private :
-        // The room and users are stocked here. Messages are stocked in their
-        // respective rooms.
+        // The room, users and membership requests are stocked here.
+        // Messages are stocked in their respective rooms.
         QMap<quint32, ModelRoom> _rooms;
         QMap<quint32, ModelUser> _users;
+        QList<ModelRequest> _requests;
 
         RSAPair _rsaKeyPair;
 	
@@ -116,6 +118,13 @@ class ModelChator
         // Adding last edition's date.
         void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate);
         void deleteMessage(const quint32 idRoom, const quint32 idMessage);
+
+        /*
+         * Created by Miguel Santamario on 29.05.2015 21:35
+         *
+         * Add a new user's membership request in the model.
+         */
+        void addMembershipRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 
         void setRsaKeyPair(const RSAPair& rsaKeyPair);
         RSAPair getRsaKeyPair() const;
@@ -290,6 +299,17 @@ class ModelUser
         void setConnected(const bool connected);
         void setImage(const QImage& image);
         
+};
+
+class ModelRequest
+{
+    private :
+        quint32 _roomId;
+        ModelUser _user;
+        QByteArray _publicKey;
+
+    public :
+        ModelRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

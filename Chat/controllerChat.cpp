@@ -13,6 +13,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     _model = model;
     _view = new ViewChat(_model);
     _viewEdition = new ViewInscription(_view, currentUser);
+    _viewRequests = new ViewMembershipRequests(_model);
 
     _currentUser = currentUser;
     _cci = cci;
@@ -30,10 +31,13 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestDeleteRoom(quint32)), this, SLOT(askServerToDeleteRoom(quint32)));
     connect(_view, SIGNAL(requestLeaveRoom(quint32)), this, SLOT(askServerToLeaveRoom(quint32)));
     connect(_view, SIGNAL(requestShowEditionView()), this, SLOT(showViewEdition()));
+    connect(_view, SIGNAL(requestOpenRoomMembership()), this, SLOT(openRoomMembership()));
+    connect(_view, SIGNAL(requestShowMembershipRequestsView()), this, SLOT(showMembershipRequestsView()));
 }
 
 ControllerChat::~ControllerChat()
 {
+    _controllerRoom->closeWindows();
     delete _view;
     delete _model;
     delete _viewEdition;
@@ -56,7 +60,17 @@ void ControllerChat::loadRoom(ModelRoom& room) const
     qDebug() << "Réception d'une salle";
     if (room.isPrivate())
     {
+        QString messageContent;
+
         _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+
+        for (ModelMessage& message : room.getMessages())
+        {
+            CypherText cypher(message.getContent().size());
+            memcpy(cypher.data(), message.getContent().data(), message.getContent().size());
+            messageContent = QString::fromStdString(_cryptor->decryptWithAES(cypher, room.getSecretKey()));
+            message.setContent(messageContent.toUtf8());
+        }
     }
 
     _model->addRoom(room);
@@ -88,9 +102,11 @@ void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnec
     _view->userStatusChanged(userId, isConnected);
 }
 
-void ControllerChat::newNotification(const NotificationType notifType) const
+void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
+                                          const QByteArray& publicKey) const
 {
-    _view->newNotification(notifType);
+    _model->addMembershipRequest(roomId, user, publicKey);
+    _view->newMembershipRequest();
 }
 
 void ControllerChat::openRoomModule(const bool editRoom) const
@@ -117,7 +133,7 @@ void ControllerChat::loadUserRooms() const
     for (quint32 roomId : userRooms)
     {
         ModelRoom& room = _model->getRoom(roomId);
-        _view->addRoom(roomId, room.getName(), room.getPicture());
+        _view->addRoom(roomId, room.getName(), room.getPicture(), room.isPrivate());
 
         for (quint32 userId : room.getUsers())
         {
@@ -218,6 +234,16 @@ void ControllerChat::showViewEdition()
     // Open the inscription window
     _viewEdition->show();
     _viewEdition->setEnabled(true);
+}
+
+void ControllerChat::openRoomMembership()
+{
+    _controllerRoom->showJoin();
+}
+
+void ControllerChat::showMembershipRequestsView()
+{
+    _viewRequests->show();
 }
 
 ViewInscription* ControllerChat::getViewEdition()

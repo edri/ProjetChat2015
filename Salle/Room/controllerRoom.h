@@ -65,6 +65,14 @@ public:
     void showRoom(const quint32 idRoom);
     // Should be called when a user's id is received by the client.
     void userId(bool exists, quint32 userId);
+    // Open the romm joining window.
+    void showJoin();
+    // Shoulde be called when the lists of visible rooms are received by the 
+    // Client
+    void listRooms(const QList<QPair<quint32, QString>>& publicRooms,
+                   const QList<QPair<quint32, QString>>& privateRooms);
+    // Close all opened windows.
+    void closeWindows();
     
     
 public slots :
@@ -82,7 +90,7 @@ public slots :
     void addUser();
     
     // Send the server a request for the user to join a specific room.
-    void joinRoom();
+    void joinRoom(quint32 roomId);
     
     // Close and destroy viewRoom. Should only be called if a window is open.
     void cancelRoom();

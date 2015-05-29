@@ -14,7 +14,8 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     _ui(new Ui::viewChat),
     _model(model),
     _isEditingMessage(false),
-    _menu(new QMenu(this))
+    _menu(new QMenu(this)),
+    _nbNotifications(0)
 {
     _ui->setupUi(this);
 
@@ -28,10 +29,6 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     connect(_ui->tre_messages, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMessage(const QPoint&)));
 
     _ui->ldt_message->setFocus();
-
-    _nbTotalNotifications = 0;
-    for (quint32 i = 0; i < (quint32)NotificationType::NBR_ITEMS; ++i)
-        _nbNotifications.append(0);
 }
 
 ViewChat::~ViewChat()
@@ -87,7 +84,8 @@ void ViewChat::setConnectedAsText(const QString& user)
     _ui->lbl_connectedAs->setText("Connecté en tant que <b>" + user + "</b>.");
 }
 
-void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
+void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
+                       const bool isPrivate)
 {
     bool alreadyExisting = false;
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
@@ -108,6 +106,12 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
         roomItem->setData(0, Qt::UserRole, roomId);
         roomItem->setText(0, roomName);
         roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+
+        if (isPrivate)
+        {
+            roomItem->setBackground(0, QBrush(QColor(255, 234, 153)));
+            roomItem->setBackground(1, QBrush(QColor(255, 234, 153)));
+        }
 
         roomItem->setData(1, Qt::UserRole, 0);
         roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
@@ -345,20 +349,10 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
     }
 }
 
-void ViewChat::newNotification(const NotificationType notifType) const
+void ViewChat::newMembershipRequest()
 {
-    /*switch(notifType)
-    {
-        case NotificationType::NEW_MEMBERSHIP_APPLICATION:
-        {
-            _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion") + " (" +
-                                                    ++_nbNotifications[(quint32)NotificationType::NEW_MEMBERSHIP_APPLICATION] +
-                                                    ")");
-        }
-        break;
-    }
-
-    _ui->action*/
+    _ui->menuNotifications->setTitle(tr("Notifications") + " (" + QString::number(++_nbNotifications) + ")");
+    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") + " (" + QString::number(_nbNotifications) + ")");
 }
 
 void ViewChat::on_btn_send_clicked()
@@ -393,7 +387,7 @@ void ViewChat::on_btn_leaveRoom_clicked()
 
 void ViewChat::on_btn_joinRoom_clicked()
 {
-
+    emit requestOpenRoomMembership();
 }
 
 void ViewChat::on_btn_newRoom_clicked()
@@ -506,7 +500,6 @@ void ViewChat::showContextMessage(const QPoint &pos)
 
         if (act == editAct)
         {
-            // FAIRE QUELQUE CHOSE...
             _ui->tre_messages->editItem(_ui->tre_messages->selectedItems().at(0), 1);
             delete delAct;
         }
@@ -546,4 +539,9 @@ void ViewChat::on_btn_collapseAll_clicked()
 void ViewChat::on_actionCompte_triggered()
 {
     emit requestShowEditionView();
+}
+
+void ViewChat::on_actionDemandes_d_adh_sion_triggered()
+{
+    emit requestShowMembershipRequestsView();
 }

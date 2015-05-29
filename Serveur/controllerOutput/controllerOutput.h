@@ -67,6 +67,24 @@ class ControllerOutput
      * Create by Bastien Rouiller on 25.05.2015
      */
     void askForSalt(const QString& pseudo);
+    
+    /* Called when the clien needs to know receive a list of all the public
+     * rooms as well as the visible private rooms
+     */
+    void askForRooms();
+    
+    void joinRoom(const quint32 roomId);
+
+    /* Called when a private room's administrator accept or reject an
+     * user's new membership request.
+     * - roomId : the private room's id
+     * - user : the object representing the membership-requester user
+     * - publicKey :
+     * - status : indicate whether the administrator accepted the user
+     *            (true), or not (false).
+     */
+    void changeRequestStatus(const quint32 roomId, const ModelUser& user,
+                             const QByteArray& publicKey, const bool accepted);
 
 
     private:
