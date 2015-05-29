@@ -28,6 +28,8 @@ public:
     void setPublicRooms(const QList<QPair<quint32, QString>>& publicRooms);
     void setPrivateRooms(const QList<QPair<quint32, QString>>& privateRooms);
     
+    void loadRooms();
+    
 public slots:
     void filterRooms(const QString& substring);
     void checkRoom();
@@ -39,7 +41,6 @@ signals:
     void join(quint32 roomId);
 
 private:
-    void loadRooms();
     
     // Core elements
     QList<QLayout*>* layouts;

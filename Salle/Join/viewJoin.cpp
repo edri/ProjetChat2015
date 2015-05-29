@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QStandardItem>
 #include <QFont>
+#include <QDebug>
 #include "viewJoin.h"
 
 ViewJoin::ViewJoin()
@@ -54,7 +55,7 @@ ViewJoin::ViewJoin()
     
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
     connect(btn_join, SIGNAL(clicked()), this, SLOT(checkRoom()));
-    connect(ledit_name, SIGNAL(textEdited(QString&)), this, SLOT(filterRooms(QString&)));
+    connect(ledit_name, SIGNAL(textEdited(const QString&)), this, SLOT(filterRooms(const QString&)));
 }
 
 ViewJoin::~ViewJoin()
@@ -97,7 +98,7 @@ void ViewJoin::loadRooms()
         model_rooms->appendRow(item);
     }
     
-    for (QPair<quint32, QString> pair : _publicRooms)
+    for (QPair<quint32, QString> pair : _privateRooms)
     {
         item = new QStandardItem(pair.second);
         item->setEditable(false);
@@ -123,7 +124,7 @@ void ViewJoin::filterRooms(const QString& substring)
         }
     }
     
-    for (QPair<quint32, QString> pair : _publicRooms)
+    for (QPair<quint32, QString> pair : _privateRooms)
     {
         if(pair.second.contains(substring, Qt::CaseInsensitive))
         {
@@ -146,5 +147,6 @@ void ViewJoin::checkRoom()
     }
     
     QStandardItem* item = model_rooms->item(list_rooms->currentIndex().row());
+    
     emit(join(item->data().toUInt()));
 }
