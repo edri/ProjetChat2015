@@ -13,6 +13,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     _model = model;
     _view = new ViewChat(_model);
     _viewEdition = new ViewInscription(_view, currentUser);
+    _viewRequests = new ViewMembershipRequests(_model);
 
     _currentUser = currentUser;
     _cci = cci;
@@ -31,10 +32,12 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestLeaveRoom(quint32)), this, SLOT(askServerToLeaveRoom(quint32)));
     connect(_view, SIGNAL(requestShowEditionView()), this, SLOT(showViewEdition()));
     connect(_view, SIGNAL(requestOpenRoomMembership()), this, SLOT(openRoomMembership()));
+    connect(_view, SIGNAL(requestShowMembershipRequestsView()), this, SLOT(showMembershipRequestsView()));
 }
 
 ControllerChat::~ControllerChat()
 {
+    _controllerRoom->closeWindows();
     delete _view;
     delete _model;
     delete _viewEdition;
@@ -102,7 +105,8 @@ void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnec
 void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
                                           const QByteArray& publicKey) const
 {
-    _view->newMembershipRequest(roomId, user, publicKey);
+    _model->addMembershipRequest(roomId, user, publicKey);
+    _view->newMembershipRequest();
 }
 
 void ControllerChat::openRoomModule(const bool editRoom) const
@@ -235,6 +239,11 @@ void ControllerChat::showViewEdition()
 void ControllerChat::openRoomMembership()
 {
     _controllerRoom->showJoin();
+}
+
+void ControllerChat::showMembershipRequestsView()
+{
+    _viewRequests->show();
 }
 
 ViewInscription* ControllerChat::getViewEdition()

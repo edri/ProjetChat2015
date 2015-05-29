@@ -71,6 +71,8 @@ public:
     // Client
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms,
                    const QList<QPair<quint32, QString>>& privateRooms);
+    // Close all opened windows.
+    void closeWindows();
     
     
 public slots :

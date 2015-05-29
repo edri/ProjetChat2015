@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     viewInscription.cpp\
     ../Chat/controllerChat.cpp\
     ../Chat/viewChat.cpp \
-    ../Cryptor/cryptor.cpp
+    ../Cryptor/cryptor.cpp \
+    ../Chat/viewmembershiprequests.cpp
 
 HEADERS  += viewUser.h \
     controllerUser.h    \
@@ -46,11 +47,13 @@ HEADERS  += viewUser.h \
     viewInscription.h\
     ../Chat/controllerChat.h\
     ../Chat/viewChat.h \
-    ../Cryptor/cryptor.h
+    ../Cryptor/cryptor.h \
+    ../Chat/viewmembershiprequests.h
 
 FORMS    += viewUser.ui \
     viewInscription.ui\
-    ../Chat/viewChat.ui
+    ../Chat/viewChat.ui \
+    ../Chat/viewmembershiprequests.ui
 
 RESOURCES += \
     icons.qrc

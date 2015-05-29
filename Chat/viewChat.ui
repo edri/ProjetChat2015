@@ -883,8 +883,14 @@
     <addaction name="actionA_propos"/>
    </widget>
    <widget class="QMenu" name="menuNotifications">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Notifications</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>false</bool>
     </property>
     <addaction name="actionDemandes_d_adh_sion"/>
    </widget>
@@ -927,7 +933,7 @@
   </action>
   <action name="actionDemandes_d_adh_sion">
    <property name="text">
-    <string>Demandes d'adhésion</string>
+    <string>Demandes d'adhésion...</string>
    </property>
   </action>
  </widget>

@@ -20,6 +20,7 @@
 #include "../Serveur/controllerOutput/controllerOutput.h"
 #include "../Salle/Room/controllerRoom.h"
 #include "../Cryptor/cryptor.h"
+#include "viewmembershiprequests.h"
 
 class ClientControllerInput;
 
@@ -29,6 +30,7 @@ class ControllerChat : public QObject
 private:
     ViewChat* _view;
     ViewInscription* _viewEdition;
+    ViewMembershipRequests* _viewRequests;
     ModelChator* _model;
     ModelUser* _currentUser;
     ClientControllerInput* _cci;
@@ -188,6 +190,12 @@ public slots :
     // Param     : /
     //----------------------------------------------------------------------------------
     void openRoomMembership();
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Open the membership requests' view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void showMembershipRequestsView();
 
 };
 

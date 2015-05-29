@@ -34,8 +34,7 @@ private:
     quint32 _selectedRoomId;
     bool _isEditingMessage;
     QMenu* _menu;
-    quint32 _nbTotalNotifications;
-    QList<quint32> _nbNotifications;
+    quint32 _nbNotifications;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
@@ -139,8 +138,7 @@ public:
     // Goal      : Show a notification
     // Param     :
     //----------------------------------------------------------------------------------
-    void newMembershipRequest(const quint32 roomId, const ModelUser& user,
-                              const QByteArray& publicKey) const;
+    void newMembershipRequest();
 
 private slots:
     void on_btn_send_clicked();
@@ -159,6 +157,8 @@ private slots:
     void on_btn_collapseAll_clicked();
     void on_actionCompte_triggered();
 
+    void on_actionDemandes_d_adh_sion_triggered();
+
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule(const bool editRoom) const;
@@ -169,6 +169,7 @@ signals:
     void requestLeaveRoom(const quint32 roomId) const;
     void requestShowEditionView() const;
     void requestOpenRoomMembership() const;
+    void requestShowMembershipRequestsView() const;
 };
 
 #endif // VIEWCHAT_H

@@ -14,7 +14,8 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     _ui(new Ui::viewChat),
     _model(model),
     _isEditingMessage(false),
-    _menu(new QMenu(this))
+    _menu(new QMenu(this)),
+    _nbNotifications(0)
 {
     _ui->setupUi(this);
 
@@ -28,8 +29,6 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     connect(_ui->tre_messages, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMessage(const QPoint&)));
 
     _ui->ldt_message->setFocus();
-
-    _nbTotalNotifications = 0;
 }
 
 ViewChat::~ViewChat()
@@ -350,21 +349,10 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
     }
 }
 
-void ViewChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
-                                    const QByteArray& publicKey) const
+void ViewChat::newMembershipRequest()
 {
-    /*switch(notifType)
-    {
-        case NotificationType::NEW_MEMBERSHIP_APPLICATION:
-        {
-            _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion") + " (" +
-                                                    ++_nbNotifications[(quint32)NotificationType::NEW_MEMBERSHIP_APPLICATION] +
-                                                    ")");
-        }
-        break;
-    }
-
-    _ui->action*/
+    _ui->menuNotifications->setTitle(tr("Notifications") + " (" + QString::number(++_nbNotifications) + ")");
+    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") + " (" + QString::number(_nbNotifications) + ")");
 }
 
 void ViewChat::on_btn_send_clicked()
@@ -512,7 +500,6 @@ void ViewChat::showContextMessage(const QPoint &pos)
 
         if (act == editAct)
         {
-            // FAIRE QUELQUE CHOSE...
             _ui->tre_messages->editItem(_ui->tre_messages->selectedItems().at(0), 1);
             delete delAct;
         }
@@ -552,4 +539,9 @@ void ViewChat::on_btn_collapseAll_clicked()
 void ViewChat::on_actionCompte_triggered()
 {
     emit requestShowEditionView();
+}
+
+void ViewChat::on_actionDemandes_d_adh_sion_triggered()
+{
+    emit requestShowMembershipRequestsView();
 }
