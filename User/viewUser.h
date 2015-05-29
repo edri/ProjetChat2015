@@ -25,28 +25,38 @@ public:
     explicit ViewUser(QWidget *parent = 0);
     ~ViewUser();
 
+    // Getters
     QString getUsername() const;
     QString getPassword() const;
     QString getPort() const;
     QString getIpAddress() const;
     ViewInscription* getViewInscription() const;
 
-private slots:      // Fonctions appelées lorsqu'un événement se produit (signal = msg envoyé par un objet)
+private slots:
 
-    // Envoyer le nom d'utilisateur et le mot de passe au serveur?
-    // Le serveur vérifie s'ils sont valides?
+    //----------------------------------------------------------------------------------
+    // Goal      : If the fields are validated ask the controller to retrieves the
+    //             values from the forms and log to the server.
+    //----------------------------------------------------------------------------------
     void on_btn_connexion_clicked();
 
-    // Ouvrir la fenêtre inscription!
+    //----------------------------------------------------------------------------------
+    // Goal      : If the fields are validated ask the controller to retrieves the
+    //             values from the forms and connect to the server in order to create a
+    //             new account.
+    //----------------------------------------------------------------------------------
     void on_btn_inscription_clicked();
 
 private:
     Ui::ViewUser* ui;
+    //viewInscription is linked to the viewUser
     ViewInscription* _viewInscription;
 
-
 signals:
-    // Ask to get the login
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Signal to the controller to retrieve the field values.
+    //----------------------------------------------------------------------------------
     void requestGetIds(bool fromBtnConnection) const;
 };
 

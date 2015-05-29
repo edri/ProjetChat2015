@@ -35,8 +35,8 @@ void ControllerRoom::connectViewRoom()
 void ControllerRoom::connectViewJoin()
 {
     // Connect the view signals with the controller's slots.
-    connect(_viewJoin, SIGNAL(join()), this, SLOT(joinRoom()));
-    connect(_viewJoin, SIGNAL(cancel), this, SLOT(cancelJoin()));
+    connect(_viewJoin, SIGNAL(join(quint32)), this, SLOT(joinRoom(quint32)));
+    connect(_viewJoin, SIGNAL(cancel()), this, SLOT(cancelJoin()));
 }
 
 void ControllerRoom::showRoom()
@@ -289,9 +289,11 @@ void ControllerRoom::cancelJoin()
     _viewJoin->close();
 }
 
-void ControllerRoom::joinRoom()
+void ControllerRoom::joinRoom(quint32 roomId)
 {
    // Inform the server that the user wish to join a room.
+   _controllerOutput->joinRoom(roomId);
+   _viewJoin->close();
 }
 
 void ControllerRoom::userId(bool exists, quint32 userId)
@@ -310,4 +312,18 @@ void ControllerRoom::userId(bool exists, quint32 userId)
     // Enable the view again
     _viewRoom->setDisabled(false);
     
+}
+
+void ControllerRoom::showJoin()
+{
+    _controllerOutput->askForRooms();
+    _viewJoin = new ViewJoin();
+    _viewJoin->show();
+}
+
+void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms,
+                               const QList<QPair<quint32, QString>>& privateRooms)
+{
+    _viewJoin->setPublicRooms(publicRooms);
+    _viewJoin->setPrivateRooms(privateRooms);
 }

@@ -85,3 +85,13 @@ void ControllerOutput::askForSalt(const QString& pseudo)
 {
     _connector.send(_interpretor.salt(pseudo));
 }
+
+void ControllerOutput::askForRooms()
+{
+    _connector.send(_interpretor.listRooms());
+}
+
+void ControllerOutput::joinRoom(const quint32 roomId)
+{
+    _connector.send(_interpretor.joinRoom(roomId));
+}

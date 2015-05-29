@@ -156,7 +156,7 @@ public slots :
 
     //----------------------------------------------------------------------------------
     // Goal      : Update the ModelChator in order to delete a message and also update
-    //             the viewChat so the the message is not showed anymore on the window.
+    //             the viewChat so the the message is not shown anymore on the window.
     // Param     : roomId - Identify the room where the message should be deleted.
     //             messageId - Identify the message that has to be deleted
     //----------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ public slots :
 
     //----------------------------------------------------------------------------------
     // Goal      : Update the ModelChator in order to be removed from a room and also
-    //             update the viewChat so the the room is not showed anymore.
+    //             update the viewChat so the the room is not shown anymore.
     // Param     : roomId - Identify the room where the message should be deleted.
     //             messageId - Identify the message that has to be deleted
     //----------------------------------------------------------------------------------
