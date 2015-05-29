@@ -325,7 +325,9 @@ void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms
                                const QList<QPair<quint32, QString>>& privateRooms)
 {
     _viewJoin->setPublicRooms(publicRooms);
-    _viewJoin->setPrivateRooms(privateRooms);
+    _viewJoin->setPrivateRooms(privateRooms);  
+    _viewJoin->loadRooms();
+    connectViewJoin();
 }
 
 void ControllerRoom::closeWindows()
