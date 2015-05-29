@@ -18,6 +18,8 @@ ChatorClient::ChatorClient(QWebSocket& socket) : socket(socket)
 
 ChatorClient::~ChatorClient()
 {
-    socket.close();
-    delete &socket;
+    qDebug() << "suppr client...";
+    //socket.close();
+    //delete &socket;
+    qDebug() << "Fin suppr...";
 }

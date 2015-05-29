@@ -117,7 +117,7 @@ void ControllerUser::createAccount(ModelUser& user, const QByteArray& password, 
 
 void ControllerUser::disconnect(ChatorClient* client)
 {
-    qDebug() << "Déconnexion..." << endl;
+    qDebug() << "Déconnexion...";
     // Process the logout in the database (toggle the online bool, update the last connection date)
     _db.logout(client->id);
     
@@ -155,7 +155,7 @@ void ControllerUser::disconnect(ChatorClient* client)
     
     qDebug() << "Suppression du client " << client->id;
     delete client;
-    qDebug() << "Fin Déconnexion..." << endl;
+    qDebug() << "Fin Déconnexion...";
 }
 
 void ControllerUser::modifyUser(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey, ChatorClient* client)
