@@ -129,6 +129,13 @@ public:
     void deleteRoom(const quint32 roomId) const;
 
     //----------------------------------------------------------------------------------
+    // Goal      : Remove a user from a room in the list
+    // Param     : userId - Identify the user to remove.
+    //             roomId - Identify the room where the user should be removed.
+    //----------------------------------------------------------------------------------
+    void deleteUserFromRoom(const quint32 userId, const quint32 roomId) const;
+
+    //----------------------------------------------------------------------------------
     // Goal      : Show a notification
     // Param     : notifyType - The kind of notification
     //----------------------------------------------------------------------------------
@@ -149,12 +156,11 @@ private slots:
     void showContextMessage(const QPoint& pos);
     void on_btn_expandAll_clicked();
     void on_btn_collapseAll_clicked();
-
     void on_actionCompte_triggered();
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;
-    void requestOpenRoomModule() const;
+    void requestOpenRoomModule(const bool editRoom) const;
     void requestSendMessage() const;
     void requestEditMessage(const QTreeWidgetItem* item) const;
     void requestDeleteMessage(const quint32 roomId, const quint32 messageId) const;

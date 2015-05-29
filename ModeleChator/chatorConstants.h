@@ -39,6 +39,6 @@ const char PROFILE_PICTURE_FORMAT[] = "JPG";
 const quint16 NB_MESSAGES_TO_FETCH = 50;
 
 // The default width for the pictures
-const quint16 PICTURE_WIDTH = 256;
+const quint16 PICTURE_SIZE = 256;
 
 #endif

@@ -272,7 +272,8 @@ void Interpretor::processData(const QByteArray& data)
             quint32 idUser;
             quint32 idRoom;
             stream >> idUser >> idRoom;
-            // Envoyer ces objets quelque part
+            //_dispatcher.userJoin(idUser, idRoom, sender());
+            // IL FAUT FAIRE QQCH ICI LOL
         }
         break;
         

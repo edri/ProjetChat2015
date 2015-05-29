@@ -22,7 +22,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     _controllerRoom = controllerRoom;
     _cryptor = cryptor;
 
-    connect(_view, SIGNAL(requestOpenRoomModule()), this, SLOT(openRoomModule()));
+    connect(_view, SIGNAL(requestOpenRoomModule(const bool)), this, SLOT(openRoomModule(const bool)));
     connect(_view, SIGNAL(requestLoadRoomMessages(const quint32)), this, SLOT(loadRoomMessages(const quint32)));
     connect(_view, SIGNAL(requestSendMessage()), this, SLOT(sendMessage()));
     connect(_view, SIGNAL(requestEditMessage(const QTreeWidgetItem*)), this, SLOT(editMessage(const QTreeWidgetItem*)));
@@ -93,9 +93,12 @@ void ControllerChat::newNotification(const NotificationType notifType) const
     _view->newNotification(notifType);
 }
 
-void ControllerChat::openRoomModule() const
+void ControllerChat::openRoomModule(const bool editRoom) const
 {
-    _controllerRoom->showRoom();
+    if (editRoom)
+        _controllerRoom->showRoom(_view->getSelectedRoomId());
+    else
+        _controllerRoom->showRoom();
 }
 
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
@@ -197,10 +200,14 @@ void ControllerChat::askServerToLeaveRoom(const quint32 roomId) const
     _co->leave(_currentUser->getIdUser(), roomId);
 }
 
-void ControllerChat::leaveRoomInModel(const quint32 roomId) const
+void ControllerChat::leaveRoomInModel(const quint32 userId, const quint32 roomId) const
 {
-    _model->removeUser(_currentUser->getIdUser(), roomId);
-    _view->deleteRoom(roomId);
+    _model->removeUser(userId, roomId);
+
+    if (userId == _currentUser->getIdUser())
+        _view->deleteRoom(roomId);
+    else
+        _view->deleteUserFromRoom(userId, roomId);
 }
 
 void ControllerChat::showViewEdition()
