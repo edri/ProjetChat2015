@@ -73,7 +73,6 @@ QString ViewUser::getPassword() const
 QString ViewUser::getPort() const
 {
     return ui->spn_port->text();
-
 }
 
 QString ViewUser::getIpAddress() const
@@ -86,3 +85,7 @@ QString ViewUser::getIpAddress() const
     return _viewInscription;
 }
 
+void ViewUser::setInfoText(QString information)
+{
+    ui->lbl_info->setText(information);
+}
