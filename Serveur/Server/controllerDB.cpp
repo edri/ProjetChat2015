@@ -104,7 +104,7 @@ ModelUser ControllerDB::info(const quint32 id)
     QSqlQuery query(_db);
     QSet<quint32> rooms;
     
-    query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id");
+    query.prepare("SELECT idRoom FROM roomMembership INNER JOIN privilege ON roommembership.idPrivilege = privilege.idPrivilege WHERE idUser = :id AND (name = 'admin' OR name = 'user')");
 	query.bindValue(":id", id);
 	query.exec();
     
