@@ -128,7 +128,7 @@ class Interpretor : public QObject
     //             The flag is written first, the room second.
     // Created Jan Purro 26.04.2015 14:55 modified by Jan Purro 26.05.2015 00:36
     //----------------------------------------------------------------------------------
-    QByteArray room(const ModelRoom& room, QList<quint32>& usersIds, QList<QPair<QByteArray, QByteArray>>& cryptedKeys , bool edited);
+    QByteArray room(const ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, bool edited);
     
 
     //----------------------------------------------------------------------------------
