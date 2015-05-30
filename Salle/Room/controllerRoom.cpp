@@ -182,7 +182,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         logo.load(_viewRoom->roomLogo());
     }
     
-    else if (_currentRoomId)
+    else if (!_viewRoom->roomLogo().isEmpty() && _currentRoomId)
     {
         logo = _model->getRoom(_currentRoomId).getPicture();
     }
