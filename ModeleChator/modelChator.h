@@ -29,7 +29,10 @@ class ModelChator
         // Messages are stocked in their respective rooms.
         QMap<quint32, ModelRoom> _rooms;
         QMap<quint32, ModelUser> _users;
-        QList<ModelRequest> _requests;
+        QMap<quint32, ModelRequest> _requests;
+
+        // Indicate the number of private room's membership requests.
+        quint32 _nbRequests;
 
         RSAPair _rsaKeyPair;
 	
@@ -126,12 +129,27 @@ class ModelChator
          */
         void addMembershipRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 
+
         /*
-         * Created by Miguel Santamario on 29.05.2015 21:35
+         * Created by Miguel Santamario on 30.05.2015 15:01
+         *
+         * Delete the given membership request in the model.
+         */
+        void deleteRequest(const quint32 requestId);
+
+        /*
+         * Created by Miguel Santamario on 30.05.2015 13:35
          *
          * Get the users' membership requests in the model.
          */
-        QList<ModelRequest> getRequests() const;
+        QMap<quint32, ModelRequest> getRequests() const;
+
+        /*
+         * Created by Miguel Santamario on 30.05.2015 14:16
+         *
+         * Get a user's membership request in the model.
+         */
+        ModelRequest& getRequest(const quint32 idRequest);
 
         void setRsaKeyPair(const RSAPair& rsaKeyPair);
         RSAPair getRsaKeyPair() const;
@@ -310,15 +328,20 @@ class ModelUser
 class ModelRequest
 {
     private :
+        quint32 _id;
         ModelRoom _room;
         ModelUser _user;
         QByteArray _publicKey;
 
     public :
-        ModelRequest(const ModelRoom& room, const ModelUser& user, const QByteArray& publicKey);
+        ModelRequest();
+        ModelRequest(const quint32 id, const ModelRoom& room, const ModelUser& user, const QByteArray& publicKey);
+        ~ModelRequest();
 
+        quint32 getId() const;
         ModelRoom getRoom() const;
         ModelUser getUser() const;
+        QByteArray& getPublicKey();
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

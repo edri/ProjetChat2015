@@ -37,7 +37,6 @@ private:
     quint32 _nbNotifications;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
-    void updateRequests() const;
 
 public:
     static quint32 currentUserId;
@@ -136,10 +135,11 @@ public:
     void deleteUserFromRoom(const quint32 userId, const quint32 roomId) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Show a notification
-    // Param     :
+    // Goal      : Update the notifications' toolbar and the view.
+    // Param     : - nbToUpdate : the number of new notifications (positive number) or
+    //                            notifications to clear (negative number).
     //----------------------------------------------------------------------------------
-    void newMembershipRequest();
+    void updateRequests(const qint32 nbToUpdate);
 
 private slots:
     void on_btn_send_clicked();
