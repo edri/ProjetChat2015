@@ -56,7 +56,7 @@ class ClientControllerInput : public ControllerInput
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
     void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender);
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender);
-    void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender);
+    void room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender);
     void editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender);
     void request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender);
 };

@@ -171,12 +171,10 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     QSet<quint32> users;
     
     QSqlQuery query(_db);
-	query.prepare("SELECT roomMembership.idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idRoom = :idRoom ORDER BY login");
+	query.prepare("SELECT roomMembership.idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idRoom = :idRoom");
 	query.bindValue(":idRoom", id);
 	query.exec();
-    
-    qDebug() << "J'aime le fromage " << query.lastError().text();
-    
+
     quint32 idUser;
     
     while(query.next())
@@ -424,13 +422,25 @@ QByteArray ControllerDB::getPublicKey(const quint32 idUser)
     return query.record().value("publicKey").toByteArray();
 }
 
-void ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
+bool ControllerDB::requestAccess(const quint32 idUser, const quint32 idRoom)
 {
     QSqlQuery query(_db);
+    
+    query.prepare("SELECT count(idUser) AS nbRequest FROM roomMembership  WHERE idUser = :idUser AND idRoom = :idRoom AND idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'request')");
+    query.bindValue(":idUser", idUser);
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
+    query.first();
+    
+    if (query.record().value("nbRequest").toUInt() > 0) {return false;}
+    
     query.prepare("INSERT INTO roomMembership (idUser, idRoom, idPrivilege) VALUES (:idUser, :idRoom, (SELECT idPrivilege FROM privilege WHERE name = 'request'))");
     query.bindValue(":idUser", idUser);
     query.bindValue(":idRoom", idRoom);
     query.exec();
+    
+    return true;
 }
 
 void ControllerDB::setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey)
@@ -527,6 +537,7 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // New users
     if (!newUsers.empty())
     {
+        qDebug() << "Insertion des nouveaux utilisateurs";
         query.prepare("INSERT INTO roomMembership (idRoom, idPrivilege, idUser, roomKey) VALUES (" + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = 'user'), ?, ?)");
         
         ids.clear();

@@ -102,7 +102,7 @@ void ControllerRoom::userConnected(const ModelUser& user, ChatorClient* currentC
     }
 }
 
-void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
+void ControllerRoom::createRoom(ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, ChatorClient* client)
 {
     // The client must be logged in to create a room
     if (!client->logged)
@@ -124,26 +124,17 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     QMap<quint32, ModelUser> usersData;
     ChatorClient* currentClient;
     
-    int size = usersIds.size();
     bool isPrivate = room.isPrivate();
-    quint32 idUser;
     
-    qDebug() << "Création de la salle " << room.getName() << " avec users: " << usersIds.size();
+    qDebug() << "Création de la salle " << room.getName();
     
-    //for (quint32 idUser : usersIds)
-    for (int i = 0; i < size; i++)
+    for (quint32 idUser : room.getUsers())
     {
-        idUser = usersIds[i];
-         qDebug() << "Traitement de l'user " << idUser;
+        qDebug() << "Traitement de l'user " << idUser;
         
         if (isPrivate)
         {
-            QByteArray aesKey;
-            QDataStream stream(&aesKey, QIODevice::WriteOnly);
-            stream << cryptedKeys[i].first << cryptedKeys[i].second;
-            qDebug() << "A la creation, le truc fait " << aesKey.size();
-            qDebug() << "La clé originale fait " << cryptedKeys[i].first.size() << "|" << cryptedKeys[i].first.size();
-            _db.setKey(idUser, newRoom->id, aesKey);
+            _db.setKey(idUser, newRoom->id, usersAndKeys[idUser]);
         }
         
         // For every user in the new room, we have to fetch its ModelUser
@@ -167,26 +158,15 @@ void ControllerRoom::createRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     // Build the packet
     QByteArray data = _interpretor->join(roomToSend, usersData);
     
-    int clientIndex;
     // Send the packet to every client
     for (ChatorClient* client : newRoom->clients)
     {
         if (isPrivate)
         {
-            QByteArray aesKeyAndIV;
-            QDataStream writeStream(&aesKeyAndIV, QIODevice::WriteOnly);
-            clientIndex = usersIds.indexOf(client->id);
-            qDebug() << "Index de l'utilisateur actuel" << clientIndex;
-            qDebug() << "Clé de l'utilisateur actuel" << cryptedKeys[clientIndex].first.size();
-            qDebug() << "IV de l'utilisateur actuel" << cryptedKeys[clientIndex].second.size();
-            writeStream << cryptedKeys[clientIndex].first << cryptedKeys[clientIndex].second;
-            
-            qDebug() << "La chose contient " << aesKeyAndIV.size();
-            
-            QDataStream readStream(aesKeyAndIV);
+            QDataStream stream(usersAndKeys[client->id]);
             AESKey aesKey;
-            readStream >> aesKey;
-            qDebug() << "L'aeskey contient: " << aesKey.key.size() << "|" << aesKey.initializationVector.size();
+            stream >> aesKey;
+            
             roomToSend.first().setKey(aesKey);
             data = _interpretor->join(roomToSend, usersData);
         }
@@ -257,7 +237,8 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     
     if (!room.isPrivate())
     {
-        QSet<quint32> newUser = newUser << client->id;
+        QSet<quint32> newUser;
+        newUser << client->id;
         _db.modifyMembership(idRoom, newUser);
         room.addUser(client->id);
         ChatorRoom* currentRoom;
@@ -298,10 +279,10 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
             c->socket.sendBinaryMessage(data);
         }
     }
-    else
+    
+    else if (_db.requestAccess(client->id, idRoom))
     {
         ModelRoom room = _db.infoRoom(idRoom);
-        _db.requestAccess(client->id, idRoom);
         
         // Les ennuis commencent
         ChatorRoom* currentRoom = _onlineRooms[idRoom];
@@ -325,22 +306,8 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
 }
 
-// IL FAUDRAIT PLUTÔT UNE QMAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// USERSIDS NE SERT À RIEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!¨¨
-void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, ChatorClient* client)
+void ControllerRoom::modifyRoom(ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, ChatorClient* client)
 {
-    // Construction moche d'une Qmap
-    // BERK BERK BERK
-    QMap<quint32, QByteArray> usersAndKeys;
-    for (int i = 0; i < usersIds.size(); i++)
-    {
-        QByteArray aesKey;
-        QDataStream stream(&aesKey, QIODevice::WriteOnly);
-        stream << cryptedKeys[i].first << cryptedKeys[i].second;
-        usersAndKeys.insert(usersIds[i], aesKey);
-    }
-    // -------
-    
     ChatorRoom* onlineRoom = _onlineRooms[room.getIdRoom()];
     
     if (!onlineRoom || !_db.infoRoom(onlineRoom->id).getAdmins().contains(client->id))
@@ -359,11 +326,8 @@ void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<
     _db.modifyRoom(room);
     _db.modifyMembership(room.getIdRoom(), newUsers, removedUsers, newAdmins, removedAdmins, usersAndKeys);
     
-    // Le paquet n'existe pas encore
-    QList<QPair<QByteArray, QByteArray>> prout2;
-    QList<quint32> prout;
-    QByteArray data = _interpretor->room(room, prout, prout2, true);
-    //QByteArray data;
+    QMap<quint32, QByteArray> empty;
+    QByteArray data = _interpretor->room(room, empty, true);
     
     for (ChatorClient* currentClient : onlineRoom->clients)
     {
@@ -420,7 +384,7 @@ void ControllerRoom::deleteRoom(const quint32 roomId, ChatorClient* client)
     }
 }
 
-void ControllerRoom::acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted, ChatorClient* client)
+void ControllerRoom::acceptOrDeny(const quint32 idRoom, const quint32 idUser, const QByteArray& key, const bool accepted)
 {
     _db.acceptOrDeny(idRoom, idUser, key, accepted);
     

@@ -41,4 +41,8 @@ const quint16 NB_MESSAGES_TO_FETCH = 50;
 // The default width for the pictures
 const quint16 PICTURE_SIZE = 256;
 
+// The default files to use for the TLS encryption
+const QString SERVER_CERTIFICATE_FILE = "cert.pem";
+const QString SERVER_KEY_FILE = "key.pem";
+
 #endif
