@@ -171,7 +171,7 @@ ModelRoom ControllerDB::infoRoom(const quint32 id)
     QSet<quint32> users;
     
     QSqlQuery query(_db);
-	query.prepare("SELECT roomMembership.idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idRoom = :idRoom");
+	query.prepare("SELECT roomMembership.idUser, name FROM roomMembership INNER JOIN privilege ON roomMembership.idPrivilege = privilege.idPrivilege INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idRoom = :idRoom AND (name = 'admin' OR name = 'user')");
 	query.bindValue(":idRoom", id);
 	query.exec();
 
@@ -597,4 +597,21 @@ QByteArray ControllerDB::getAesKey(const quint32 idUser, const quint32 idRoom)
     qDebug() << "Suis-je nul2? " << query.record().value("roomKey").toByteArray().size();
     
     return query.record().value("roomKey").toByteArray();
+}
+
+QList<QPair<quint32, QByteArray>> ControllerDB::getRequests(const quint32 idRoom)
+{
+    QSqlQuery query(_db);
+    query.prepare("SELECT roomMembership.idUser, publicKey FROM roomMembership INNER JOIN user ON roomMembership.idUser = user.idUser WHERE idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'request') AND idRoom = :idRoom");
+    query.bindValue(":idRoom", idRoom);
+    query.exec();
+    
+    QList<QPair<quint32, QByteArray>> requests;
+    
+    while (query.next())
+    {
+        requests.append(QPair<quint32, QByteArray>(query.record().value("idUser").toUInt(), query.record().value("publicKey").toByteArray()));
+    }
+    
+    return requests;
 }

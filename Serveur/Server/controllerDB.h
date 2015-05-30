@@ -231,6 +231,8 @@ class ControllerDB
     //----------------------------------------------------------------------------------
     QByteArray getAesKey(const quint32 idUser, const quint32 idRoom);
     
+    QList<QPair<quint32, QByteArray>> getRequests(const quint32 idRoom);
+    
     private :
     QSqlDatabase _db;
 };
