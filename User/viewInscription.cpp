@@ -183,3 +183,8 @@ void ViewInscription::setCurrentUser(ModelUser* currentUser)
     ui->ldt_lastName->setText(currentUser->getLastName());
     ui->lbl_profilPicture->setPixmap(QPixmap::fromImage(currentUser->getImage()));
 }
+
+void ViewInscription::on_btn_cancel_clicked()
+{
+    close();
+}
