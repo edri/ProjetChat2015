@@ -151,7 +151,6 @@ class ModelRoom
 		bool _private;
         bool _visible;
         QImage _picture;
-        //QString _picture;
         quint32 _limitOfStoredMessage;
         
         // The admins and members of the room, only the ids are stocked.
