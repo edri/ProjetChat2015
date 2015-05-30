@@ -6,7 +6,7 @@
  * Description : Implementation room module controller (see controllerRoom.h for
  * more info).
  */
-
+#include "../../ModeleChator/chatorConstants.h"
 #include "controllerRoom.h"
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput, Cryptor* cryptor)
@@ -179,7 +179,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     QImage logo;
     if (!_viewRoom->roomLogo().isEmpty())
     {
-        logo.load(_viewRoom->roomLogo());
+        logo = QImage(_viewRoom->roomLogo()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     
     else if (!_viewRoom->roomLogo().isEmpty() && _currentRoomId)

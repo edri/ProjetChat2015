@@ -410,7 +410,7 @@ void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdm
 
 void ViewRoom::browseImage()
 {
-    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), tr("~"), tr("Image Files (*.png *.jpg)")));
+    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier"), QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), "Images (*.png *.gif *.jpg *.jpeg);;Autres (*.*)"));
 }
 
 void ViewRoom::remove()
