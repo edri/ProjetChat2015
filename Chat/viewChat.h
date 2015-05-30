@@ -53,7 +53,7 @@ public:
     void setConnectedAsText(const QString& user);
 
     //----------------------------------------------------------------------------------
-    // Goal      : Add a room on the list of room in the chat's window.
+    // Goal      : Add a room on the list of rooms in the chat's window.
     // Param     : roomId - Identify the room that is added to the view.
     //             roomName - Name of the room
     //             roomPicture - Picture of the room
@@ -61,6 +61,14 @@ public:
     //----------------------------------------------------------------------------------
     void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
                  const bool isPrivate);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Edit a room's data in the chat's window.
+    // Param     : roomId - Identify the room that is added to the view.
+    //             roomName - Name of the room
+    //             roomPicture - Picture of the room
+    //----------------------------------------------------------------------------------
+    void modifyRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
 
     //----------------------------------------------------------------------------------
     // Goal      : Add a user in a room, below a room in the list of room.

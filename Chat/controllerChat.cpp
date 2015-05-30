@@ -81,6 +81,7 @@ void ControllerChat::editRoom(const ModelRoom& room)
 {
     _model->modifyRoom(room.getIdRoom(), room.getName(), room.getLimit(),
                        room.isPrivate(), room.isVisible(), room.getPicture());
+    _view->modifyRoom(room.getIdRoom(), room.getName(), room.getPicture());
 }
 
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const

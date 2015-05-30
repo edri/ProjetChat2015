@@ -122,6 +122,21 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
     }
 }
 
+void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
+{
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        // Searching for the room to update.
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        {
+            _ui->tre_rooms->topLevelItem(i)->setText(0, roomName);
+            _ui->tre_rooms->topLevelItem(i)->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+        }
+    }
+}
+
 void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QImage& image, const bool isConnected)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
