@@ -52,6 +52,12 @@ private slots:
     //----------------------------------------------------------------------------------
     void on_btn_inscription_clicked();
 
+    void on_ldt_userName_returnPressed();
+
+    void on_ldt_password_returnPressed();
+
+    void on_ldt_server_returnPressed();
+
 private:
     Ui::ViewUser* ui;
     //viewInscription is linked to the viewUser
