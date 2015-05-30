@@ -330,8 +330,29 @@ void ControllerRoom::showJoin()
 void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms,
                                const QList<QPair<quint32, QString>>& privateRooms)
 {
-    _viewJoin->setPublicRooms(publicRooms);
-    _viewJoin->setPrivateRooms(privateRooms);  
+    // Remove the rooms the user is already a member of.
+    QList<QPair<quint32, QString>> roomsList;
+    for(QPair<quint32, QString> pair : publicRooms)
+    {
+        if(! _model->containsRoom(pair.first))
+        {
+            roomsList.append(pair);
+        }
+    }
+    
+    _viewJoin->setPublicRooms(roomsList);
+    
+    roomsList.clear();
+    
+    for(QPair<quint32, QString> pair : privateRooms)
+    {
+        if(! _model->containsRoom(pair.first))
+        {
+            roomsList.append(pair);
+        }
+    }
+    _viewJoin->setPrivateRooms(roomsList);
+      
     _viewJoin->loadRooms();
     connectViewJoin();
 }

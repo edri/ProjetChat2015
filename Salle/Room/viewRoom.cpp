@@ -331,8 +331,12 @@ bool ViewRoom::isEditing()
 
 void ViewRoom::toggleAdmin()
 {
-    quint32 userId = currentSelectedUserId();
-    toggleAdmin(userId, _users->value(userId));
+    // Check if there's a selected user.
+    if(! lst_members->selectionModel()->selectedIndexes().isEmpty())
+    {
+        quint32 userId = currentSelectedUserId();
+        toggleAdmin(userId, _users->value(userId));
+    }
 }
 
 quint32 ViewRoom::currentSelectedUserId()
@@ -415,15 +419,9 @@ void ViewRoom::browseImage()
 
 void ViewRoom::remove()
 {
-    if (!editing)
+    if (! lst_members->selectionModel()->selectedIndexes().isEmpty())
     {
         removeUser(currentSelectedUserId());
-    }
-    
-    else
-    {
-        // Add to the banned users.
-        // Will not be implemented...
     }
 }
 

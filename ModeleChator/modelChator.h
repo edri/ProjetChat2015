@@ -91,6 +91,8 @@ class ModelChator
         ModelRoom& getRoom(const quint32 idRoom);
         const ModelRoom& getRoom(const quint32 idRoom) const;
         
+        bool containsRoom(const quint32 idRoom) const;
+        
 
         //----------------------------------------------------------------------------------
         // Goal      : Modify a specific room.
