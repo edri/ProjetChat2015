@@ -27,12 +27,15 @@ class ModelError
     friend QDataStream& operator>> (QDataStream& ds, ModelError& r);
     
     public:
-    ModelError();
-    ModelError(ErrorType errorType, QString errorString);
+        ModelError();
+        ModelError(ErrorType errorType, QString errorString);
+
+        ErrorType getErrorType() const;
+        QString getErrorString() const;
     
     private:
-    ErrorType _errorType;
-    QString _errorString;
+        ErrorType _errorType;
+        QString _errorString;
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelError& r);

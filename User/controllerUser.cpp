@@ -169,3 +169,8 @@ void ControllerUser::cancelInscription()
     _view->setEnabled(true);
     _view->setInfoText("");
 }
+
+void ControllerUser::authError()
+{
+    _view->authError();
+}

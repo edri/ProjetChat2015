@@ -188,3 +188,15 @@ void ClientControllerInput::request(const quint32 roomId, const ModelUser& user,
 
     _controllerChat->newMembershipRequest(roomId, user, publicKey);
 }
+
+void ClientControllerInput::error(const ModelError& error)
+{
+    switch(error.getErrorType())
+    {
+        case ErrorType::AUTH_ERROR:
+        {
+            _controllerUser->authError();
+        }
+        break;
+    }
+}

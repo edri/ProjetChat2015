@@ -59,6 +59,7 @@ class ClientControllerInput : public ControllerInput
     void room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender);
     void editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender);
     void request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender);
+    void error(const ModelError& error);
 };
 
 #endif // CLIENT_CONTROLLER_INPUT_H
