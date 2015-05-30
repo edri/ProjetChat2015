@@ -21,9 +21,6 @@ ViewInscription::ViewInscription(QWidget *parent) :
     ui->setupUi(this);
     ui->btn_question->setEnabled(false);
     ui->btn_question->setToolTip(passwordRequirement);
-
-    ui->lbl_newPassword->setVisible(false);
-    ui->ldt_newPassword->setVisible(false);
 }
 
 ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
@@ -36,16 +33,26 @@ ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
 
     ui->setupUi(this);
 
+    this->setWindowTitle("Compte");
+
     ui->btn_question->setVisible(false);
-    ui->btn_inscription->setText("Editer");
+    ui->btn_inscription->setVisible(false);
 
     ui->lbl_userName->setText("Nom d'utilisateur");
     ui->ldt_userName->setDisabled(true);
+    ui->ldt_firstName->setDisabled(true);
+    ui->ldt_lastName->setDisabled(true);
 
-    ui->lbl_password->setText("Nouveau mot de passe");
-    ui->lbl_passwordConf->setText("Veuillez retaper le nouveau mot de passe");
+    ui->lbl_password->setVisible(false);
+    ui->ldt_password->setVisible(false);
+    ui->lbl_passwordConf->setVisible(false);
+    ui->ldt_passwordConf->setVisible(false);
+    ui->ldt_profilPicture->setVisible(false);
+    ui->btn_path->setVisible(false);
+    //ui->lbl_password->setText("Nouveau mot de passe");
+    //ui->lbl_passwordConf->setText("Veuillez retaper le nouveau mot de passe");
 
-    ui->lbl_mendatory->setText("Veuillez ne modifier seulement les champs désirés,");
+    ui->lbl_mendatory->setText("");
 }
 
 ViewInscription::~ViewInscription()
