@@ -34,6 +34,7 @@ class ClientConnector : public Connector
     signals:
     void connectionSuccessful();
     void binaryMessageReceived(const QByteArray& message);
+    void disconnected();
     
     private slots:
     void sslErrors(const QList<QSslError>& errors);

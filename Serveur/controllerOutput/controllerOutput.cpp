@@ -34,12 +34,6 @@ void ControllerOutput::sendInfoUser(const ModelUser& user)
     _connector.send(_interpretor.sendInfoUser(user));
 }
 
-
-void ControllerOutput::join(const quint32 idUser, const quint32 idRoom)
-{
-    //_connector.send(_interpretor.join(idUser, idRoom));
-}
-
 void ControllerOutput::leave(const quint32 idUser, const quint32 idRoom)
 {
     _connector.send(_interpretor.leave(idUser, idRoom));
