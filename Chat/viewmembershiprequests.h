@@ -18,6 +18,11 @@ public:
 
     void refresh(const QList<ModelRequest>& requests) const;
 
+private slots:
+    void on_btn_accept_clicked();
+
+    void on_btn_refuse_clicked();
+
 private:
     Ui::ViewMembershipRequests *_ui;
      ModelChator* _model;

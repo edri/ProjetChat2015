@@ -27,3 +27,13 @@ void ViewMembershipRequests::refresh(const QList<ModelRequest>& requests) const
         requestItem->setData(1, Qt::UserRole, request.getRoom().getIdRoom());
     }
 }
+
+void ViewMembershipRequests::on_btn_accept_clicked()
+{
+
+}
+
+void ViewMembershipRequests::on_btn_refuse_clicked()
+{
+
+}

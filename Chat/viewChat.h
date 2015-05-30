@@ -37,6 +37,7 @@ private:
     quint32 _nbNotifications;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
+    void updateRequests() const;
 
 public:
     static quint32 currentUserId;

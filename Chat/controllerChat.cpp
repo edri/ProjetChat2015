@@ -107,6 +107,7 @@ void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser&
 {
     _model->addMembershipRequest(roomId, user, publicKey);
     _view->newMembershipRequest();
+    _viewRequests->refresh(_model->getRequests());
 }
 
 void ControllerChat::openRoomModule(const bool editRoom) const

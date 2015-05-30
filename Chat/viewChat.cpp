@@ -39,11 +39,13 @@ ViewChat::~ViewChat()
 
 void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const
 {
+    QString userName = _model->getUser(message.getIdUser()).getUserName();
     QTreeWidgetItem* messageItem = new QTreeWidgetItem();
     messageItem->setData(0, Qt::UserRole, message.getDate());
     messageItem->setData(1, Qt::UserRole, message.getIdMessage());
     messageItem->setData(2, Qt::UserRole, isCurrentUserMessage);
-    messageItem->setText(0, "[" + message.getDate().toString("HH:mm") + "] <" + _model->getUser(message.getIdUser()).getUserName() + ">");
+    messageItem->setText(0, "[" + message.getDate().toString("HH:mm") + "] <" +
+                         (userName.isEmpty() ? tr("Anonyme") : userName) + ">");
     messageItem->setText(1, QString::fromUtf8(message.getContent()));
 
     if (message.getEditionDate() != message.getDate())
@@ -77,6 +79,12 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
 
         ++nbTopMessageItems;
     }
+}
+
+void ViewChat::updateRequests() const
+{
+    _ui->menuNotifications->setTitle(tr("Notifications") + " (" + QString::number(_nbNotifications) + ")");
+    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") + " (" + QString::number(_nbNotifications) + ")");
 }
 
 void ViewChat::setConnectedAsText(const QString& user)
@@ -351,8 +359,8 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
 
 void ViewChat::newMembershipRequest()
 {
-    _ui->menuNotifications->setTitle(tr("Notifications") + " (" + QString::number(++_nbNotifications) + ")");
-    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") + " (" + QString::number(_nbNotifications) + ")");
+    ++_nbNotifications;
+    updateRequests();
 }
 
 void ViewChat::on_btn_send_clicked()
