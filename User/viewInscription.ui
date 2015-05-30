@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>394</width>
-    <height>400</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Inscription</string>
   </property>
   <property name="windowIcon">
    <iconset resource="icons.qrc">
@@ -28,6 +28,9 @@
        <number>20</number>
       </property>
       <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout"/>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="lbl_firstName">
         <property name="font">
          <font>
@@ -39,7 +42,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="1" column="1">
        <widget class="QLineEdit" name="ldt_firstName">
         <property name="font">
          <font>
@@ -51,7 +54,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="lbl_lastName">
         <property name="font">
          <font>
@@ -63,7 +66,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="ldt_lastName">
         <property name="font">
          <font>
@@ -256,21 +259,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lbl_newPassword">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Nouveau mot de passe</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="ldt_newPassword"/>
-      </item>
      </layout>
     </item>
     <item>
@@ -284,6 +272,20 @@
       </property>
       <property name="text">
        <string>Inscription</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_cancel">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Fermer</string>
       </property>
      </widget>
     </item>

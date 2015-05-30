@@ -11,6 +11,7 @@
 #define CONTROLLERCHAT
 
 #include <QString>
+#include <cstring>
 
 #include "viewChat.h"
 #include "../ModeleChator/modelChator.h"
@@ -197,6 +198,13 @@ public slots :
     //----------------------------------------------------------------------------------
     void showMembershipRequestsView();
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Process a private room's membership request, which can be accepted or
+    //             not.
+    // Param     : - accepted : indicate whether the request has been accepted (true) or
+    //                          not (false).
+    //----------------------------------------------------------------------------------
+    void processRequest(const bool accepted);
 };
 
 #endif // CONTROLLERCHAT

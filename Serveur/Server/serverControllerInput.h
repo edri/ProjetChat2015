@@ -25,7 +25,7 @@ class ServerControllerInput : public ControllerInput
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender);
     void login(const QString& pseudo, const QByteArray& hashedPWD, QObject* sender);
-    void room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender);
+    void room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender);
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
     void disconnect(const quint32 userId, QObject* sender);
     void deleteRoom(const quint32 roomId, QObject* sender);

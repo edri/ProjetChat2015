@@ -74,7 +74,6 @@ void ControllerUser::auth() const
         // Disabling the view and retrieving of "passwordSalt"
         // The salt will be received in the slot receiveSalt
         _view->setDisabled(true);
-        _view->setInfoText("");
         _co->askForSalt(_view->getUsername());
     }
     else  // button inscription
@@ -168,4 +167,5 @@ void ControllerUser::cancelInscription()
 {
     _fromBtnConnection = true;
     _view->setEnabled(true);
+    _view->setInfoText("");
 }

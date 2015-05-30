@@ -2,10 +2,10 @@
      * Created by Miguel Santamaria
      *
      * This model is used to store any information received from the
-     * server such as room, users and messages
+     * server such as room, users and messages. It Contains any informations
+     * related to the chat.
 */
 
-//Contain any informations related to the chat
 #ifndef MODELCHATOR
 #define MODELCHATOR
 
@@ -29,7 +29,10 @@ class ModelChator
         // Messages are stocked in their respective rooms.
         QMap<quint32, ModelRoom> _rooms;
         QMap<quint32, ModelUser> _users;
-        QList<ModelRequest> _requests;
+        QMap<quint32, ModelRequest> _requests;
+
+        // Indicate the number of private room's membership requests.
+        quint32 _nbRequests;
 
         RSAPair _rsaKeyPair;
 	
@@ -37,101 +40,127 @@ class ModelChator
     
         ModelChator();
 
-        /*
-         * Created by Miguel Santamaria, on 17.04.2015 21:20
-         *
-         * Get all the given user's rooms, and return them in a QMap.
-         * Used in : - ControllerChat::loadRooms.
-         *
-         * Last edited by Jan Purro, on 24.04.2015 16:23
-        */
+        //----------------------------------------------------------------------------------
+        // Goal      : Get all the given user's rooms, and return them in a QMap.
+        // Used in : - ControllerChat::loadRooms.
+        // Created by Miguel Santamaria, on 17.04.2015 21:20
+        // Last edited by Jan Purro, on 24.04.2015 16:23
+        //----------------------------------------------------------------------------------
         QList<quint32> getUserRooms(const quint32 idUser) const;
 
-        /*
-         * Created by Miguel Santamaria, on 17.04.2015 21:59
-         *
-         * Add an user to the users list.
-         * Used anytime we need to store an user in the application.
-         *
-         * Last edited by Jan Purro, on 24.04.2015 15::57
-        */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add an user to the users list.
+        //             Used anytime we need to store an user in the application.
+        // Created by Miguel Santamaria, on 17.04.2015 21:59
+        // Last edited by Jan Purro, on 24.04.2015 15:57
+        //----------------------------------------------------------------------------------
         void addUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image, const QSet<quint32> roomsIds);
         void addUser(const ModelUser& user);
         
-        /*
-         * Created by ?? on ??
-         *
-         * Add an admin to the specified room
-         *
-         * Last edited by Jan Purro, on 24.04.2015 16:31
-        */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add an admin to the specified room
+        // Last edited by Jan Purro, on 24.04.2015 16:31
+        //----------------------------------------------------------------------------------
         void addAdmin(const quint32 idRoom, const quint32 idUser);
-        
-        /*
-         * Created by Miguel Santamaria, on 21.04.2015 09:12
-         *
-         * Get the user identified by the given id.
-         * Used anytime we need to get an user in the application.
-         *
-         * Last edited by Jan Purro, on 24.04.2015 16:07
-        */
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Get the user identified by the given id.
+        //             Used anytime we need to get an user in the application.
+        // Created by Miguel Santamaria, on 21.04.2015 09:12
+        // Last edited by Jan Purro, on 24.04.2015 16:07
+        //----------------------------------------------------------------------------------
         ModelUser& getUser(const quint32 idUser);
         const ModelUser& getUser(const quint32 idUser) const;
 
-
-        /*
-         * Created by Miguel Santamaria, on 18.04.2015 00:18
-         *
-         * Add room to the rooms list.
-         * Used anytime we need to store a room in the application.
-         *
-         * Last edited by Miguel Santamaria, on 18.04.2015 00:18
-        */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add room to the rooms list.
+        //             Used anytime we need to store a room in the application.
+        // Created by Miguel Santamaria, on 18.04.2015 00:18
+        // Last edited by Miguel Santamaria, on 18.04.2015 00:18
+        //----------------------------------------------------------------------------------
         void addRoom(const quint32 idRoom, const QString &name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage &picture, const QSet<quint32>& admins, const QSet<quint32>& users, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey);
         void addRoom(const ModelRoom& room);
-        /*
-         * Created by Miguel Santamaria, on 20.04.2015 12:22
-         *
-         * Get the room identified by the given id.
-         * Used anytime we need to get a room in the application.
-         *
-         * Last edited by Jan Purro, on 24.04.2015 16:11
-        */
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a specific room.
+        // Param     : Get the room identified by the given id.
+        //             Used anytime we need to get a room in the application.
+        // Created by Miguel Santamaria, on 20.04.2015 12:22
+        // Last edited by Jan Purro, on 24.04.2015 16:11
+        //----------------------------------------------------------------------------------
         ModelRoom& getRoom(const quint32 idRoom);
         const ModelRoom& getRoom(const quint32 idRoom) const;
         
-        // Last edited by Jan Purro on 24.04.2015 16:40
-        void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
-		void deleteRoom(const quint32 idRoom);
 
-        /*
-         * Created by Miguel Santamaria on 14.05.2015 19:55
-         *
-         * Unsuscribe the given user to the given room.
-         *
-         */
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a specific room.
+        // Param     : name, limitOfStoredMessage, isPrivate, isVisible, picture
+        //             New values for the room.
+        // Last edited by Jan Purro on 24.04.2015 16:40
+        //----------------------------------------------------------------------------------
+        void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture);
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Delete a specific room.
+        // Param     : idRoom - Room's identifier
+        //----------------------------------------------------------------------------------
+        void deleteRoom(const quint32 idRoom);
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Unsuscribe the given user to the given room.
+        // Param     : userId - User's identifier
+        //             idRoom - Room's identifier
+        // Created by Miguel Santamaria on 14.05.2015 19:55
+        //----------------------------------------------------------------------------------
         void removeUser(const quint32 userId, const quint32 roomId);
-		
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Return a specific message.
+        // Param     : idRoom - Room's identifier
+        //             idMessage - Message's identifer
         // Last edited by Jan Purro on 24.04.2015 16:47
+        //----------------------------------------------------------------------------------
         ModelMessage& getMessage(const quint32 idRoom, const quint32 idMessage);
-        // Last edited by Miguel Santamaria on 09.05.2015 18:46
-        // Adding last edition's date.
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a message
+        // Param     : idRoom - Room's identifier
+        //             idMessage - Message's identifer
+        //             content - New message's content
+        //             lastEditionDate - Update the message date.
+        //----------------------------------------------------------------------------------
         void modifyMessage(const quint32 idRoom, const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate);
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Delete a message.
+        // Param     : idRoom - Room's identifier
+        //             idMessage - Message's identifer
+        //----------------------------------------------------------------------------------
         void deleteMessage(const quint32 idRoom, const quint32 idMessage);
 
-        /*
-         * Created by Miguel Santamario on 29.05.2015 21:35
-         *
-         * Add a new user's membership request in the model.
-         */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add a new user's membership request in the model.
+        // Created by Miguel Santamario on 29.05.2015 21:35
+        //----------------------------------------------------------------------------------
         void addMembershipRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 
-        /*
-         * Created by Miguel Santamario on 29.05.2015 21:35
-         *
-         * Get the users' membership requests in the model.
-         */
-        QList<ModelRequest> getRequests() const;
+        //----------------------------------------------------------------------------------
+        // Goal      : Delete the given membership request in the model.
+        // Created by Miguel Santamario on 30.05.2015 15:01
+        //----------------------------------------------------------------------------------
+        void deleteRequest(const quint32 requestId);
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Get the users' membership requests in the model.
+        // Created by Miguel Santamario on 30.05.2015 13:35
+        //----------------------------------------------------------------------------------
+        QMap<quint32, ModelRequest> getRequests() const;
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Get a user's membership request in the model.
+        // Created by Miguel Santamario on 30.05.2015 14:16
+        //----------------------------------------------------------------------------------
+        ModelRequest& getRequest(const quint32 idRequest);
 
         void setRsaKeyPair(const RSAPair& rsaKeyPair);
         RSAPair getRsaKeyPair() const;
@@ -151,7 +180,6 @@ class ModelRoom
 		bool _private;
         bool _visible;
         QImage _picture;
-        //QString _picture;
         quint32 _limitOfStoredMessage;
         
         // The admins and members of the room, only the ids are stocked.
@@ -170,46 +198,51 @@ class ModelRoom
         ModelRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture, const QSet<quint32>& adminsIds, const QSet<quint32>& usersIds, const QMap<quint32, ModelMessage>& messages, const AESKey& secretKey = AESKey());
 		~ModelRoom();
 
-        /*
-         * Created by Miguel Santamaria, on 19.04.2015 21:20
-         *
-         * Add a message to the messages list.
-         * Used anytime we need to store a message in the application.
-         *
-         * Last edited by Jan Purro, on 24.04.2015 15:45
-        */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add a message to the messages list.
+        //             Used anytime we need to store a message in the application.
+        // Created by Miguel Santamaria, on 19.04.2015 21:20
+        // Last edited by Jan Purro, on 24.04.2015 15:45
+        //----------------------------------------------------------------------------------
         void addMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime &lastEditionDate, const QByteArray& content);
         void addMessage(const ModelMessage& message);
-        
+
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a message.
+        // Param     : idMessage - Message's identifier
         // Last edited by Miguel Santamaria, on 09.05.2015 18:47
-        // Adding the last edition's date.
+        //----------------------------------------------------------------------------------
         void modifyMessage(const quint32 idMessage, const QByteArray& content, const QDateTime lastEditionDate);
-		void deleteMessage(const quint32 idMessage);
+
+        //----------------------------------------------------------------------------------
+        // Goal      : Delete a message from the message's list.
+        // Param     : idMessage - message's identifier
+        //----------------------------------------------------------------------------------
+        void deleteMessage(const quint32 idMessage);
 		
-        /*
-         * Created by Jan Purro, on 24.04.2015 15:35
-         * 
-         * Add a user to the user list
-         * 
-         * Last edited by Jan Purro, on 24.04.2015 15:35
-         */
+        //----------------------------------------------------------------------------------
+        // Goal      : Add a user to the user list.
+        // Param     : idUser - User's identifier
+        // Created by Jan Purro, on 24.04.2015 15:35
+        // Last edited by Jan Purro, on 24.04.2015 15:35
+        //----------------------------------------------------------------------------------
         void addUser(const quint32 idUser);
 
-        /*
-         * Created by Miguel Santamaria on 14.05.2015 19:57
-         *
-         * Remove the given user of the room.
-         */
+        //----------------------------------------------------------------------------------
+        // Goal      : Remove the given user of the room..
+        // Param     : idUser - User's identifier
+        // Created by Miguel Santamaria on 14.05.2015 19:57
+        //----------------------------------------------------------------------------------
         void removeUser(const quint32 userId);
         
-        /*
-         * Created by Jan Purro, on 24.04.2015 15:35
-         * 
-         * Add an admin to the admin list AND the user list.
-         * 
-         * Last edited by Jan Purro, on 24.04.2015 15:35
-         */
-		void addAdmin(const quint32 idUser);
+        //----------------------------------------------------------------------------------
+        // Goal      : Add an admin to the admin list AND the user list.
+        // Param     : idUser - User's identifier
+        // Created by Jan Purro, on 24.04.2015 15:35
+        // Last edited by Jan Purro, on 24.04.2015 15:35
+        //----------------------------------------------------------------------------------
+        void addAdmin(const quint32 idUser);
 
         // Getters
         quint32 getIdRoom() const;
@@ -222,7 +255,6 @@ class ModelRoom
         bool isPrivate() const ;
         bool isVisible() const;
         AESKey& getSecretKey();
-        
         ModelMessage& getMessage(const quint32 idMessage);
 
         // Setters
@@ -250,6 +282,11 @@ class ModelMessage
         ModelMessage(const quint32 idMessage, const quint32 idRoom, const quint32 idUser, const QDateTime& date, const QDateTime& lastEditionDate, const QByteArray& content);
 		~ModelMessage();
 		
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a message
+        // Param     : content - New content
+        //             lastEditionDate - Last date of modification
+        //----------------------------------------------------------------------------------
         void modify(const QByteArray& content, const QDateTime lastEditionDate);
 
         // Getters
@@ -287,6 +324,12 @@ class ModelUser
         ModelUser(const quint32 idUser, const QString& userName, const QString& firstName, const QString& lastName, const bool isConnected, const QDateTime& lastConnection, const QImage& image, const QSet<quint32> roomsIds);
 		~ModelUser();
 		
+        //----------------------------------------------------------------------------------
+        // Goal      : Modify a user's information
+        // Param     : firstName - New first name
+        //             lastName - New last Name
+        //             image - New image
+        //----------------------------------------------------------------------------------
         void modify(const QString& firstName, const QString& lastName, const QImage& image);
 
         // Getters
@@ -311,15 +354,21 @@ class ModelUser
 class ModelRequest
 {
     private :
+        quint32 _id;
         ModelRoom _room;
         ModelUser _user;
         QByteArray _publicKey;
 
     public :
-        ModelRequest(const ModelRoom& room, const ModelUser& user, const QByteArray& publicKey);
+        ModelRequest();
+        ModelRequest(const quint32 id, const ModelRoom& room, const ModelUser& user, const QByteArray& publicKey);
+        ~ModelRequest();
 
+        // Getters
+        quint32 getId() const;
         ModelRoom getRoom() const;
         ModelUser getUser() const;
+        QByteArray& getPublicKey();
 };
 
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);

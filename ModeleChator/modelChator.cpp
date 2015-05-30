@@ -7,7 +7,7 @@
 #include "modelChator.h"
 #include <iostream>
 
-ModelChator::ModelChator() {}
+ModelChator::ModelChator() : _nbRequests(0) {}
 
 void ModelChator::setRsaKeyPair(const RSAPair& rsaKeyPair)
 {
@@ -249,12 +249,22 @@ void ModelChator::removeUser(const quint32 userId, const quint32 roomId)
 void ModelChator::addMembershipRequest(const quint32 roomId, const ModelUser &user,
                                        const QByteArray &publicKey)
 {
-    _requests.append(ModelRequest(_rooms[roomId], user, publicKey));
+    _requests.insert(++_nbRequests, ModelRequest(_nbRequests, _rooms[roomId], user, publicKey));
 }
 
-QList<ModelRequest> ModelChator::getRequests() const
+void ModelChator::deleteRequest(const quint32 requestId)
+{
+    _requests.remove(requestId);
+}
+
+QMap<quint32, ModelRequest> ModelChator::getRequests() const
 {
     return _requests;
+}
+
+ModelRequest& ModelChator::getRequest(const quint32 idRequest)
+{
+    return _requests[idRequest];
 }
 
 ModelMessage& ModelRoom::getMessage(const quint32 idMessage)
@@ -472,9 +482,18 @@ void ModelRoom::setKey(const AESKey& aeskey)
     qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }
 
-ModelRequest::ModelRequest(const ModelRoom& room, const ModelUser& user,
-                           const QByteArray& publicKey) :
-    _room(room), _user(user), _publicKey(publicKey) {}
+ModelRequest::ModelRequest() {}
+
+ModelRequest::ModelRequest(const quint32 id, const ModelRoom& room,
+                           const ModelUser& user, const QByteArray& publicKey) :
+    _id(id), _room(room), _user(user), _publicKey(publicKey) {}
+
+ModelRequest::~ModelRequest() {}
+
+quint32 ModelRequest::getId() const
+{
+    return _id;
+}
 
 ModelRoom ModelRequest::getRoom() const
 {
@@ -484,4 +503,9 @@ ModelRoom ModelRequest::getRoom() const
 ModelUser ModelRequest::getUser() const
 {
     return _user;
+}
+
+QByteArray& ModelRequest::getPublicKey()
+{
+    return _publicKey;
 }

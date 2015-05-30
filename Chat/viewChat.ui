@@ -874,7 +874,6 @@
      <string>Edition</string>
     </property>
     <addaction name="actionCompte"/>
-    <addaction name="actionS_curit"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">

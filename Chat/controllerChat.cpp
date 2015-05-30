@@ -33,6 +33,7 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestShowEditionView()), this, SLOT(showViewEdition()));
     connect(_view, SIGNAL(requestOpenRoomMembership()), this, SLOT(openRoomMembership()));
     connect(_view, SIGNAL(requestShowMembershipRequestsView()), this, SLOT(showMembershipRequestsView()));
+    connect(_viewRequests, SIGNAL(requestProcessRequest(bool)), this, SLOT(processRequest(bool)));
 }
 
 ControllerChat::~ControllerChat()
@@ -106,7 +107,8 @@ void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser&
                                           const QByteArray& publicKey) const
 {
     _model->addMembershipRequest(roomId, user, publicKey);
-    _view->newMembershipRequest();
+    // Add a new request.
+    _view->updateRequests(1);
     _viewRequests->refresh(_model->getRequests());
 }
 
@@ -244,8 +246,43 @@ void ControllerChat::openRoomMembership()
 
 void ControllerChat::showMembershipRequestsView()
 {
-    _viewRequests->show();
     _viewRequests->refresh(_model->getRequests());
+    _viewRequests->show();
+}
+
+void ControllerChat::processRequest(const bool accepted)
+{
+    ModelRequest request = _model->getRequest(_viewRequests->getSelectedRequestId());
+    QByteArray aesKey;
+
+    // If the user has been accepted in the room, we must send this room's secret key to the serveur.
+    // To avoiding security issues, we encrypt this key with the requester-user public key.
+    if (accepted)
+    {
+        AESKey roomSecretKey = request.getRoom().getSecretKey();
+
+        // Prepare a RSA key in which we store the requester-user public key.
+        // In other words, we convert the requester-user public key from QByteArray to RSAPair.
+        RSAPair rsaKey;
+        rsaKey.publicKey.resize(request.getPublicKey().size());
+        memcpy(rsaKey.publicKey.data(), request.getPublicKey().data(), rsaKey.publicKey.size());
+
+        // Encrypt the room's secret key with the requester-user public key (in RSAPair format).
+        _cryptor->encryptWithRSA(roomSecretKey, rsaKey);
+
+        // Put the encrypted room's secret key in a QByteArray, for sending it to the server.
+        QDataStream stream(&aesKey, QIODevice::WriteOnly);
+        stream << QByteArray((char*)roomSecretKey.key.data(), roomSecretKey.key.size()) << QByteArray((char*)roomSecretKey.initializationVector.data(), roomSecretKey.initializationVector.size());
+    }
+
+    // Send to the server the request status.
+    _co->changeRequestStatus(request.getRoom().getIdRoom(), request.getUser(), aesKey, accepted);
+    // Remove the request from the model.
+    _model->deleteRequest(request.getId());
+    // Remove the request from the requests' view.
+    _viewRequests->removeRequest();
+    // Remove a request from the main view.
+    _view->updateRequests(-1);
 }
 
 ViewInscription* ControllerChat::getViewEdition()
