@@ -251,10 +251,14 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
 
 void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
 {
+    qDebug() << "User " << client->id << " souhaite rejoindre salle " << idRoom;
+    
     ModelRoom room = _db.infoRoom(idRoom);
-    /*if (room.getUsers().contains(client->id)) {client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "You are already registered")));}*/
+    
     if (!room.isPrivate())
     {
+        _db.modifyMembership(idRoom, QSet<quint32>({client->id}));
+        room.addUser(client->id);
         ChatorRoom* currentRoom;
         
         if (!_onlineRooms.contains(idRoom))
@@ -280,7 +284,11 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
         rooms.insert(idRoom, room);
         
         QMap<quint32, ModelUser> users;
-        users.insert(client->id, _db.info(client->id));
+        
+        for (quint32 member : room.getUsers())
+        {
+            users.insert(member, _db.info(member));
+        }
         
         QByteArray data = _interpretor->join(rooms, users);
         
@@ -291,6 +299,7 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     }
     else
     {
+        ModelRoom room = _db.infoRoom(idRoom);
         _db.requestAccess(client->id, idRoom);
         
         // Les ennuis commencent
