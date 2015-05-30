@@ -6,7 +6,7 @@
  * Description : Implementation room module controller (see controllerRoom.h for
  * more info).
  */
-
+#include "../../ModeleChator/chatorConstants.h"
 #include "controllerRoom.h"
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput, Cryptor* cryptor)
@@ -179,7 +179,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     QImage logo;
     if (!_viewRoom->roomLogo().isEmpty())
     {
-        logo.load(_viewRoom->roomLogo());
+        logo = QImage(_viewRoom->roomLogo()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     
     else if (!_viewRoom->roomLogo().isEmpty() && _currentRoomId)
@@ -330,8 +330,29 @@ void ControllerRoom::showJoin()
 void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms,
                                const QList<QPair<quint32, QString>>& privateRooms)
 {
-    _viewJoin->setPublicRooms(publicRooms);
-    _viewJoin->setPrivateRooms(privateRooms);  
+    // Remove the rooms the user is already a member of.
+    QList<QPair<quint32, QString>> roomsList;
+    for(QPair<quint32, QString> pair : publicRooms)
+    {
+        if(! _model->containsRoom(pair.first))
+        {
+            roomsList.append(pair);
+        }
+    }
+    
+    _viewJoin->setPublicRooms(roomsList);
+    
+    roomsList.clear();
+    
+    for(QPair<quint32, QString> pair : privateRooms)
+    {
+        if(! _model->containsRoom(pair.first))
+        {
+            roomsList.append(pair);
+        }
+    }
+    _viewJoin->setPrivateRooms(roomsList);
+      
     _viewJoin->loadRooms();
     connectViewJoin();
 }

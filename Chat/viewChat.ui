@@ -549,6 +549,9 @@
                <property name="text">
                 <string>Rejoindre une salle...</string>
                </property>
+               <property name="shortcut">
+                <string>Ctrl+R</string>
+               </property>
                <property name="autoDefault">
                 <bool>false</bool>
                </property>
@@ -564,6 +567,9 @@
               <widget class="QPushButton" name="btn_newRoom">
                <property name="text">
                 <string>Nouvelle salle...</string>
+               </property>
+               <property name="shortcut">
+                <string>Ctrl+N</string>
                </property>
                <property name="default">
                 <bool>false</bool>
@@ -586,6 +592,9 @@
                </property>
                <property name="text">
                 <string>Quitter la salle</string>
+               </property>
+               <property name="shortcut">
+                <string>Ctrl+Q</string>
                </property>
               </widget>
              </item>
@@ -749,6 +758,9 @@
           <property name="text">
            <string>Editer...</string>
           </property>
+          <property name="shortcut">
+           <string>Ctrl+E</string>
+          </property>
           <property name="flat">
            <bool>false</bool>
           </property>
@@ -808,7 +820,7 @@
             <normaloff>:/icons/img/expand.png</normaloff>:/icons/img/expand.png</iconset>
           </property>
           <property name="shortcut">
-           <string>&gt;</string>
+           <string>&gt;, +</string>
           </property>
          </widget>
         </item>
@@ -834,7 +846,7 @@
             <normaloff>:/icons/img/collapse.png</normaloff>:/icons/img/collapse.png</iconset>
           </property>
           <property name="shortcut">
-           <string>&lt;</string>
+           <string>&lt;, -</string>
           </property>
          </widget>
         </item>
@@ -902,13 +914,10 @@
    <property name="text">
     <string>Quitter</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
   </action>
   <action name="actionCompte">
    <property name="text">
-    <string>Compte...</string>
+    <string>Informations utilisateur...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -924,7 +933,7 @@
   </action>
   <action name="actionA_propos">
    <property name="text">
-    <string>A propos...</string>
+    <string>À propos...</string>
    </property>
    <property name="shortcut">
     <string>F1</string>

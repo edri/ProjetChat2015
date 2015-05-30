@@ -399,8 +399,13 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
-        
-        
+        case MessageType::SERVER_ERROR:
+        {
+            ModelError error;
+            stream >> error;
+            _dispatcher.error(error);
+        }
+        break;
         
         default:
         break;

@@ -331,8 +331,12 @@ bool ViewRoom::isEditing()
 
 void ViewRoom::toggleAdmin()
 {
-    quint32 userId = currentSelectedUserId();
-    toggleAdmin(userId, _users->value(userId));
+    // Check if there's a selected user.
+    if(! lst_members->selectionModel()->selectedIndexes().isEmpty())
+    {
+        quint32 userId = currentSelectedUserId();
+        toggleAdmin(userId, _users->value(userId));
+    }
 }
 
 quint32 ViewRoom::currentSelectedUserId()
@@ -410,20 +414,14 @@ void ViewRoom::addUser(quint32 idUser, const QString& userName, const bool isAdm
 
 void ViewRoom::browseImage()
 {
-    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Open Image"), tr("~"), tr("Image Files (*.png *.jpg)")));
+    ldt_logo->setText(QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier"), QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), "Images (*.png *.gif *.jpg *.jpeg);;Autres (*.*)"));
 }
 
 void ViewRoom::remove()
 {
-    if (!editing)
+    if (! lst_members->selectionModel()->selectedIndexes().isEmpty())
     {
         removeUser(currentSelectedUserId());
-    }
-    
-    else
-    {
-        // Add to the banned users.
-        // Will not be implemented...
     }
 }
 

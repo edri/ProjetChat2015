@@ -14,6 +14,16 @@ QDataStream& operator<< (QDataStream& ds, const ModelError& r)
     return ds << (quint32) r._errorType << r._errorString;
 }
 
+ErrorType ModelError::getErrorType() const
+{
+    return _errorType;
+}
+
+QString ModelError::getErrorString() const
+{
+    return _errorString;
+}
+
 QDataStream& operator>> (QDataStream& ds, ModelError& r)
 {
     quint32 errorType;

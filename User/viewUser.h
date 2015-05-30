@@ -37,6 +37,11 @@ public:
     //----------------------------------------------------------------------------------
     void setInfoText(QString information);
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Display an user authentication's error.
+    //----------------------------------------------------------------------------------
+    void authError();
+
 private slots:
 
     //----------------------------------------------------------------------------------
@@ -53,7 +58,7 @@ private slots:
     void on_btn_inscription_clicked();
 
 private:
-    Ui::ViewUser* ui;
+    Ui::ViewUser* _ui;
     //viewInscription is linked to the viewUser
     ViewInscription* _viewInscription;
 

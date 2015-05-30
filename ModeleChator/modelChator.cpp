@@ -178,6 +178,11 @@ const ModelRoom& ModelChator::getRoom(const quint32 idRoom) const
     return _rooms.find(idRoom).value();
 }
 
+bool ModelChator::containsRoom(const quint32 idRoom) const
+{
+    return _rooms.contains(idRoom);
+}
+
 ModelUser& ModelChator::getUser(const quint32 idUser)
 {
     return _users[idUser];

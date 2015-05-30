@@ -15,7 +15,8 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     _model(model),
     _isEditingMessage(false),
     _menu(new QMenu(this)),
-    _nbNotifications(0)
+    _nbNotifications(0),
+    _viewAbout(new ViewAbout(this))
 {
     _ui->setupUi(this);
 
@@ -35,6 +36,7 @@ ViewChat::~ViewChat()
 {
     delete _ui;
     delete _menu;
+    delete _viewAbout;
 }
 
 void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const
@@ -568,4 +570,10 @@ void ViewChat::on_actionCompte_triggered()
 void ViewChat::on_actionDemandes_d_adh_sion_triggered()
 {
     emit requestShowMembershipRequestsView();
+}
+
+void ViewChat::on_actionA_propos_triggered()
+{
+    setDisabled(true);
+    _viewAbout->show();
 }

@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>315</width>
-    <height>327</height>
+    <width>350</width>
+    <height>363</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>350</width>
+    <height>363</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>363</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Connexion</string>
@@ -18,16 +30,13 @@
     <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
       </property>
-      <property name="verticalSpacing">
-       <number>20</number>
-      </property>
-      <item row="0" column="0">
+      <item>
        <widget class="QLabel" name="lbl_userName">
         <property name="enabled">
          <bool>true</bool>
@@ -47,6 +56,8 @@
         <property name="font">
          <font>
           <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -54,7 +65,32 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item>
+       <widget class="QLineEdit" name="ldt_userName">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>5</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="lbl_password">
         <property name="maximumSize">
          <size>
@@ -65,6 +101,8 @@
         <property name="font">
          <font>
           <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -72,11 +110,41 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item>
+       <widget class="QLineEdit" name="ldt_password">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>12</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="lbl_server">
         <property name="font">
          <font>
           <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -84,7 +152,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item>
        <widget class="QLineEdit" name="ldt_server">
         <property name="font">
          <font>
@@ -96,11 +164,29 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="lbl_port">
         <property name="font">
          <font>
           <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -108,7 +194,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item>
        <widget class="QSpinBox" name="spn_port">
         <property name="font">
          <font>
@@ -129,14 +215,23 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QLabel" name="lbl_required">
-        <property name="text">
-         <string>* champs obligatoires</string>
+      <item>
+       <spacer name="verticalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-       </widget>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>12</height>
+         </size>
+        </property>
+       </spacer>
       </item>
-      <item row="5" column="0" colspan="2">
+      <item>
        <widget class="QLabel" name="lbl_info">
         <property name="maximumSize">
          <size>
@@ -156,62 +251,74 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="ldt_userName">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
+      <item>
+       <spacer name="verticalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lbl_required">
+        <property name="text">
+         <string>* champs obligatoires</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="ldt_password">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
-        </property>
-       </widget>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="btn_inscription">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Inscription</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+I</string>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_connexion">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Connexion</string>
+          </property>
+          <property name="shortcut">
+           <string>Return</string>
+          </property>
+          <property name="default">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_connexion">
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Connexion</string>
-      </property>
-      <property name="default">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_inscription">
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Inscription</string>
-      </property>
-      <property name="default">
-       <bool>true</bool>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -220,21 +327,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>315</width>
-     <height>21</height>
+     <width>350</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <tabstops>
-  <tabstop>ldt_userName</tabstop>
-  <tabstop>ldt_password</tabstop>
-  <tabstop>ldt_server</tabstop>
-  <tabstop>spn_port</tabstop>
-  <tabstop>btn_connexion</tabstop>
-  <tabstop>btn_inscription</tabstop>
- </tabstops>
  <resources>
   <include location="icons.qrc"/>
  </resources>

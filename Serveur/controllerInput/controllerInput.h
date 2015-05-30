@@ -9,6 +9,7 @@
 #define CONTROLLER_INPUT_H
 
 #include <QtCore/QObject>
+#include "../Interpretor/packet.h"
 #include "../../ModeleChator/modelChator.h"
 
 class ControllerInput : public QObject
@@ -34,6 +35,7 @@ class ControllerInput : public QObject
     virtual void listRooms(const QList<QPair<quint32, QString>>& publicRooms, const QList<QPair<quint32, QString>>& privateVisibleRooms, QObject* sender) = 0;
     virtual void request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted, QObject* sender) = 0;
     virtual void joinRoom(const quint32 roomId, QObject* sender) {Q_UNUSED(roomId); Q_UNUSED(sender);}
+    virtual void error(const ModelError& error) {Q_UNUSED(error);}
 };
 
 #endif
