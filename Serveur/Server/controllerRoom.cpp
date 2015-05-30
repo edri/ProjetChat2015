@@ -251,10 +251,15 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
 
 void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
 {
+    qDebug() << "User " << client->id << " souhaite rejoindre salle " << idRoom;
+    
     ModelRoom room = _db.infoRoom(idRoom);
-    /*if (room.getUsers().contains(client->id)) {client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "You are already registered")));}*/
+    
     if (!room.isPrivate())
     {
+        QSet<quint32> newUser = newUser << client->id;
+        _db.modifyMembership(idRoom, newUser);
+        room.addUser(client->id);
         ChatorRoom* currentRoom;
         
         if (!_onlineRooms.contains(idRoom))
@@ -280,7 +285,11 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
         rooms.insert(idRoom, room);
         
         QMap<quint32, ModelUser> users;
-        users.insert(client->id, _db.info(client->id));
+        
+        for (quint32 member : room.getUsers())
+        {
+            users.insert(member, _db.info(member));
+        }
         
         QByteArray data = _interpretor->join(rooms, users);
         
@@ -289,9 +298,10 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
             c->socket.sendBinaryMessage(data);
         }
     }
-    else
+    
+    else if (_db.requestAccess(client->id, idRoom))
     {
-        _db.requestAccess(client->id, idRoom);
+        ModelRoom room = _db.infoRoom(idRoom);
         
         // Les ennuis commencent
         ChatorRoom* currentRoom = _onlineRooms[idRoom];
@@ -321,10 +331,13 @@ void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<
 {
     // Construction moche d'une Qmap
     // BERK BERK BERK
-    QMap<quint32, QPair<QByteArray, QByteArray>> usersAndKeys;
+    QMap<quint32, QByteArray> usersAndKeys;
     for (int i = 0; i < usersIds.size(); i++)
     {
-        usersAndKeys.insert(usersIds[i], cryptedKeys[i]);
+        QByteArray aesKey;
+        QDataStream stream(&aesKey, QIODevice::WriteOnly);
+        stream << cryptedKeys[i].first << cryptedKeys[i].second;
+        usersAndKeys.insert(usersIds[i], aesKey);
     }
     // -------
     

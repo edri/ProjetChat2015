@@ -28,7 +28,6 @@ class ControllerOutput
     void createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys);
     void editAccount(const ModelUser& user);
     void sendInfoUser(const ModelUser& user);
-    void join(const quint32 idUser, const quint32 idRoom);
     void leave(const quint32 idUser, const quint32 idRoom);
     void disconnect(const quint32 idUser);
     void publicKey(const QList<QPair<quint32, QByteArray>>& usersIdAndKey);

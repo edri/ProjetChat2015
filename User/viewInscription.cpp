@@ -98,6 +98,11 @@ bool ViewInscription::verifyFields()
         ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
         return false;
     }
+    else if(ui->ldt_userName->text().toLower() == tr("Anonyme").toLower())
+    {
+        ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est un nom réservé par le système.</font>");
+        return false;
+    }
     else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
     {
         ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");

@@ -31,14 +31,14 @@ class ControllerDB
     quint32 createRoom(ModelRoom& room);
     ModelMessage infoMessage(const quint32 id);
     void modifyRoom(const ModelRoom& room);
-    void modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys);
+    void modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers = QSet<quint32>(), const QSet<quint32>& newAdmins = QSet<quint32>(), const QSet<quint32>& removedAdmins = QSet<quint32>(), const QMap<quint32, QByteArray>& usersAndKeys = QMap<quint32, QByteArray>());
     void modifyUser(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey);
     void deleteRoom(const quint32 roomId);
     quint64 saveImage(const QImage& image);
     void leaveRoom(const quint32 idUser, const quint32 idRoom);
     QByteArray getSalt(const QString& pseudo);
     QByteArray getPublicKey(const quint32 idUser);
-    void requestAccess(const quint32 idUser, const quint32 idRoom);
+    bool requestAccess(const quint32 idUser, const quint32 idRoom);
     void setKey(const quint32 idUser, const quint32 idRoom, const QByteArray& aesKey);
     QList<QPair<quint32, QString>> listPublicRooms();
     QList<QPair<quint32, QString>> listPrivateVisibleRooms();

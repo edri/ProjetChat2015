@@ -31,7 +31,7 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         QMap<quint32, ModelUser> users;
         
         // Get the ids of the rooms of the user
-        QSet<quint32> idRooms = user.getRooms();
+        QSet<quint32>& idRooms = user.getRooms();
         for (quint32 idRoom : idRooms)
         {
             // Test

@@ -14,6 +14,7 @@ ClientConnector::ClientConnector() : _isConnected(false)
     connect(&_socket, SIGNAL(connected()), this, SLOT(connected()));
     connect(&_socket, SIGNAL(sslErrors(const QList<QSslError>&)), this, SLOT(sslErrors(const QList<QSslError>&)));
     connect(&_socket, SIGNAL(binaryMessageReceived(const QByteArray&)), this, SIGNAL(binaryMessageReceived(const QByteArray&)));
+    connect(&_socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
 }
 
 void ClientConnector::connectToServer(QString url)
