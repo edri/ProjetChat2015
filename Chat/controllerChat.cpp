@@ -77,6 +77,12 @@ void ControllerChat::loadRoom(ModelRoom& room) const
     _model->addRoom(room);
 }
 
+void ControllerChat::editRoom(const ModelRoom& room)
+{
+    _model->modifyRoom(room.getIdRoom(), room.getName(), room.getLimit(),
+                       room.isPrivate(), room.isVisible(), room.getPicture());
+}
+
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
     QString messageContent;
@@ -160,7 +166,6 @@ void ControllerChat::sendMessage() const
     }
     else
     {
-        //messageContent = QByteArray::fromStdString(_view->getMessageText().toStdString());
         messageContent = _view->getMessageText().toUtf8();
     }
 
