@@ -132,7 +132,9 @@ void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const Q
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
             _ui->tre_rooms->topLevelItem(i)->setText(0, roomName);
-            _ui->tre_rooms->topLevelItem(i)->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+
+            if (!roomPicture.isNull())
+                _ui->tre_rooms->topLevelItem(i)->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
         }
     }
 }
