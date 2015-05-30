@@ -257,7 +257,8 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
     
     if (!room.isPrivate())
     {
-        QSet<quint32> newUser = newUser << client->id;
+        QSet<quint32> newUser;
+        newUser << client->id;
         _db.modifyMembership(idRoom, newUser);
         room.addUser(client->id);
         ChatorRoom* currentRoom;

@@ -537,6 +537,7 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // New users
     if (!newUsers.empty())
     {
+        qDebug() << "Insertion des nouveaux utilisateurs";
         query.prepare("INSERT INTO roomMembership (idRoom, idPrivilege, idUser, roomKey) VALUES (" + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = 'user'), ?, ?)");
         
         ids.clear();
