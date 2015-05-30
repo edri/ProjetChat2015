@@ -10,15 +10,21 @@
 #include <QSslKey>
 #include "../controllerInput/controllerInput.h"
 #include "../Interpretor/interpretor.h"
+#include "../../ModeleChator/chatorConstants.h"
 #include "serverModel.h"
 
 Listener::Listener(quint16 port, Interpretor& interpretor, ServerControllerInput& controllerInput) : _server("Chator", QWebSocketServer::SecureMode, this), _interpretor(interpretor), _controllerInput(controllerInput)
 {
     QSslConfiguration sslConfiguration;
-    QFile certFile(QStringLiteral("cert.pem"));
-    QFile keyFile(QStringLiteral("key.pem"));
-    certFile.open(QIODevice::ReadOnly);
-    keyFile.open(QIODevice::ReadOnly);
+    QFile certFile(SERVER_CERTIFICATE_FILE);
+    QFile keyFile(SERVER_KEY_FILE);    
+    
+    if (!certFile.open(QIODevice::ReadOnly) || !keyFile.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Unable to connect to open the necessary files for SSL/TLS, there's noting to do...";
+        exit(EXIT_FAILURE);
+    }
+    
     QSslCertificate certificate(&certFile, QSsl::Pem);
     QSslKey sslKey(&keyFile, QSsl::Rsa, QSsl::Pem);
     certFile.close();
