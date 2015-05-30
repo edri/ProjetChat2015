@@ -298,10 +298,10 @@ void ControllerRoom::joinRoom(const quint32 idRoom, ChatorClient* client)
             c->socket.sendBinaryMessage(data);
         }
     }
-    else
+    
+    else if (_db.requestAccess(client->id, idRoom))
     {
         ModelRoom room = _db.infoRoom(idRoom);
-        _db.requestAccess(client->id, idRoom);
         
         // Les ennuis commencent
         ChatorRoom* currentRoom = _onlineRooms[idRoom];
