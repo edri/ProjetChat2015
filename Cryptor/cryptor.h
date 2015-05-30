@@ -1,7 +1,7 @@
 /*
      * Created by Jan Purro
      *
-     * Contains fonctions required for security aspect of the chat
+     * Contains functions required for security aspect of the chat
      * such as encryption.
 */
 
