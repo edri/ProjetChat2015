@@ -330,10 +330,13 @@ void ControllerRoom::modifyRoom(ModelRoom& room, QList<quint32> usersIds, QList<
 {
     // Construction moche d'une Qmap
     // BERK BERK BERK
-    QMap<quint32, QPair<QByteArray, QByteArray>> usersAndKeys;
+    QMap<quint32, QByteArray> usersAndKeys;
     for (int i = 0; i < usersIds.size(); i++)
     {
-        usersAndKeys.insert(usersIds[i], cryptedKeys[i]);
+        QByteArray aesKey;
+        QDataStream stream(&aesKey, QIODevice::WriteOnly);
+        stream << cryptedKeys[i].first << cryptedKeys[i].second;
+        usersAndKeys.insert(usersIds[i], aesKey);
     }
     // -------
     

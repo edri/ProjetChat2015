@@ -494,7 +494,7 @@ void ControllerDB::getCryptoData(const quint32 id, QByteArray& keySalt, QByteArr
     qDebug() << "clé privée : "<< QString::fromUtf8(privateKey.toHex());
 }
 
-void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QPair<QByteArray, QByteArray>>& usersAndKeys)
+void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers, const QSet<quint32>& newAdmins, const QSet<quint32>& removedAdmins, const QMap<quint32, QByteArray>& usersAndKeys)
 {
     QSqlQuery query(_db);
     QVariantList ids;
@@ -502,8 +502,7 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // Removed admins
     if (!removedAdmins.empty())
     {
-        query.prepare("UPDATE roomMembership SET idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'user') WHERE idRoom = :idRoom AND idUser = ?");
-        query.bindValue(":idRoom", idRoom);
+        query.prepare("UPDATE roomMembership SET idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'user') WHERE idRoom = " + QString::number(idRoom) + " AND idUser = ?");
         
         for (quint32 id : removedAdmins) {ids << id;}
         query.addBindValue(ids);
@@ -515,8 +514,7 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // Removed users
     if (!removedUsers.empty())
     {
-        query.prepare("DELETE FROM roomMembership WHERE idRoom = :idRoom AND idUser = ?");
-        query.bindValue(":idRoom", idRoom);
+        query.prepare("DELETE FROM roomMembership WHERE idRoom = " + QString::number(idRoom) + " AND idUser = ?");
         
         ids.clear();
         for (quint32 id : removedUsers) {ids << id;}
@@ -529,12 +527,13 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // New users
     if (!newUsers.empty())
     {
-        query.prepare("INSERT INTO roomMembership (idRoom, idPrivilege, idUser) VALUES (" + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = 'user'), ?)");
-        //query.bindValue(":idRoom", idRoom);
+        query.prepare("INSERT INTO roomMembership (idRoom, idPrivilege, idUser, roomKey) VALUES (" + QString::number(idRoom) + ", (SELECT idPrivilege FROM privilege WHERE name = 'user'), ?, ?)");
         
         ids.clear();
-        for (quint32 id : newUsers) {ids << id;}
+        QVariantList keys;
+        for (quint32 id : newUsers) {ids << id; keys << usersAndKeys[id];}
         query.addBindValue(ids);
+        query.addBindValue(keys);
         
         query.execBatch();
         qDebug() << "Ajout des nouveaux utilisateurs: " << query.lastError().text();
@@ -544,8 +543,7 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     // New admins
     if (!newAdmins.empty())
     {
-        query.prepare("UPDATE roomMembership SET idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'admin') WHERE idRoom = :idRoom AND idUser = ?");
-        query.bindValue(":idRoom", idRoom);
+        query.prepare("UPDATE roomMembership SET idPrivilege = (SELECT idPrivilege FROM privilege WHERE name = 'admin') WHERE idRoom = " + QString::number(idRoom) + " AND idUser = ?");
         
         ids.clear();
         for (quint32 id : newAdmins) {ids << id;}
