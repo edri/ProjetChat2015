@@ -30,16 +30,16 @@ void ServerControllerInput::editAccount(ModelUser& user, const QByteArray& passw
     _controllerUser.modifyUser(user, password, privateKey, (ChatorClient*) sender);
 }
 
-void ServerControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)
+void ServerControllerInput::room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
     if (edited)
     {
-        _controllerRoom.modifyRoom(room, usersIds, cryptedKeys, client);
+        _controllerRoom.modifyRoom(room, usersAndKeys, client);
     }
     else
     {
-        _controllerRoom.createRoom(room, usersIds, cryptedKeys, client);
+        _controllerRoom.createRoom(room, usersAndKeys, client);
     }
 }
 
@@ -93,7 +93,8 @@ void ServerControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
 
 void ServerControllerInput::request(const quint32 roomId, const ModelUser& user, const QByteArray& key, const bool accepted, QObject* sender)
 {
-    _controllerRoom.acceptOrDeny(roomId, user.getIdUser(), key, accepted, (ChatorClient*) sender);
+    Q_UNUSED(sender);
+    _controllerRoom.acceptOrDeny(roomId, user.getIdUser(), key, accepted);
 }
 
 void ServerControllerInput::joinRoom(const quint32 roomId, QObject* sender)
