@@ -300,7 +300,7 @@ void ControllerRoom::userId(bool exists, quint32 userId)
 {
     if(!exists)
     {   
-        QMessageBox::information(_viewRoom, tr("Opération impossible") ,tr("Cette utilisateur n'existe pas."));
+        QMessageBox::information(_viewRoom, tr("Opération impossible") ,tr("Cet utilisateur n'existe pas."));
     }
     
     else
