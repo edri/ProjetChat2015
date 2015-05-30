@@ -66,6 +66,12 @@ public:
     void loadRoom(ModelRoom& room) const;
 
     //----------------------------------------------------------------------------------
+    // Goal      : Edit the given room.
+    // Param     : room - room that will be edited, contains the edited data.
+    //----------------------------------------------------------------------------------
+    void editRoom(const ModelRoom& room);
+
+    //----------------------------------------------------------------------------------
     // Goal      : Add or modify a message in the corresponding room in the local
     //             modelChator.
     // Param     : message - message that will be stored or modified.

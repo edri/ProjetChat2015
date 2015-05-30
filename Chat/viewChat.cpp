@@ -15,7 +15,8 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
     _model(model),
     _isEditingMessage(false),
     _menu(new QMenu(this)),
-    _nbNotifications(0)
+    _nbNotifications(0),
+    _viewAbout(new ViewAbout(this))
 {
     _ui->setupUi(this);
 
@@ -35,6 +36,7 @@ ViewChat::~ViewChat()
 {
     delete _ui;
     delete _menu;
+    delete _viewAbout;
 }
 
 void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const
@@ -119,6 +121,23 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
         roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
         roomItem->setForeground(1, QBrush(QColor(255, 85, 0)));
         roomItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+    }
+}
+
+void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture)
+{
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        // Searching for the room to update.
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        {
+            _ui->tre_rooms->topLevelItem(i)->setText(0, roomName);
+
+            if (!roomPicture.isNull())
+                _ui->tre_rooms->topLevelItem(i)->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
+        }
     }
 }
 
@@ -551,4 +570,10 @@ void ViewChat::on_actionCompte_triggered()
 void ViewChat::on_actionDemandes_d_adh_sion_triggered()
 {
     emit requestShowMembershipRequestsView();
+}
+
+void ViewChat::on_actionA_propos_triggered()
+{
+    setDisabled(true);
+    _viewAbout->show();
 }

@@ -171,10 +171,11 @@ void ClientControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
 
 void ClientControllerInput::room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender)
 {
-    Q_UNUSED(room);
     Q_UNUSED(usersAndKeys);
-    Q_UNUSED(edited);
     Q_UNUSED(sender);
+
+    if (edited)
+        _controllerChat->editRoom(room);
 }
 
 void ClientControllerInput::editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender)

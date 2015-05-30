@@ -29,6 +29,7 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         
         QMap<quint32, ModelRoom> rooms;
         QMap<quint32, ModelUser> users;
+        QList<QPair<quint32, QList<QPair<quint32, QByteArray>>>> requests;
         
         // Get the ids of the rooms of the user
         QSet<quint32>& idRooms = user.getRooms();
@@ -41,6 +42,11 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
             // Get the informations of each room
             ModelRoom room = _db.infoRoom(idRoom);
             
+            if (room.getAdmins().contains(id))
+            {
+                requests.append(QPair<quint32, QList<QPair<quint32, QByteArray>>>(idRoom, _db.getRequests(idRoom)));
+            }
+            
             QByteArray aesKeyAndIV = _db.getAesKey(user.getIdUser(), idRoom);
             qDebug() << "La clé de la salle " << idRoom << " fait " << aesKeyAndIV.size();
             QDataStream stream(&aesKeyAndIV, QIODevice::ReadOnly);
@@ -51,14 +57,6 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
             room.setKey(aesKey);
             
             rooms.insert(idRoom, room);
-            
-            
-            // Test
-            QMap<quint32, ModelMessage> mes = room.getMessages();
-            for (ModelMessage mm : mes) 
-            {
-                qDebug() << "Room " << idRoom << ", message " << mm.getIdMessage() << ": " << mm.getContent() << ", créé le " << mm.getDate().toString() << ", edité le " << mm.getEditionDate().toString();
-            }// until here
             
             // Get the ids of all the users present in this room 
             QSet<quint32> roomUsers = room.getUsers();
@@ -84,6 +82,14 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         
         // Inform everyone in the rooms that this client is online
         _room->userConnected(user, client);
+        
+        for (QPair<quint32, QList<QPair<quint32, QByteArray>>>& requestsForRoom : requests)
+        {
+            for (QPair<quint32, QByteArray>& r : requestsForRoom.second)
+            {
+                client->socket.sendBinaryMessage(_interpretor->request(requestsForRoom.first, _db.info(r.first), r.second, false));
+            }
+        }
     }
     else
     {
