@@ -12,6 +12,7 @@
 
 #include "../ModeleChator/modelChator.h"
 #include "../User/viewInscription.h"
+#include "viewabout.h"
 #include <QMainWindow>
 #include <QBitmap>
 #include <QDate>
@@ -35,6 +36,7 @@ private:
     bool _isEditingMessage;
     QMenu* _menu;
     quint32 _nbNotifications;
+    ViewAbout* _viewAbout;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
@@ -53,7 +55,7 @@ public:
     void setConnectedAsText(const QString& user);
 
     //----------------------------------------------------------------------------------
-    // Goal      : Add a room on the list of room in the chat's window.
+    // Goal      : Add a room on the list of rooms in the chat's window.
     // Param     : roomId - Identify the room that is added to the view.
     //             roomName - Name of the room
     //             roomPicture - Picture of the room
@@ -61,6 +63,14 @@ public:
     //----------------------------------------------------------------------------------
     void addRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture,
                  const bool isPrivate);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Edit a room's data in the chat's window.
+    // Param     : roomId - Identify the room that is added to the view.
+    //             roomName - Name of the room
+    //             roomPicture - Picture of the room
+    //----------------------------------------------------------------------------------
+    void modifyRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
 
     //----------------------------------------------------------------------------------
     // Goal      : Add a user in a room, below a room in the list of room.
@@ -159,6 +169,8 @@ private slots:
     void on_actionCompte_triggered();
 
     void on_actionDemandes_d_adh_sion_triggered();
+
+    void on_actionA_propos_triggered();
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;

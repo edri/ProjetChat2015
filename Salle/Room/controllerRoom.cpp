@@ -75,7 +75,7 @@ void ControllerRoom::showRoom(const quint32 idRoom)
     _viewRoom->setRoomName(room.getName());
     _viewRoom->setNbMessage(room.getLimit());
     //viewRoom->setRoomLogo(room.getPicture()); // How to retrieve the path for this image ?
-    _viewRoom->setRoomLogo("image.png"); // Stand in text
+    //_viewRoom->setRoomLogo("image.png"); // Stand in text
     
     // Set the room visibility and privacy.
     _viewRoom->setPrivate(room.isPrivate());
@@ -111,7 +111,7 @@ void ControllerRoom::addUser()
     // Get the name entered by the user in the view.
     QString userName = _viewRoom->userName();
     
-    // Ignore is the user name is empty.
+    // Ignore if the user name is empty.
     if(!userName.isEmpty())
     {
         // Disable the room while waiting for the server answer.
@@ -180,6 +180,11 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     if (!_viewRoom->roomLogo().isEmpty())
     {
         logo.load(_viewRoom->roomLogo());
+    }
+    
+    else if (!_viewRoom->roomLogo().isEmpty() && _currentRoomId)
+    {
+        logo = _model->getRoom(_currentRoomId).getPicture();
     }
     
     AESKey roomKey;

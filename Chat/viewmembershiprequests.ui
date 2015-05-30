@@ -22,7 +22,7 @@
     <widget class="QTreeWidget" name="tre_requests">
      <column>
       <property name="text">
-       <string>#</string>
+       <string>ID</string>
       </property>
      </column>
      <column>
