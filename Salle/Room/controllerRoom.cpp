@@ -183,8 +183,9 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     }
     
     AESKey roomKey;
-    QList<QPair<QByteArray, QByteArray>> cryptedKeys;
-    QList<quint32> usersIds;
+    //QList<QPair<QByteArray, QByteArray>> cryptedKeys;
+    //QList<quint32> usersIds;
+    QMap<quint32, QByteArray> usersAndKeys;
     // If the room is private, the key must be encrypted by the public key of each added memebers.
     // We need those key and demands them to the server.
     if(_viewRoom->isRoomPrivate() && idsAndKeys.isEmpty())
@@ -216,26 +217,26 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         }
         AESKey cryptedKey;
         
-        QPair<QByteArray, QByteArray> newPair;
+        //QPair<QByteArray, QByteArray> newPair;
         RSAPair rsaKeys;
         for(QPair<quint32, QByteArray> pair : idsAndKeys)
         {
+            QByteArray aesKey;
+            QDataStream stream(&aesKey, QIODevice::WriteOnly);
+            
             cryptedKey = roomKey;
-            usersIds.append(pair.first);
+            //usersIds.append(pair.first);
+            
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
             
-            QByteArray tmp3((const char*) rsaKeys.publicKey.data(), rsaKeys.publicKey.size());
-            qDebug() << "Clé public : " << QString::fromUtf8(tmp3.toHex());
-            
             _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
             
-            QByteArray tmp2((const char*) cryptedKey.key.data(), cryptedKey.key.size());
-            qDebug() << "Clé secrète chiffrée : " << QString::fromUtf8(tmp2.toHex());
-            
-            newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
-            newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
-            cryptedKeys.append(newPair);
+            stream << QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size()) << QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
+            //newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
+            //newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
+            //cryptedKeys.append(newPair);
+            usersAndKeys.insert(pair.first, aesKey);
         
         }
         //_cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
@@ -245,7 +246,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     {
         for(quint32 id : _viewRoom->roomUsers())
         {
-           usersIds.append(id);
+           usersAndKeys.insert(id, QByteArray());
         }
     }
     
@@ -254,7 +255,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     roomKey = AESKey();
     ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
-    _controllerOutput->room(newRoom, usersIds, cryptedKeys, _viewRoom->isEditing());
+    _controllerOutput->room(newRoom, usersAndKeys, _viewRoom->isEditing());
     
     //_viewRoom->setDisabled(false);
     // Faut que qqun ferme cette fenêtre à ce moment...

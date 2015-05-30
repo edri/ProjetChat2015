@@ -169,11 +169,10 @@ void ClientControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
     _controllerRoom->listRooms(publicRooms, privateVisibleRooms);
 }
 
-void ClientControllerInput::room(ModelRoom& room, bool edited, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, QObject* sender)
+void ClientControllerInput::room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender)
 {
     Q_UNUSED(room);
-    Q_UNUSED(usersIds);
-    Q_UNUSED(cryptedKeys);
+    Q_UNUSED(usersAndKeys);
     Q_UNUSED(edited);
     Q_UNUSED(sender);
 }

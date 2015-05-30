@@ -122,12 +122,12 @@ QByteArray Interpretor::connected(const ModelUser& user)
     return data;
 }
 
-QByteArray Interpretor::room(const ModelRoom& room, QList<quint32>& usersIds, QList<QPair<QByteArray, QByteArray>>& cryptedKeys, bool edited)
+QByteArray Interpretor::room(const ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, bool edited)
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
-    qDebug() << "Envoi de " << usersIds.size();
-    stream << (quint32) MessageType::ROOM << edited << room << usersIds << cryptedKeys;
+    qDebug() << "Envoi de " << usersAndKeys.size();
+    stream << (quint32) MessageType::ROOM << edited << room << usersAndKeys;
     return data;
 }
 
@@ -325,13 +325,11 @@ void Interpretor::processData(const QByteArray& data)
         {
             bool edited;
             ModelRoom room;
-            QList<quint32> usersIds; 
-            QList<QPair<QByteArray, QByteArray>> cryptedKeys;
+            QMap<quint32, QByteArray> usersAndKeys;
             stream >> edited;
             stream >> room;
-            stream >> usersIds;
-            stream >> cryptedKeys;
-            _dispatcher.room(room, edited, usersIds, cryptedKeys, sender());
+            stream >> usersAndKeys;
+            _dispatcher.room(room, edited, usersAndKeys, sender());
         }
         break;
 

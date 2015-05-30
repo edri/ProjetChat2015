@@ -39,7 +39,7 @@ class ControllerOutput
      * Oui je sais le nom est peut être pas le plus génial qui soit. Mais bon createRoom ou editRoom c'est pas cool non plus, alors tant que c'est le seul truc qui concerne directement les salles autant le garder.
      * Created by Jan Purro on 26.04.2015 14:46 Etided by Jan 26.05.2015 00:15
      */
-    void room(const ModelRoom& room, QList<quint32> usersIds, QList<QPair<QByteArray, QByteArray>> cryptedKeys, bool edited = false);
+    void room(const ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, bool edited = false);
     
     /* Called when asking the server for the ID corresponding to a user name, provided the user exists.
      *  - userName : the inquired user name.
