@@ -89,3 +89,9 @@ void ControllerOutput::joinRoom(const quint32 roomId)
 {
     _connector.send(_interpretor.joinRoom(roomId));
 }
+
+void ControllerOutput::changeRequestStatus(const quint32 roomId, const ModelUser& user,
+                                           const QByteArray& publicKey, const bool accepted)
+{
+    _connector.send(_interpretor.request(roomId, user, publicKey, accepted));
+}

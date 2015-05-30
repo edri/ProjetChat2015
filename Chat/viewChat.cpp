@@ -81,12 +81,6 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
     }
 }
 
-void ViewChat::updateRequests() const
-{
-    _ui->menuNotifications->setTitle(tr("Notifications") + " (" + QString::number(_nbNotifications) + ")");
-    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") + " (" + QString::number(_nbNotifications) + ")");
-}
-
 void ViewChat::setConnectedAsText(const QString& user)
 {
     _ui->lbl_connectedAs->setText("Connecté en tant que <b>" + user + "</b>.");
@@ -357,10 +351,15 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
     }
 }
 
-void ViewChat::newMembershipRequest()
+void ViewChat::updateRequests(const qint32 nbToUpdate)
 {
-    ++_nbNotifications;
-    updateRequests();
+    if ((_nbNotifications += nbToUpdate) < 0)
+        _nbNotifications = 0;
+
+    _ui->menuNotifications->setTitle(tr("Notifications") +
+                                     (_nbNotifications ? " (" + QString::number(_nbNotifications) + ")" : ""));
+    _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") +
+                                            (_nbNotifications ? " (" + QString::number(_nbNotifications) + ")" : ""));
 }
 
 void ViewChat::on_btn_send_clicked()
