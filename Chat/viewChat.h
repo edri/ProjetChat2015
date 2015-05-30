@@ -12,6 +12,7 @@
 
 #include "../ModeleChator/modelChator.h"
 #include "../User/viewInscription.h"
+#include "viewabout.h"
 #include <QMainWindow>
 #include <QBitmap>
 #include <QDate>
@@ -35,6 +36,7 @@ private:
     bool _isEditingMessage;
     QMenu* _menu;
     quint32 _nbNotifications;
+    ViewAbout* _viewAbout;
 
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
@@ -167,6 +169,8 @@ private slots:
     void on_actionCompte_triggered();
 
     void on_actionDemandes_d_adh_sion_triggered();
+
+    void on_actionA_propos_triggered();
 
 signals:
     void requestLoadRoomMessages(const quint32 roomId) const;

@@ -142,7 +142,7 @@ bool ViewInscription::verifyProfileImage() const
     return !image.isNull();
 }
 
-void ViewInscription::closeEvent(QCloseEvent *)
+void ViewInscription::closeEvent(QCloseEvent*)
 {
     // Enable connexion window once you close the inscription window
     emit requestCancelInscription();

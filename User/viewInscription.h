@@ -78,7 +78,7 @@ private slots:
 
 private:
     Ui::viewInscription *_ui;
-    void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent*);
 
     //----------------------------------------------------------------------------------
     // Goal      : Make several field's verification such as password complexity and

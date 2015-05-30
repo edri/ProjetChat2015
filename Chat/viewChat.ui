@@ -933,7 +933,7 @@
   </action>
   <action name="actionA_propos">
    <property name="text">
-    <string>A propos...</string>
+    <string>À propos...</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
