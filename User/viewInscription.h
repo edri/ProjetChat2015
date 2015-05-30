@@ -72,6 +72,8 @@ private slots:
     //----------------------------------------------------------------------------------
     void on_btn_inscription_clicked();
 
+    void on_btn_cancel_clicked();
+
 private:
     Ui::viewInscription *ui;
     void closeEvent(QCloseEvent *);
