@@ -17,6 +17,7 @@ ViewInscription::ViewInscription(QWidget *parent) :
     _edition(false)
 {
     _ui->setupUi(this);
+    _passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
 }
 
 ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
@@ -68,7 +69,7 @@ void ViewInscription::on_btn_path_clicked()
 
 void ViewInscription::on_btn_inscription_clicked()
 {
-    _ui->lbl_info->setText("");
+    //_ui->lbl_info->clear();
 
     if(_edition)
     {
