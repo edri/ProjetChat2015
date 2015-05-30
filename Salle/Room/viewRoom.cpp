@@ -37,8 +37,11 @@
     lbl_member = new QLabel(tr("Membres"));
     
     ldt_name = new QLineEdit("");
+    ldt_name->setMaxLength(32);
     ldt_logo = new QLineEdit("");
+    ldt_logo->setMaxLength(256);
     ldt_member = new QLineEdit("");
+    ldt_member->setMaxLength(16);
     ldt_member->setPlaceholderText(tr("Entrez le nom du nouveau member"));
     
     sbx_number = new QSpinBox();
