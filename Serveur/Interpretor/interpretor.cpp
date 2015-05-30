@@ -403,7 +403,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             ModelError error;
             stream >> error;
-            // Envoyer cet objet quelque part
+            _dispatcher.error(error);
         }
         break;
         
