@@ -91,6 +91,11 @@ class ModelChator
         ModelRoom& getRoom(const quint32 idRoom);
         const ModelRoom& getRoom(const quint32 idRoom) const;
         
+        //----------------------------------------------------------------------------------
+        // Goal      : Returns true if the room is the model fals otherwise
+        // Param     : The id of the room the model is checked for.
+        // Created by Jan Purro, on 30.05.2015
+        //----------------------------------------------------------------------------------
         bool containsRoom(const quint32 idRoom) const;
         
 
