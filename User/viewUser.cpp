@@ -89,18 +89,3 @@ void ViewUser::setInfoText(QString information)
 {
     ui->lbl_info->setText(information);
 }
-
-void ViewUser::on_ldt_userName_returnPressed()
-{
-    ui->btn_connexion->click();
-}
-
-void ViewUser::on_ldt_password_returnPressed()
-{
-    ui->btn_connexion->click();
-}
-
-void ViewUser::on_ldt_server_returnPressed()
-{
-    ui->btn_connexion->click();
-}

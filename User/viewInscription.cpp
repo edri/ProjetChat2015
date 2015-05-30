@@ -13,51 +13,47 @@
 
 ViewInscription::ViewInscription(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::viewInscription)
+    _ui(new Ui::viewInscription),
+    _edition(false)
 {
-    edition = false;
-    passwordRequirement = "<p>Votre mot de passe doit contenir au moins 8 caractère et:</p> <p>une miniscule, une majuscule, un chiffre et un caractère spécial.</p>";
-
-    ui->setupUi(this);
-    ui->btn_question->setEnabled(false);
-    ui->btn_question->setToolTip(passwordRequirement);
+    _ui->setupUi(this);
 }
 
 ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
     QMainWindow(parent),
-    ui(new Ui::viewInscription)
+    _ui(new Ui::viewInscription)
 {
     //We modify the original View in order to have the edition view
-    edition = true;
+    _edition = true;
     //this->currentUser = currentUser;
 
-    ui->setupUi(this);
+    _ui->setupUi(this);
 
     this->setWindowTitle("Compte");
 
-    ui->btn_question->setVisible(false);
-    ui->btn_inscription->setVisible(false);
+    _ui->btn_question->setVisible(false);
+    _ui->btn_inscription->setVisible(false);
 
-    ui->lbl_userName->setText("Nom d'utilisateur");
-    ui->ldt_userName->setDisabled(true);
-    ui->ldt_firstName->setDisabled(true);
-    ui->ldt_lastName->setDisabled(true);
+    _ui->lbl_userName->setText("Nom d'utilisateur");
+    _ui->ldt_userName->setDisabled(true);
+    _ui->ldt_firstName->setDisabled(true);
+    _ui->ldt_lastName->setDisabled(true);
 
-    ui->lbl_password->setVisible(false);
-    ui->ldt_password->setVisible(false);
-    ui->lbl_passwordConf->setVisible(false);
-    ui->ldt_passwordConf->setVisible(false);
-    ui->ldt_profilPicture->setVisible(false);
-    ui->btn_path->setVisible(false);
+    _ui->lbl_password->setVisible(false);
+    _ui->ldt_password->setVisible(false);
+    _ui->lbl_passwordConf->setVisible(false);
+    _ui->ldt_passwordConf->setVisible(false);
+    _ui->ldt_profilPicture->setVisible(false);
+    _ui->btn_path->setVisible(false);
     //ui->lbl_password->setText("Nouveau mot de passe");
     //ui->lbl_passwordConf->setText("Veuillez retaper le nouveau mot de passe");
 
-    ui->lbl_mendatory->setText("");
+    _ui->lbl_mendatory->setText("");
 }
 
 ViewInscription::~ViewInscription()
 {
-    delete ui;
+    delete _ui;
 }
 
 
@@ -66,24 +62,24 @@ void ViewInscription::on_btn_path_clicked()
     // Browse the files in order to find a picture
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), "Images (*.png *.gif *.jpg *.jpeg);;Autres (*.*)");
 
-    ui->ldt_profilPicture->setText(fichier);
+    _ui->ldt_profilPicture->setText(fichier);
     // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
 }
 
 void ViewInscription::on_btn_inscription_clicked()
 {
-    ui->lbl_info->setText("");
+    _ui->lbl_info->setText("");
 
-    if(edition)
+    if(_edition)
     {
         emit requestEditUser();
-        ui->lbl_info->setText("Modification envoyée au serveur");
+        _ui->lbl_info->setText("Modification envoyée au serveur");
 
     }
     else if(verifyFields())
     {
         emit requestGetNewUser();
-        ui->lbl_info->setText("Prêt à être envoyé au serveur");
+        _ui->lbl_info->setText("Prêt à être envoyé au serveur");
     }
 }
 
@@ -94,40 +90,40 @@ bool ViewInscription::verifyFields()
     QRegExp userNameRestriction("^[a-zA-Z0-9_ -]*$");
 
     // Verify the fields
-    if(ui->ldt_userName->text().isEmpty() || ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty() ||
-       ui->ldt_password->text().isEmpty() || ui->ldt_passwordConf->text().isEmpty())
+    if(_ui->ldt_userName->text().isEmpty() || _ui->ldt_password->text().isEmpty() || _ui->ldt_passwordConf->text().isEmpty() ||
+       _ui->ldt_password->text().isEmpty() || _ui->ldt_passwordConf->text().isEmpty())
     {
-        ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
+        _ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
         return false;
     }
-    else if(!userNameRestriction.exactMatch(ui->ldt_userName->text()))
+    else if(!userNameRestriction.exactMatch(_ui->ldt_userName->text()))
     {
-        ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
+        _ui->lbl_info->setText("<font color='red'>Le nom d'utilisateur doit contenir des chiffres, des lettres ou - et _</font>");
         return false;
     }
-    else if(ui->ldt_userName->text().toLower() == tr("Anonyme").toLower())
+    else if(_ui->ldt_userName->text().toLower() == tr("Anonyme").toLower())
     {
-        ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est un nom réservé par le système.</font>");
+        _ui->lbl_info->setText("<font color='red'>Ce nom d'utilisateur est un nom réservé par le système.</font>");
         return false;
     }
-    else if(ui->ldt_password->text() != ui->ldt_passwordConf->text())
+    else if(_ui->ldt_password->text() != _ui->ldt_passwordConf->text())
     {
-        ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
+        _ui->lbl_info->setText("<font color='red'>Le mot de passe ne correspond pas.</font>");
         return false;
     }
-    else if(ui->ldt_password->text() == ui->ldt_userName->text())
+    else if(_ui->ldt_password->text() == _ui->ldt_userName->text())
     {
-        ui->lbl_info->setText("<font color='red'>Votre mot de passe doit être différent de votre nom d'utilisateur.</font>");
+        _ui->lbl_info->setText("<font color='red'>Votre mot de passe doit être différent de votre nom d'utilisateur.</font>");
         return false;
     }
-    else if(!passwordRestriction.exactMatch(ui->ldt_password->text()))
+    else if(!passwordRestriction.exactMatch(_ui->ldt_password->text()))
     {
-        ui->lbl_info->setText("<font color='red'>" + passwordRequirement + "</font>");
+        _ui->lbl_info->setText("<font color='red'>" + _passwordRequirement + "</font>");
         return false;
     }
-    else if(!ui->ldt_profilPicture->text().isEmpty() && !verifyProfileImage())
+    else if(!_ui->ldt_profilPicture->text().isEmpty() && !verifyProfileImage())
     {
-        ui->lbl_info->setText("<font color='red'>Image spécifiée incorrecte</font>");
+        _ui->lbl_info->setText("<font color='red'>Image spécifiée incorrecte</font>");
         return false;
     }
     else
@@ -141,7 +137,7 @@ bool ViewInscription::verifyProfileImage() const
 
     return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));*/
     
-    QImage image(ui->ldt_profilPicture->text());
+    QImage image(_ui->ldt_profilPicture->text());
     
     return !image.isNull();
 }
@@ -155,43 +151,50 @@ void ViewInscription::closeEvent(QCloseEvent *)
 
 QString ViewInscription::getFirstName() const
 {
-    return ui->ldt_firstName->text();
+    return _ui->ldt_firstName->text();
 }
 
 QString ViewInscription::getLastName() const
 {
-    return ui->ldt_lastName->text();
+    return _ui->ldt_lastName->text();
 }
 
 QString ViewInscription::getUserName() const
 {
-    return ui->ldt_userName->text();
+    return _ui->ldt_userName->text();
 }
 
 QString ViewInscription::getPassword() const
 {
-    return ui->ldt_password->text();
+    return _ui->ldt_password->text();
 }
 
 QImage ViewInscription::getProfileImage() const
 {
     if (!verifyProfileImage()){return QImage();}
     
-    return QImage(ui->ldt_profilPicture->text()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    return QImage(_ui->ldt_profilPicture->text()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void ViewInscription::setCurrentUser(ModelUser* currentUser)
 {
     //Uptade the view with the information about the user
-    this->currentUser = currentUser;
+    this->_currentUser = currentUser;
 
-    ui->ldt_userName->setText(currentUser->getUserName());
-    ui->ldt_firstName->setText(currentUser->getFirstName());
-    ui->ldt_lastName->setText(currentUser->getLastName());
-    ui->lbl_profilPicture->setPixmap(QPixmap::fromImage(currentUser->getImage()));
+    _ui->ldt_userName->setText(currentUser->getUserName());
+    _ui->ldt_firstName->setText(currentUser->getFirstName());
+    _ui->ldt_lastName->setText(currentUser->getLastName());
+    _ui->lbl_profilPicture->setPixmap(QPixmap::fromImage(currentUser->getImage()));
 }
 
 void ViewInscription::on_btn_cancel_clicked()
 {
     close();
+}
+
+void ViewInscription::on_btn_question_clicked()
+{
+    QMessageBox::information(this, tr("Informations sur le mot de passe"),
+                             "Votre mot de passe doit contenir au moins 8 caractères, dont une miniscule, une majuscule, un chiffre et un caractère spécial.",
+                            QMessageBox::Ok);
 }

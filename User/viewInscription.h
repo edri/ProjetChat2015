@@ -35,7 +35,7 @@ public:
     // Goal      : Constructor for the view used for inscription
     // Param     : currentUser - Contain information about the current user
     //----------------------------------------------------------------------------------
-    ViewInscription(QWidget *parent, ModelUser* currentUser);
+    ViewInscription(QWidget *parent, ModelUser* _currentUser);
 
     ~ViewInscription();
 
@@ -54,7 +54,7 @@ public:
     //             edition view.
     // Param     : currentUser - Current user connected
     //----------------------------------------------------------------------------------
-    void setCurrentUser(ModelUser* currentUser);
+    void setCurrentUser(ModelUser* _currentUser);
 
 private slots:
     //----------------------------------------------------------------------------------
@@ -74,8 +74,10 @@ private slots:
 
     void on_btn_cancel_clicked();
 
+    void on_btn_question_clicked();
+
 private:
-    Ui::viewInscription *ui;
+    Ui::viewInscription *_ui;
     void closeEvent(QCloseEvent *);
 
     //----------------------------------------------------------------------------------
@@ -92,9 +94,9 @@ private:
     //----------------------------------------------------------------------------------
     bool verifyProfileImage() const;
 
-    QString passwordRequirement;
-    bool edition;
-    ModelUser* currentUser;
+    QString _passwordRequirement;
+    bool _edition;
+    ModelUser* _currentUser;
 
 signals:
     //----------------------------------------------------------------------------------
