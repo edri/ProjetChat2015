@@ -1,0 +1,8 @@
+Nombres en orange :	plus long que ce qui avait été planifié.
+Nombres en vert :	plus court que ce qui avait été planifié.
+Nombres en bleu :	n'était pas planifié dans la planification initiale
+Nombres en noir :	a suivi la planification initiale.
+
+Certaines tâches se sont étendues en longueur (comme le module utilisateur dans la conception des fonctionnalités de bases), car il a fallu se mettre d'accord sur certains points et y implémenter la sécurité.
+Même si le schéma pourrait paraître très (trop) orange à premier vue, il ne s'agit pas forcément d'un point néfaste : il s'agit pour beaucoup de tâches de la partie sécurité qui nous a pris un peu plus de temps que prévu, mais nous sommes arrivés à nos fins ; nous avons aussi comptabilisé les formations, dans ces tâches.
+La partie "Conception des fonctionnalités avancées -> Serveur -> Adaptations" a dû être ajoutée, afin de pouvoir afficher les adaptations qui ont dû être faites au serveur, du côté sécuritaire.
