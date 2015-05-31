@@ -522,12 +522,12 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     
     
     // Removed users
-    if (!removedUsers.empty())
+    if (!removedUsers.empty() || !newUsers.empty())
     {
         query.prepare("DELETE FROM roomMembership WHERE idRoom = " + QString::number(idRoom) + " AND idUser = ?");
         
         ids.clear();
-        for (quint32 id : removedUsers) {ids << id;}
+        for (quint32 id : removedUsers + newUsers) {ids << id;}
         query.addBindValue(ids);
         
         query.execBatch();
