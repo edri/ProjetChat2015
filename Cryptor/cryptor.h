@@ -40,7 +40,7 @@ typedef vector<unsigned char> Hash;
 typedef vector<unsigned char> CypherText;
 
 // Abstraction for the AES keys. contains both the key and the initialization 
-// vector.
+// vector, needed to initialize encryption.
 struct AESKey
 {
     vector<unsigned char> key;
@@ -83,17 +83,24 @@ class Cryptor
      */ 
     Salt generateSalt(const unsigned saltLength = SALT_LENGTH/8);
     
-    /* Generate the hash for the given password and salt. The 
+    /* Generate the hash for the given password and salt.
      * password : the password to be hashed.
      * salt : the added salt to avoid tables attack.
      * numberOfRounds : the number of rounds to generate the hash. Using a high
      * number of round avoid brute force attack.*/
     Hash generateHash(const string& password, const Salt& salt,
          const unsigned numberOfRounds = NUMBER_OF_HASH_ROUNDS);
-         
+    
+    /* Generate an AES key from a Hash. 
+     * hash : the hash from which the AESKey will be created.*/
     AESKey generateAESKeyFromHash(const Hash& hash);
     
+    /* Returns the result of the encryption of the message with the given AES
+     * key.
+     * message : the message to encrypt.
+     * encryptionKey : the key used for encrpytion.*/
     CypherText encryptWithAES(const string& message, const AESKey& encryptionKey);
+    
     string decryptWithAES(const CypherText& cypherMessage, const AESKey& encryptionKey);
     int encryptWithAES(RSAPair& key, const AESKey& encryptionKey);
     int decryptWithAES(RSAPair& key, const AESKey& encryptionKey);    
