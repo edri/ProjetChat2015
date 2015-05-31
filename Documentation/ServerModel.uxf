@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>190</x>
+      <y>130</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*ChatorClient*
+--
+id : quint32
+logged : bool
+socket : QWebSocket
+rooms : QSet&lt;ChatorRooms*&gt;
+
+lt=-
+bg=#FF6600
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>550</x>
+      <y>130</y>
+      <w>230</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>*ChatorRoom*
+--
+id : quint32
+clients : QSet&lt;ChatorClient*&gt;
+
+lt=-
+bg=#FF6600
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>130</y>
+      <w>230</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>210.0;10.0;160.0;10.0;160.0;120.0;10.0;120.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>130</y>
+      <w>320</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0;60.0;140.0;300.0;140.0;300.0;60.0</additional_attributes>
+  </element>
+</diagram>
