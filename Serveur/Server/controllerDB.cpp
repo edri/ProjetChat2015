@@ -342,13 +342,18 @@ void ControllerDB::modifyUser(const ModelUser& user, const QByteArray& password,
     profilePicture.close();
 }
 
-// A FAIRE AVEC LES PREPARED
 void ControllerDB::modifyRoom(const ModelRoom& room)
 {
     QSqlQuery query(_db);
-    query.exec("UPDATE room (name, limitOfStoredMessages) VALUES (\"" + room.getName() + "\", " + QString::number(room.getLimit()) + ")");
+    query.prepare("UPDATE room SET name = :name, limitOfStoredMessages = :limit WHERE idRoom = :idRoom");
+    query.bindValue(":name", room.getName());
+    query.bindValue(":limit", room.getLimit());
+    query.bindValue(":idRoom", room.getIdRoom());
+    query.exec();
     
-    query.exec("SELECT picture FROM room WHERE idRoom = " + QString::number(room.getIdRoom()));
+    query.exec("SELECT picture FROM room WHERE idRoom = :idRoom");
+    query.bindValue(":idRoom", room.getIdRoom());
+    query.exec();
     query.first();
     
     QFile profilePicture(query.record().value("picture").toString());
