@@ -30,6 +30,7 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     connect(_controllerChat->getViewEdition(), SIGNAL(requestEditUser()), this, SLOT(editUser()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
     connect(_view->getViewInscription(), SIGNAL(requestCancelInscription()), this, SLOT(cancelInscription()));
+    connect(cc, SIGNAL(disconnected()), SLOT(serverDisconnected()));
 }
 
 ControllerUser::~ControllerUser()
@@ -175,4 +176,9 @@ void ControllerUser::cancelInscription()
 void ControllerUser::authError()
 {
     _view->authError();
+}
+
+void ControllerUser::serverDisconnected()
+{
+    _connected = false;
 }

@@ -34,6 +34,9 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestOpenRoomMembership()), this, SLOT(openRoomMembership()));
     connect(_view, SIGNAL(requestShowMembershipRequestsView()), this, SLOT(showMembershipRequestsView()));
     connect(_viewRequests, SIGNAL(requestProcessRequest(bool)), this, SLOT(processRequest(bool)));
+    // Occurs when the serveur's connexion has been lost.
+    connect(cc, SIGNAL(disconnected()), SLOT(serverDisconnected()));
+    connect(_view, SIGNAL(requestCloseApplication()), this, SLOT(closeApplication()));
 }
 
 ControllerChat::~ControllerChat()
@@ -301,6 +304,17 @@ void ControllerChat::processRequest(const bool accepted)
     _viewRequests->removeRequest();
     // Remove a request from the main view.
     _view->updateRequests(-1);
+}
+
+void ControllerChat::serverDisconnected()
+{
+    if (!_view->isHidden())
+        _view->serverDisconnected();
+}
+
+void ControllerChat::closeApplication()
+{
+    exit(0);
 }
 
 ViewInscription* ControllerChat::getViewEdition()
