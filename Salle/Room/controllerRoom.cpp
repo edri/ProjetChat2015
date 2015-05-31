@@ -259,6 +259,11 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     // Construct a ModelRoom object.
     QMap<quint32, ModelMessage> messages;
+    if(_viewRoom->isEditing())
+    {
+        messages = _model->getRoom(_currentRoomId).getMessages();
+    }
+    
     roomKey = AESKey();
     ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
