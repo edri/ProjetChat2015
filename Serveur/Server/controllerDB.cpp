@@ -342,13 +342,18 @@ void ControllerDB::modifyUser(const ModelUser& user, const QByteArray& password,
     profilePicture.close();
 }
 
-// A FAIRE AVEC LES PREPARED
 void ControllerDB::modifyRoom(const ModelRoom& room)
 {
     QSqlQuery query(_db);
-    query.exec("UPDATE room (name, limitOfStoredMessages) VALUES (\"" + room.getName() + "\", " + QString::number(room.getLimit()) + ")");
+    query.prepare("UPDATE room SET name = :name, limitOfStoredMessages = :limit WHERE idRoom = :idRoom");
+    query.bindValue(":name", room.getName());
+    query.bindValue(":limit", room.getLimit());
+    query.bindValue(":idRoom", room.getIdRoom());
+    query.exec();
     
-    query.exec("SELECT picture FROM room WHERE idRoom = " + QString::number(room.getIdRoom()));
+    query.exec("SELECT picture FROM room WHERE idRoom = :idRoom");
+    query.bindValue(":idRoom", room.getIdRoom());
+    query.exec();
     query.first();
     
     QFile profilePicture(query.record().value("picture").toString());
@@ -522,12 +527,12 @@ void ControllerDB::modifyMembership(const quint32 idRoom, const QSet<quint32>& n
     
     
     // Removed users
-    if (!removedUsers.empty())
+    if (!removedUsers.empty() || !newUsers.empty())
     {
         query.prepare("DELETE FROM roomMembership WHERE idRoom = " + QString::number(idRoom) + " AND idUser = ?");
         
         ids.clear();
-        for (quint32 id : removedUsers) {ids << id;}
+        for (quint32 id : removedUsers + newUsers) {ids << id;}
         query.addBindValue(ids);
         
         query.execBatch();
