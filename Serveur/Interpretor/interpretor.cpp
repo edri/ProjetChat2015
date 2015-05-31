@@ -276,16 +276,6 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
-        case MessageType::USER_JOIN:
-        {
-            quint32 idUser;
-            quint32 idRoom;
-            stream >> idUser >> idRoom;
-            //_dispatcher.userJoin(idUser, idRoom, sender());
-            // IL FAUT FAIRE QQCH ICI LOL
-        }
-        break;
-        
         case MessageType::JOIN:
         {
             QMap<quint32, ModelRoom> rooms;
