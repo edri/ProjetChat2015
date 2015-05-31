@@ -16,7 +16,10 @@ ViewUser::ViewUser(QWidget *parent) :
     _ui->setupUi(this);
     //ui->ldt_password->setValidator(new QIntValidator());
     // Initialize a new view for the inscription
-    this->_viewInscription = new ViewInscription(this);
+    _viewInscription = new ViewInscription(this);
+
+    _timerConnexion = new QTimer(this);
+    connect(_timerConnexion, SIGNAL(timeout()), this, SLOT(errorServerUnreachable()));
 }
 
 ViewUser::~ViewUser()
@@ -36,6 +39,9 @@ void ViewUser::on_btn_connexion_clicked()
     else
     {
         _ui->lbl_info->setText("Connexion au serveur...");
+        setDisabled(true);
+
+        _timerConnexion->start(3000);
         // Send the data
         emit requestGetIds(true);
         // Les données doivent être confirmées
@@ -53,7 +59,9 @@ void ViewUser::on_btn_inscription_clicked()
     else
     {
         _ui->lbl_info->setText("Connexion au serveur...");
+        setDisabled(true);
 
+        _timerConnexion->start(3000);
         // Connect to server in order to create a new account
         emit requestGetIds(false);
     }
@@ -94,6 +102,21 @@ void ViewUser::authError()
 {
     QMessageBox::critical(this, tr("Erreur d'authentification"),
                           tr("Vous devez entrer un identifiant et un mot de passe corrects."),
+                          QMessageBox::Ok);
+    _ui->lbl_info->clear();
+    setEnabled(true);
+}
+
+void ViewUser::stopTimer()
+{
+    _timerConnexion->stop();
+}
+
+void ViewUser::errorServerUnreachable()
+{
+    _timerConnexion->stop();
+    QMessageBox::critical(this, tr("Erreur de connexion"),
+                          tr("Impossible de se connecter au serveur. Veuillez vérifier les informations de connexion, et si le problème persiste, réessayez dans un moment."),
                           QMessageBox::Ok);
     _ui->lbl_info->clear();
     setEnabled(true);
