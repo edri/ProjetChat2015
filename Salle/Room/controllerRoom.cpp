@@ -182,7 +182,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         logo = QImage(_viewRoom->roomLogo()).scaled(PICTURE_SIZE, PICTURE_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     
-    else if (!_viewRoom->roomLogo().isEmpty() && _currentRoomId)
+    else if (_viewRoom->roomLogo().isEmpty() && _viewRoom->isEditing())
     {
         logo = _model->getRoom(_currentRoomId).getPicture();
     }
@@ -262,8 +262,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     
     _controllerOutput->room(newRoom, usersAndKeys, _viewRoom->isEditing());
     
-    //_viewRoom->setDisabled(false);
-    // Faut que qqun ferme cette fenêtre à ce moment...
+    _viewRoom->close();
 }
 
 bool ControllerRoom::isValidImage(const QString& path)
