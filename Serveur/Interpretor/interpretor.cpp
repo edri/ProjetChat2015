@@ -158,15 +158,6 @@ QByteArray Interpretor::joinRoom(const quint32 roomId)
     return data;
 }
 
-//QByteArray Interpretor::leaveRoom(const quint32 roomId)
-//{
-    //QByteArray data;
-    //QDataStream stream(&data, QIODevice::WriteOnly);
-
-    //stream << (quint32) MessageType::LEAVE << roomId;
-    //return data;
-//}
-
 QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
 {
     QByteArray data;
