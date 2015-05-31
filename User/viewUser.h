@@ -42,6 +42,12 @@ public:
     //----------------------------------------------------------------------------------
     void authError();
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Stop the connexion timer, because the connexion has been successfully
+    //             established.
+    //----------------------------------------------------------------------------------
+    void stopTimer();
+
 private slots:
 
     //----------------------------------------------------------------------------------
@@ -57,10 +63,19 @@ private slots:
     //----------------------------------------------------------------------------------
     void on_btn_inscription_clicked();
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Occurs when the client cannot connect to the serveur, at the end of
+    //             the connexion's timer.
+    //----------------------------------------------------------------------------------
+    void errorServerUnreachable();
+
 private:
     Ui::ViewUser* _ui;
     //viewInscription is linked to the viewUser
     ViewInscription* _viewInscription;
+    // The timer which will be lauch at connexion, and will indicate if the server is
+    // unreachable.
+    QTimer* _timerConnexion;
 
 signals:
 

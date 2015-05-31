@@ -56,7 +56,6 @@ void ControllerUser::connectToServer(bool fromBtnConnection)
 
         // Connection to the servers
         _cc->connectToServer(server + ":" + port);
-        _connected = true;
     }
     // if the user has already a socket open with the server, no need to
     // open a connection again. We can skip to next step.
@@ -66,8 +65,11 @@ void ControllerUser::connectToServer(bool fromBtnConnection)
     }
 }
 
-void ControllerUser::auth() const
+void ControllerUser::auth()
 {
+    _view->stopTimer();
+    _connected = true;
+
     if(_fromBtnConnection)
     {
         qDebug() << "Demande du sel";
