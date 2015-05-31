@@ -97,6 +97,13 @@ public slots :
     // Close and destroy viewJoin. Should only be called if a window is open.
     void cancelJoin();
 
+    // Request to reactivate the chat windows.
+    void askReactivateChatWindows();
+
+signals:
+    // Reactivate the chat windows.
+    void reactivateChatWindows();
+
 };
 
 

@@ -37,6 +37,8 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
     // Occurs when the serveur's connexion has been lost.
     connect(cc, SIGNAL(disconnected()), SLOT(serverDisconnected()));
     connect(_view, SIGNAL(requestCloseApplication()), this, SLOT(closeApplication()));
+    // When a room windows has been closed we reactivate the chat view.
+    connect(_controllerRoom, SIGNAL(reactivateChatWindows()), SLOT(reactivateWindows()));
 }
 
 ControllerChat::~ControllerChat()
@@ -315,6 +317,11 @@ void ControllerChat::serverDisconnected()
 {
     if (!_view->isHidden())
         _view->serverDisconnected();
+}
+
+void ControllerChat::reactivateWindows()
+{
+    _view->setEnabled(true);
 }
 
 void ControllerChat::closeApplication()

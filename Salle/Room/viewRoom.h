@@ -96,6 +96,8 @@ signals:
     void edit();
     // Signal emited when the user wishes to cancel the operation.
     void cancel();
+    // Signal emited when the user closed the view.
+    void reactivateChatWindows();
     
 private:
 
@@ -140,6 +142,8 @@ private:
     
     QListView* lst_members;
     QStandardItemModel* sim_members;
+
+    void closeEvent(QCloseEvent*);
 };
 
 #endif //CHAT_VIEW_ROOM_H

@@ -30,6 +30,7 @@ void ControllerRoom::connectViewRoom()
     connect(_viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
     connect(_viewRoom, SIGNAL(create()), this, SLOT(createRoom()));
     connect(_viewRoom, SIGNAL(edit()), this, SLOT(editRoom()));
+    connect(_viewRoom, SIGNAL(reactivateChatWindows()), this, SLOT(askReactivateChatWindows()));
 }
 
 void ControllerRoom::connectViewJoin()
@@ -37,6 +38,7 @@ void ControllerRoom::connectViewJoin()
     // Connect the view signals with the controller's slots.
     connect(_viewJoin, SIGNAL(join(quint32)), this, SLOT(joinRoom(quint32)));
     connect(_viewJoin, SIGNAL(cancel()), this, SLOT(cancelJoin()));
+    connect(_viewJoin, SIGNAL(reactivateChatWindows()), this, SLOT(askReactivateChatWindows()));
 }
 
 void ControllerRoom::showRoom()
@@ -292,6 +294,11 @@ void ControllerRoom::cancelJoin()
 {
     // Close and delete the viewJoin (the viewJoin is set to be destroyed when closed).
     _viewJoin->close();
+}
+
+void ControllerRoom::askReactivateChatWindows()
+{
+    emit reactivateChatWindows();
 }
 
 void ControllerRoom::joinRoom(quint32 roomId)
