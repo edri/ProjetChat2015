@@ -71,6 +71,7 @@ public:
     void removeUser(const quint32 userId);
     
     void disablePrivacy();
+    void focusAddUser();
     
 public slots:
     // If the radio buttons for the visibility of private rooms are enabled will
