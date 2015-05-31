@@ -172,9 +172,9 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
 
                 if (isConnected)
                     userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
-
-                break;
             }
+
+            break;
         }
     }
 }

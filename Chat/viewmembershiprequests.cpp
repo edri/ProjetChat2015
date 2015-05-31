@@ -42,9 +42,28 @@ void ViewMembershipRequests::refresh(const QMap<quint32, ModelRequest>& requests
     }
 }
 
-void ViewMembershipRequests::removeRequest()
+void ViewMembershipRequests::removeRequest(const qint32 requestId)
 {
-    _ui->tre_requests->takeTopLevelItem(_ui->tre_requests->currentIndex().row());
+    // If no ID is given, remove the selected request.
+    if (requestId == -1)
+    {
+        _ui->tre_requests->takeTopLevelItem(_ui->tre_requests->currentIndex().row());
+    }
+    // Else remove the given ID one.
+    else
+    {
+        quint32 nbRequests = _ui->tre_requests->topLevelItemCount();
+
+        for (quint32 i = 0; i < nbRequests; ++i)
+        {
+            if (_ui->tre_requests->topLevelItem(i)->data(0, Qt::UserRole).toInt() == requestId)
+            {
+                _ui->tre_requests->takeTopLevelItem(i);
+                break;
+            }
+        }
+    }
+
     setDisabled(false);
 
     if (!_ui->tre_requests->topLevelItemCount())

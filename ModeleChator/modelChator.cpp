@@ -263,6 +263,19 @@ void ModelChator::deleteRequest(const quint32 requestId)
     _requests.remove(requestId);
 }
 
+qint32 ModelChator::searchRequest(const quint32 roomId, const quint32 userId)
+{
+    for (ModelRequest request : _requests)
+    {
+        if (request.getRoom().getIdRoom() == roomId && request.getUser().getIdUser() == userId)
+        {
+            return request.getId();
+        }
+    }
+
+    return -1;
+}
+
 QMap<quint32, ModelRequest> ModelChator::getRequests() const
 {
     return _requests;
