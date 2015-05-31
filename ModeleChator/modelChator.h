@@ -147,25 +147,32 @@ class ModelChator
 
         //----------------------------------------------------------------------------------
         // Goal      : Add a new user's membership request in the model.
-        // Created by Miguel Santamario on 29.05.2015 21:35
+        // Created by Miguel Santamaria on 29.05.2015 21:35
         //----------------------------------------------------------------------------------
         void addMembershipRequest(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey);
 
         //----------------------------------------------------------------------------------
         // Goal      : Delete the given membership request in the model.
-        // Created by Miguel Santamario on 30.05.2015 15:01
+        // Created by Miguel Santamaria on 30.05.2015 15:01
         //----------------------------------------------------------------------------------
         void deleteRequest(const quint32 requestId);
 
         //----------------------------------------------------------------------------------
+        // Goal      : Search the request identified by the given room and user's IDs, and
+        //             return its ID. If it's not existing, returns -1.
+        // Created by Miguel Santamaria on 31.05.2015 13:24
+        //----------------------------------------------------------------------------------
+        qint32 searchRequest(const quint32 roomId, const quint32 userId);
+
+        //----------------------------------------------------------------------------------
         // Goal      : Get the users' membership requests in the model.
-        // Created by Miguel Santamario on 30.05.2015 13:35
+        // Created by Miguel Santamaria on 30.05.2015 13:35
         //----------------------------------------------------------------------------------
         QMap<quint32, ModelRequest> getRequests() const;
 
         //----------------------------------------------------------------------------------
         // Goal      : Get a user's membership request in the model.
-        // Created by Miguel Santamario on 30.05.2015 14:16
+        // Created by Miguel Santamaria on 30.05.2015 14:16
         //----------------------------------------------------------------------------------
         ModelRequest& getRequest(const quint32 idRequest);
 

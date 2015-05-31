@@ -225,8 +225,11 @@ void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const qu
 
 void ModelChator::deleteRoom(const quint32 idRoom)
 {
-    for (ModelMessage message : _rooms[idRoom].getMessages())
+    QMap<quint32, ModelMessage> messages = _rooms[idRoom].getMessages();
+    for (ModelMessage message : messages)
+    {
         _rooms[idRoom].deleteMessage(message.getIdMessage());
+    }
 
     _rooms.remove(idRoom);
 }
@@ -261,6 +264,19 @@ void ModelChator::addMembershipRequest(const quint32 roomId, const ModelUser &us
 void ModelChator::deleteRequest(const quint32 requestId)
 {
     _requests.remove(requestId);
+}
+
+qint32 ModelChator::searchRequest(const quint32 roomId, const quint32 userId)
+{
+    for (ModelRequest request : _requests)
+    {
+        if (request.getRoom().getIdRoom() == roomId && request.getUser().getIdUser() == userId)
+        {
+            return request.getId();
+        }
+    }
+
+    return -1;
 }
 
 QMap<quint32, ModelRequest> ModelChator::getRequests() const

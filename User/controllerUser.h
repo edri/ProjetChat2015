@@ -97,7 +97,7 @@ public slots:
     //             Inscription's window will open.
     // Param     : /
     //----------------------------------------------------------------------------------
-    void auth() const;
+    void auth();
 
     //----------------------------------------------------------------------------------
     // Goal      : Retrieve the user's information from the view. And generate a certain

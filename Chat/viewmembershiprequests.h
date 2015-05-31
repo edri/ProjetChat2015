@@ -17,7 +17,7 @@ public:
     ~ViewMembershipRequests();
 
     void refresh(const QMap<quint32, ModelRequest>& requests) const;
-    void removeRequest();
+    void removeRequest(const qint32 requestId = -1);
 
     quint32 getSelectedRequestId() const;
 

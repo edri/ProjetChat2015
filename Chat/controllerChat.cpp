@@ -147,6 +147,19 @@ void ControllerChat::loadUserRooms() const
 
         for (quint32 userId : room.getUsers())
         {
+            // Check if the room is private and if we have a request for the given user.
+            // If it exists, we remove it, because it's useless.
+            qint32 requestId = _model->searchRequest(roomId, userId);
+            if (room.isPrivate() && requestId != -1)
+            {
+                // Remove the request from the model.
+                _model->deleteRequest(requestId);
+                // Remove the request from the requests' view.
+                _viewRequests->removeRequest(requestId);
+                // Remove a request from the main view.
+                _view->updateRequests(-1);
+            }
+
             ModelUser& user = _model->getUser(userId);
             _view->addUserToRoom(roomId, userId, user.getUserName(), user.getImage(), user.isConnected());
         }
