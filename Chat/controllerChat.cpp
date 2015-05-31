@@ -266,28 +266,18 @@ void ControllerChat::processRequest(const bool accepted)
     if (accepted)
     {
         AESKey roomSecretKey = request.getRoom().getSecretKey();
-        
-        qDebug() << "Acceptation de la demande d'adhésion";
-        QByteArray tmp ((char*)roomSecretKey.key.data(), roomSecretKey.key.size());
-        qDebug() << "Clé de la salle : " << tmp.toBase64();
 
         // Prepare a RSA key in which we store the requester-user public key.
         // In other words, we convert the requester-user public key from QByteArray to RSAPair.
         RSAPair rsaKey;
         rsaKey.publicKey.resize(request.getPublicKey().size());
         memcpy(rsaKey.publicKey.data(), request.getPublicKey().data(), rsaKey.publicKey.size());
-        QByteArray tmp2 ((char*)request.getPublicKey().data(), request.getPublicKey().size());
-        qDebug() << "Clé publique : " << tmp2.toBase64();
         // Encrypt the room's secret key with the requester-user public key (in RSAPair format).
         _cryptor->encryptWithRSA(roomSecretKey, rsaKey);
-        qDebug() << "Clé est chiffrée";
 
         // Put the encrypted room's secret key in a QByteArray, for sending it to the server.
         QDataStream stream(&aesKey, QIODevice::WriteOnly);
         stream << QByteArray((char*)roomSecretKey.key.data(), roomSecretKey.key.size()) << QByteArray((char*)roomSecretKey.initializationVector.data(), roomSecretKey.initializationVector.size());
-        QByteArray tmp3 ((char*)roomSecretKey.key.data(), roomSecretKey.key.size());
-        qDebug() << "Clé de la salle : " << tmp3.toBase64();
-        qDebug() << "Clé chiffrée : " << ;
     }
 
     // Send to the server the request status.
