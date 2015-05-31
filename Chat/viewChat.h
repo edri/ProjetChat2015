@@ -151,6 +151,13 @@ public:
     //----------------------------------------------------------------------------------
     void updateRequests(const qint32 nbToUpdate);
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Display an error message indicating that the server's connexion has
+    //             been lost, and notify the controller to close the application.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void serverDisconnected();
+
 private slots:
     void on_btn_send_clicked();
     void on_ldt_message_returnPressed();
@@ -167,9 +174,7 @@ private slots:
     void on_btn_expandAll_clicked();
     void on_btn_collapseAll_clicked();
     void on_actionCompte_triggered();
-
     void on_actionDemandes_d_adh_sion_triggered();
-
     void on_actionA_propos_triggered();
 
 signals:
@@ -183,6 +188,7 @@ signals:
     void requestShowEditionView() const;
     void requestOpenRoomMembership() const;
     void requestShowMembershipRequestsView() const;
+    void requestCloseApplication() const;
 };
 
 #endif // VIEWCHAT_H

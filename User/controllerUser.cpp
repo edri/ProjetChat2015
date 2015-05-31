@@ -26,10 +26,11 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     // Bind the signals and the slots
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
-    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(inscriptionToServer()));
+    connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(checkUsername()));
     connect(_controllerChat->getViewEdition(), SIGNAL(requestEditUser()), this, SLOT(editUser()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
     connect(_view->getViewInscription(), SIGNAL(requestCancelInscription()), this, SLOT(cancelInscription()));
+    connect(cc, SIGNAL(disconnected()), SLOT(serverDisconnected()));
 }
 
 ControllerUser::~ControllerUser()
@@ -121,6 +122,18 @@ void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsa
     
 }
 
+void ControllerUser::usernameResponse(const bool exists) const
+{
+    if (exists)
+    {
+        _view->getViewInscription()->usernameAlreadyExistd();
+    }
+    else
+    {
+        inscriptionToServer();
+    }
+}
+
 void ControllerUser::inscriptionToServer() const
 {
     qDebug() << "Inscription to server";
@@ -135,10 +148,10 @@ void ControllerUser::inscriptionToServer() const
     Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
-    
+
     QByteArray tmp((const char*) keyPair.publicKey.data(), keyPair.publicKey.size());
     qDebug() << "Clé publique : " << QString::fromUtf8(tmp.toHex());
-    
+
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
 
     //Store information into a ModelUser
@@ -146,6 +159,12 @@ void ControllerUser::inscriptionToServer() const
 
     //send data to the server
     _co->createAccount(myUser, hashPassword, passwordSalt, keySalt, keyPair);
+}
+
+void ControllerUser::checkUsername() const
+{
+    // Request the server to know if the userName already exists.
+    _co->userId(_view->getViewInscription()->getUserName());
 }
 
 void ControllerUser::editUser() const
@@ -175,4 +194,9 @@ void ControllerUser::cancelInscription()
 void ControllerUser::authError()
 {
     _view->authError();
+}
+
+void ControllerUser::serverDisconnected()
+{
+    _connected = false;
 }

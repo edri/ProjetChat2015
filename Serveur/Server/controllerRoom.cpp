@@ -208,7 +208,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
     for (ChatorRoom* room : client->rooms)
     {
         if (room->id == idRoom)
-        {
+        {            
             client->rooms.remove(room);
             
             QByteArray data = _interpretor->leave(client->id, idRoom);
@@ -218,6 +218,7 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
                 member->socket.sendBinaryMessage(data);
             }
             
+            
             room->clients.remove(client);
             
             if (room->clients.empty())
@@ -225,7 +226,6 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
                 _onlineRooms.remove(idRoom);
                 delete room;
             }
-            
             return;
         }
     }
@@ -328,16 +328,27 @@ void ControllerRoom::modifyRoom(ModelRoom& room, const QMap<quint32, QByteArray>
     _db.modifyRoom(room);
     _db.modifyMembership(room.getIdRoom(), newUsers, removedUsers, newAdmins, removedAdmins, usersAndKeys);
     
+    QList<ChatorClient*> clientsToRemove;
+    
+    for (ChatorClient* currentClient : onlineRoom->clients)
+    {
+        if (removedUsers.contains(currentClient->id))
+        {
+            clientsToRemove.append(currentClient);
+        }
+    }
+    
+    for (ChatorClient* clientToRemove : clientsToRemove)
+    {
+        leaveRoom(clientToRemove->id, onlineRoom->id, clientToRemove);
+    }
+    
     QMap<quint32, QByteArray> empty;
     QByteArray data = _interpretor->room(room, empty, true);
     
     for (ChatorClient* currentClient : onlineRoom->clients)
     {
         currentClient->socket.sendBinaryMessage(data);
-        if (removedUsers.contains(currentClient->id))
-        {
-            leaveRoom(currentClient->id, onlineRoom->id, currentClient);
-        }
     }
     
     QMap<quint32, ModelRoom> rooms;

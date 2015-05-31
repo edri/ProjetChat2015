@@ -398,6 +398,19 @@ void ViewChat::updateRequests(const qint32 nbToUpdate)
                                             (_nbNotifications ? " (" + QString::number(_nbNotifications) + ")" : ""));
 }
 
+void ViewChat::serverDisconnected()
+{
+    qint32 result =
+            QMessageBox::critical(this, tr("Connexion perdu..."),
+                                  tr("La connexion avec le serveur a été perdu. Veuillez vous reconnecter."),
+                                  QMessageBox::Ok);
+
+    if (result == QMessageBox::Ok)
+    {
+        emit requestCloseApplication();
+    }
+}
+
 void ViewChat::on_btn_send_clicked()
 {
     if (!_ui->ldt_message->text().trimmed().isEmpty())
