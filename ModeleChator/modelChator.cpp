@@ -225,8 +225,11 @@ void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const qu
 
 void ModelChator::deleteRoom(const quint32 idRoom)
 {
-    for (ModelMessage message : _rooms[idRoom].getMessages())
+    QMap<quint32, ModelMessage> messages = _rooms[idRoom].getMessages();
+    for (ModelMessage message : messages)
+    {
         _rooms[idRoom].deleteMessage(message.getIdMessage());
+    }
 
     _rooms.remove(idRoom);
 }

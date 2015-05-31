@@ -331,7 +331,7 @@ void ViewChat::deleteMessage(const quint32 messageId) const
     }
 }
 
-void ViewChat::deleteRoom(const quint32 roomId) const
+void ViewChat::deleteRoom(const quint32 roomId)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
@@ -339,14 +339,22 @@ void ViewChat::deleteRoom(const quint32 roomId) const
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
-            _ui->tre_messages->clear();
             _ui->tre_rooms->takeTopLevelItem(i);
             break;
         }
     }
+
+    if (_ui->tre_rooms->topLevelItemCount())
+    {
+        _ui->tre_messages->clear();
+    }
+    else
+    {
+        on_tre_rooms_itemSelectionChanged();
+    }
 }
 
-void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) const
+void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
@@ -367,6 +375,15 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId) co
 
             break;
         }
+    }
+
+    if (_ui->tre_rooms->topLevelItemCount())
+    {
+        _ui->tre_messages->clear();
+    }
+    else
+    {
+        on_tre_rooms_itemSelectionChanged();
     }
 }
 
@@ -429,6 +446,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
 
     if (!nbItems)
     {
+        _ui->tre_messages->clear();
         _ui->btn_leaveRoom->setDisabled(true);
         _ui->btn_send->setDisabled(true);
         _ui->ldt_message->setDisabled(true);

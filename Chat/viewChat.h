@@ -135,14 +135,14 @@ public:
     // Goal      : Remove a room from the list
     // Param     : roomId - Identify the room where the room should be removed.
     //----------------------------------------------------------------------------------
-    void deleteRoom(const quint32 roomId) const;
+    void deleteRoom(const quint32 roomId);
 
     //----------------------------------------------------------------------------------
     // Goal      : Remove a user from a room in the list
     // Param     : userId - Identify the user to remove.
     //             roomId - Identify the room where the user should be removed.
     //----------------------------------------------------------------------------------
-    void deleteUserFromRoom(const quint32 userId, const quint32 roomId) const;
+    void deleteUserFromRoom(const quint32 userId, const quint32 roomId);
 
     //----------------------------------------------------------------------------------
     // Goal      : Update the notifications' toolbar and the view.
