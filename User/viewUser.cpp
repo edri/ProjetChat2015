@@ -41,7 +41,7 @@ void ViewUser::on_btn_connexion_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
-        _timerConnexion->start(3000);
+        _timerConnexion->start(15000);
         // Send the data
         emit requestGetIds(true);
         // Les données doivent être confirmées
@@ -61,7 +61,7 @@ void ViewUser::on_btn_inscription_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
-        _timerConnexion->start(3000);
+        _timerConnexion->start(15000);
         // Connect to server in order to create a new account
         emit requestGetIds(false);
     }
