@@ -431,3 +431,8 @@ void ViewRoom::disablePrivacy()
     rbt_visible->setDisabled(true);
     rbt_onInvitation->setDisabled(true);
 }
+
+void ViewRoom::focusAddUser()
+{
+    ldt_member->setFocus();
+}

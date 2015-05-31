@@ -317,7 +317,7 @@ void ControllerRoom::userId(bool exists, quint32 userId)
     
     // Enable the view again
     _viewRoom->setDisabled(false);
-    
+    _viewRoom->focusAddUser();
 }
 
 void ControllerRoom::showJoin()

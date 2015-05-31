@@ -209,6 +209,8 @@ void ControllerRoom::leaveRoom(const quint32 idUser, const quint32 idRoom, Chato
     {
         if (room->id == idRoom)
         {
+            client->rooms.remove(room);
+            
             QByteArray data = _interpretor->leave(client->id, idRoom);
             
             for (ChatorClient* member : room->clients)
