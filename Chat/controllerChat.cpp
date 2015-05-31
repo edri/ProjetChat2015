@@ -272,7 +272,6 @@ void ControllerChat::processRequest(const bool accepted)
         RSAPair rsaKey;
         rsaKey.publicKey.resize(request.getPublicKey().size());
         memcpy(rsaKey.publicKey.data(), request.getPublicKey().data(), rsaKey.publicKey.size());
-
         // Encrypt the room's secret key with the requester-user public key (in RSAPair format).
         _cryptor->encryptWithRSA(roomSecretKey, rsaKey);
 

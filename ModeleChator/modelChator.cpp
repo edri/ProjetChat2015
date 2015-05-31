@@ -178,6 +178,11 @@ const ModelRoom& ModelChator::getRoom(const quint32 idRoom) const
     return _rooms.find(idRoom).value();
 }
 
+bool ModelChator::containsRoom(const quint32 idRoom) const
+{
+    return _rooms.contains(idRoom);
+}
+
 ModelUser& ModelChator::getUser(const quint32 idUser)
 {
     return _users[idUser];
@@ -249,7 +254,8 @@ void ModelChator::removeUser(const quint32 userId, const quint32 roomId)
 void ModelChator::addMembershipRequest(const quint32 roomId, const ModelUser &user,
                                        const QByteArray &publicKey)
 {
-    _requests.insert(++_nbRequests, ModelRequest(_nbRequests, _rooms[roomId], user, publicKey));
+    ++_nbRequests;
+    _requests.insert(_nbRequests, ModelRequest(_nbRequests, _rooms[roomId], user, publicKey));
 }
 
 void ModelChator::deleteRequest(const quint32 requestId)
@@ -508,4 +514,30 @@ ModelUser ModelRequest::getUser() const
 QByteArray& ModelRequest::getPublicKey()
 {
     return _publicKey;
+}
+
+ModelError::ModelError() {}
+ModelError::ModelError(ErrorType errorType, QString errorString) : _errorType(errorType), _errorString(errorString) {}
+
+QDataStream& operator<< (QDataStream& ds, const ModelError& r)
+{
+    return ds << (quint32) r._errorType << r._errorString;
+}
+
+ErrorType ModelError::getErrorType() const
+{
+    return _errorType;
+}
+
+QString ModelError::getErrorString() const
+{
+    return _errorString;
+}
+
+QDataStream& operator>> (QDataStream& ds, ModelError& r)
+{
+    quint32 errorType;
+    ds >> errorType;
+    r._errorType = (ErrorType) errorType;
+    return ds >> r._errorString;
 }

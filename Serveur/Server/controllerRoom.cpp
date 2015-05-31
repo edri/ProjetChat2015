@@ -416,9 +416,25 @@ void ControllerRoom::acceptOrDeny(const quint32 idRoom, const quint32 idUser, co
             }
         }
         
+        QByteArray data = _interpretor->join(rooms, users);
+        
         for (ChatorClient* onlineClient : onlineRoom->clients)
         {
-            onlineClient->socket.sendBinaryMessage(_interpretor->join(rooms, users));
+            if (onlineClient->id == idUser)
+            {
+                QDataStream stream(key);
+                AESKey aesKey;
+                stream >> aesKey;
+                rooms.first().setKey(aesKey);
+                
+                onlineClient->socket.sendBinaryMessage(_interpretor->join(rooms, users));
+                rooms.first().setKey(AESKey());
+                data = _interpretor->join(rooms, users);
+            }
+            else
+            {
+                onlineClient->socket.sendBinaryMessage(data);
+            }
         }
     }
 }

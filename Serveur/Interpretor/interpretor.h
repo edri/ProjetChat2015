@@ -9,8 +9,8 @@
 #ifndef INTERPRETOR_H
 #define INTERPRETOR_H
 
-#include "../../ModeleChator/modelChator.h"
 #include "packet.h"
+#include "../../ModeleChator/modelChator.h"
 //#include <QObject>
 #include <QByteArray>
 #include <QByteArray>

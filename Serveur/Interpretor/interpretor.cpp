@@ -407,8 +407,6 @@ void Interpretor::processData(const QByteArray& data)
         }
         break;
         
-        
-        
         default:
         break;
     }
