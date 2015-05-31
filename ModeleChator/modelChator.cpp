@@ -254,7 +254,8 @@ void ModelChator::removeUser(const quint32 userId, const quint32 roomId)
 void ModelChator::addMembershipRequest(const quint32 roomId, const ModelUser &user,
                                        const QByteArray &publicKey)
 {
-    _requests.insert(++_nbRequests, ModelRequest(_nbRequests, _rooms[roomId], user, publicKey));
+    ++_nbRequests;
+    _requests.insert(_nbRequests, ModelRequest(_nbRequests, _rooms[roomId], user, publicKey));
 }
 
 void ModelChator::deleteRequest(const quint32 requestId)
