@@ -57,6 +57,14 @@ ViewInscription::~ViewInscription()
     delete _ui;
 }
 
+void ViewInscription::usernameAlreadyExistd()
+{
+    QMessageBox::critical(this, tr("Le nom d'utilisateur existe déjà..."),
+                          tr("Le nom d'utilisateur entré existe déjà. Veuillez en entrer un autre."),
+                          QMessageBox::Ok);
+    setEnabled(true);
+    _ui->ldt_userName->setFocus();
+}
 
 void ViewInscription::on_btn_path_clicked()
 {
@@ -69,7 +77,7 @@ void ViewInscription::on_btn_path_clicked()
 
 void ViewInscription::on_btn_inscription_clicked()
 {
-    //_ui->lbl_info->clear();
+    setEnabled(false);
 
     if(_edition)
     {

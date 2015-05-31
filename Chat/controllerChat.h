@@ -108,6 +108,13 @@ public:
     //----------------------------------------------------------------------------------
     void loadUserRooms() const;
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Indicate whether the chat controller is active (true - the connexion
+    //             has already been established) or not (false).
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    bool isControllerActive() const;
+
 public slots :
 // Methods called when the controller received signal from the viewChat.
 // The controller will then ask the controllerOutput to send request to the server

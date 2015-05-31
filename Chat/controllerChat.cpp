@@ -171,6 +171,11 @@ void ControllerChat::loadUserRooms() const
     _view->selectFirstRoom();
 }
 
+bool ControllerChat::isControllerActive() const
+{
+    return !_view->isHidden();
+}
+
 void ControllerChat::sendMessage() const
 {
     QByteArray messageContent;

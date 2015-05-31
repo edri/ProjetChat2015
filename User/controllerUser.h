@@ -73,6 +73,29 @@ public:
     //----------------------------------------------------------------------------------
     void infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys);
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Get the server response which indicate if the username already exists
+    //             or not.
+    // Param     : exists - indicate whether the username already exists (true) or not
+    //                      (false).
+    //----------------------------------------------------------------------------------
+    void usernameResponse(const bool exists) const;
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Retrieve the user's information from the view. And generate a certain
+    //             numbers of security related elements by using a Cryptor object :
+    //             passwordSalt - Used to generate the hash, generated
+    //             hashPassword - Made from passwordSalt and user password
+    //             keyPair - RSA Key pair
+    //             keySalt - Salt use to encrypt RSA Key pair.
+    //             Then these elements will be sent to the server alongside user's
+    //             information.
+    //             For further information on the security aspect, refer to Cryptor
+    //             source and developper's documentation.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void inscriptionToServer() const;
+
 
 public slots:
     //----------------------------------------------------------------------------------
@@ -100,19 +123,10 @@ public slots:
     void auth();
 
     //----------------------------------------------------------------------------------
-    // Goal      : Retrieve the user's information from the view. And generate a certain
-    //             numbers of security related elements by using a Cryptor object :
-    //             passwordSalt - Used to generate the hash, generated
-    //             hashPassword - Made from passwordSalt and user password
-    //             keyPair - RSA Key pair
-    //             keySalt - Salt use to encrypt RSA Key pair.
-    //             Then these elements will be sent to the server alongside user's
-    //             information.
-    //             For further information on the security aspect, refer to Cryptor
-    //             source and developper's documentation.
+    // Goal      : Ask the server to know if the given username already exists.
     // Param     : /
     //----------------------------------------------------------------------------------
-    void inscriptionToServer() const;
+    void checkUsername() const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Use to edit any information about current user information except

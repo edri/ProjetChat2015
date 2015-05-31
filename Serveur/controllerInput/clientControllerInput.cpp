@@ -110,11 +110,15 @@ void ClientControllerInput::userId(const QString& userName, bool exists, quint32
 {
     Q_UNUSED(sender);
     Q_UNUSED(userName);
-    // if (controllerUser->userIsConnected()) // Need to add the method to the controller user.
-    
-    _controllerRoom->userId(exists, userId);
-    
-    // else { call controllerUser->foo();}
+
+    if (_controllerChat->isControllerActive())
+    {
+        _controllerRoom->userId(exists, userId);
+    }
+    else
+    {
+        _controllerUser->usernameResponse(exists);
+    }
 }
 
 void ClientControllerInput::connected(const quint32 userId, QObject *sender)
