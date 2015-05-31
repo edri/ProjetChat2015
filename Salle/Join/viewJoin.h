@@ -39,6 +39,8 @@ signals:
     void cancel();
     // Signal emited when the user wishes to join a room.
     void join(quint32 roomId);
+    // Signal emited when the user closed the view.
+    void reactivateChatWindows();
 
 private:
     
@@ -60,6 +62,8 @@ private:
     QListView* list_rooms;
     
     QStandardItemModel* model_rooms;
+
+    void closeEvent(QCloseEvent*);
 };
 
 #endif //CHAT_JOIN_H

@@ -150,3 +150,8 @@ void ViewJoin::checkRoom()
     
     emit(join(item->data().toUInt()));
 }
+
+void ViewJoin::closeEvent(QCloseEvent *)
+{
+    emit reactivateChatWindows();
+}

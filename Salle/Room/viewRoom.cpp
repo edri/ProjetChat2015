@@ -436,3 +436,8 @@ void ViewRoom::focusAddUser()
 {
     ldt_member->setFocus();
 }
+
+void ViewRoom::closeEvent(QCloseEvent *)
+{
+    emit reactivateChatWindows();
+}

@@ -443,11 +443,13 @@ void ViewChat::on_btn_leaveRoom_clicked()
 
 void ViewChat::on_btn_joinRoom_clicked()
 {
+    setDisabled(true);
     emit requestOpenRoomMembership();
 }
 
 void ViewChat::on_btn_newRoom_clicked()
 {
+    setDisabled(true);
     emit requestOpenRoomModule(false);
 }
 
@@ -530,6 +532,7 @@ void ViewChat::on_actionQuitter_triggered()
 
 void ViewChat::on_btn_edit_clicked()
 {
+    setDisabled(true);
     emit requestOpenRoomModule(true);
 }
 
