@@ -21,24 +21,4 @@ enum class MessageType : quint32 {NEW_ACCOUNT, EDIT_ACCOUNT, INFO_USER, MESSAGE,
 
 enum class ErrorType : quint32 {AUTH_ERROR, USER_CREATION, ROOM_CREATION};
 
-class ModelError
-{
-    friend QDataStream& operator<< (QDataStream& ds, const ModelError& r);
-    friend QDataStream& operator>> (QDataStream& ds, ModelError& r);
-    
-    public:
-        ModelError();
-        ModelError(ErrorType errorType, QString errorString);
-
-        ErrorType getErrorType() const;
-        QString getErrorString() const;
-    
-    private:
-        ErrorType _errorType;
-        QString _errorString;
-};
-
-QDataStream& operator<< (QDataStream& ds, const ModelError& r);
-QDataStream& operator>> (QDataStream& ds, ModelError& r);
-
 #endif

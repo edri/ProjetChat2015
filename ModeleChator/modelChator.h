@@ -11,8 +11,8 @@
 
 #include <QtWidgets>
 #include <QString>
+#include "../Serveur/Interpretor/packet.h"
 #include "../Cryptor/cryptor.h"
-
 #include "../Cryptor/cryptor.h"
 
 using namespace std;
@@ -25,7 +25,7 @@ class ModelRequest;
 class ModelChator
 {
 	private :
-        // The room, users and membership requests are stocked here.
+        // The room, users and membership requests are stored here.
         // Messages are stocked in their respective rooms.
         QMap<quint32, ModelRoom> _rooms;
         QMap<quint32, ModelUser> _users;
@@ -378,6 +378,25 @@ class ModelRequest
         QByteArray& getPublicKey();
 };
 
+class ModelError
+{
+    friend QDataStream& operator<< (QDataStream& ds, const ModelError& r);
+    friend QDataStream& operator>> (QDataStream& ds, ModelError& r);
+    
+    public:
+        ModelError();
+        ModelError(ErrorType errorType, QString errorString);
+
+        ErrorType getErrorType() const;
+        QString getErrorString() const;
+    
+    private:
+        ErrorType _errorType;
+        QString _errorString;
+};
+
+QDataStream& operator<< (QDataStream& ds, const ModelError& r);
+QDataStream& operator>> (QDataStream& ds, ModelError& r);
 QDataStream& operator<< (QDataStream& ds, const ModelRoom& r);
 QDataStream& operator>> (QDataStream& ds, ModelRoom& r);
 QDataStream& operator<< (QDataStream& ds, const ModelMessage& m);
