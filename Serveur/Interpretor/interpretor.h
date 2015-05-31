@@ -57,7 +57,7 @@ class Interpretor : public QObject
     // Goal      : Serialize a ModelUser containing modified information about the
     //             current user.
     //----------------------------------------------------------------------------------
-    QByteArray editAccount(const ModelUser& user, const QByteArray& keySalt = QByteArray(), const QByteArray& privateKey = QByteArray());
+    QByteArray editAccount(const ModelUser& user, const QByteArray& password = QByteArray(), const QByteArray& privateKey = QByteArray());
 
     //----------------------------------------------------------------------------------
     // Goal      : Serialize encrypted informations such as keySalt and
