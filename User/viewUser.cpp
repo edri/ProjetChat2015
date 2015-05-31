@@ -41,7 +41,7 @@ void ViewUser::on_btn_connexion_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
-        _timerConnexion->start(15000);
+        _timerConnexion->start(30000);
         // Send the data
         emit requestGetIds(true);
         // Les données doivent être confirmées
@@ -61,7 +61,7 @@ void ViewUser::on_btn_inscription_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
-        _timerConnexion->start(15000);
+        _timerConnexion->start(30000);
         // Connect to server in order to create a new account
         emit requestGetIds(false);
     }
@@ -116,7 +116,7 @@ void ViewUser::errorServerUnreachable()
 {
     _timerConnexion->stop();
     QMessageBox::critical(this, tr("Erreur de connexion"),
-                          tr("Impossible de se connecter au serveur. Veuillez vérifier les informations de connexion, et si le problème persiste, réessayez dans un moment."),
+                          tr("Impossible de se connecter au serveur. Veuillez vérifier les informations de connexion, et si le problème persiste, réessayez plus tard."),
                           QMessageBox::Ok);
     _ui->lbl_info->clear();
     setEnabled(true);
