@@ -350,14 +350,30 @@ void ControllerRoom::modifyRoom(ModelRoom& room, const QMap<quint32, QByteArray>
         }
     }
     
-    data = _interpretor->join(rooms, users);
-    
     for (ChatorClient* onlineClient : _user->_connectedUsers)
     {
         if (newUsers.contains(onlineClient->id))
         {
             onlineRoom->clients.insert(onlineClient);
             onlineClient->rooms.insert(onlineRoom);
+        }
+    }
+    
+    data = _interpretor->join(rooms, users);
+    
+    for (ChatorClient* onlineClient : onlineRoom->clients)
+    {
+        if (newUsers.contains(onlineClient->id))
+        {
+            QDataStream stream(usersAndKeys[onlineClient->id]);
+            AESKey aesKey;
+            stream >> aesKey;
+            rooms.first().setKey(aesKey);
+            
+            onlineClient->socket.sendBinaryMessage(_interpretor->join(rooms, users));
+        }
+        else
+        {
             onlineClient->socket.sendBinaryMessage(data);
         }
     }
@@ -428,8 +444,6 @@ void ControllerRoom::acceptOrDeny(const quint32 idRoom, const quint32 idUser, co
                 rooms.first().setKey(aesKey);
                 
                 onlineClient->socket.sendBinaryMessage(_interpretor->join(rooms, users));
-                rooms.first().setKey(AESKey());
-                data = _interpretor->join(rooms, users);
             }
             else
             {
