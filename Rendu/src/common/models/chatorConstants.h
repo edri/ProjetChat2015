@@ -18,7 +18,7 @@ const QString DATABASE_FILE_NAME = "db.sqlite";
 const QString DATABASE_TYPE = "QSQLITE";
 
 // The script to use for the database initialization
-const QString DATABASE_INIT_SCRIPT = "init.sql";
+const QString DATABASE_INIT_SCRIPT = "data/init.sql";
 
 // The port to be listened
 const quint16 PORT_TO_LISTEN = 1234;
@@ -42,10 +42,10 @@ const quint16 NB_MESSAGES_TO_FETCH = 50;
 const quint16 PICTURE_SIZE = 256;
 
 // The default files to use for the TLS encryption
-const QString SERVER_CERTIFICATE_FILE = "cert.pem";
-const QString SERVER_KEY_FILE = "key.pem";
+const QString SERVER_CERTIFICATE_FILE = "data/cert.pem";
+const QString SERVER_KEY_FILE = "data/key.pem";
 
 // The duration between two database cleanings, in seconds
-const int CLEANING_INTERVAL = 60; 
+const int CLEANING_INTERVAL = 24 * 3600; 
 
 #endif

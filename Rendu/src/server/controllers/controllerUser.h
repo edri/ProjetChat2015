@@ -8,7 +8,7 @@
 #define CONTROLLER_USER_H
 
 #include "controllerDB.h"
-#include "serverModel.h"
+#include "../utils/serverModel.h"
 #include "../../common/interpretor/interpretor.h"
 #include "controllerRoom.h"
 

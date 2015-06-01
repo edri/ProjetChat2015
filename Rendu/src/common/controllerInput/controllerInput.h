@@ -15,7 +15,7 @@
 
 #include <QtCore/QObject>
 #include "../models/packet.h"
-#include "./models/modelChator.h"
+#include "../models/modelChator.h"
 
 class ControllerInput : public QObject
 {

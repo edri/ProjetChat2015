@@ -9,13 +9,13 @@
 
 #include <QApplication>
 #include <QString>
-#include "listener.h"
-#include "controllerDB.h"
-#include "../Interpretor/interpretor.h"
-#include "serverControllerInput.h"
-#include "controllerRoom.h"
-#include "controllerUser.h"
-#include "../../ModeleChator/chatorConstants.h"
+#include "utils/listener.h"
+#include "controllers/controllerDB.h"
+#include "../common/interpretor/interpretor.h"
+#include "controllers/serverControllerInput.h"
+#include "controllers/controllerRoom.h"
+#include "controllers/controllerUser.h"
+#include "../common/models/chatorConstants.h"
 
 int main(int argc, char *argv[])
 {
