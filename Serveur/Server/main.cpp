@@ -19,22 +19,24 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    // We have to build the elements in the right order.
     
-    ControllerDB cdb(DATABASE_FILE_NAME);
+    QApplication QtApplication(argc, argv);
     
-    ControllerRoom cr(cdb);
-    ControllerUser cu(cdb);
-    cu._room = &cr;
-    cr._user = &cu;
+    ControllerDB controllerDb(DATABASE_FILE_NAME);
     
-    ServerControllerInput sci(cu, cr);
-    Interpretor i(sci);
+    ControllerRoom controllerRoom(controllerDb);
+    ControllerUser controllerUser(controllerDb);
+    controllerUser._room = &controllerRoom;
+    controllerRoom._user = &controllerUser;
     
-    cu._interpretor = &i;
-    cr._interpretor = &i;
+    ServerControllerInput serverControllerInput(controllerUser, controllerRoom);
+    Interpretor interpretor(serverControllerInput);
     
-    Listener listener(PORT_TO_LISTEN, i, sci);
+    controllerUser._interpretor = &interpretor;
+    controllerRoom._interpretor = &interpretor;
     
-    return a.exec();
+    Listener listener(PORT_TO_LISTEN, interpretor, serverControllerInput);
+    
+    return QtApplication.exec();
 }

@@ -1,8 +1,8 @@
 /*
-     * Created by Benoist Wolleb
-     *
-     *
-     *
+     * These structures are used to wrap every client socket in order to add
+     * precious informations such as the ID of the user and the pointers to its
+     * rooms. Il allows us to quickly browse the structure and send data to
+     * every clients in a room in an efficient way.
 */
 
 #ifndef CHATOR_MODEL_H
@@ -22,12 +22,14 @@ class ChatorClient : public QObject
     public:
     ChatorClient(QWebSocket& socket);
     ~ChatorClient();
-
+    
+    // Useful data
     quint32 id;
     bool logged;
     QWebSocket& socket;
     QSet<ChatorRoom*> rooms;
     
+    // We forward those sognals from the internal socket
     signals:
     void disconnected();
     void binaryMessageReceived(const QByteArray& message);
