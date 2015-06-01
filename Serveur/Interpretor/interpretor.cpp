@@ -159,7 +159,7 @@ QByteArray Interpretor::joinRoom(const quint32 roomId)
 }
 
 QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
-{
+{qDebug() << "salt";
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
 
