@@ -60,7 +60,9 @@ public:
     void loadUser(ModelUser& user) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Add a new user in the local modelChator.
+    // Goal      : Add a new room with its messages in the local modelChator ; if the
+    //             room is private, we also decrypt its secret key and its messages'
+    //             content.
     // Param     : room - room that will be stored.
     //----------------------------------------------------------------------------------
     void loadRoom(ModelRoom& room) const;
@@ -81,16 +83,21 @@ public:
     void receiveMessage(ModelMessage& message, const bool edited) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Inform the view that a user's status has changed. For example a user
-    //             the user went online.
+    // Goal      : Inform the view that a user's status has changed. For example the
+    //             user went online.
     // Param     : userId - The affected user
-    //             isConnected - The new user's status
+    //             isConnected - Indicate whether the user connected (true) or
+    //                           disconnected (false).
     //----------------------------------------------------------------------------------
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Forward a new private room's membership request to the view
-    // Param     :
+    // Goal      : Forward a new private room's membership request to the view.
+    // Param     : roomId - the ID of the room concerned by the request.
+    //             user - the concerned user.
+    //             publicKey - the concerned user's public key ; will be useful for
+    //                         encrypting the room's private key, if the user is
+    //                         accepted.
     //----------------------------------------------------------------------------------
     void newMembershipRequest(const quint32 roomId, const ModelUser& user,
                               const QByteArray& publicKey) const;
@@ -103,8 +110,8 @@ public:
     ViewInscription* getViewEdition();
 	
     //----------------------------------------------------------------------------------
-    // Goal      :
-    // Param     :
+    // Goal      : Add every stored rooms in the view.
+    // Param     : /
     //----------------------------------------------------------------------------------
     void loadUserRooms() const;
 
@@ -218,6 +225,8 @@ public slots :
     //                          not (false).
     //----------------------------------------------------------------------------------
     void processRequest(const bool accepted);
+
+// Methods called when the controller received signal from the server or the room module.
 
     //----------------------------------------------------------------------------------
     // Goal      : Occurs when the server's connexion has been lost.

@@ -8,6 +8,7 @@ ViewAbout::ViewAbout(QWidget *parent) :
 {
     _ui->setupUi(this);
 
+    // Add the application's logo in the QGraphicsView componant of the window.
     QPixmap logo;
     logo.load(":/icons/img/chator.png");
     QGraphicsScene* sceneLogo = new QGraphicsScene(_ui->grv_logo);
@@ -15,6 +16,7 @@ ViewAbout::ViewAbout(QWidget *parent) :
     _ui->grv_logo->setScene(sceneLogo);
     _ui->grv_logo->setRenderHint(QPainter::Antialiasing);
 
+    // Add the heig's logo in the QGraphicsView componant of the window.
     QPixmap heig;
     heig.load(":/icons/img/heig.png");
     QGraphicsScene* sceneHeig = new QGraphicsScene(_ui->grv_heig);
@@ -26,6 +28,7 @@ ViewAbout::ViewAbout(QWidget *parent) :
 ViewAbout::~ViewAbout()
 {
     delete _ui;
+    delete _parent;
 }
 
 void ViewAbout::closeEvent(QCloseEvent*)

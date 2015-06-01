@@ -19,6 +19,10 @@ private:
     Ui::viewAbout *_ui;
     QWidget* _parent;
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Reactivate the main view when closed.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void closeEvent(QCloseEvent*);
 };
 

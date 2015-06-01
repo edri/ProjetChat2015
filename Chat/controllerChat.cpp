@@ -11,16 +11,21 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
                                Cryptor* cryptor)
 {
     _model = model;
+
+    // Initialize the chat module's view.
     _view = new ViewChat(_model);
     _viewEdition = new ViewInscription(_view, currentUser);
     _viewRequests = new ViewMembershipRequests(_model);
 
     _currentUser = currentUser;
+    _controllerRoom = controllerRoom;
+
+    // Object used for the server communication.
     _cci = cci;
     _i = i;
     _cc = cc;
     _co = co;
-    _controllerRoom = controllerRoom;
+    // Object used for the security.
     _cryptor = cryptor;
 
     connect(_view, SIGNAL(requestOpenRoomModule(const bool)), this, SLOT(openRoomModule(const bool)));
@@ -43,14 +48,22 @@ ControllerChat::ControllerChat(ModelChator* model, ModelUser* currentUser, Clien
 
 ControllerChat::~ControllerChat()
 {
-    _controllerRoom->closeWindows();
     delete _view;
-    delete _model;
     delete _viewEdition;
+    delete _viewRequests;
+    delete _model;
+    delete _currentUser;
+    delete _cci;
+    delete _i;
+    delete _cc;
+    delete _co;
+    delete _controllerRoom;
+    delete _cryptor;
 }
 
 void ControllerChat::showView() const
 {
+    // Give the current user's ID to the view, and show it.
     ViewChat::currentUserId = _currentUser->getIdUser();
     _view->setConnectedAsText(_currentUser->getUserName());
     _view->show();
@@ -58,18 +71,27 @@ void ControllerChat::showView() const
 
 void ControllerChat::loadUser(ModelUser& user) const
 {
+    qDebug() << "Réception d'un utilisateur";
+
+    // Add the given user in the model.
     _model->addUser(user);
 }
 
 void ControllerChat::loadRoom(ModelRoom& room) const
 {
     qDebug() << "Réception d'une salle";
-    if (room.isPrivate())
+
+    // If we have a private room, we must decrypt its secret key with RSA,
+    // and decrypt each of its messages with the secret key.
+    if (room.isPrivate() && !_model->containsRoom(room.getIdRoom()))
     {
         QString messageContent;
 
+        // Decrypt the private room's secret key with the known RSA key pair.
         _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
 
+        // Decrypt each message's content with the decrypted secret key, and
+        // store it in binary format (UTF8).
         for (ModelMessage& message : room.getMessages())
         {
             CypherText cypher(message.getContent().size());
@@ -79,11 +101,15 @@ void ControllerChat::loadRoom(ModelRoom& room) const
         }
     }
 
+    // Add the given room to the model.
     _model->addRoom(room);
 }
 
 void ControllerChat::editRoom(const ModelRoom& room)
 {
+    qDebug() << "Réception d'une salle éditée";
+
+    // Edit the room in the model and then in the view.
     _model->modifyRoom(room.getIdRoom(), room.getName(), room.getLimit(),
                        room.isPrivate(), room.isVisible(), room.getPicture());
     _view->modifyRoom(room.getIdRoom(), room.getName(), room.getPicture());
@@ -92,8 +118,10 @@ void ControllerChat::editRoom(const ModelRoom& room)
 void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) const
 {
     QString messageContent;
+    // Get the received message's room.
     ModelRoom& room = _model->getRoom(message.getIdRoom());
 
+    // Decrypt the message if its room is private.
     if (room.isPrivate())
     {
         CypherText cypher(message.getContent().size());
@@ -102,11 +130,13 @@ void ControllerChat::receiveMessage(ModelMessage& message, const bool edited) co
         message.setContent(messageContent.toUtf8());
     }
 
+    // Add the message to the room, depending on its status.
     if (!edited)
-        _model->getRoom(room.getIdRoom()).addMessage(message);
+        room.addMessage(message);
     else
         _model->modifyMessage(room.getIdRoom(), message.getIdMessage(), message.getContent(), message.getEditionDate());
 
+    // Add/Edit the message in the view.
     _view->loadRoomMessage(message, edited);
 }
 
@@ -118,14 +148,16 @@ void ControllerChat::userStatusChanged(const quint32 userId, const bool isConnec
 void ControllerChat::newMembershipRequest(const quint32 roomId, const ModelUser& user,
                                           const QByteArray& publicKey) const
 {
+    // Add the new membership request in the model.
     _model->addMembershipRequest(roomId, user, publicKey);
-    // Add a new request.
+    // Add a new request in the views.
     _view->updateRequests(1);
     _viewRequests->refresh(_model->getRequests());
 }
 
 void ControllerChat::openRoomModule(const bool editRoom) const
 {
+    // Open the room's editing/adding windows.
     if (editRoom)
         _controllerRoom->showRoom(_view->getSelectedRoomId());
     else
@@ -135,21 +167,25 @@ void ControllerChat::openRoomModule(const bool editRoom) const
 void ControllerChat::loadRoomMessages(const quint32 idRoom) const
 {
     ModelRoom& room = _model->getRoom(idRoom);
-
+    // Show/Hide the administration's buttons, depending on the connected user's
+    // status.
     _view->updateButtons(room.getAdmins().contains(_currentUser->getIdUser()));
+    // Load the room's messages in the view.
     _view->loadRoomMessages(_model->getRoom(idRoom).getMessages());
 }
 
 void ControllerChat::loadUserRooms() const
 {
+    // Get all the rooms of the connected user.
     QList<quint32> userRooms = _model->getUserRooms(_currentUser->getIdUser());
-    qStableSort(userRooms);
 
+    // Add each room in the view.
     for (quint32 roomId : userRooms)
     {
         ModelRoom& room = _model->getRoom(roomId);
         _view->addRoom(roomId, room.getName(), room.getPicture(), room.isPrivate());
 
+        // Add each room's user in the view.
         for (quint32 userId : room.getUsers())
         {
             // Check if the room is private and if we have a request for the given user.
@@ -175,47 +211,53 @@ void ControllerChat::loadUserRooms() const
 
 bool ControllerChat::isControllerActive() const
 {
+    // To know if the controller is currently active, we look at the main view's status.
     return !_view->isHidden();
 }
 
 void ControllerChat::sendMessage() const
 {
     QByteArray messageContent;
+    // Get the selected room.
     ModelRoom& room = _model->getRoom(_view->getSelectedRoomId());
 
+    // If the room is private, we must encrypt the message's content with its secret key.
     if (room.isPrivate())
     {
         CypherText cypher(_cryptor->encryptWithAES(_view->getMessageText().toStdString(), room.getSecretKey()));
         messageContent = QByteArray((char*)cypher.data(), cypher.size());
     }
+    // Else we just need to convert the message's content to binary.
     else
     {
         messageContent = _view->getMessageText().toUtf8();
     }
 
+    // Create a new ModelMessage object, and send it to the server.
     ModelMessage message(0, room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);
-
     _co->sendMessage(message, false);
 }
 
 void ControllerChat::editMessage(const QTreeWidgetItem* item) const
 {
     QByteArray messageContent;
+    // Get the selected room.
     ModelRoom& room = _model->getRoom(_view->getSelectedRoomId());
 
+    // If the room is private, we must encrypt the message's content with its secret key.
     if (room.isPrivate())
     {
         CypherText cypher(_cryptor->encryptWithAES(item->text(1).toStdString(), room.getSecretKey()));
         messageContent = QByteArray((char*)cypher.data(), cypher.size());
     }
+    // Else we just need to convert the message's content to binary.
     else
     {
-        //messageContent = QByteArray::fromStdString(item->text(1).toStdString());
         messageContent = item->text(1).toUtf8();
     }
 
+    // Create a new ModelMessage object, and send it to the server.
     ModelMessage message(item->data(1, Qt::UserRole).toInt(), room.getIdRoom(), _currentUser->getIdUser(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), messageContent);
-
     _co->sendMessage(message, true);
 }
 
@@ -226,6 +268,7 @@ void ControllerChat::askServerToDeleteMessage(const quint32 roomId, const quint3
 
 void ControllerChat::deleteMessageInModel(const quint32 roomId, const quint32 messageId) const
 {
+    // Remove the message of the model, and then delete it in the view.
     _model->deleteMessage(roomId, messageId);
     _view->deleteMessage(messageId);
 }
@@ -239,6 +282,7 @@ void ControllerChat::askServerToDeleteRoom(const quint32 roomId) const
 
 void ControllerChat::deleteRoomInModel(const quint32 roomId) const
 {
+    // Remove the room of the model, and then delete it in the view.
     _model->deleteRoom(roomId);
     _view->deleteRoom(roomId);
 }
@@ -250,8 +294,11 @@ void ControllerChat::askServerToLeaveRoom(const quint32 roomId) const
 
 void ControllerChat::leaveRoomInModel(const quint32 userId, const quint32 roomId) const
 {
+    // Remove the link between the user and the room, in the model.
     _model->removeUser(userId, roomId);
 
+    // Delete the room of the view, or remove the oser of the room, depending on who
+    // asked to leave.
     if (userId == _currentUser->getIdUser())
         _view->deleteRoom(roomId);
     else
@@ -260,10 +307,10 @@ void ControllerChat::leaveRoomInModel(const quint32 userId, const quint32 roomId
 
 void ControllerChat::showViewEdition()
 {
-    //Récupération de l'utilisateur
+    // Send the current user to the view.
     _viewEdition->setCurrentUser(_currentUser);
 
-    // Open the inscription window
+    // Open the inscription's window.
     _viewEdition->show();
     _viewEdition->setEnabled(true);
 }
@@ -275,12 +322,14 @@ void ControllerChat::openRoomMembership()
 
 void ControllerChat::showMembershipRequestsView()
 {
+    // Refresh the membership requests and show the view.
     _viewRequests->refresh(_model->getRequests());
     _viewRequests->show();
 }
 
 void ControllerChat::processRequest(const bool accepted)
 {
+    // Get the selected membership request.
     ModelRequest request = _model->getRequest(_viewRequests->getSelectedRequestId());
     QByteArray aesKey;
 
@@ -315,6 +364,7 @@ void ControllerChat::processRequest(const bool accepted)
 
 void ControllerChat::serverDisconnected()
 {
+    // If the view is currently opened, we ask it to show a disconnection's message.
     if (!_view->isHidden())
         _view->serverDisconnected();
 }
