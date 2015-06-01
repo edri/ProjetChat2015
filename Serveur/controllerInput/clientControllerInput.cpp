@@ -79,7 +79,7 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
     {
         _controllerChat->loadUser(user);
     }
-    
+
     qDebug() << "Ajout des salles";
     for (ModelRoom room : rooms)
     {

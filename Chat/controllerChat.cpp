@@ -81,28 +81,31 @@ void ControllerChat::loadRoom(ModelRoom& room) const
 {
     qDebug() << "Réception d'une salle";
 
-    // If we have a private room, we must decrypt its secret key with RSA,
-    // and decrypt each of its messages with the secret key.
-    if (room.isPrivate() && !_model->containsRoom(room.getIdRoom()))
+    if (!_model->containsRoom(room.getIdRoom()))
     {
-        QString messageContent;
-
-        // Decrypt the private room's secret key with the known RSA key pair.
-        _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
-
-        // Decrypt each message's content with the decrypted secret key, and
-        // store it in binary format (UTF8).
-        for (ModelMessage& message : room.getMessages())
+        // If we have a private room, we must decrypt its secret key with RSA,
+        // and decrypt each of its messages with the secret key.
+        if (room.isPrivate())
         {
-            CypherText cypher(message.getContent().size());
-            memcpy(cypher.data(), message.getContent().data(), message.getContent().size());
-            messageContent = QString::fromStdString(_cryptor->decryptWithAES(cypher, room.getSecretKey()));
-            message.setContent(messageContent.toUtf8());
-        }
-    }
+            QString messageContent;
 
-    // Add the given room to the model.
-    _model->addRoom(room);
+            // Decrypt the private room's secret key with the known RSA key pair.
+            _cryptor->decryptWithRSA(room.getSecretKey(), _model->getRsaKeyPair());
+
+            // Decrypt each message's content with the decrypted secret key, and
+            // store it in binary format (UTF8).
+            for (ModelMessage& message : room.getMessages())
+            {
+                CypherText cypher(message.getContent().size());
+                memcpy(cypher.data(), message.getContent().data(), message.getContent().size());
+                messageContent = QString::fromStdString(_cryptor->decryptWithAES(cypher, room.getSecretKey()));
+                message.setContent(messageContent.toUtf8());
+            }
+        }
+
+        // Add the given room to the model.
+        _model->addRoom(room);
+    }
 }
 
 void ControllerChat::editRoom(const ModelRoom& room)
