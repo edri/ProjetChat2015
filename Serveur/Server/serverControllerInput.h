@@ -27,7 +27,6 @@ class ServerControllerInput : public ControllerInput
     void login(const QString& pseudo, const QByteArray& hashedPWD, QObject* sender);
     void room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender);
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
-    void disconnect(const quint32 userId, QObject* sender);
     void deleteRoom(const quint32 roomId, QObject* sender);
     void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender);
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
@@ -36,6 +35,7 @@ class ServerControllerInput : public ControllerInput
     void editAccount(ModelUser& user, const QByteArray& password, const QByteArray& privateKey, QObject* sender);
     void request(const quint32 roomId, const ModelUser& user, const QByteArray& key, const bool accepted, QObject* sender);
     void joinRoom(const quint32 roomId, QObject* sender);
+    void disconnect(const quint32 userId, QObject* sender);
     
     
     private:

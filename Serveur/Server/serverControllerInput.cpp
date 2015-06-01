@@ -51,12 +51,6 @@ void ServerControllerInput::userId(const QString& userName, bool exists, quint32
     _controllerUser.userId(userName, client);
 }
 
-void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
-{
-    Q_UNUSED(userId);
-    _controllerUser.disconnect((ChatorClient*) sender);
-}
-
 void ServerControllerInput::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, QObject* sender)
 {
     qDebug() << "ServerControllerInput CreateAccount";
@@ -100,4 +94,10 @@ void ServerControllerInput::request(const quint32 roomId, const ModelUser& user,
 void ServerControllerInput::joinRoom(const quint32 roomId, QObject* sender)
 {
     _controllerRoom.joinRoom(roomId, (ChatorClient*) sender);
+}
+
+void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
+{
+    Q_UNUSED(userId);
+    _controllerUser.disconnect((ChatorClient*) sender);
 }
