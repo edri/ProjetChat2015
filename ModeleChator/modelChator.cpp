@@ -219,9 +219,10 @@ void ModelChator::addAdmin(const quint32 idRoom, const quint32 idUser)
 }
 
 void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage,
-                             const bool isPrivate, const bool isVisible, const QImage& picture, QSet<quint32> admins)
+                             const bool isPrivate, const bool isVisible, const QImage& picture, QSet<quint32> admins,
+                             QSet<quint32> users)
 {
-    _rooms[idRoom].modifyRoom(name, limitOfStoredMessage, isPrivate, isVisible, picture, admins);
+    _rooms[idRoom].modifyRoom(name, limitOfStoredMessage, isPrivate, isVisible, picture, admins, users);
 }
 
 void ModelChator::deleteRoom(const quint32 idRoom)
@@ -316,7 +317,7 @@ void ModelRoom::deleteMessage(const quint32 idMessage)
 }
 
 void ModelRoom::modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
-                           const bool isVisible, const QImage& picture, QSet<quint32> admins)
+                           const bool isVisible, const QImage& picture, QSet<quint32> admins, QSet<quint32> users)
 {
     _name = name;
     _limitOfStoredMessage = limitOfStoredMessage;
@@ -324,6 +325,7 @@ void ModelRoom::modifyRoom(const QString& name, const quint32 limitOfStoredMessa
     _visible = isVisible;
     _picture = picture;
     _admins = admins;
+    _members = users;
 }
 
 QList<quint32> ModelChator::getUserRooms(const quint32 idUser) const
