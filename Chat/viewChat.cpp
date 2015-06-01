@@ -497,7 +497,7 @@ void ViewChat::serverDisconnected()
 
 void ViewChat::on_btn_send_clicked()
 {
-    // There must be non-blank content in the message to send.
+    // There must not be only blank content in the message to send.
     if (!_ui->ldt_message->text().trimmed().isEmpty())
     {
         emit requestSendMessage();
@@ -544,6 +544,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
     bool aRoomIsSelected = false;
     quint32 nbItems = _ui->tre_rooms->topLevelItemCount();
 
+    // Clear all components, if there is no longer selected room.
     if (!nbItems)
     {
         _ui->tre_messages->clear();
@@ -559,6 +560,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
         _ui->ldt_message->setDisabled(false);
         _ui->ldt_message->setPlaceholderText(tr("Entrez un message."));
 
+        // Change the selected room's aspect.
         for (quint32 i = 0; i < nbItems; ++i)
         {
             if (_ui->tre_rooms->topLevelItem(i)->isSelected())
@@ -597,6 +599,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
 
 void ViewChat::on_tre_messages_itemChanged(QTreeWidgetItem* item, int column)
 {
+    // The message is edited only if the content (second column) changed.
     if (column == 1 && !_isEditingMessage)
         emit requestEditMessage(item);
 
@@ -643,6 +646,7 @@ void ViewChat::showContextMessage(const QPoint &pos)
         // Show the context menu in the messages tree at the cursor position.
         QAction* act = _menu->exec(_ui->tre_messages->viewport()->mapToGlobal(pos));
 
+        // Call the right action, depending on the selected QAction.
         if (act == editAct)
         {
             _ui->tre_messages->editItem(_ui->tre_messages->selectedItems().at(0), 1);
