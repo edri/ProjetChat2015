@@ -1,3 +1,9 @@
+/*
+     * Created by Miguel Santamaria
+     *
+     * Show a view composed by general information.
+*/
+
 #ifndef VIEWABOUT_H
 #define VIEWABOUT_H
 
