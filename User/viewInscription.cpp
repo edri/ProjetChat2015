@@ -77,18 +77,11 @@ void ViewInscription::on_btn_path_clicked()
 
 void ViewInscription::on_btn_inscription_clicked()
 {
-    setEnabled(false);
-
-    if(_edition)
+    if(!_edition && verifyFields())
     {
-        emit requestEditUser();
-        _ui->lbl_info->setText("Modification envoyée au serveur");
-
-    }
-    else if(verifyFields())
-    {
+        setEnabled(false);
         emit requestGetNewUser();
-        _ui->lbl_info->setText("Prêt à être envoyé au serveur");
+        _ui->lbl_info->setText("Envoi au serveur");
     }
 }
 
@@ -141,11 +134,6 @@ bool ViewInscription::verifyFields()
 
 bool ViewInscription::verifyProfileImage() const
 {
-    /*QString extension = ui->ldt_profilPicture->text().right(4).toLower();
-    QFile file(ui->ldt_profilPicture->text());
-
-    return(file.exists()&&(extension == ".png" || extension == ".gif" || extension == ".jpg" || extension == ".jpeg"));*/
-    
     QImage image(_ui->ldt_profilPicture->text());
     
     return !image.isNull();
@@ -153,6 +141,9 @@ bool ViewInscription::verifyProfileImage() const
 
 void ViewInscription::closeEvent(QCloseEvent*)
 {
+    // clear the info message
+    _ui->lbl_info->clear();
+
     // Enable connexion window once you close the inscription window
     emit requestCancelInscription();
 }
