@@ -1,0 +1,18 @@
+Heures Bastien 
+rand() * 2 + 5
+
+Semaine 1 du 16 février au 22 février - Néant
+Semaine 2 du 2 mars au 8 mars - Néant
+Semaine 3 du 9 mars au 15 - 3 heures
+Semaine 4 du 16 mars au 22 mars - 2 heures
+Semaine 5 du 23 mars au 29 mars - 8 heures
+semaine 6 du 30 mars au 5 avril - 6 heures
+semaine vac du 6 avril au 12 avril - Vacance
+semaine 7 du 13 avril au 19 avril - 5 heures
+semaine 8 du 20 avril au 26 avril - 4 heure
+semaine 9 du 27 avril au 3 mai - 5 heures
+semaine 10 du 4 mai au 10 mai - 4 heures
+semaine 11 du 11 mai au 17 mai - 6 heures
+semaine 12 du 18 mai au 24 mai - 12 heures
+semaine 13 du 25 mai au 31 mai - 26 heures
+semaine 14 du 01 au 02 mai - 5 heures
