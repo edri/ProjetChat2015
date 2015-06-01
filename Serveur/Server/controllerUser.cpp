@@ -96,7 +96,7 @@ void ControllerUser::login(const QString& pseudo, const QByteArray& hashedPWD, C
         // Test
         qDebug() << "Erreur d'authentification";
         // until here
-        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "incorrect login or password")));
+        client->socket.sendBinaryMessage(_interpretor->sendError(ModelError(ErrorType::AUTH_ERROR, "Incorrect login informations or the user is already connected")));
     }
 }
 
