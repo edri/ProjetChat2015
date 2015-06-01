@@ -27,7 +27,6 @@ ControllerUser::ControllerUser(ModelChator* model, ModelUser* currentUser, Clien
     connect(_view, SIGNAL(requestGetIds(bool)), this, SLOT(connectToServer(bool)));
     connect(cc, SIGNAL(connectionSuccessful()), this, SLOT(auth()));
     connect(_view->getViewInscription(), SIGNAL(requestGetNewUser()), this, SLOT(checkUsername()));
-    connect(_controllerChat->getViewEdition(), SIGNAL(requestEditUser()), this, SLOT(editUser()));
     connect(cc, SIGNAL(binaryMessageReceived(const QByteArray&)), i, SLOT(processData(const QByteArray&)));
     connect(_view->getViewInscription(), SIGNAL(requestCancelInscription()), this, SLOT(cancelInscription()));
     connect(cc, SIGNAL(disconnected()), SLOT(serverDisconnected()));
@@ -68,10 +67,11 @@ void ControllerUser::connectToServer(bool fromBtnConnection)
 
 void ControllerUser::auth()
 {
+    // we can stop the timeout timer
     _view->stopTimer();
     _connected = true;
 
-    if(_fromBtnConnection)
+    if(_fromBtnConnection)  //connection's button
     {
         qDebug() << "Demande du sel";
         // Disabling the view and retrieving of "passwordSalt"
@@ -79,7 +79,7 @@ void ControllerUser::auth()
         _view->setDisabled(true);
         _co->askForSalt(_view->getUsername());
     }
-    else  // button inscription
+    else  // inscription's button
     {
         // Open the inscription window
         _view->getViewInscription()->show();
@@ -91,73 +91,80 @@ void ControllerUser::auth()
 
 void ControllerUser::receiveSalt(const Salt& salt) const
 {
+    //Create a temporal QByteArray to store the salt
     QByteArray tmp((const char*) salt.data(), salt.size());
-    qDebug() << "Reception du sel: " << QString::fromUtf8(tmp.toHex());
+
+    // Hash's generation from the password
     Hash hashPassword = _cryptor->generateHash(_view->getPassword().toStdString(), salt);
 
+    // Send username and hash to prove user's identity
     _co->login(_view->getUsername(), hashPassword);
 }
 
-void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys) {
-    
+void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsaKeys)
+{
+    // Receive user's information from the server and store it in the model
     _model->addUser(user);
     *_currentUser = _model->getUser(user.getIdUser());
     
     QString password (_view->getViewInscription()->getPassword());
+
+    // Decrypt the private key in order to to decrypt the future received messages
     if (password.isEmpty())
     {
         _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(_view->getPassword().toStdString(), keySalt)));
     }
-    
     else
     {
         _cryptor->decryptWithAES(rsaKeys,  _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password.toStdString(), keySalt)));
     }
     
+    // Configure the key pair in the local model
     _model->setRsaKeyPair(rsaKeys);
-    qDebug() << "Affichage de l'interface prinicpale";
+
+    // Show the main chat window
     _controllerChat->showView();
     _view->close();
-    qDebug() << "Utilisateur Reçu !";
-    
 }
 
 void ControllerUser::usernameResponse(const bool exists) const
 {
     if (exists)
     {
+        // Show an error if user already exist
         _view->getViewInscription()->usernameAlreadyExistd();
     }
     else
     {
+        // user can is allow to create his account
         inscriptionToServer();
     }
 }
 
 void ControllerUser::inscriptionToServer() const
 {
-    qDebug() << "Inscription to server";
-    // Get user information
+    // Fetch user's information
     const QString firstName = _view->getViewInscription()->getFirstName();
     const QString lastName = _view->getViewInscription()->getLastName();
     const QString userName = _view->getViewInscription()->getUserName();
     const QImage profilePicture = _view->getViewInscription()->getProfileImage();
     string password = _view->getViewInscription()->getPassword().toStdString();
 
+    // Salt generation and hash
     Salt passwordSalt = _cryptor->generateSalt();
     Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
 
     QByteArray tmp((const char*) keyPair.publicKey.data(), keyPair.publicKey.size());
-    qDebug() << "Clé publique : " << QString::fromUtf8(tmp.toHex());
 
+    // Encrypt private key in order to store in the server's database
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
 
-    //Store information into a ModelUser
+    // Store information into a ModelUser
     ModelUser myUser(0, userName, firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
 
-    //send data to the server
+    // Send data to the server
     _co->createAccount(myUser, hashPassword, passwordSalt, keySalt, keyPair);
 }
 
@@ -165,23 +172,6 @@ void ControllerUser::checkUsername() const
 {
     // Request the server to know if the userName already exists.
     _co->userId(_view->getViewInscription()->getUserName());
-}
-
-void ControllerUser::editUser() const
-{
-    const QString firstName = _controllerChat->getViewEdition()->getFirstName();
-    const QString lastName = _controllerChat->getViewEdition()->getLastName();
-    QString previousPassword = _controllerChat->getViewEdition()->getPassword();
-    const QImage profilePicture = _controllerChat->getViewEdition()->getProfileImage();
-
-    ModelUser myUser(_currentUser->getIdUser(), "", firstName, lastName, false,  QDateTime::currentDateTime(), profilePicture, QSet<quint32>());
-
-    //Modification are sent to the server
-    _co->editAccount(myUser);
-
-    //Local current user is updated
-    _currentUser->setFirstName(firstName);
-    _currentUser->setLastName(lastName);
 }
 
 void ControllerUser::cancelInscription()
