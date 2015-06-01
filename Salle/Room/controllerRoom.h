@@ -90,7 +90,7 @@ public slots :
     void addUser();
     
     // Send the server a request for the user to join a specific room.
-    void joinRoom(quint32 roomId);
+    void joinRoom(quint32 roomId, bool isPrivate);
     
     // Close and destroy viewRoom. Should only be called if a window is open.
     void cancelRoom();

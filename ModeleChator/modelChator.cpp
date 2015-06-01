@@ -503,8 +503,6 @@ void ModelRoom::setPicture(const QImage& picture)
 void ModelRoom::setKey(const AESKey& aeskey)
 {
     _secretKey = aeskey;
-    qDebug() << "SETKEEEY: " << aeskey.key.size() << "|" << aeskey.initializationVector.size();
-    qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }
 
 ModelRequest::ModelRequest() {}
