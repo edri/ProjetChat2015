@@ -114,7 +114,7 @@ void ControllerChat::editRoom(const ModelRoom& room)
 
     // Edit the room in the model and then in the view.
     _model->modifyRoom(room.getIdRoom(), room.getName(), room.getLimit(),
-                       room.isPrivate(), room.isVisible(), room.getPicture(), room.getAdmins());
+                       room.isPrivate(), room.isVisible(), room.getPicture(), room.getAdmins(), room.getUsers());
     _view->modifyRoom(room.getIdRoom(), room.getName(), room.getPicture());
 }
 
@@ -181,6 +181,10 @@ void ControllerChat::loadUserRooms() const
 {
     // Get all the rooms of the connected user.
     QList<quint32> userRooms = _model->getUserRooms(_currentUser->getIdUser());
+
+    // First of all, we clear the users of each room (because we maybe added
+    // or removed some, since the last refresh).
+    _view->clearRoomUsers();
 
     // Add each room in the view.
     for (quint32 roomId : userRooms)

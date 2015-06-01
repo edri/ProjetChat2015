@@ -91,6 +91,12 @@ public:
     void modifyRoom(const quint32 roomId, const QString& roomName, const QImage& roomPicture);
 
     //----------------------------------------------------------------------------------
+    // Goal      : Clear the users of each room in the view.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void clearRoomUsers();
+
+    //----------------------------------------------------------------------------------
     // Goal      : Add a user in a room, below a room in the list of room.
     // Param     : roomId - Identify the room where the message should be deleted.
     //             userId - Identify the message that has to be deleted

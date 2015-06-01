@@ -166,6 +166,17 @@ void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const Q
     }
 }
 
+void ViewChat::clearRoomUsers()
+{
+    quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
+
+    // Take each child of each room.
+    for (quint32 i = 0; i < nbRooms; ++i)
+    {
+        _ui->tre_rooms->topLevelItem(i)->takeChildren();
+    }
+}
+
 void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const QString &userName, const QImage& image, const bool isConnected)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
@@ -242,17 +253,24 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
         if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == message.getIdRoom())
         {
             // When the room has been found, we have two choice :
-            //    1. The room is currently selected, so we have to add the message in the messages' tree.
+            //    1. The room is currently selected, so we have to add the message in the
+            //       messages' tree.
             //    2. The room is not selected, so we have to add a new notification near to it.
+            // Choice 1.
             if (_selectedRoomId == message.getIdRoom())
             {
+                // If the received message is an edition, update it in the tree.
                 if (edited)
                 {
-                    // Select the message to update.
+                    // Indicate whether the message to edit has been found in the tree.
+                    bool messageFound = false;
+
+                    // Select the date-node in which the message is stored.
                     for (i = 0; i < nbTopMessageItems; ++i)
                     {
                         nbChildren = _ui->tre_messages->topLevelItem(i)->childCount();
 
+                        // Select the message to update, and edit it.
                         for (j = 0; j < nbChildren; ++j)
                         {
                             if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole) == message.getIdMessage())
@@ -262,10 +280,17 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setText(2, "[Edité le " + message.getEditionDate().toString("dd.MM.yyyy à HH:mm") + "]");
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setTextColor(2, QColor(192, 192, 192));
                                 _ui->tre_messages->topLevelItem(i)->child(j)->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
+                                messageFound = true;
+
+                                break;
                             }
                         }
+
+                        if (messageFound)
+                            break;
                     }
                 }
+                // Else (if the received message is a new one), we add it to the messages' tree.
                 else
                 {
                     addMessageToTree(nbTopMessageItems, message, message.getIdUser() == currentUserId);
@@ -277,13 +302,16 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
                 _ui->tre_messages->resizeColumnToContents(1);
                 _ui->tre_messages->resizeColumnToContents(2);
             }
+            // Choice 2.
             else if (!edited)
             {
                 QTreeWidgetItem* item = _ui->tre_rooms->topLevelItem(k);
+                // Get the room-node's current number of unread messages, and increment it.
                 quint32 nbNewMessages = item->data(1, Qt::UserRole).toInt() + 1;
 
                 item->setData(1, Qt::UserRole, nbNewMessages);
 
+                // Add the notification right to the room's name.
                 _ui->tre_rooms->topLevelItem(k)->setText(1, "(" + QString::number(nbNewMessages) + ")");
                 _ui->tre_rooms->topLevelItem(k)->setForeground(0, QBrush(QColor(255, 85, 0)));
                 _ui->tre_rooms->resizeColumnToContents(1);
@@ -309,12 +337,15 @@ void ViewChat::userStatusChanged(const quint32 userId, const bool isConnected) c
     quint32 nbTopRoomItems = _ui->tre_rooms->topLevelItemCount();
     quint32 nbRoomUsers;
 
+    // Search the concerned user in each room.
     for (quint32 i = 0; i < nbTopRoomItems; ++i)
     {
         nbRoomUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
         for (quint32 j = 0; j < nbRoomUsers; ++j)
         {
+            // Change the user's status (connected => bold / disconnected => normal) when we
+            // find it in a room.
             if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
             {
                 if (isConnected)
@@ -328,6 +359,8 @@ void ViewChat::userStatusChanged(const quint32 userId, const bool isConnected) c
 
 void ViewChat::updateButtons(const bool isAdmin) const
 {
+    // Display administration's buttons if the user is admin, and
+    // hide them if not.
     if (isAdmin)
     {
         _ui->btn_edit->show();
@@ -345,15 +378,17 @@ void ViewChat::deleteMessage(const quint32 messageId) const
     quint32 nbMessageDates = _ui->tre_messages->topLevelItemCount();
     quint32 nbMessages;
 
+    // Search for the date-node item which contains the message to delete.
     for (quint32 i = 0; i < nbMessageDates; ++i)
     {
         nbMessages = _ui->tre_messages->topLevelItem(i)->childCount();
 
+        // Search for the message in the date-node.
         for (quint32 j = 0; j < nbMessages; ++j)
         {
-            int a = _ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole).toInt();
-            if (a == messageId)
+            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole).toInt() == messageId)
             {
+                // Take (remove) the message.
                 _ui->tre_messages->topLevelItem(i)->takeChild(j);
 
                 // If the top-level item has no child anymore, we take it too.
@@ -370,6 +405,7 @@ void ViewChat::deleteRoom(const quint32 roomId)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
+    // Search for the room to delete, and remove it of the rooms' tree.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
@@ -379,10 +415,12 @@ void ViewChat::deleteRoom(const quint32 roomId)
         }
     }
 
+    // Clear the messages' tree if there is no room anymore.
     if (_ui->tre_rooms->topLevelItemCount())
     {
         _ui->tre_messages->clear();
     }
+    // Else, update the messages' tree.
     else
     {
         on_tre_rooms_itemSelectionChanged();
@@ -393,12 +431,14 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
+    // Search for the room in which we will remove the user.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
             quint32 nbUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
+            // Search the user to remove, and take it.
             for (quint32 j = 0; j < nbUsers; ++j)
             {
                 if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
@@ -412,10 +452,12 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
         }
     }
 
+    // Clear the messages' tree if there is no room anymore.
     if (_ui->tre_rooms->topLevelItemCount())
     {
         _ui->tre_messages->clear();
     }
+    // Else, update the messages' tree.
     else
     {
         on_tre_rooms_itemSelectionChanged();
@@ -424,9 +466,12 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
 
 void ViewChat::updateRequests(const qint32 nbToUpdate)
 {
+    // The number of notifications must be greater or equals to 0.
     if ((_nbNotifications += nbToUpdate) < 0)
         _nbNotifications = 0;
 
+    // Update the notifications' number in the menubar ; if the number is equals to 0, we
+    // don't display it.
     _ui->menuNotifications->setTitle(tr("Notifications") +
                                      (_nbNotifications ? " (" + QString::number(_nbNotifications) + ")" : ""));
     _ui->actionDemandes_d_adh_sion->setText(tr("Demandes d'adhésion...") +
@@ -435,11 +480,15 @@ void ViewChat::updateRequests(const qint32 nbToUpdate)
 
 void ViewChat::serverDisconnected()
 {
+    // Display a critical message box, which indicates that the connection to the server
+    // has been lost.
     qint32 result =
             QMessageBox::critical(this, tr("Connexion perdue..."),
                                   tr("La connexion avec le serveur a été perdue.<br/>L'application va se fermer."),
                                   QMessageBox::Ok);
 
+    // Wait for the user to click the "OK" button (or to close the pop-up) to close the
+    // application.
     if (result == QMessageBox::Ok)
     {
         emit requestCloseApplication();
@@ -448,6 +497,7 @@ void ViewChat::serverDisconnected()
 
 void ViewChat::on_btn_send_clicked()
 {
+    // There must be non-blank content in the message to send.
     if (!_ui->ldt_message->text().trimmed().isEmpty())
     {
         emit requestSendMessage();
