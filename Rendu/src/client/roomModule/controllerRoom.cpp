@@ -6,7 +6,7 @@
  * Description : Implementation room module controller (see controllerRoom.h for
  * more info).
  */
-#include "../../ModeleChator/chatorConstants.h"
+#include "../../common/models/chatorConstants.h"
 #include "controllerRoom.h"
 
 ControllerRoom::ControllerRoom(ModelChator* model, ModelUser* user, ControllerOutput* controllerOuput, Cryptor* cryptor)

@@ -22,10 +22,10 @@
 
 #include "viewRoom.h"
 // These paths will be probably changed at some time.
-#include "../../ModeleChator/modelChator.h"
-#include "../Join/viewJoin.h"
+#include "../../common/models/modelChator.h"
+#include "viewJoin.h"
 #include "../../Serveur/controllerOutput/controllerOutput.h"
-#include "../../Cryptor/cryptor.h"
+#include "../../common/cryptor/cryptor."
 
 class ControllerRoom : public QObject
 {

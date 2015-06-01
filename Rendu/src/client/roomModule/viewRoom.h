@@ -15,7 +15,7 @@
 #define CHAT_VIEW_ROOM_H
 
 #include <QtWidgets>
-#include "../../ModeleChator/modelChator.h"
+#include "../../common/models/modelChator.h"
 
 // predeclaration of the controller.
 class ControllerRoom;

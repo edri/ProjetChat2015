@@ -8,7 +8,7 @@
 #define VIEWMEMBERSHIPREQUESTS_H
 
 #include <QDialog>
-#include "../ModeleChator/modelChator.h"
+#include "../../common/models/modelChator.h"
 
 namespace Ui {
 class ViewMembershipRequests;

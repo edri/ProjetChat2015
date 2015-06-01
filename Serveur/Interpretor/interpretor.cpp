@@ -1,6 +1,4 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Implements interpretor.h.
 */
 
@@ -8,7 +6,11 @@
 #include <QByteArray>
 #include <QDataStream>
 
+// The constructor sets the reference to the controllerInput
 Interpretor::Interpretor(ControllerInput& dispatcher) : _dispatcher(dispatcher){};
+
+
+// Every following method serializes the packet identifier and the parameters.
 
 QByteArray Interpretor::sendMessage(const ModelMessage& message, const bool edited)
 {
@@ -30,8 +32,6 @@ QByteArray Interpretor::deleteMessage(const quint32 roomId, const quint32 messag
 
 QByteArray Interpretor::login(const QString& pseudo, const Hash& hashedPwd)
 {
-    qDebug() << "Envoi de login";
-    
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
@@ -41,7 +41,6 @@ QByteArray Interpretor::login(const QString& pseudo, const Hash& hashedPwd)
 
 QByteArray Interpretor::createAccount(const ModelUser& user, const Hash& password, const Salt& passwordSalt, const Salt& keySalt, const RSAPair& asymKeys)
 {
-    // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
@@ -51,7 +50,6 @@ QByteArray Interpretor::createAccount(const ModelUser& user, const Hash& passwor
 
 QByteArray Interpretor::editAccount(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey)
 {
-    // Il y aura aussi les clés à gérer ici (envoi des deux clés asymétriques et de la masterkey chiffrée)
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     
@@ -63,7 +61,7 @@ QByteArray Interpretor::sendInfoUser(const ModelUser& user, const QByteArray& ke
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
-    qDebug() << "serialisation de " << user.getUserName();
+
     stream << (quint32) MessageType::INFO_USER << user << keySalt << privateKey << publicKey;
     return data;
 }
@@ -126,7 +124,7 @@ QByteArray Interpretor::room(const ModelRoom& room, const QMap<quint32, QByteArr
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
-    qDebug() << "Envoi de " << usersAndKeys.size();
+
     stream << (quint32) MessageType::ROOM << edited << room << usersAndKeys;
     return data;
 }
@@ -197,9 +195,13 @@ QByteArray Interpretor::listRooms(const QList<QPair<quint32, QString>>& publicRo
 void Interpretor::processData(const QByteArray& data)
 {
     QDataStream stream(data);
+    
+    // We first deserializes the packet identifier and pass it to the switch
     quint32 type;
     stream >> type;
     
+    // Each case of this switch corresponds to a different packet identifier. Each one will deserialize the parameters and transmit everything to the controllerInput.
+    // We had to use braces in order to create variables inside a case of a switch.
     switch ((MessageType) type)
     {
         case MessageType::NEW_ACCOUNT:
@@ -221,6 +223,7 @@ void Interpretor::processData(const QByteArray& data)
             ModelUser user;
             QByteArray password;
             QByteArray privateKey;
+            
             stream >> user >> password >> privateKey;
             _dispatcher.editAccount(user, password, privateKey, sender());
         }
@@ -232,6 +235,7 @@ void Interpretor::processData(const QByteArray& data)
             QByteArray keySalt;
             QByteArray privateKey;
             QByteArray publicKey;
+            
             stream >> user >> keySalt >> privateKey >> publicKey;
             _dispatcher.infoUser(user, keySalt, publicKey, privateKey, sender());
         }
@@ -241,17 +245,17 @@ void Interpretor::processData(const QByteArray& data)
         {
             bool edited;
             ModelMessage message;
-            stream >> edited;
-            stream >> message;
+            
+            stream >> edited >> message;
             _dispatcher.receiveMessage(message, edited, sender());
         }
         break;
         
         case MessageType::DELETE_MESSAGE:
         {
-            qDebug() << "Déserialisation deletemessage";
             quint32 roomId;
             quint32 messageId;
+            
             stream >> roomId >> messageId;
             _dispatcher.deleteMessage(roomId, messageId, sender());
         }
@@ -259,9 +263,9 @@ void Interpretor::processData(const QByteArray& data)
 
         case MessageType::LOGIN:
         {
-            qDebug() << "Déserialisation login";
             QString pseudo;
             QByteArray hashedPwd;
+            
             stream >> pseudo >> hashedPwd;
             _dispatcher.login(pseudo, hashedPwd, sender());
         }
@@ -271,6 +275,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             QMap<quint32, ModelRoom> rooms;
             QMap<quint32, ModelUser> users;
+            
             stream >> rooms >> users;
             _dispatcher.join(rooms, users, sender());
         }
@@ -280,8 +285,8 @@ void Interpretor::processData(const QByteArray& data)
         {
             quint32 roomId;
             quint32 userId;
+            
             stream >> userId >> roomId;
-            qDebug() << "Quittage d'une salle " << userId << ", " << roomId;
             _dispatcher.leaveRoom(userId, roomId, sender());
         }
         break;
@@ -289,6 +294,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::DISCONNECT:
         {
             quint32 idUser;
+            
             stream >> idUser;
             _dispatcher.disconnect(idUser, sender());
         }
@@ -297,6 +303,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::CONNECTED:
         {
             ModelUser user;
+            
             stream >> user;
             _dispatcher.connected(user.getIdUser(), sender());
         }
@@ -319,9 +326,8 @@ void Interpretor::processData(const QByteArray& data)
             QString userName;
             bool exists;
             quint32 userId;
-            stream >> userName;
-            stream >> exists;
-            stream >> userId;
+            
+            stream >> userName >> exists >> userId;
             _dispatcher.userId(userName, exists, userId, sender());
         }
         break;
@@ -329,6 +335,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::DELETE_ROOM:
         {
             quint32 roomId;
+            
             stream >> roomId;
             _dispatcher.deleteRoom(roomId, sender());
         }
@@ -338,8 +345,8 @@ void Interpretor::processData(const QByteArray& data)
         {
             QString pseudo;
             QByteArray salt;
-            stream >> pseudo;
-            stream >> salt;
+            
+            stream >> pseudo >> salt;
             _dispatcher.salt(pseudo, salt, sender());
         }
         break;
@@ -350,6 +357,7 @@ void Interpretor::processData(const QByteArray& data)
             ModelUser user;
             QByteArray key;
             bool accepted;
+            
             stream >> idRoom >> user >> key >> accepted;
             _dispatcher.request(idRoom, user, key, accepted, sender());
         }
@@ -358,6 +366,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::PUBLIC_KEY:
         {
             QList<QPair<quint32, QByteArray>> idsAndKeys;
+            
             stream >> idsAndKeys;
             _dispatcher.publicKey(idsAndKeys, sender());
         }
@@ -367,6 +376,7 @@ void Interpretor::processData(const QByteArray& data)
         {
             QList<QPair<quint32, QString>> publicRooms;
             QList<QPair<quint32, QString>> privateVisibleRooms;
+            
             stream >> publicRooms >> privateVisibleRooms;
             _dispatcher.listRooms(publicRooms, privateVisibleRooms, sender());
         }
@@ -375,6 +385,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::JOIN_ROOM:
         {
             quint32 roomId;
+            
             stream >> roomId;
             _dispatcher.joinRoom(roomId, sender());
         }
@@ -383,6 +394,7 @@ void Interpretor::processData(const QByteArray& data)
         case MessageType::SERVER_ERROR:
         {
             ModelError error;
+            
             stream >> error;
             _dispatcher.error(error);
         }

@@ -1,9 +1,11 @@
 /*
-     * Created by Benoist Wolleb
-     *
-     * Serialize any request made by the user in ControlerOutput in order
-     * to be sent to the server.
-     * Also serialize the other way, from server to client.
+     * This class is able to serialize and deserialize every packet defined in
+     * our protocol. When the server or the client has something to send, it
+     * calls this class which will serialize data whose can be sent afterwards
+     * in the socket directly.
+     * When the data arrives in the remote socket, the interpretor is called to
+     * deserialize its content and send it to the controllerInput who knows
+     * which controller can process it.
 */
 
 #ifndef INTERPRETOR_H
@@ -11,7 +13,6 @@
 
 #include "packet.h"
 #include "../../ModeleChator/modelChator.h"
-//#include <QObject>
 #include <QByteArray>
 #include <QByteArray>
 #include <QList>
@@ -19,25 +20,26 @@
 #include "../controllerInput/controllerInput.h"
 #include "../ServerConnector/connector.h"
 
-//class Interpretor : public QObject        // Not sure yet if the Interpretor has to be a subclass of QObject (will it have signals/slots?)
 class Interpretor : public QObject
 {
     Q_OBJECT
     
     public:
+    
+    // Constructor, takes a reference to the controllerInput to which the data will have to be transmitted 
     Interpretor(ControllerInput& dispatcher);
 
     //----------------------------------------------------------------------------------
     // Goal      : Serialize a message and the flag indicating if the message was edited
     //             or created.
-    // Last edited by Miguel Santamaria on 08.05.2015 07:21
+    // Params    : message - message to send
+    //             edited - flag
     //----------------------------------------------------------------------------------
     QByteArray sendMessage(const ModelMessage& message, const bool edited = false);
 
     //----------------------------------------------------------------------------------
     // Goal      : Serialize a message's id and its room's id, in the purpose of delete
     //             it.
-    // Last edited by Miguel Santamaria on 18.05.2015 16:47
     //----------------------------------------------------------------------------------
     QByteArray deleteMessage(const quint32 roomId, const quint32 messageId);
 
@@ -64,7 +66,7 @@ class Interpretor : public QObject
     //             rsaKeys. Once the user has received it, he can use his password to
     //             decipher it and store it in the local app. It will allow him to
     //             decipher encrypted messages addressed to him.
-    // Param     : user - cuModelUser of the current user
+    // Params    : user - ModelUser of the current user
     //             keySalt - salt used for key's encryption
     //             rsaKeys - RSA Keys
     //----------------------------------------------------------------------------------
@@ -126,7 +128,6 @@ class Interpretor : public QObject
     //             created.
     //             The message type will be ROOM.
     //             The flag is written first, the room second.
-    // Created Jan Purro 26.04.2015 14:55 modified by Jan Purro 26.05.2015 00:36
     //----------------------------------------------------------------------------------
     QByteArray room(const ModelRoom& room, const QMap<quint32, QByteArray>& usersAndKeys, bool edited);
     
@@ -136,22 +137,25 @@ class Interpretor : public QObject
     //             is used and obtain the user's id if he exists).
     //             userId and exists are not used by the client, the server use them to answer the clien request.
     //             The message type will be USER_ID. The parameters are written in the same order they appear in the prototype.
-    // Created Jan Purro 27.04.2015 13:35
     //----------------------------------------------------------------------------------
     QByteArray userId(const QString& userName, bool exists, quint32 userId);
 
     //----------------------------------------------------------------------------------
-    // Goal      : Serialize a room's id.
-    // Created by Miguel Santamaria on 13.05.2015 09:04
+    // Goal      : Serialize a room's id to delete it.
     //----------------------------------------------------------------------------------
     QByteArray deleteRoom(const quint32 roomId);
-
-
+    
+    //----------------------------------------------------------------------------------
+    // Goal      : Serialize a request that has been, or will have to be managed by an admin.
+    //----------------------------------------------------------------------------------
     QByteArray request(const quint32 roomId, const ModelUser& user, const QByteArray& publicKey, const bool accepted);
 
-    //QByteArray leaveRoom(const quint32 roomId);
     
     public slots:
+    
+    //----------------------------------------------------------------------------------
+    // Goal      : Deserializes the data and transmits the data to the controllerInput
+    //----------------------------------------------------------------------------------
     void processData(const QByteArray& data);
     
     private:
