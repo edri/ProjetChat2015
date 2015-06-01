@@ -70,7 +70,7 @@ void Listener::disconnected()
     
     if (client)
     {
-        
+        qDebug() << "Client loggué: " << client->logged;
         if (client->logged) {_controllerInput.disconnect(client->id, (QObject*) client);}
     
         delete client;

@@ -95,3 +95,9 @@ void ServerControllerInput::joinRoom(const quint32 roomId, QObject* sender)
 {
     _controllerRoom.joinRoom(roomId, (ChatorClient*) sender);
 }
+
+void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
+{
+    Q_UNUSED(userId);
+    _controllerUser.disconnect((ChatorClient*) sender);
+}
