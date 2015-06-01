@@ -79,3 +79,8 @@ CREATE TABLE IF NOT EXISTS banning (
     FOREIGN KEY (idRoom)
     REFERENCES room (idRoom)
 	);
+
+CREATE TABLE IF NOT EXISTS cleaning (
+  idCleaning INTEGER PRIMARY KEY AUTOINCREMENT,
+  dateCleaning DATETIME NOT NULL
+  );

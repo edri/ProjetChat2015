@@ -1,13 +1,15 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Implements serverControllerInput.h
-     *
+     * The server side requires the sender parameter. It is casted in
+     * a ChatorCLient pointer that is needed by the controllers.
 */
 
 #include "serverControllerInput.h"
 
+// The constructor sets the references to the controllers.
 ServerControllerInput::ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom) : _controllerUser(controllerUser), _controllerRoom(controllerRoom) {}
+
+// All the following methods are simple adapter dispatching.
 
 void ServerControllerInput::receiveMessage(ModelMessage& message, const bool edited, QObject* sender)
 {
@@ -33,6 +35,8 @@ void ServerControllerInput::editAccount(ModelUser& user, const QByteArray& passw
 void ServerControllerInput::room(ModelRoom& room, bool edited, const QMap<quint32, QByteArray>& usersAndKeys, QObject* sender)
 {
     ChatorClient* client = (ChatorClient*) sender;
+    
+    // We check if the room was edited or if it is a new one and call the right method in the room controller.
     if (edited)
     {
         _controllerRoom.modifyRoom(room, usersAndKeys, client);
@@ -47,13 +51,12 @@ void ServerControllerInput::userId(const QString& userName, bool exists, quint32
 {
     Q_UNUSED(exists);
     Q_UNUSED(userId);
-    ChatorClient* client = (ChatorClient*) sender;
-    _controllerUser.userId(userName, client);
+
+    _controllerUser.userId(userName, (ChatorClient*) sender);
 }
 
 void ServerControllerInput::createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, QObject* sender)
 {
-    qDebug() << "ServerControllerInput CreateAccount";
     _controllerUser.createAccount(user, password, passwordSalt, keySalt, privateKey, publicKey, (ChatorClient*) sender);
 }
 
@@ -70,6 +73,7 @@ void ServerControllerInput::leaveRoom(const quint32 userId, const quint32 roomId
 void ServerControllerInput::salt(const QString& pseudo, const QByteArray& salt, QObject* sender)
 {
     Q_UNUSED(salt);
+    
     _controllerUser.getSalt(pseudo, (ChatorClient*) sender);
 }
 
@@ -82,12 +86,14 @@ void ServerControllerInput::listRooms(const QList<QPair<quint32, QString>>& publ
 {
     Q_UNUSED(publicRooms);
     Q_UNUSED(privateVisibleRooms);
+    
     _controllerUser.getAvalaibleRooms((ChatorClient*) sender);
 }
 
 void ServerControllerInput::request(const quint32 roomId, const ModelUser& user, const QByteArray& key, const bool accepted, QObject* sender)
 {
     Q_UNUSED(sender);
+    
     _controllerRoom.acceptOrDeny(roomId, user.getIdUser(), key, accepted);
 }
 
@@ -99,5 +105,6 @@ void ServerControllerInput::joinRoom(const quint32 roomId, QObject* sender)
 void ServerControllerInput::disconnect(const quint32 userId, QObject* sender)
 {
     Q_UNUSED(userId);
+    
     _controllerUser.disconnect((ChatorClient*) sender);
 }
