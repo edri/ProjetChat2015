@@ -106,7 +106,8 @@ class ModelChator
         // Last edited by Jan Purro on 24.04.2015 16:40
         //----------------------------------------------------------------------------------
         void modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage,
-                        const bool isPrivate, const bool isVisible, const QImage& picture, QSet<quint32> admins);
+                        const bool isPrivate, const bool isVisible, const QImage& picture, QSet<quint32> admins,
+                        QSet<quint32> users);
 
         //----------------------------------------------------------------------------------
         // Goal      : Delete a specific room.
@@ -274,7 +275,7 @@ class ModelRoom
 
         // Setters
         void modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
-                        const bool isVisible, const QImage& picture, QSet<quint32> admins);
+                        const bool isVisible, const QImage& picture, QSet<quint32> admins, QSet<quint32> users);
         void setIdRoom(const quint32 id);
         void setPicture(const QImage& picture);
         void setKey(const AESKey& aeskey);

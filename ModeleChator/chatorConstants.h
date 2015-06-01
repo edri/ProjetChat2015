@@ -45,4 +45,7 @@ const quint16 PICTURE_SIZE = 256;
 const QString SERVER_CERTIFICATE_FILE = "cert.pem";
 const QString SERVER_KEY_FILE = "key.pem";
 
+// The duration between two database cleanings, in seconds
+const int CLEANING_INTERVAL = 60; 
+
 #endif

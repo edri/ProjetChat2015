@@ -1,8 +1,7 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Contains methods called everytime the server receive instruction from
-     * the client
+     * the client. This is a concrete subclass that implements the methods
+     * defined in its parent: ControllerInput.
      *
 */
 
@@ -19,8 +18,11 @@ class ServerControllerInput : public ControllerInput
     Q_OBJECT
     
     public:
+    
+    // Constructor
     ServerControllerInput(ControllerUser& controllerUser, ControllerRoom& controllerRoom);
     
+    // Concrete methods that implement the ControllerInput interface. See controllerInput.h for more details.
     void createAccount(ModelUser& user, const QByteArray& password, const QByteArray& passwordSalt, const QByteArray& keySalt, const QByteArray& privateKey, const QByteArray& publicKey, QObject* sender);
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
     void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender);

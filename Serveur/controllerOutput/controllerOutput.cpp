@@ -1,13 +1,19 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Implements controllerOutput.h
+     * This class is a simple wrapper that serializes the parameters
+     * by calling the interpretor and directly sending them into the socket.
+     * This is a simple abstraction, currenty used to simplify the
+     * communication with the server but could be used in the future for
+     * more abstraction.
 */
 
 #include "controllerOutput.h"
 #include "../../ModeleChator/modelChator.h"
 
+// The constructor initializes the references to the Interpretor and the output socket system
 ControllerOutput::ControllerOutput(Connector& connector, Interpretor& interpretor) : _connector(connector), _interpretor(interpretor) {};
+
+// Every following method simply call the interpretor and send the result into the socket.
 
 void ControllerOutput::sendMessage(const ModelMessage& message, const bool edited)
 {
@@ -58,12 +64,6 @@ void ControllerOutput::deleteRoom(const quint32 roomId)
 {
     _connector.send(_interpretor.deleteRoom(roomId));
 }
-
-//void ControllerOutput::leaveRoom(const quint32 userId, const quint32 roomId)
-//{
-    //_connector.send(_interpretor.leaveRoom(roomId));
-    //_connector.send(_interpretor.leave(userId, roomId));
-//}
 
 void ControllerOutput::editAccount(const ModelUser& user)
 {

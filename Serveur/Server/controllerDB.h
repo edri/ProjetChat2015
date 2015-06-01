@@ -13,8 +13,10 @@
 #include "../../ModeleChator/chatorConstants.h"
 #include "serverModel.h"
 
-class ControllerDB
+class ControllerDB : public QObject
 {
+    Q_OBJECT
+    
     public:
     //----------------------------------------------------------------------------------
     // Goal      : Constructor of the controllerDB
@@ -22,6 +24,7 @@ class ControllerDB
     //             See ModelChator\chatorConstants.h for further details
     //----------------------------------------------------------------------------------
     ControllerDB(const QString& dbName = DATABASE_FILE_NAME);
+    ~ControllerDB();
 
     //----------------------------------------------------------------------------------
     // Goal      : Connect to the database, if the database does not exist, create a
@@ -233,8 +236,13 @@ class ControllerDB
     
     QList<QPair<quint32, QByteArray>> getRequests(const quint32 idRoom);
     
+    public slots:
+    
+    void cleanDatabase();
+    
     private :
     QSqlDatabase _db;
+    QTimer _timer;
 };
 
 #endif
