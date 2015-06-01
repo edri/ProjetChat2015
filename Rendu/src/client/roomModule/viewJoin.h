@@ -69,18 +69,18 @@ private:
     QList<QPair<quint32, QString>> _privateRooms;
     
     // GUI elements
-    QLabel* label_title;
-    QLabel* label_name;
-    QLabel* label_rooms;
+    QLabel* lbl_title;
+    QLabel* lbl_name;
+    QLabel* lbl_rooms;
     
-    QLineEdit* ledit_name;
+    QLineEdit* ldt_name;
     
     QPushButton* btn_join;
     QPushButton* btn_cancel;
     
-    QListView* list_rooms;
+    QListView* lst_rooms;
     
-    QStandardItemModel* model_rooms;
+    QStandardItemModel* sim_rooms;
 
     // Function called when the view is closed
     void closeEvent(QCloseEvent*);
