@@ -13,12 +13,12 @@
 #include <QString>
 #include "viewUser.h"
 #include "../../common/models/modelChator.h"
-#include "../../common/controllerInput/clientControllerInput.h"
+#include "../connectionModule/clientControllerInput.h"
 #include "../../common/interpretor/interpretor.h"
-#include "../../common/ServerConnector/connector.h"
-#include "../controllerOutput/controllerOutput.h"
+#include "../connectionModule/connector.h"
+#include "../connectionModule/controllerOutput.h"
 #include "../chatModule/controllerChat.h"
-#include "../../cryptor/cryptor.h"
+#include "../../common/cryptor/cryptor.h"
 
 class ClientControllerInput;
 class ControllerChat;

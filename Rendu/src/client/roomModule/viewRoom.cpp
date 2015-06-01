@@ -8,7 +8,6 @@
 #include <QtWidgets>
 
 #include "viewRoom.h"
-#include "controllerRoom.h"
 
  ViewRoom:: ViewRoom(const bool edit)
 {

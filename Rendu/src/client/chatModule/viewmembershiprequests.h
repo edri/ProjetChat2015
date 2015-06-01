@@ -1,6 +1,4 @@
 /*
-     * Created by Miguel Santamaria
-     *
      * View used by a room administrator to manage the new membership's requests.
 */
 

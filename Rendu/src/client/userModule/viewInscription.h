@@ -13,7 +13,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "../../common/models/modelChator.h"
-#include "../../common/leChator/chatorConstants.h"
+#include "../../common/models/chatorConstants.h"
 
 namespace Ui {
 class viewInscription;

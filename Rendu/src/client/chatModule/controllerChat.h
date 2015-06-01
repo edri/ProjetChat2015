@@ -15,10 +15,10 @@
 
 #include "viewChat.h"
 #include "../../common/models/modelChator.h"
-#include "../../common/controllerInput/clientControllerInput.h"
+#include "../connectionModule/clientControllerInput.h"
 #include "../../common/interpretor/interpretor.h"
-######include "../Serveur/ServerConnector/connector.h"
-######include "../Serveur/controllerOutput/controllerOutput.h"
+#include "../connectionModule/connector.h"
+#include "../connectionModule/controllerOutput.h"
 #include "../roomModule/controllerRoom.h"
 #include "../../common/cryptor/cryptor.h"
 #include "viewmembershiprequests.h"

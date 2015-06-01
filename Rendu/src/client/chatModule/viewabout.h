@@ -1,6 +1,4 @@
 /*
-     * Created by Miguel Santamaria
-     *
      * Show a view composed by general information.
 */
 

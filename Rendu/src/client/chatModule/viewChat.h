@@ -1,6 +1,4 @@
 /*
-     * Created by Miguel Santamaria
-     *
      * Show information in the GUI received from the controllerChat:
      * - Messages receives
      * - Available rooms

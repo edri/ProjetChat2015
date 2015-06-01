@@ -21,11 +21,10 @@
 #include <QString>
 
 #include "viewRoom.h"
-// These paths will be probably changed at some time.
 #include "../../common/models/modelChator.h"
 #include "viewJoin.h"
-#include "../../Serveur/controllerOutput/controllerOutput.h"
-#include "../../common/cryptor/cryptor."
+#include "../connectionModule/controllerOutput.h"
+#include "../../common/cryptor/cryptor.h"
 
 class ControllerRoom : public QObject
 {
