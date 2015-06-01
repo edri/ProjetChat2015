@@ -35,21 +35,33 @@ ViewChat::ViewChat(ModelChator* model, QWidget *parent) :
 ViewChat::~ViewChat()
 {
     delete _ui;
+    delete _model;
     delete _menu;
     delete _viewAbout;
 }
 
+void ViewChat::closeEvent(QCloseEvent*)
+{
+    emit requestCloseApplication();
+}
+
 void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const
 {
+    // Get the message's user's name.
     QString userName = _model->getUser(message.getIdUser()).getUserName();
+    // Create a new node to add to the messages' tree.
     QTreeWidgetItem* messageItem = new QTreeWidgetItem();
+    // This node has three hidden data : the message's date, its ID and the boolean indicate if its the
+    // current's user property.
     messageItem->setData(0, Qt::UserRole, message.getDate());
     messageItem->setData(1, Qt::UserRole, message.getIdMessage());
     messageItem->setData(2, Qt::UserRole, isCurrentUserMessage);
     messageItem->setText(0, "[" + message.getDate().toString("HH:mm") + "] <" +
                          (userName.isEmpty() ? tr("Anonyme") : userName) + ">");
+    // Convert the message's content from utg8 to QString and put it in the node.
     messageItem->setText(1, QString::fromUtf8(message.getContent()));
 
+    // Display a text if the message has been edited.
     if (message.getEditionDate() != message.getDate())
     {
         messageItem->setText(2, "[" + tr("Edité le ") + message.getEditionDate().toString("dd.MM.yyyy à HH:mm") + "]");
@@ -57,6 +69,7 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
         messageItem->setFont(2, QFont("MS Shell Dlg 2", 9, -1, true));
     }
 
+    // Add some colors to the message if current user's property.
     if (isCurrentUserMessage)
     {
         messageItem->setBackgroundColor(0, QColor(234, 239, 245));
@@ -65,8 +78,11 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
         messageItem->setFlags(messageItem->flags() | Qt::ItemIsEditable);
     }
 
+    // Check if a top-level node (date) already exist for containing the message.
+    // In other words, check if a node contains the message's date.
     if (nbTopMessageItems && QDate::fromString(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->text(0), "dd.MM.yyyy") == message.getDate().date())
         _ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->insertChild(_ui->tre_messages->topLevelItem(nbTopMessageItems - 1)->childCount(), messageItem);
+    // If there is no top-level node for our message, create one.
     else
     {
         // Create the top-level item, and insert the message in the first subrow.
@@ -79,6 +95,7 @@ void ViewChat::addMessageToTree(quint32& nbTopMessageItems, ModelMessage& messag
         _ui->tre_messages->topLevelItem(nbTopMessageItems)->insertChild(0, messageItem);
         _ui->tre_messages->expandItem(dateItem);
 
+        // Increment the number of top-level items.
         ++nbTopMessageItems;
     }
 }
@@ -92,8 +109,10 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
                        const bool isPrivate)
 {
     bool alreadyExisting = false;
+    // The number of current rooms in the tree.
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
+    // Check if the given room is not already existing.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
@@ -103,23 +122,27 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
         }
     }
 
+    // If not, add it to the tree.
     if (!alreadyExisting)
     {
         QTreeWidgetItem* roomItem = new QTreeWidgetItem(_ui->tre_rooms);
-
         roomItem->setData(0, Qt::UserRole, roomId);
         roomItem->setText(0, roomName);
+        // Convert the room's image in a QPixmap object, and put it in an icon object.
         roomItem->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
 
+        // Add some color to the room if it's private.
         if (isPrivate)
         {
             roomItem->setBackground(0, QBrush(QColor(255, 234, 153)));
             roomItem->setBackground(1, QBrush(QColor(255, 234, 153)));
         }
 
+        // Store the number of non-read messages (currently, 0) in hidden data.
         roomItem->setData(1, Qt::UserRole, 0);
         roomItem->setFont(1, QFont("MS Shell Dlg 2", 9, QFont::Bold));
         roomItem->setForeground(1, QBrush(QColor(255, 85, 0)));
+        // Align horizontaly and verticaly the room's name.
         roomItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     }
 }
@@ -128,13 +151,15 @@ void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const Q
 {
     quint32 nbRooms = _ui->tre_rooms->topLevelItemCount();
 
+    // Searching for the room to update.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        // Searching for the room to update.
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
+            // Edit room's name.
             _ui->tre_rooms->topLevelItem(i)->setText(0, roomName);
 
+            // If the room's picture is not null, this means that it has been edited.
             if (!roomPicture.isNull())
                 _ui->tre_rooms->topLevelItem(i)->setIcon(0, QIcon(QPixmap::fromImage(roomPicture)));
         }
@@ -147,12 +172,14 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
     bool userAlreadyExisting = false;
     quint32 nbRoomUsers;
 
+    // Search for the room in which the user will be added, in the rooms' tree.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
         if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
         {
             nbRoomUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
+            // Check if the given user is not already existing in the room.
             for (quint32 j = 0; j < nbRoomUsers; ++j)
             {
                 if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
@@ -162,14 +189,17 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
                 }
             }
 
+            // If not, add it to the tree.
             if (!userAlreadyExisting)
             {
                 QTreeWidgetItem* userItem = new QTreeWidgetItem(_ui->tre_rooms->topLevelItem(i));
                 userItem->setData(0, Qt::UserRole, userId);
                 userItem->setText(0, userName);
                 userItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
+                // Set the only item's flag to enabled, for avoiding the selection.
                 userItem->setFlags(Qt::ItemIsEnabled);
 
+                // If the user is currently conencted, put its name in bold.
                 if (isConnected)
                     userItem->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
             }
@@ -189,6 +219,7 @@ void ViewChat::loadRoomMessages(const QMap<quint32, ModelMessage>& messages)
 {
     quint32 nbTopMessageItems = _ui->tre_messages->topLevelItemCount();
 
+    // Add each room's message to the tree.
     for (ModelMessage message : messages)
         addMessageToTree(nbTopMessageItems, message, message.getIdUser() == currentUserId);
 
@@ -205,10 +236,14 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
     quint32 nbTopRoomItems = _ui->tre_rooms->topLevelItemCount();
     quint32 nbChildren;
 
+    // Search for the message's room.
     for (quint32 k = 0; k < nbTopRoomItems; ++k)
     {
         if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == message.getIdRoom())
         {
+            // When the room has been found, we have two choice :
+            //    1. The room is currently selected, so we have to add the message in the messages' tree.
+            //    2. The room is not selected, so we have to add a new notification near to it.
             if (_selectedRoomId == message.getIdRoom())
             {
                 if (edited)
@@ -401,8 +436,8 @@ void ViewChat::updateRequests(const qint32 nbToUpdate)
 void ViewChat::serverDisconnected()
 {
     qint32 result =
-            QMessageBox::critical(this, tr("Connexion perdu..."),
-                                  tr("La connexion avec le serveur a été perdu. Veuillez vous reconnecter."),
+            QMessageBox::critical(this, tr("Connexion perdue..."),
+                                  tr("La connexion avec le serveur a été perdue.<br/>L'application va se fermer."),
                                   QMessageBox::Ok);
 
     if (result == QMessageBox::Ok)
@@ -474,7 +509,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
         _ui->ldt_message->setDisabled(false);
         _ui->ldt_message->setPlaceholderText(tr("Entrez un message."));
 
-        for (int i = 0; i < nbItems; ++i)
+        for (quint32 i = 0; i < nbItems; ++i)
         {
             if (_ui->tre_rooms->topLevelItem(i)->isSelected())
             {
@@ -501,7 +536,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
         // the last selected room known to avoid it.
         if (!aRoomIsSelected)
         {
-            for (int i = 0; i < nbItems; ++i)
+            for (quint32 i = 0; i < nbItems; ++i)
             {
                 if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == _selectedRoomId)
                     _ui->tre_rooms->topLevelItem(i)->setSelected(true);
