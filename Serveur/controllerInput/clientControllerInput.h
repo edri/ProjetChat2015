@@ -1,8 +1,7 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Contains methods called everytime a user receive instruction from
-     * the server
+     * the server. This is a concrete subclass that implements the methods
+     * defined in its parent: ControllerInput.
 */
 
 #ifndef CLIENT_CONTROLLER_INPUT_H
@@ -13,6 +12,7 @@
 #include "../../Salle/Room/controllerRoom.h"
 #include "../../User/controllerUser.h"
 
+// We have to predeclare the controllers so that we can use them
 class ControllerUser;
 class ControllerChat;
 
@@ -21,8 +21,6 @@ class ClientControllerInput : public ControllerInput
     ControllerChat* _controllerChat;
     ControllerUser* _controllerUser;
     ControllerRoom* _controllerRoom;
-    // Error controller ?
-    // Main controller ?
     
     public:
     
@@ -35,23 +33,15 @@ class ClientControllerInput : public ControllerInput
     void controllerUser(ControllerUser* controlleruser);
     void controllerRoom(ControllerRoom* controllerRoom);
     
-    // Method called when a message is received by the client.
+    // Concrete methods that implement the ControllerInput interface. See controllerInput.h for more details.
     void receiveMessage(ModelMessage& message, const bool edited, QObject* sender);
-    // Method called when an user want to delete its message.
     void deleteMessage(const quint32 roomId, const quint32 messageId, QObject* sender);
-    // Method called when user's info are received by the client when loging in.
     void infoUser(ModelUser& user, QByteArray& keySalt, QByteArray& publicKey, QByteArray& privateKey, QObject* sender);
-    // Method called when the client has to add a room and its users
     void join(const QMap<quint32, ModelRoom>& rooms, const QMap<quint32, ModelUser>& users, QObject* sender);
-    // Method called when a requested user ID is returned by the server after a client request.
     void userId(const QString& userName, bool exists, quint32 userId, QObject* sender);
-    // Method called when another user connects
     void connected(const quint32 userId, QObject* sender);
-    // Method called when another user disconnects
     void disconnect(const quint32 userId, QObject* sender);
-    // Method called when an administrator want to delete a room.
     void deleteRoom(const quint32 roomId, QObject* sender);
-    // Method called when an user want to leave a room.
     void leaveRoom(const quint32 userId, const quint32 roomId, QObject* sender);
     void salt(const QString& pseudo, const QByteArray& salt, QObject* sender);
     void publicKey(QList<QPair<quint32, QByteArray>>& usersIdAndKey, QObject* sender);

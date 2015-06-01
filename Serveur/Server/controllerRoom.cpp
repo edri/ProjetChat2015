@@ -343,8 +343,7 @@ void ControllerRoom::modifyRoom(ModelRoom& room, const QMap<quint32, QByteArray>
         leaveRoom(clientToRemove->id, onlineRoom->id, clientToRemove);
     }
     
-    QMap<quint32, QByteArray> empty;
-    QByteArray data = _interpretor->room(room, empty, true);
+    QByteArray data = _interpretor->room(room, QMap<quint32, QByteArray>(), true);
     
     for (ChatorClient* currentClient : onlineRoom->clients)
     {
