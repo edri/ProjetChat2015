@@ -83,12 +83,12 @@ bool ControllerDB::init()
 bool ControllerDB::login(const QString& pseudo, const QByteArray& hashedPWD, quint32& id)
 {    
     QSqlQuery query(_db);
-    query.prepare("SELECT idUser FROM user WHERE login = :login AND password = :password");
+    query.prepare("SELECT idUser, isConnected FROM user WHERE login = :login AND password = :password");
     query.bindValue(":login", pseudo);
     query.bindValue(":password", hashedPWD);
 	query.exec();
 
-    if (!query.first()) {return false;}
+    if (!query.first() || query.record().value("isConnected").toBool()) {return false;}
     
     id = query.record().value(0).toUInt();
 
