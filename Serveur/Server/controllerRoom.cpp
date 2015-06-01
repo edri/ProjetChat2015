@@ -1,3 +1,7 @@
+/*
+     * implements controllerRoom.h
+*/
+
 #include "controllerRoom.h"
 #include <QByteArray>
 #include <QList>
