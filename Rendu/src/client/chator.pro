@@ -14,7 +14,8 @@ HEADERS  += roomModule/controllerRoom.h roomModule/viewRoom.h roomModule/viewJoi
 
 FORMS    += 
 
-RESOURCES += 
+RESOURCES += \
+    icons.qrc
 
 win32 {
     LIBS += -LC:/OpenSSL-Win32/lib -llibeay32
