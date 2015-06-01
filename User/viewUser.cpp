@@ -14,7 +14,7 @@ ViewUser::ViewUser(QWidget *parent) :
     _ui(new Ui::ViewUser)
 {
     _ui->setupUi(this);
-    //ui->ldt_password->setValidator(new QIntValidator());
+
     // Initialize a new view for the inscription
     _viewInscription = new ViewInscription(this);
 
@@ -30,10 +30,10 @@ ViewUser::~ViewUser()
 
 void ViewUser::on_btn_connexion_clicked()
 {
-    // Vérifier que les champs ne soient pas vides
+    // Vérify that the fields are not empty
     if(_ui->ldt_userName->text().isEmpty() || _ui->ldt_password->text().isEmpty() || _ui->ldt_server->text().isEmpty())
     {
-        // Afficher un message d'erreur
+        // Show an error message
         _ui->lbl_info->setText("<font color='red'>Veuillez mentionnez tous les champs requis.</font>");
     }
     else
@@ -41,19 +41,20 @@ void ViewUser::on_btn_connexion_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
+        // timer of timeout is started so the user won't wait for years if the server is unreachable
         _timerConnexion->start(30000);
+
         // Send the data
         emit requestGetIds(true);
-        // Les données doivent être confirmées
     }
 }
 
 void ViewUser::on_btn_inscription_clicked()
 {
-    // Vérifier que les champs ne soient pas vides
+    // Verify that the fields are not empty
     if(_ui->ldt_server->text().isEmpty() || _ui->spn_port->text().isEmpty())
     {
-        // Afficher un message d'erreur
+        // Show an error message
         _ui->lbl_info->setText("<font color='red'>Veuillez mentionnez un serveur et un port.</font>");
     }
     else
@@ -61,7 +62,9 @@ void ViewUser::on_btn_inscription_clicked()
         _ui->lbl_info->setText("Connexion au serveur...");
         setDisabled(true);
 
+        // timer of timeout is started so the user won't wait for years if the server is unreachable
         _timerConnexion->start(30000);
+
         // Connect to server in order to create a new account
         emit requestGetIds(false);
     }
@@ -100,6 +103,7 @@ void ViewUser::setInfoText(QString information)
 
 void ViewUser::authError()
 {
+    // When the server sent an error, the interface show this error to the user
     QMessageBox::critical(this, tr("Erreur d'authentification"),
                           tr("Identifiant / mot de passe incorrects."),
                           QMessageBox::Ok);
@@ -114,7 +118,10 @@ void ViewUser::stopTimer()
 
 void ViewUser::errorServerUnreachable()
 {
+    // We stop the timer
     _timerConnexion->stop();
+
+    // An error is shown
     QMessageBox::critical(this, tr("Erreur de connexion"),
                           tr("Impossible de se connecter au serveur. Veuillez vérifier les informations de connexion, et si le problème persiste, réessayez plus tard."),
                           QMessageBox::Ok);

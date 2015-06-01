@@ -24,10 +24,8 @@ ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
     QMainWindow(parent),
     _ui(new Ui::viewInscription)
 {
-    //We modify the original View in order to have the edition view
+    //We modify the original View and interface in order to have the view for the account's details
     _edition = true;
-    //this->currentUser = currentUser;
-
     _ui->setupUi(this);
 
     this->setWindowTitle("Compte");
@@ -46,8 +44,6 @@ ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
     _ui->ldt_passwordConf->setVisible(false);
     _ui->ldt_profilPicture->setVisible(false);
     _ui->btn_path->setVisible(false);
-    //ui->lbl_password->setText("Nouveau mot de passe");
-    //ui->lbl_passwordConf->setText("Veuillez retaper le nouveau mot de passe");
 
     _ui->lbl_mendatory->setText("");
 }
@@ -59,6 +55,7 @@ ViewInscription::~ViewInscription()
 
 void ViewInscription::usernameAlreadyExistd()
 {
+    // Show an error when an username is already taken
     QMessageBox::critical(this, tr("Le nom d'utilisateur existe déjà..."),
                           tr("Le nom d'utilisateur entré existe déjà. Veuillez en entrer un autre."),
                           QMessageBox::Ok);
@@ -72,13 +69,13 @@ void ViewInscription::on_btn_path_clicked()
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), "Images (*.png *.gif *.jpg *.jpeg);;Autres (*.*)");
 
     _ui->ldt_profilPicture->setText(fichier);
-    // QMessageBox::information(this, "Fichier", "Vous avez sélectionné :\n" + fichier);
 }
 
 void ViewInscription::on_btn_inscription_clicked()
 {
     if(!_edition && verifyFields())
     {
+        // Disable window and inform the controlller that data can be fetched
         setEnabled(false);
         emit requestGetNewUser();
         _ui->lbl_info->setText("Envoi au serveur");
@@ -91,7 +88,7 @@ bool ViewInscription::verifyFields()
     QRegExp passwordRestriction("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-z^A-Z^0-9]).{8,}$");
     QRegExp userNameRestriction("^[a-zA-Z0-9_ -]*$");
 
-    // Verify the fields
+    // Verify the fields (fields required, password complexity, valid image ...)
     if(_ui->ldt_userName->text().isEmpty() || _ui->ldt_password->text().isEmpty() || _ui->ldt_passwordConf->text().isEmpty() ||
        _ui->ldt_password->text().isEmpty() || _ui->ldt_passwordConf->text().isEmpty())
     {
@@ -134,8 +131,10 @@ bool ViewInscription::verifyFields()
 
 bool ViewInscription::verifyProfileImage() const
 {
+    // Construction of the QImage from the specified path
     QImage image(_ui->ldt_profilPicture->text());
     
+    // return false if the QImage construction failed
     return !image.isNull();
 }
 
@@ -178,7 +177,7 @@ QImage ViewInscription::getProfileImage() const
 
 void ViewInscription::setCurrentUser(ModelUser* currentUser)
 {
-    //Uptade the view with the information about the user
+    //Uptade the view with the information about the current user
     this->_currentUser = currentUser;
 
     _ui->ldt_userName->setText(currentUser->getUserName());

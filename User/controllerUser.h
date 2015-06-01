@@ -129,15 +129,6 @@ public slots:
     void checkUsername() const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Use to edit any information about current user information except
-    //             username. Send new information to server and update local current
-    //             user.
-    // Param     : /
-    //----------------------------------------------------------------------------------
-    void editUser() const;
-
-
-    //----------------------------------------------------------------------------------
     // Goal      : Receiving salt used to hash user password. This method is
     //             automatically called when we server answer to the requestSalt
     //             request.
