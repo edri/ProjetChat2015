@@ -253,7 +253,10 @@ void ControllerChat::leaveRoomInModel(const quint32 userId, const quint32 roomId
     _model->removeUser(userId, roomId);
 
     if (userId == _currentUser->getIdUser())
+    {
         _view->deleteRoom(roomId);
+        _model->deleteRoom(roomId);
+    }
     else
         _view->deleteUserFromRoom(userId, roomId);
 }
