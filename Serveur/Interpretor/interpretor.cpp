@@ -158,15 +158,6 @@ QByteArray Interpretor::joinRoom(const quint32 roomId)
     return data;
 }
 
-//QByteArray Interpretor::leaveRoom(const quint32 roomId)
-//{
-    //QByteArray data;
-    //QDataStream stream(&data, QIODevice::WriteOnly);
-
-    //stream << (quint32) MessageType::LEAVE << roomId;
-    //return data;
-//}
-
 QByteArray Interpretor::salt(const QString& pseudo, const QByteArray& salt)
 {
     QByteArray data;
@@ -273,16 +264,6 @@ void Interpretor::processData(const QByteArray& data)
             QByteArray hashedPwd;
             stream >> pseudo >> hashedPwd;
             _dispatcher.login(pseudo, hashedPwd, sender());
-        }
-        break;
-        
-        case MessageType::USER_JOIN:
-        {
-            quint32 idUser;
-            quint32 idRoom;
-            stream >> idUser >> idRoom;
-            //_dispatcher.userJoin(idUser, idRoom, sender());
-            // IL FAUT FAIRE QQCH ICI LOL
         }
         break;
         
