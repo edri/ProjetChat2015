@@ -148,7 +148,7 @@ void ViewJoin::checkRoom()
     
     QStandardItem* item = model_rooms->item(list_rooms->currentIndex().row());
     
-    emit(join(item->data().toUInt()));
+    emit(join(item->data().toUInt(), item->font().weight() == QFont::Bold));
 }
 
 void ViewJoin::closeEvent(QCloseEvent *)

@@ -198,9 +198,11 @@ void ClientControllerInput::error(const ModelError& error)
     switch(error.getErrorType())
     {
         case ErrorType::AUTH_ERROR:
-        {
             _controllerUser->authError();
-        }
-        break;
+            break;
+        
+        default:
+            break;
+        
     }
 }

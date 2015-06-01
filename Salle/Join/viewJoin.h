@@ -38,7 +38,7 @@ signals:
     // Signal emited when the user wishes to cancel the operation.
     void cancel();
     // Signal emited when the user wishes to join a room.
-    void join(quint32 roomId);
+    void join(quint32 roomId, bool isPrivate);
     // Signal emited when the user closed the view.
     void reactivateChatWindows();
 

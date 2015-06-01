@@ -36,7 +36,7 @@ void ControllerRoom::connectViewRoom()
 void ControllerRoom::connectViewJoin()
 {
     // Connect the view signals with the controller's slots.
-    connect(_viewJoin, SIGNAL(join(quint32)), this, SLOT(joinRoom(quint32)));
+    connect(_viewJoin, SIGNAL(join(quint32, bool)), this, SLOT(joinRoom(quint32, bool)));
     connect(_viewJoin, SIGNAL(cancel()), this, SLOT(cancelJoin()));
     connect(_viewJoin, SIGNAL(reactivateChatWindows()), this, SLOT(askReactivateChatWindows()));
 }
@@ -306,10 +306,14 @@ void ControllerRoom::askReactivateChatWindows()
     emit reactivateChatWindows();
 }
 
-void ControllerRoom::joinRoom(quint32 roomId)
+void ControllerRoom::joinRoom(quint32 roomId, bool isPrivate)
 {
    // Inform the server that the user wish to join a room.
    _controllerOutput->joinRoom(roomId);
+   if(isPrivate)
+   {
+       QMessageBox::information(_viewRoom, tr("Salle Privée") ,tr("Une demande d'adhésion a été enovyée."));
+   }
    _viewJoin->close();
 }
 
