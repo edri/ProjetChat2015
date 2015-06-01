@@ -115,7 +115,7 @@ void ViewChat::addRoom(const quint32 roomId, const QString& roomName, const QIma
     // Check if the given room is not already existing.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == roomId)
         {
             alreadyExisting = true;
             break;
@@ -154,7 +154,7 @@ void ViewChat::modifyRoom(const quint32 roomId, const QString& roomName, const Q
     // Searching for the room to update.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == roomId)
         {
             // Edit room's name.
             _ui->tre_rooms->topLevelItem(i)->setText(0, roomName);
@@ -186,14 +186,14 @@ void ViewChat::addUserToRoom(const quint32 roomId, const quint32 userId, const Q
     // Search for the room in which the user will be added, in the rooms' tree.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == roomId)
         {
             nbRoomUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
             // Check if the given user is not already existing in the room.
             for (quint32 j = 0; j < nbRoomUsers; ++j)
             {
-                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toUInt() == userId)
                 {
                     userAlreadyExisting = true;
                     break;
@@ -250,7 +250,7 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
     // Search for the message's room.
     for (quint32 k = 0; k < nbTopRoomItems; ++k)
     {
-        if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toInt() == message.getIdRoom())
+        if (_ui->tre_rooms->topLevelItem(k)->data(0, Qt::UserRole).toUInt() == message.getIdRoom())
         {
             // When the room has been found, we have two choice :
             //    1. The room is currently selected, so we have to add the message in the
@@ -307,7 +307,7 @@ void ViewChat::loadRoomMessage(ModelMessage& message, const bool edited)
             {
                 QTreeWidgetItem* item = _ui->tre_rooms->topLevelItem(k);
                 // Get the room-node's current number of unread messages, and increment it.
-                quint32 nbNewMessages = item->data(1, Qt::UserRole).toInt() + 1;
+                quint32 nbNewMessages = item->data(1, Qt::UserRole).toUInt() + 1;
 
                 item->setData(1, Qt::UserRole, nbNewMessages);
 
@@ -346,7 +346,7 @@ void ViewChat::userStatusChanged(const quint32 userId, const bool isConnected) c
         {
             // Change the user's status (connected => bold / disconnected => normal) when we
             // find it in a room.
-            if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+            if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toUInt() == userId)
             {
                 if (isConnected)
                     _ui->tre_rooms->topLevelItem(i)->child(j)->setFont(0, QFont("MS Shell Dlg 2", 8, QFont::Bold));
@@ -386,7 +386,7 @@ void ViewChat::deleteMessage(const quint32 messageId) const
         // Search for the message in the date-node.
         for (quint32 j = 0; j < nbMessages; ++j)
         {
-            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole).toInt() == messageId)
+            if (_ui->tre_messages->topLevelItem(i)->child(j)->data(1, Qt::UserRole).toUInt() == messageId)
             {
                 // Take (remove) the message.
                 _ui->tre_messages->topLevelItem(i)->takeChild(j);
@@ -408,7 +408,7 @@ void ViewChat::deleteRoom(const quint32 roomId)
     // Search for the room to delete, and remove it of the rooms' tree.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == roomId)
         {
             _ui->tre_rooms->takeTopLevelItem(i);
             break;
@@ -434,14 +434,14 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
     // Search for the room in which we will remove the user.
     for (quint32 i = 0; i < nbRooms; ++i)
     {
-        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == roomId)
+        if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == roomId)
         {
             quint32 nbUsers = _ui->tre_rooms->topLevelItem(i)->childCount();
 
             // Search the user to remove, and take it.
             for (quint32 j = 0; j < nbUsers; ++j)
             {
-                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toInt() == userId)
+                if (_ui->tre_rooms->topLevelItem(i)->child(j)->data(0, Qt::UserRole).toUInt() == userId)
                 {
                     _ui->tre_rooms->topLevelItem(i)->takeChild(j);
                     break;
@@ -467,8 +467,7 @@ void ViewChat::deleteUserFromRoom(const quint32 userId, const quint32 roomId)
 void ViewChat::updateRequests(const qint32 nbToUpdate)
 {
     // The number of notifications must be greater or equals to 0.
-    if ((_nbNotifications += nbToUpdate) < 0)
-        _nbNotifications = 0;
+    _nbNotifications += nbToUpdate;
 
     // Update the notifications' number in the menubar ; if the number is equals to 0, we
     // don't display it.
@@ -566,7 +565,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
             if (_ui->tre_rooms->topLevelItem(i)->isSelected())
             {
                 aRoomIsSelected = true;
-                _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt();
+                _selectedRoomId = _ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt();
 
                 _ui->tre_rooms->topLevelItem(i)->setFont(0, QFont("MS Shell Dlg 2", 9, QFont::Bold));
                 _ui->tre_rooms->topLevelItem(i)->setForeground(0, QBrush(Qt::black));
@@ -590,7 +589,7 @@ void ViewChat::on_tre_rooms_itemSelectionChanged()
         {
             for (quint32 i = 0; i < nbItems; ++i)
             {
-                if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toInt() == _selectedRoomId)
+                if (_ui->tre_rooms->topLevelItem(i)->data(0, Qt::UserRole).toUInt() == _selectedRoomId)
                     _ui->tre_rooms->topLevelItem(i)->setSelected(true);
             }
         }
@@ -655,7 +654,7 @@ void ViewChat::showContextMessage(const QPoint &pos)
         else if (act == delAct)
         {
             emit requestDeleteMessage(_selectedRoomId,
-                                      _ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toInt());
+                                      _ui->tre_messages->selectedItems().at(0)->data(1, Qt::UserRole).toUInt());
             delete editAct;
         }
         else
