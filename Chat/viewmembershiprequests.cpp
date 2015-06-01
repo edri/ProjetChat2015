@@ -18,6 +18,7 @@ void ViewMembershipRequests::refresh(const QMap<quint32, ModelRequest>& requests
 {
     _ui->tre_requests->clear();
 
+    // Add each request in the tree.
     for (ModelRequest request : requests)
     {
         QTreeWidgetItem* requestItem = new QTreeWidgetItem(_ui->tre_requests);
@@ -29,6 +30,7 @@ void ViewMembershipRequests::refresh(const QMap<quint32, ModelRequest>& requests
         requestItem->setData(2, Qt::UserRole, request.getRoom().getIdRoom());
     }
 
+    // Enable or disable the buttons, depending if there is notifications or not.
     if (_ui->tre_requests->topLevelItemCount() > 0)
     {
         _ui->tre_requests->topLevelItem(0)->setSelected(true);

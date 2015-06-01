@@ -20,33 +20,33 @@ ViewJoin::ViewJoin()
     layouts = new QList<QLayout*>();
     
     // Initialization of the GUI elements.
-    label_title = new QLabel(tr("Rejoindre une salle"));
-    label_title->setFont(QFont(this->font().family(), 
+    lbl_title = new QLabel(tr("Rejoindre une salle"));
+    lbl_title->setFont(QFont(this->font().family(), 
                          this->font().pointSize() * 2, QFont::DemiBold));
-    label_title->setAlignment(Qt::AlignCenter);
+    lbl_title->setAlignment(Qt::AlignCenter);
     
-    label_name = new QLabel(tr("Nom de la salle"));
-    label_rooms = new QLabel(tr("Résultat(s)"));
+    lbl_name = new QLabel(tr("Nom de la salle"));
+    lbl_rooms = new QLabel(tr("Résultat(s)"));
     
-    ledit_name = new QLineEdit("");
+    ldt_name = new QLineEdit("");
     
     btn_join = new QPushButton(tr("Rejoindre"));
     btn_cancel = new QPushButton(tr("Annuler"));
     
-    list_rooms = new QListView();
+    lst_rooms = new QListView();
     
-    model_rooms = new QStandardItemModel();
-    list_rooms->setModel(model_rooms);
+    sim_rooms = new QStandardItemModel();
+    lst_rooms->setModel(sim_rooms);
     
     // Main Layout
     QVBoxLayout* vbl_main = new QVBoxLayout();
     layouts->append(vbl_main);
-    vbl_main->addWidget(label_title);
+    vbl_main->addWidget(lbl_title);
     vbl_main->addSpacing(3);
-    vbl_main->addWidget(label_name);
-    vbl_main->addWidget(ledit_name);
-    vbl_main->addWidget(label_rooms);
-    vbl_main->addWidget(list_rooms);
+    vbl_main->addWidget(lbl_name);
+    vbl_main->addWidget(ldt_name);
+    vbl_main->addWidget(lbl_rooms);
+    vbl_main->addWidget(lst_rooms);
     vbl_main->addWidget(btn_join);
     vbl_main->addWidget(btn_cancel);
     
@@ -55,19 +55,19 @@ ViewJoin::ViewJoin()
     // Connect signals with public slots or signals
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
     connect(btn_join, SIGNAL(clicked()), this, SLOT(checkRoom()));
-    connect(ledit_name, SIGNAL(textEdited(const QString&)), this, SLOT(filterRooms(const QString&)));
+    connect(ldt_name, SIGNAL(textEdited(const QString&)), this, SLOT(filterRooms(const QString&)));
 }
 
 ViewJoin::~ViewJoin()
 {
-    delete label_title;
-    delete label_name;
-    delete label_rooms;
-    delete ledit_name;
+    delete lbl_title;
+    delete lbl_name;
+    delete lbl_rooms;
+    delete ldt_name;
     delete btn_join;
     delete btn_cancel;
-    delete list_rooms;
-    delete model_rooms;
+    delete lst_rooms;
+    delete sim_rooms;
     
     // Delete layouts.
     for (QLayout* l : *layouts)
@@ -97,7 +97,7 @@ void ViewJoin::loadRooms()
         item = new QStandardItem(pair.second);
         item->setEditable(false);
         item->setData(pair.first);
-        model_rooms->appendRow(item);
+        sim_rooms->appendRow(item);
     }
     
     // The items won't be editable, will display the room's name and will contain
@@ -109,14 +109,14 @@ void ViewJoin::loadRooms()
         item->setData(pair.first);
         item->setFont(QFont(this->font().family(), 
                       this->font().pointSize(), QFont::Bold));
-        model_rooms->appendRow(item);
+        sim_rooms->appendRow(item);
     }
 }
 
 void ViewJoin::filterRooms(const QString& substring)
 {
     // Clears the view
-    model_rooms->clear();
+    sim_rooms->clear();
     
     // Similar to loadRooms, but only the rooms containing the given substring
     // will be displayed.
@@ -128,7 +128,7 @@ void ViewJoin::filterRooms(const QString& substring)
             item = new QStandardItem(pair.second);
             item->setEditable(false);
             item->setData(pair.first);
-            model_rooms->appendRow(item);
+            sim_rooms->appendRow(item);
         }
     }
     
@@ -141,7 +141,7 @@ void ViewJoin::filterRooms(const QString& substring)
             item->setData(pair.first);
             item->setFont(QFont(this->font().family(), 
                           this->font().pointSize(), QFont::Bold));
-                                     model_rooms->appendRow(item);
+                                     sim_rooms->appendRow(item);
         }
     }
 }
@@ -149,12 +149,12 @@ void ViewJoin::filterRooms(const QString& substring)
 void ViewJoin::checkRoom()
 {
     // If no room was selected by the user, returns.
-    if(list_rooms->selectionModel()->selectedIndexes().isEmpty())
+    if(lst_rooms->selectionModel()->selectedIndexes().isEmpty())
     {
         return;
     }
     
-    QStandardItem* item = model_rooms->item(list_rooms->currentIndex().row());
+    QStandardItem* item = sim_rooms->item(lst_rooms->currentIndex().row());
     
     emit(join(item->data().toUInt(), item->font().weight() == QFont::Bold));
 }
