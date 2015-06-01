@@ -29,7 +29,6 @@ void ControllerRoom::connectViewRoom()
     connect(_viewRoom, SIGNAL(add()), this, SLOT(addUser()));
     connect(_viewRoom, SIGNAL(cancel()), this, SLOT(cancelRoom()));
     connect(_viewRoom, SIGNAL(create()), this, SLOT(createRoom()));
-    connect(_viewRoom, SIGNAL(edit()), this, SLOT(editRoom()));
     connect(_viewRoom, SIGNAL(reactivateChatWindows()), this, SLOT(askReactivateChatWindows()));
 }
 
