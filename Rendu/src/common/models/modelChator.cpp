@@ -1,6 +1,4 @@
 /*
-     * Created by Miguel Santamaria
-     *
      * Implements modelChator.h
 */
 

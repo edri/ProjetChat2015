@@ -14,7 +14,7 @@
 #include "viewUser.h"
 #include "../../common/models/modelChator.h"
 #include "../../common/controllerInput/clientControllerInput.h"
-#include "../../common/Interpretor/interpretor.h"
+#include "../../common/interpretor/interpretor.h"
 #include "../../common/ServerConnector/connector.h"
 #include "../controllerOutput/controllerOutput.h"
 #include "../chatModule/controllerChat.h"
