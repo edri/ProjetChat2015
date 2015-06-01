@@ -84,3 +84,6 @@ CREATE TABLE IF NOT EXISTS cleaning (
   idCleaning INTEGER PRIMARY KEY AUTOINCREMENT,
   dateCleaning DATETIME NOT NULL
   );
+
+INSERT INTO cleaning (dateCleaning)
+	VALUES	(datetime('NOW'));

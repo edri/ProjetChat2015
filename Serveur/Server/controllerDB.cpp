@@ -32,6 +32,25 @@ ControllerDB::ControllerDB(const QString& dbName)
         qDebug() << "Cannot access the picture folder properly: " << PROFILE_PICTURE_FOLDER;
         exit(EXIT_FAILURE);
     }
+    
+    QObject::connect(&_timer, SIGNAL(timeout()), this, SLOT(cleanDatabase()));
+    
+    QSqlQuery query(_db);
+    query.exec("SELECT strftime('%s','now') - strftime('%s', MAX(dateCleaning)) AS nbSeconds FROM cleaning");
+    query.first();
+    int difference = query.record().value("nbSeconds").toUInt();
+    
+    if (difference >= CLEANING_INTERVAL)
+    {
+        qDebug() << "It has been a long time since last cleaning, let's do it now" << difference;
+        cleanDatabase();
+    }
+    else
+    {
+        _timer.setInterval((CLEANING_INTERVAL - difference) * 1000);
+        _timer.start();
+    }
+    
 }
 
 bool ControllerDB::connect()
@@ -620,3 +639,27 @@ QList<QPair<quint32, QByteArray>> ControllerDB::getRequests(const quint32 idRoom
     
     return requests;
 }
+
+void ControllerDB::cleanDatabase()
+{
+    qDebug() << "Database cleaning...";
+    
+    QSqlQuery query(_db);
+    QSqlQuery queryDelete(_db);
+    query.exec("SELECT idRoom, limitOfStoredMessages FROM room");
+    
+    while (query.next())
+    {
+        queryDelete.prepare("DELETE FROM message WHERE idRoom = :idRoom AND idMessage < (SELECT MIN(idMessage) FROM (SELECT idMessage FROM message WHERE idRoom = :idRoom ORDER BY date DESC LIMIT :limit))");
+        queryDelete.bindValue(":idRoom", query.record().value("idRoom").toUInt());
+        queryDelete.bindValue(":limit", query.record().value("limitOfStoredMessages").toUInt());
+        queryDelete.exec();
+    }
+    
+    query.exec("INSERT INTO cleaning (dateCleaning) VALUES (datetime('NOW'))");
+    
+    _timer.setInterval(CLEANING_INTERVAL * 1000);
+    _timer.start();
+}
+
+ControllerDB::~ControllerDB() {}
