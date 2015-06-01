@@ -10,7 +10,7 @@
 ClientConnector::ClientConnector() : _isConnected(false)
 {
     // The constructors binds the signals of the sockets to the internal methods
-    connect(&_socket, SIGNAL(connected()), this, SIGNAL(connectionSuccessful()));
+    connect(&_socket, SIGNAL(connected()), this, SLOT(connected()));
     connect(&_socket, SIGNAL(sslErrors(const QList<QSslError>&)), this, SLOT(sslErrors(const QList<QSslError>&)));
     connect(&_socket, SIGNAL(binaryMessageReceived(const QByteArray&)), this, SIGNAL(binaryMessageReceived(const QByteArray&)));
     connect(&_socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
@@ -53,4 +53,10 @@ void ClientConnector::sslErrors(const QList<QSslError>& errors)
     
     // The user has accepted every SSL/TLS error, we can continue
     _socket.ignoreSslErrors();
+}
+
+void ClientConnector::connected()
+{
+    _isConnected = true;
+    emit connectionSuccessful();
 }
