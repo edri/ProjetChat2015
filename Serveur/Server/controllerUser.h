@@ -1,6 +1,4 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Process requests sent by users and related to users such
      * as login or salt request in order to hash his password and
      * interact with the database's controller (controllerDB.h)

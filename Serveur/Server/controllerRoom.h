@@ -1,6 +1,4 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Processed requests sent by users and related to rooms such
      * as leaving a room, creating a room.
 */

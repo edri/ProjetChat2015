@@ -1,6 +1,4 @@
 /*
-     * Created by Benoist Wolleb
-     *
      * Contains methods used to interact with the SQLite database.
 */
 
@@ -41,7 +39,7 @@ class ControllerDB : public QObject
     bool init();
 
     //----------------------------------------------------------------------------------
-    // Goal      : Look in the databse if there is a match for the pseudo/hashedPWD and
+    // Goal      : Look in the database if there is a match for the pseudo/hashedPWD and
     //             udpate user status to "connected".
     //             Return true if there is match
     //             Return false if there no match (wrong pseudo or hashed password).
@@ -130,7 +128,12 @@ class ControllerDB : public QObject
     // Goal      : Update current memberships related to the room. For example when a
     //             user join a room or when he is being promoted.
     //             The database has to be updated.
-    // Param     :
+    // Param     : idRoom - the identifier of the room
+    //             newUsers - the ids of the newly added users
+    //             removedUsers - the ids of the removed users
+    //             newAdmins - the ids of the newly granted users
+    //             removedAdmins - the ids of the removed admins
+    //             usersAndKeys - contains the encrypted AES keys for every new user if the room is private
     //----------------------------------------------------------------------------------
     void modifyMembership(const quint32 idRoom, const QSet<quint32>& newUsers, const QSet<quint32>& removedUsers = QSet<quint32>(), const QSet<quint32>& newAdmins = QSet<quint32>(), const QSet<quint32>& removedAdmins = QSet<quint32>(), const QMap<quint32, QByteArray>& usersAndKeys = QMap<quint32, QByteArray>());
 
@@ -138,7 +141,7 @@ class ControllerDB : public QObject
     // Goal      : Modify a currentUser.
     // Param     : user - ModelUser containing updated information.
     //             password - Hashed password
-    //             privateKey -
+    //             privateKey - modified RSA private key
     //----------------------------------------------------------------------------------
     void modifyUser(const ModelUser& user, const QByteArray& password, const QByteArray& privateKey);
 
@@ -234,10 +237,17 @@ class ControllerDB : public QObject
     //----------------------------------------------------------------------------------
     QByteArray getAesKey(const quint32 idUser, const quint32 idRoom);
     
+    //----------------------------------------------------------------------------------
+    // Goal      : Retrieve every requests for a room
+    // Param     : idRoom - room's identifer
+    //----------------------------------------------------------------------------------
     QList<QPair<quint32, QByteArray>> getRequests(const quint32 idRoom);
     
     public slots:
     
+    //----------------------------------------------------------------------------------
+    // Goal      : Cleans the messages of every room according to their limit
+    //----------------------------------------------------------------------------------
     void cleanDatabase();
     
     private :

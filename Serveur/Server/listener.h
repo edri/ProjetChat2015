@@ -1,7 +1,5 @@
 /*
-     * Created by Benoist Wolleb
-     *
-     *
+     * This class listens to the network for new peers.
 */
 
 #ifndef LISTENER_H
@@ -19,16 +17,24 @@
 class Listener : public QObject
 {
     Q_OBJECT
-public:
+    
+    public:
+    // Constructor
     Listener(quint16 port, Interpretor& interpretor, ServerControllerInput& controllerInput);
+    // Destructor
     ~Listener();
 
-public slots:
+    public slots:
+    // This method is called when a new peer is connecting
     void newConnection();
+    
+    // This method is called when a socket disconnects
     void disconnected();
+    
+    // This method is called when SSL/TLS errors occur (shouldn't be the case)
     void SSLErrors(const QList<QSslError> &errors);
 
-private:
+    private:
     QWebSocketServer _server;
     QList<ChatorClient*> _clients;
     Interpretor& _interpretor;
