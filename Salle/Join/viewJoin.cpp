@@ -16,7 +16,7 @@ ViewJoin::ViewJoin()
     // Setting attributes
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(tr("Adhésion Salle"));
-    setWindowIcon(":/icons/img/chator.png");
+    setWindowIcon(QIcon(":/icons/img/chator.png"));
     
     // Initializazion of core elements
     layouts = new QList<QLayout*>();

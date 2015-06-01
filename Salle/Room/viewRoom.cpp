@@ -28,7 +28,7 @@
         setWindowTitle(tr("Création Salle"));
     }
     
-    setWindowIcon(":/icons/img/chator.png");
+    setWindowIcon(QIcon(":/icons/img/chator.png"));
     
     // Initializazion of core elements
     editing = edit;
