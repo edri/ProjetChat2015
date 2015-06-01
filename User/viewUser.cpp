@@ -101,7 +101,7 @@ void ViewUser::setInfoText(QString information)
 void ViewUser::authError()
 {
     QMessageBox::critical(this, tr("Erreur d'authentification"),
-                          tr("Vous devez entrer un identifiant et un mot de passe corrects."),
+                          tr("Identifiant / mot de passe incorrects."),
                           QMessageBox::Ok);
     _ui->lbl_info->clear();
     setEnabled(true);

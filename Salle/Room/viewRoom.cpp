@@ -18,6 +18,17 @@
     
     // The view will be destroyed if it's closed.
     setAttribute(Qt::WA_DeleteOnClose, true);
+    if(edit)
+    {
+        setWindowTitle(tr("Édition Salle"));
+    }
+    
+    else
+    {
+        setWindowTitle(tr("Création Salle"));
+    }
+    
+    setWindowIcon(QIcon(":/icons/img/chator.png"));
     
     // Initializazion of core elements
     editing = edit;

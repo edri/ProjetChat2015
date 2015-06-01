@@ -15,6 +15,8 @@ ViewJoin::ViewJoin()
 {    
     // Setting attributes
     setAttribute(Qt::WA_DeleteOnClose, true);
+    setWindowTitle(tr("Adhésion Salle"));
+    setWindowIcon(QIcon(":/icons/img/chator.png"));
     
     // Initializazion of core elements
     layouts = new QList<QLayout*>();
@@ -148,7 +150,7 @@ void ViewJoin::checkRoom()
     
     QStandardItem* item = model_rooms->item(list_rooms->currentIndex().row());
     
-    emit(join(item->data().toUInt()));
+    emit(join(item->data().toUInt(), item->font().weight() == QFont::Bold));
 }
 
 void ViewJoin::closeEvent(QCloseEvent *)

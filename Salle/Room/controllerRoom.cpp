@@ -36,7 +36,7 @@ void ControllerRoom::connectViewRoom()
 void ControllerRoom::connectViewJoin()
 {
     // Connect the view signals with the controller's slots.
-    connect(_viewJoin, SIGNAL(join(quint32)), this, SLOT(joinRoom(quint32)));
+    connect(_viewJoin, SIGNAL(join(quint32, bool)), this, SLOT(joinRoom(quint32, bool)));
     connect(_viewJoin, SIGNAL(cancel()), this, SLOT(cancelJoin()));
     connect(_viewJoin, SIGNAL(reactivateChatWindows()), this, SLOT(askReactivateChatWindows()));
 }
@@ -177,6 +177,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         return;
     }
     
+    qDebug() << "Je suis en train de créer / modifier une salle";
     // Construit l'image
     QImage logo;
     if (!_viewRoom->roomLogo().isEmpty())
@@ -208,7 +209,6 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         _controllerOutput->publicKey(idsAndKeys);
          return;
     }
-    
     else if (_viewRoom->isRoomPrivate())
     {
         if(_currentRoomId)
@@ -219,9 +219,8 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         else
         {
             roomKey = _cryptor->generateAESKey();
-            QByteArray tmp((const char*) roomKey.key.data(), roomKey.key.size());
-            qDebug() << "Clé secrète : " << QString::fromUtf8(tmp.toHex());
         }
+        
         AESKey cryptedKey;
         
         //QPair<QByteArray, QByteArray> newPair;
@@ -233,7 +232,6 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
             
             cryptedKey = roomKey;
             //usersIds.append(pair.first);
-            
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
             
@@ -268,6 +266,8 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
     _controllerOutput->room(newRoom, usersAndKeys, _viewRoom->isEditing());
+    
+    
     
     _viewRoom->close();
 }
@@ -306,10 +306,14 @@ void ControllerRoom::askReactivateChatWindows()
     emit reactivateChatWindows();
 }
 
-void ControllerRoom::joinRoom(quint32 roomId)
+void ControllerRoom::joinRoom(quint32 roomId, bool isPrivate)
 {
    // Inform the server that the user wish to join a room.
    _controllerOutput->joinRoom(roomId);
+   if(isPrivate)
+   {
+       QMessageBox::information(_viewRoom, tr("Salle Privée") ,tr("Une demande d'adhésion a été enovyée."));
+   }
    _viewJoin->close();
 }
 
