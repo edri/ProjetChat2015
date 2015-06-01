@@ -177,6 +177,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         return;
     }
     
+    qDebug() << "Je suis en train de créer / modifier une salle";
     // Construit l'image
     QImage logo;
     if (!_viewRoom->roomLogo().isEmpty())
@@ -208,7 +209,6 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         _controllerOutput->publicKey(idsAndKeys);
          return;
     }
-    
     else if (_viewRoom->isRoomPrivate())
     {
         if(_currentRoomId)
@@ -219,21 +219,22 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         else
         {
             roomKey = _cryptor->generateAESKey();
-            QByteArray tmp((const char*) roomKey.key.data(), roomKey.key.size());
-            qDebug() << "Clé secrète : " << QString::fromUtf8(tmp.toHex());
         }
+        
         AESKey cryptedKey;
         
         //QPair<QByteArray, QByteArray> newPair;
         RSAPair rsaKeys;
         for(QPair<quint32, QByteArray> pair : idsAndKeys)
         {
+            qDebug() << "Bonjour";
             QByteArray aesKey;
             QDataStream stream(&aesKey, QIODevice::WriteOnly);
             
             cryptedKey = roomKey;
             //usersIds.append(pair.first);
-            
+            QByteArray tmp ((char *)roomKey.key.data(), roomKey.key.size());
+            qDebug() << "Clé : " << tmp.toBase64();
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
             
@@ -268,6 +269,8 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
     _controllerOutput->room(newRoom, usersAndKeys, _viewRoom->isEditing());
+    
+    
     
     _viewRoom->close();
 }
