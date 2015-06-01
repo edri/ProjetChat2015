@@ -218,9 +218,10 @@ void ModelChator::addAdmin(const quint32 idRoom, const quint32 idUser)
     _rooms[idRoom].addAdmin(idUser);
 }
 
-void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture)
+void ModelChator::modifyRoom(const quint32 idRoom, const QString& name, const quint32 limitOfStoredMessage,
+                             const bool isPrivate, const bool isVisible, const QImage& picture, QSet<quint32> admins)
 {
-    _rooms[idRoom].modifyRoom(name, limitOfStoredMessage, isPrivate, isVisible, picture);
+    _rooms[idRoom].modifyRoom(name, limitOfStoredMessage, isPrivate, isVisible, picture, admins);
 }
 
 void ModelChator::deleteRoom(const quint32 idRoom)
@@ -314,13 +315,15 @@ void ModelRoom::deleteMessage(const quint32 idMessage)
     _messages.remove(idMessage);
 }
 
-void ModelRoom::modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate, const bool isVisible, const QImage& picture)
+void ModelRoom::modifyRoom(const QString& name, const quint32 limitOfStoredMessage, const bool isPrivate,
+                           const bool isVisible, const QImage& picture, QSet<quint32> admins)
 {
     _name = name;
     _limitOfStoredMessage = limitOfStoredMessage;
     _private = isPrivate;
     _visible = isVisible;
     _picture = picture;
+    _admins = admins;
 }
 
 QList<quint32> ModelChator::getUserRooms(const quint32 idUser) const

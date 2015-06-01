@@ -114,7 +114,7 @@ void ControllerChat::editRoom(const ModelRoom& room)
 
     // Edit the room in the model and then in the view.
     _model->modifyRoom(room.getIdRoom(), room.getName(), room.getLimit(),
-                       room.isPrivate(), room.isVisible(), room.getPicture());
+                       room.isPrivate(), room.isVisible(), room.getPicture(), room.getAdmins());
     _view->modifyRoom(room.getIdRoom(), room.getName(), room.getPicture());
 }
 
