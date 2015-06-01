@@ -322,7 +322,7 @@ void ControllerRoom::joinRoom(quint32 roomId, bool isPrivate)
    // Display an informative box message if the room is private.
    if(isPrivate)
    {
-       QMessageBox::information(_viewRoom, tr("Salle Privée") ,tr("Une demande d'adhésion a été enovyée."));
+       QMessageBox::information(_viewRoom, tr("Salle Privée") ,tr("Une demande d'adhésion a été envoyée."));
    }
    _viewJoin->close();
 }
