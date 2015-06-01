@@ -84,23 +84,8 @@ void ClientControllerInput::join(const QMap<quint32, ModelRoom>& rooms, const QM
     for (ModelRoom room : rooms)
     {
         _controllerChat->loadRoom(room);
-
-        /*qDebug() << "Il faut ajouter la salle " << room.getIdRoom() << ": " << room.getName();
-        QSet<quint32> rusers = room.getUsers();
-        QSet<quint32> radmins = room.getAdmins();
-        
-        for (quint32 u : rusers)
-        {
-            ModelUser mu = users[u];
-            qDebug() << "Contenant l'utilisateur " << mu.getIdUser() << ": " << mu.getUserName();
-        }
-        
-        for (quint32 u : radmins)
-        {
-            ModelUser mu = users[u];
-            qDebug() << "Administré par " << mu.getIdUser() << ": " << mu.getUserName();
-        }*/
     }
+
     qDebug() << "Chargement des salles";
     _controllerChat->loadUserRooms();
     qDebug() << "Sort Join";

@@ -38,6 +38,20 @@ private:
     quint32 _nbNotifications;
     ViewAbout* _viewAbout;
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Ask controller to exit the application when closed.
+    // Param     : /
+    //----------------------------------------------------------------------------------
+    void closeEvent(QCloseEvent*);
+
+    //----------------------------------------------------------------------------------
+    // Goal      : Add the given message to the messages' tree.
+    // Param     : nbTopMessageItems - the current number of top-level items (the dates)
+    //                                 in the view's tree.
+    //             message - the object representing the message to add.
+    //             isCurrentUserMessage - indicate whether the message is current user's
+    //                                    property (true) or not (false).
+    //----------------------------------------------------------------------------------
     void addMessageToTree(quint32& nbTopMessageItems, ModelMessage& message, const bool isCurrentUserMessage) const;
 
 public:
@@ -46,6 +60,10 @@ public:
     explicit ViewChat(ModelChator* model, QWidget *parent = 0);
     ~ViewChat();
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Resize the room's tree's second column when the window is resized.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     void resizeEvent(QResizeEvent* event);
 
     //----------------------------------------------------------------------------------
@@ -83,21 +101,22 @@ public:
     void addUserToRoom(const quint32 roomId, const quint32 userId, const QString& userName, const QImage& image, const bool isConnected);
 
     //----------------------------------------------------------------------------------
-    // Goal      : unknown
+    // Goal      : Select the first tree's room, if exists.
     // Param     : /
     //----------------------------------------------------------------------------------
     void selectFirstRoom() const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : unknown
-    // Param     : messages -
+    // Goal      : Add each selected room's message in the messages' tree
+    // Param     : messages - the list of room's messages.
     //----------------------------------------------------------------------------------
     void loadRoomMessages(const QMap<quint32, ModelMessage>& messages);
 
     //----------------------------------------------------------------------------------
-    // Goal      : unknown
-    // Param     : message -
-    //             edited -
+    // Goal      : Add/Edit the given message in the messages' tree.
+    // Param     : message - the message to add/edit
+    //             edited - indicate whether it's a new message (false) or an edited one
+    //                      (true).
     //----------------------------------------------------------------------------------
     void loadRoomMessage(ModelMessage& message, const bool edited = false);
 
@@ -107,38 +126,43 @@ public:
     //----------------------------------------------------------------------------------
     QString getMessageText() const;
 
+    //----------------------------------------------------------------------------------
+    // Goal      : Return the selected room's ID.
+    // Param     : /
+    //----------------------------------------------------------------------------------
     quint32 getSelectedRoomId() const;
 
     //----------------------------------------------------------------------------------
-    // Goal      : Update the list of users. Connected users appeared with bold format.
-    // Param     : userId -
-    //             isConnected -
+    // Goal      : Update the given user's status (connected/disconnected).
+    //             Connected users appeared with bold format.
+    // Param     : userId - the status-changed-user's ID.
+    //             isConnected - indicate whether the user connected (true) or
+    //                           disconnected (false).
     //----------------------------------------------------------------------------------
     void userStatusChanged(const quint32 userId, const bool isConnected) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Enable buttons when user is admin: edit and delete button when a room
     //             is selected.
-    // Param     : isAdmin - Determine if user is admin
+    // Param     : isAdmin - Determine if user is admin (true) or not (false).
     //----------------------------------------------------------------------------------
     void updateButtons(const bool isAdmin) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Called when a message has been deleted, remove the message from the
     //             windows.
-    // Param     : message -
-    //             edited -
+    // Param     : messageId - the message's ID to remove.
     //----------------------------------------------------------------------------------
     void deleteMessage(const quint32 messageId) const;
 
     //----------------------------------------------------------------------------------
     // Goal      : Remove a room from the list
-    // Param     : roomId - Identify the room where the room should be removed.
+    // Param     : roomId - Identify the room to remove.
     //----------------------------------------------------------------------------------
     void deleteRoom(const quint32 roomId);
 
     //----------------------------------------------------------------------------------
-    // Goal      : Remove a user from a room in the list
+    // Goal      : Remove a user from a room in the list.
     // Param     : userId - Identify the user to remove.
     //             roomId - Identify the room where the user should be removed.
     //----------------------------------------------------------------------------------
@@ -159,6 +183,7 @@ public:
     void serverDisconnected();
 
 private slots:
+    // View's componants actions.
     void on_btn_send_clicked();
     void on_ldt_message_returnPressed();
     void on_btn_newRoom_clicked();
@@ -178,6 +203,7 @@ private slots:
     void on_actionA_propos_triggered();
 
 signals:
+    // Signals sended to the controller.
     void requestLoadRoomMessages(const quint32 roomId) const;
     void requestOpenRoomModule(const bool editRoom) const;
     void requestSendMessage() const;
