@@ -321,8 +321,6 @@ void ModelRoom::modifyRoom(const QString& name, const quint32 limitOfStoredMessa
     _private = isPrivate;
     _visible = isVisible;
     _picture = picture;
-    QByteArray tmp ((char*)_secretKey.key.data(), _secretKey.key.size());
-    qDebug() << "Clé de la salle jijijij: " << tmp.toBase64();
 }
 
 QList<quint32> ModelChator::getUserRooms(const quint32 idUser) const
@@ -431,8 +429,6 @@ bool ModelRoom::isVisible() const
 
 AESKey& ModelRoom::getSecretKey()
 {
-    QByteArray tmp ((char*)_secretKey.key.data(), _secretKey.key.size());
-    qDebug() << "Je prends la clé de la salle" << tmp.toBase64();
     return _secretKey;
 }
 
@@ -504,8 +500,6 @@ void ModelRoom::setPicture(const QImage& picture)
 void ModelRoom::setKey(const AESKey& aeskey)
 {
     _secretKey = aeskey;
-    qDebug() << "SETKEEEY: " << aeskey.key.size() << "|" << aeskey.initializationVector.size();
-    qDebug() << "SETKEEEY: " << _secretKey.key.size() << "|" << _secretKey.initializationVector.size();
 }
 
 ModelRequest::ModelRequest() {}

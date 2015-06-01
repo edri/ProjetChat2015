@@ -214,8 +214,6 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         if(_currentRoomId)
         {
             roomKey = _model->getRoom(_currentRoomId).getSecretKey();
-            QByteArray tmp ((char *)roomKey.key.data(), roomKey.key.size());
-            qDebug() << "Clé : oijjijisaas" << tmp.toBase64();
         }
         
         else
@@ -229,14 +227,11 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         RSAPair rsaKeys;
         for(QPair<quint32, QByteArray> pair : idsAndKeys)
         {
-            qDebug() << "Bonjour";
             QByteArray aesKey;
             QDataStream stream(&aesKey, QIODevice::WriteOnly);
             
             cryptedKey = roomKey;
             //usersIds.append(pair.first);
-            QByteArray tmp ((char *)roomKey.key.data(), roomKey.key.size());
-            qDebug() << "Clé : " << tmp.toBase64();
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
             
