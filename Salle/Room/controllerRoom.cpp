@@ -214,6 +214,8 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         if(_currentRoomId)
         {
             roomKey = _model->getRoom(_currentRoomId).getSecretKey();
+            QByteArray tmp ((char *)roomKey.key.data(), roomKey.key.size());
+            qDebug() << "Clé : oijjijisaas" << tmp.toBase64();
         }
         
         else
