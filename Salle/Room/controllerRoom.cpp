@@ -178,7 +178,10 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     }
     
     qDebug() << "Je suis en train de créer / modifier une salle";
-    // Construit l'image
+    
+    /* If a path was given for the logo, load the image situated at the path.
+     * Else if the room is being edited reuse the old logo. If this is a new room
+     * and no path is given an empty image will be sent.*/
     QImage logo;
     if (!_viewRoom->roomLogo().isEmpty())
     {
@@ -191,16 +194,16 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
     }
     
     AESKey roomKey;
-    //QList<QPair<QByteArray, QByteArray>> cryptedKeys;
-    //QList<quint32> usersIds;
     QMap<quint32, QByteArray> usersAndKeys;
     // If the room is private, the key must be encrypted by the public key of each added memebers.
-    // We need those key and demands them to the server.
+    // We need those key and demands them to the server if they are not given.
+    // For public rooms, empty keys are created and added to the list.
     if(_viewRoom->isRoomPrivate() && idsAndKeys.isEmpty())
     {
         QByteArray emptyKey;
         QPair<quint32, QByteArray> idAndKey;
         idAndKey.second = emptyKey;
+        // Ask the keys of all the members of the room.
         for(quint32 id : _viewRoom->roomUsers())
         {
            idAndKey.first = id;
@@ -209,8 +212,11 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         _controllerOutput->publicKey(idsAndKeys);
          return;
     }
+    
     else if (_viewRoom->isRoomPrivate())
     {
+        // If the room is beign edited its key is retreived from the model.
+        // Otherwise a new key is generated.
         if(_currentRoomId)
         {
             roomKey = _model->getRoom(_currentRoomId).getSecretKey();
@@ -222,29 +228,28 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         }
         
         AESKey cryptedKey;
-        
-        //QPair<QByteArray, QByteArray> newPair;
         RSAPair rsaKeys;
+        
+        // For each member of the room, the room's secret key is encrypted with 
+        // their respective public key.
         for(QPair<quint32, QByteArray> pair : idsAndKeys)
         {
             QByteArray aesKey;
             QDataStream stream(&aesKey, QIODevice::WriteOnly);
             
             cryptedKey = roomKey;
-            //usersIds.append(pair.first);
+            // We copy the given ByteArray into an RSAPair (we only need the 
+            // public key field.
             rsaKeys.publicKey.resize(pair.second.size());
             memcpy(rsaKeys.publicKey.data(), pair.second.data(), rsaKeys.publicKey.size());
             
             _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
             
+            // Write the encrypted key and IV into a byte array.
             stream << QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size()) << QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
-            //newPair.first = QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size());
-            //newPair.second = QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
-            //cryptedKeys.append(newPair);
             usersAndKeys.insert(pair.first, aesKey);
         
         }
-        //_cryptor->encryptWithRSA(roomKey, _model->getRsaKeyPair());
     }
     
     else
@@ -255,25 +260,30 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
         }
     }
     
-    // Construct a ModelRoom object.
+    // Retreive the messages if the room is being edited. Otherwise use an empty
+    // list of message
     QMap<quint32, ModelMessage> messages;
     if(_viewRoom->isEditing())
     {
         messages = _model->getRoom(_currentRoomId).getMessages();
     }
     
+    // The key in the ModelRoom is left empty (it will be different for each user, who will receive them encrypted.
     roomKey = AESKey();
+    
+    // Create the model room
     ModelRoom newRoom(_currentRoomId, _viewRoom->roomName(), _viewRoom->messageLimit(), _viewRoom->isRoomPrivate(), _viewRoom->isRoomVisible(), logo, _viewRoom->roomAdmins(), _viewRoom->roomUsers(), messages, roomKey);
     
+    // Send the packet to the server.
     _controllerOutput->room(newRoom, usersAndKeys, _viewRoom->isEditing());
     
-    
-    
+    // Close the view.
     _viewRoom->close();
 }
 
 bool ControllerRoom::isValidImage(const QString& path)
 {
+    // An empty path will crate an empty image.
     if (path.isEmpty())
     {
         return true;
@@ -310,6 +320,7 @@ void ControllerRoom::joinRoom(quint32 roomId, bool isPrivate)
 {
    // Inform the server that the user wish to join a room.
    _controllerOutput->joinRoom(roomId);
+   // Display an informative box message if the room is private.
    if(isPrivate)
    {
        QMessageBox::information(_viewRoom, tr("Salle Privée") ,tr("Une demande d'adhésion a été enovyée."));
@@ -321,6 +332,7 @@ void ControllerRoom::userId(bool exists, quint32 userId)
 {
     if(!exists)
     {   
+        // If the user exist display an informative popup
         QMessageBox::information(_viewRoom, tr("Opération impossible") ,tr("Cet utilisateur n'existe pas."));
     }
     
@@ -345,7 +357,7 @@ void ControllerRoom::showJoin()
 void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms,
                                const QList<QPair<quint32, QString>>& privateRooms)
 {
-    // Remove the rooms the user is already a member of.
+    // Removes the public rooms the user is already a member of.
     QList<QPair<quint32, QString>> roomsList;
     for(QPair<quint32, QString> pair : publicRooms)
     {
@@ -359,6 +371,7 @@ void ControllerRoom::listRooms(const QList<QPair<quint32, QString>>& publicRooms
     
     roomsList.clear();
     
+    // Removes the private rooms the user is already a member of.
     for(QPair<quint32, QString> pair : privateRooms)
     {
         if(! _model->containsRoom(pair.first))

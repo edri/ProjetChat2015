@@ -1,8 +1,6 @@
 /*
-     * Created by Jan Purro
-     *
      * Contains functions required for security aspect of the chat
-     * such as encryption.
+     * such as encryption, generation of keys as well as salts, and hash functions.
 */
 
 #ifndef CRYPTOR_H
@@ -101,13 +99,44 @@ class Cryptor
      * encryptionKey : the key used for encrpytion.*/
     CypherText encryptWithAES(const string& message, const AESKey& encryptionKey);
     
+    /* Returns the clear message decrypted with the given AES key.
+     * cypherMessage : the message to decrypt.
+     * encryptionKey : the key used for decrpytion (must the same as the one used
+     * for encryptioon).*/
     string decryptWithAES(const CypherText& cypherMessage, const AESKey& encryptionKey);
+    
+    /* Encrypt the private key of the given RSAPair with the given AES key. Returns
+     * 0 on success and -1 otherwise.
+     * key : the key pair whose private key will be encrypted.
+     * encryptionKey : the key used for encrpytion */
     int encryptWithAES(RSAPair& key, const AESKey& encryptionKey);
-    int decryptWithAES(RSAPair& key, const AESKey& encryptionKey);    
+    
+    /* Decrypte the private key of the given RSAPair with the given AES key. Returns
+     * 0 on success and -1 otherwise.
+     * key : the key pair whose private key will be decrypted.
+     * encryptionKey : the key used for decrpytion (must the same as the one used
+     * for encryptioon).*/
+    int decryptWithAES(RSAPair& key, const AESKey& encryptionKey);
+    
+    /* Encrypt an AES key with the given RSAPair's public key. Returns
+     * 0 on success and -1 otherwise.
+     * key : the key that will be encrypted.
+     * encryptionKey : the pair of key whose public key will be used for 
+     * encryption. */    
     int encryptWithRSA(AESKey& key, const RSAPair& encryptionKey);
+    
+    /* Decrypt an AES key with the given RSAPair's private key. Returns
+     * 0 on success and -1 otherwise.
+     * key : the key that will be decrypted.
+     * encryptionKey : the pair of key whose private key will be used for 
+     * decryption. */    
     int decryptWithRSA(AESKey& key, const RSAPair& encryptionKey);
     
     private :
+    /* Function that will handle errors occuring when generating random numbers
+     * with the RAND function of the openSSL library.
+     * RANDResult : the return value of the RAND function.
+     * decryption. */ 
     void handleRANDError(const int RANDResult);
 };
 

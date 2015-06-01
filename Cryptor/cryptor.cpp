@@ -1,7 +1,8 @@
 /*
-     * Created by Jan Purro
-     *
-     * Implements cryptor.h
+ * Implements cryptor.h
+ * The openSSL library is vastly used in the implementation of all those
+ * functions. It's advised to check the openSSL documentation for more 
+ * informations about their functions.
 */
 
 #include "cryptor.h"
@@ -54,8 +55,10 @@ void Cryptor::handleRANDError(const int RANDResult)
 AESKey Cryptor::generateAESKeyFromHash(const Hash& hash)
 {
     AESKey key;
+    // Copy the wanted number of bytes from the hash into the key.
     key.key.resize(AES_KEY_LENGTH/8);
-    memcpy(key.key.data(), hash.data(), AES_KEY_LENGTH/8);
+    memcpy(key.key.data(), hash.data(), key.key.size());
+    // We initialize the IV with 0s.
     key.initializationVector.resize(AES_BLOCK_SIZE/8, 0);
     return key;
 }
@@ -64,6 +67,7 @@ AESKey Cryptor::generateAESKey(const unsigned keyLength)
 {
     int randomResult;
     
+    // Initialize the vectors lengths.
     AESKey newKey;
     newKey.key.resize(keyLength);
     newKey.initializationVector.resize(AES_BLOCK_SIZE/8);
@@ -204,24 +208,25 @@ CypherText Cryptor::encryptWithAES(const string& message, const AESKey& encrypti
     EVP_CIPHER_CTX_init(&encrypt);
     EVP_EncryptInit_ex(&encrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
     
-    /* max ciphertext len for a n bytes of plaintext is n + AES_BLOCK_SIZE -1 bytes */
+    /* The max length fot cypher text for n bytes of plain text is n + AES_BLOCK_SIZE -1 bytes */
     int cypherLength = (int) message.length() + AES_BLOCK_SIZE;
     int finalEncryptLength = 0;
     unsigned char *cypher = new unsigned char[cypherLength];
 
-    /* allows reusing of 'encrypt' for multiple encryption cycles */
+    /* Allows reusing of 'encrypt' for multiple encryption cycles */
     EVP_EncryptInit_ex(&encrypt, NULL, NULL, NULL, NULL);
 
-    /* update ciphertext, c_len is filled with the length of ciphertext generated,
-    *len is the size of plaintext in bytes */
+    /* Update the  cypher text, cypherLength is filled with the length of ciphertext generated */
     EVP_EncryptUpdate(&encrypt, cypher, &cypherLength, (unsigned char*)message.data(), (int) message.length());
 
-    /* update ciphertext with the final remaining bytes */
+    /* Update the cypher text with the final remaining bytes */
     EVP_EncryptFinal_ex(&encrypt, cypher + cypherLength, &finalEncryptLength);
-
-    CypherText cypherMessage(cypherLength + finalEncryptLength);
-    memcpy(cypherMessage.data(), cypher, cypherLength + finalEncryptLength);
     
+    // Copy the cypher text into  a vector.
+    CypherText cypherMessage(cypherLength + finalEncryptLength);
+    memcpy(cypherMessage.data(), cypher, cypherMessage.size());
+    
+    // Clean up
     delete[] cypher;
     EVP_CIPHER_CTX_cleanup(&encrypt);
     
@@ -229,21 +234,28 @@ CypherText Cryptor::encryptWithAES(const string& message, const AESKey& encrypti
 }
 string Cryptor::decryptWithAES(const CypherText& cypherMessage, const AESKey& encryptionKey)
 {
+    // Initialize decryption
     EVP_CIPHER_CTX decrypt;
     EVP_CIPHER_CTX_init(&decrypt);
     EVP_DecryptInit_ex(&decrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
     
-    /* plaintext will always be equal to or lesser than length of ciphertext*/
+    /* The plain text length  will always be equal to or lesser than the length of the cypher text*/
     int plainLength = (int) cypherMessage.size();
     int finalLength = 0;
     unsigned char *plainText = new unsigned char[plainLength];
 
     EVP_DecryptInit_ex(&decrypt, NULL, NULL, NULL, NULL);
+    
+    /* Update the  plain text, plainLength is filled with the length of the plain text generated */
     EVP_DecryptUpdate(&decrypt, plainText, &plainLength, cypherMessage.data(), (int) cypherMessage.size());
+    
+    /* Update the plain text with the final remaining bytes */
     EVP_DecryptFinal_ex(&decrypt, plainText + plainLength, &finalLength);
     
+    // Copy the plain text into a string.
     string message((char*)plainText, plainLength + finalLength);
     
+    // Clean up
     delete[] plainText;
     EVP_CIPHER_CTX_cleanup(&decrypt);
     
@@ -256,46 +268,59 @@ int Cryptor::encryptWithAES(RSAPair& key, const AESKey& encryptionKey)
     EVP_CIPHER_CTX_init(&encrypt);
     EVP_EncryptInit_ex(&encrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
     
-    /* max ciphertext len for a n bytes of plaintext is n + AES_BLOCK_SIZE -1 bytes */
+    /* The max length fot cypher text for n bytes of plain text is n + AES_BLOCK_SIZE -1 bytes */
     int cypherLength = (int) key.privateKey.size() + AES_BLOCK_SIZE;
     int finalEncryptLength = 0;
     vector<char> cypher(cypherLength);
 
-    /* allows reusing of 'encrypt' for multiple encryption cycles */
+    /* Allows reusing of 'encrypt' for multiple encryption cycles */
     EVP_EncryptInit_ex(&encrypt, NULL, NULL, NULL, NULL);
 
-    /* update ciphertext, c_len is filled with the length of ciphertext generated,
-    *len is the size of plaintext in bytes */
+   /* Update the  plain text, plainLength is filled with the length of the plain text generated */
     EVP_EncryptUpdate(&encrypt, (unsigned char*)cypher.data(), &cypherLength, (unsigned char*)key.privateKey.data(), (int) key.privateKey.size());
 
-    /* update ciphertext with the final remaining bytes */
+    /* Update the cypher text with the final remaining bytes */
     EVP_EncryptFinal_ex(&encrypt, (unsigned char*)cypher.data() + cypherLength, &finalEncryptLength);
     
+    // Resize the vector to the actual size of the encrypted key.
     cypher.resize(cypherLength + finalEncryptLength);
-
+    
+    // Copy the encrypted key in the RSAPair.
     key.privateKey = cypher;
     
+    // Clean up
     EVP_CIPHER_CTX_cleanup(&encrypt);
     
     return 0;
 }
 int Cryptor::decryptWithAES(RSAPair& key, const AESKey& encryptionKey)
 {
+    // Initialize decryption
     EVP_CIPHER_CTX decrypt;
     EVP_CIPHER_CTX_init(&decrypt);
     EVP_DecryptInit_ex(&decrypt, EVP_aes_256_cbc(), NULL, encryptionKey.key.data(), encryptionKey.initializationVector.data());
     
-    /* plaintext will always be equal to or lesser than length of ciphertext*/
+    /* The plain text length  will always be equal to or lesser than the length of the cypher text*/
     int plainLength = (int) key.privateKey.size();
     int finalLength = 0;
     vector<char> plainKey(plainLength);
     
+    // Allows the use of "decrypt" for multiple decryption cycles.
     EVP_DecryptInit_ex(&decrypt, NULL, NULL, NULL, NULL);
+    
+    /* Update the  plain text, plainLength is filled with the length of the plain text generated */
     EVP_DecryptUpdate(&decrypt, (unsigned char*)plainKey.data(), &plainLength, (unsigned char*)key.privateKey.data(), (int) key.privateKey.size());
+    
+     /* Update the plain text with the final remaining bytes */
     EVP_DecryptFinal_ex(&decrypt, (unsigned char*)plainKey.data() + plainLength, &finalLength);
     
+    // Resize the vector to the actual size of the decrypted key.
     plainKey.resize(plainLength + finalLength);
+    
+    // Copy the decrypted key in the RSAPair.
     key.privateKey = plainKey;
+    
+    // Clean up
     EVP_CIPHER_CTX_cleanup(&decrypt);
     
     return 0;
@@ -306,27 +331,42 @@ int Cryptor::encryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
     vector<unsigned char> encryptedKey(RSA_BLOCK_LENGTH);
     vector<unsigned char> encryptedIV(RSA_BLOCK_LENGTH);
     int encryptedSize;
+    
+    // We need to read the public key from a vector and write it into a RSA "object"
+    // (openSSL object used in the encryption function).
+    
+    // Create a buffer
     BIO* publicKey = BIO_new(BIO_s_mem());
     
+    // Write the key into the buffer.
     BIO_write(publicKey, encryptionKey.publicKey.data(), (int) encryptionKey.publicKey.size() - 1);
+    // Create an RSA type variable from the buffer.
     RSA* keypair = PEM_read_bio_RSAPublicKey(publicKey,NULL,0,NULL);
     
+    // Encrypt the AES key with the public key, if the function returns -1 or a bigger value than an
+    // RSA block (we only apply the RSA key once, to encrypt a block smaller or equal to a RSA block),
+    // returns -1 to signal an error.
+    // The RSA_PKCS1_OAEP_PADDING is the padding recommended for all new applications by the openSSL documentation.
     encryptedSize = RSA_public_encrypt((int)key.key.size() + 1, key.key.data(), encryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(encryptedSize == -1 || encryptedSize > RSA_KEY_LENGTH/8)
     {
         return -1;
     }
     
+    // Encrypt the AES IV with the public key in a similar fashion than the AES key just above.
     encryptedSize = RSA_public_encrypt((int)key.initializationVector.size() + 1, key.initializationVector.data(), encryptedIV.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(encryptedSize == -1 || encryptedSize > RSA_KEY_LENGTH/8)
     {
         return -1;
     }
     
+    // Copy the encrypted key and IV int AESKey struct.
     key.key = encryptedKey;
     key.initializationVector = encryptedIV;
     key.key.shrink_to_fit();
     key.initializationVector.shrink_to_fit();
+    
+    // Free the allocated openSSL "objects"
     BIO_free(publicKey);
     RSA_free(keypair);
     return 0;
@@ -337,30 +377,45 @@ int Cryptor::decryptWithRSA(AESKey& key, const RSAPair& encryptionKey)
     vector<unsigned char> decryptedIV(RSA_BLOCK_LENGTH);
     int decryptedSize;
     
+    // We need to read the private key from a vector and write it into a RSA "object"
+    // (openSSL object used in the decryption function).
+    
+    // Create a buffer.
     BIO* privateKey = BIO_new(BIO_s_mem());
     
+    // Write the key into the buffer.
     BIO_write(privateKey, encryptionKey.privateKey.data(), (int)encryptionKey.privateKey.size() - 1);
-    
+    // Create an RSA type variable from the buffer.
     RSA *keypair = PEM_read_bio_RSAPrivateKey(privateKey,NULL,0,NULL);
     
+    
+    // Dencrypt the AES key with the private key, if the function returns -1 ,
+    // returns -1 to signal an error.
+    // The RSA_PKCS1_OAEP_PADDING is the padding recommended for all new applications by the openSSL documentation.
     decryptedSize = RSA_private_decrypt((int)key.key.size(), key.key.data(), decryptedKey.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(decryptedSize == -1)
     {
         return -1;
     }
+    
+    // Resize the key to its actual size, dropping the additional '\0' at the end.
     decryptedKey.resize(decryptedSize-1);
     
+    // Decrypt the AES IV with the private key in a similar fashion than the AES key just above.
     decryptedSize = RSA_private_decrypt((int)key.initializationVector.size(), key.initializationVector.data(), decryptedIV.data(), keypair, RSA_PKCS1_OAEP_PADDING);
     if(decryptedSize == -1)
     {
         return -1;
     }
     
+    // Resize the IV to its actual size, dropping the additional '\0' at the end.
     decryptedIV.resize(decryptedSize-1);
     
+    // Copy the decrypted key and IV int AESKey struct.
     key.key = decryptedKey;
     key.initializationVector = decryptedIV;
     
+    // Free the allocated openSSL "objects"
     BIO_free(privateKey);
     RSA_free(keypair);
     

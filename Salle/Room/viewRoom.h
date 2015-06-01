@@ -1,8 +1,6 @@
 /*
  * File : viewRoom.h
  * Project : ProjetChat2015
- * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : View used when creating or editing a room. Part of the room 
  * module.
  * 
@@ -29,10 +27,6 @@ class ViewRoom : public QWidget
     //friend ControllerRoom;
     
 public:
-    
-    // Clear all the fields in the view.
-    void clear();
-    
     // Constructor.
     // Parameter : - edit : true if the user is modifiying a room, false is the
     //                       user is creating a new room.
@@ -64,13 +58,20 @@ public:
     
     // Add the specified user to the view. If isAdmin is true, the user will also
     // be added to the room admins.
+    // idUser : the user's id
+    // userName : the user's name that will be displayed in the list
+    // isAdmin : wether the user should added to the admins of the room.
     void addUser(quint32 idUser, const QString& userName, const bool isAdmin = false);
     // Remove the selected member.
     void removeUser();
-    // Remove the specified user from the room.
+    // Remove the user specified by userId from the room.
     void removeUser(const quint32 userId);
     
+    // Disable the check box and radio buttons for setting privacy, they shouldn't
+    // be active when editing the room.
     void disablePrivacy();
+    
+    // Give the keyboard focus to the view's field used to enter new members' names.
     void focusAddUser();
     
 public slots:
@@ -78,10 +79,8 @@ public slots:
     // disable them. Otherwise will enable them.
     void toggleVisibility();
     // Will call removeUser(userId) with the id of the currently selected user
-    // in the member list if creating. Will add to the banned user if editing.
+    // in the member list if creating. 
     void remove();
-    // Will emit create() or edit() signal.
-    void action();
     // Will open a window for the user to choose an image from its file system.
     void browseImage();
     // Toggle the adminstration rights of the selected user in the member list.
@@ -90,10 +89,8 @@ public slots:
 signals:
     // Signal emited when the user wishes to add a new member to the room.
     void add();
-    // Signal emited when the user wishes to create a new room.
+    // Signal emited when the user wishes to create a new room or edit an existing one.
     void create();
-    // Signal emited when the user wishes to apply the changes to a room.
-    void edit();
     // Signal emited when the user wishes to cancel the operation.
     void cancel();
     // Signal emited when the user closed the view.
@@ -103,6 +100,8 @@ private:
 
     // Toggle the administration rights of the user and modify the display of
     // the user in the view (bold if admin, normal otherwise).
+    // idUser : the id of the user.
+    // userName : the user's name that will be displayed in the view.
     void toggleAdmin(quint32 idUser, const QString& userName);
     
     // Returns the id of the currently selected user in the list.
@@ -142,7 +141,8 @@ private:
     
     QListView* lst_members;
     QStandardItemModel* sim_members;
-
+    
+    // Function called when the view is closed
     void closeEvent(QCloseEvent*);
 };
 

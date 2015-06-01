@@ -1,8 +1,6 @@
 /*
  * File : viewRoom.cpp
  * Project : ProjetChat2015
- * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 14:25 by Jan Purro
  * Description : Implementation of the room view.
  */
 
@@ -16,7 +14,7 @@
 {
     // Setting attributes
     
-    // The view will be destroyed if it's closed.
+    // The view will be destroyed when it's closed.
     setAttribute(Qt::WA_DeleteOnClose, true);
     if(edit)
     {
@@ -139,13 +137,14 @@
     vbl_main->addLayout(hbl_down);
     
     setLayout(vbl_main);
+    
     // Connect signals with public slots or signals
     connect(chk_private, SIGNAL(stateChanged(int )), this, SLOT(toggleVisibility()));
     connect(btn_add, SIGNAL(clicked()), this, SIGNAL(add()));
     connect(ldt_member, SIGNAL(returnPressed()), this, SIGNAL(add()));
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
     connect(btn_remove, SIGNAL(clicked()), this, SLOT(remove()));
-    connect(btn_create, SIGNAL(clicked()), this, SLOT(action()));
+    connect(btn_create, SIGNAL(clicked()), this, SIGNAL(create()));
     connect(btn_admin, SIGNAL(clicked()), this, SLOT(toggleAdmin()));
     connect(btn_browse, SIGNAL(clicked()), this, SLOT(browseImage()));
 }
@@ -184,22 +183,11 @@ ViewRoom::~ ViewRoom()
     delete layouts;
 }
 
-void ViewRoom::clear()
-{
-    ldt_logo->clear();
-    ldt_member->clear();
-    ldt_name->clear();
-    sim_members->clear();
-    chk_private->setChecked(false);
-    rbt_onInvitation->setChecked(false);
-    rbt_visible->setChecked(false);
-    sbx_number->setValue(50);
-}
-
 void ViewRoom::toggleVisibility()
 {
     rbt_visible->setEnabled(chk_private->isChecked());
     rbt_onInvitation->setEnabled(chk_private->isChecked());
+    
     // If neither visibility option is selected and the checkbox for private room
     // is checked the visible room option is checked by default.
     if (!bgp_visibility->checkedButton() && chk_private->isChecked())
@@ -222,19 +210,6 @@ void ViewRoom::setAction(const QString& action)
 void ViewRoom::setRemove(const QString& remove)
 {
     btn_remove->setText(remove);
-}
-
-void ViewRoom::action()
-{
-    if(editing)
-    {
-        emit(edit());
-    }
-    
-    else
-    {
-        emit(create());
-    }
 }
 
 void ViewRoom::removeUser()
@@ -291,6 +266,7 @@ QString ViewRoom::roomLogo()
 {
     // Could be a problem if the image name starts, ends or is only composed of
     // space characters, but that would be really weird.
+    // The user will be warned to check if it isn't the case.
     return ldt_logo->text().trimmed();
 }
 
@@ -305,11 +281,15 @@ bool ViewRoom::isRoomPrivate()
 }
 bool ViewRoom::isRoomVisible()
 {
+    // Returns true if the room is not private (and thus public) or private,
+    // but visible. Check the repective checkbox and button for this.
     return !chk_private->isChecked() || rbt_visible->isChecked();
 }
 
 QSet<quint32> ViewRoom::roomUsers()
 {
+    // Build a set containing the ids from the map containing the ids and names,
+    // we only need to send the ids to the server.
     QSet<quint32> ids;
     for (quint32 id : _users->keys())
     {
@@ -321,6 +301,8 @@ QSet<quint32> ViewRoom::roomUsers()
 
 QSet<quint32> ViewRoom::roomAdmins()
 {
+    // Build a set containing the ids from the map containing the ids and names,
+    // we only need to send the ids to the server.
     QSet<quint32> ids;
     for (quint32 id : _admins->keys())
     {
@@ -365,19 +347,10 @@ void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
     // If the user isn't an admin
     if (user == _admins->end())
     {
-        
-        // Used to verify that the user really exists but this case shoudln't
-        // happen.
-        /*user = _users->find(idUser);
-        if (user == _users->end())
-        {
-            // Throw exception ?
-            return;
-        }*/
-        
         // Add to the admins and change the display.
         _admins->insert(idUser, userName);
         
+        // Change the font of the user's name in the view to Bold.
         QList<QStandardItem*> user = sim_members->findItems(userName);
         user.at(0)->setFont(QFont(this->font().family(), 
                             this->font().pointSize(), QFont::Bold));
@@ -389,6 +362,8 @@ void ViewRoom::toggleAdmin(quint32 idUser, const QString& userName)
         // Remove from the admins and change the display
         _admins->remove(idUser);
         
+        // Change the font of the user's name in the view to normal (instead of 
+        // bold).
         QList<QStandardItem*> user = sim_members->findItems(userName);
         user.at(0)->setFont(QFont(this->font().family(), 
                             this->font().pointSize(), QFont::Normal));
@@ -442,6 +417,7 @@ void ViewRoom::disablePrivacy()
     rbt_visible->setDisabled(true);
     rbt_onInvitation->setDisabled(true);
 }
+
 
 void ViewRoom::focusAddUser()
 {

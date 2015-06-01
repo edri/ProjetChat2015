@@ -1,8 +1,7 @@
 /*
  * File : controllerRoom.h
  * Project : ProjetChat2015
- * Author(s) : Jan Purro
- * Last Modified : 25.04.2015 14:25 by Jan Purro
+ * 
  * Description : Controller for the room module.
  * 
  * The room module manage chat room's creation and edition(management) as well 
@@ -62,13 +61,14 @@ public:
     // Open the room's creation window.
     void showRoom();
     // Open the room's edition window, loading informations from the passed room.
+    // idRoom : the room whose informations will be loaded.
     void showRoom(const quint32 idRoom);
     // Should be called when a user's id is received by the client.
     void userId(bool exists, quint32 userId);
-    // Open the romm joining window.
+    // Open the window for the room adhesion form.
     void showJoin();
     // Shoulde be called when the lists of visible rooms are received by the 
-    // Client
+    // client
     void listRooms(const QList<QPair<quint32, QString>>& publicRooms,
                    const QList<QPair<quint32, QString>>& privateRooms);
     // Close all opened windows.
@@ -78,7 +78,9 @@ public:
 public slots :
 
     // Creation of a room. Get the data from the viewRoom and send them
-    // to the server
+    // to the server.
+    // idsAndKeys : the IDs and public keys of the users. Needed when creating
+    // a private key to encrypt the room's key.
     void createRoom();
     void createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys);
     
@@ -90,6 +92,8 @@ public slots :
     void addUser();
     
     // Send the server a request for the user to join a specific room.
+    // roomId : the id of the room to be joined.
+    // isPrivate : if the room is a private room.
     void joinRoom(quint32 roomId, bool isPrivate);
     
     // Close and destroy viewRoom. Should only be called if a window is open.

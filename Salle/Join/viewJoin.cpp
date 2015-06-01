@@ -1,6 +1,4 @@
 /*
-     * Created by Miguel Santamaria
-     *
      * Implements viewJoin.h and configure element
      * in the GUI.
 */
@@ -54,7 +52,7 @@ ViewJoin::ViewJoin()
     
     setLayout(vbl_main);
     
-    
+    // Connect signals with public slots or signals
     connect(btn_cancel, SIGNAL(clicked()), this, SIGNAL(cancel()));
     connect(btn_join, SIGNAL(clicked()), this, SLOT(checkRoom()));
     connect(ledit_name, SIGNAL(textEdited(const QString&)), this, SLOT(filterRooms(const QString&)));
@@ -91,6 +89,8 @@ void ViewJoin::setPrivateRooms(const QList<QPair<quint32, QString>>& privateRoom
 
 void ViewJoin::loadRooms()
 {
+    // The items won't be editable, will display the user's name and will contain
+    // its id in the data field.
     QStandardItem* item;
     for (QPair<quint32, QString> pair : _publicRooms)
     {
@@ -100,6 +100,8 @@ void ViewJoin::loadRooms()
         model_rooms->appendRow(item);
     }
     
+    // The items won't be editable, will display the room's name and will contain
+    // its id in the data field. The private rooms are displayed in Bold.
     for (QPair<quint32, QString> pair : _privateRooms)
     {
         item = new QStandardItem(pair.second);
@@ -113,7 +115,11 @@ void ViewJoin::loadRooms()
 
 void ViewJoin::filterRooms(const QString& substring)
 {
+    // Clears the view
     model_rooms->clear();
+    
+    // Similar to loadRooms, but only the rooms containing the given substring
+    // will be displayed.
     QStandardItem* item;
     for (QPair<quint32, QString> pair : _publicRooms)
     {
