@@ -1,3 +1,3 @@
-Pour sécuriser les échanges du côté serveur, notre application nécessite un certificat SSL/TLS au format standard X509. Il est possible d'acheter un tel certificat auprès d'un organisme de certification, ce qui permet de ne pas provoquer d'erreurs de signature. Cependant, pour notre projet, nous utilisons un certificat que nous avons généré nous-même en utilisant openssl. Notre certificat a été généré avec la commande suivante.
+Pour sécuriser les échanges du côté serveur, notre application nécessite un certificat SSL/TLS au format standard X.509. Il est possible d'acheter un tel certificat auprès d'un organisme de certification, ce qui permet de ne pas provoquer d'erreurs de signature. Cependant, pour notre projet, nous utilisons un certificat que nous avons généré nous-même en utilisant openssl. Notre certificat a été généré avec la commande suivante.
 
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 365
