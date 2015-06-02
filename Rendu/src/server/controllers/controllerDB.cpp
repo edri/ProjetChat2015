@@ -20,7 +20,7 @@ ControllerDB::ControllerDB(const QString& dbName)
     // We try to connect
     if (! connect())
     {
-        qDebug() << "Unable to connect to or initialize the database, there's noting to do...";
+        qDebug() << "Unable to connect to or initialize the database, there's nothing to do...";
         exit(EXIT_FAILURE);
     }
     
