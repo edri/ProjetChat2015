@@ -121,6 +121,7 @@ void ControllerUser::infoUser(ModelUser& user, const Salt& keySalt, RSAPair& rsa
 
     // Show the main chat window
     _controllerChat->showView();
+    _view->getViewInscription()->close();
     _view->close();
 }
 
