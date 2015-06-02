@@ -14,8 +14,8 @@
    <string>À propos de Chator</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../User/icons.qrc">
-    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
+   <iconset resource="../icons.qrc">
+    <normaloff>:/icons/common/media/img/chator.png</normaloff>:/icons/common/media/img/chator.png</iconset>
   </property>
   <widget class="QLabel" name="lbl_title">
    <property name="geometry">
@@ -103,7 +103,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../User/icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

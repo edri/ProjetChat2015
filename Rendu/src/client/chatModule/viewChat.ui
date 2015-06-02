@@ -14,8 +14,8 @@
    <string>Chat</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../User/icons.qrc">
-    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
+   <iconset resource="../icons.qrc">
+    <normaloff>:/icons/common/media/img/chator.png</normaloff>:/icons/common/media/img/chator.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -816,7 +816,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../User/icons.qrc">
+           <iconset>
             <normaloff>:/icons/img/expand.png</normaloff>:/icons/img/expand.png</iconset>
           </property>
           <property name="shortcut">
@@ -842,7 +842,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../User/icons.qrc">
+           <iconset>
             <normaloff>:/icons/img/collapse.png</normaloff>:/icons/img/collapse.png</iconset>
           </property>
           <property name="shortcut">
@@ -947,7 +947,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../User/icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

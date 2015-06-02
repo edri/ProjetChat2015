@@ -14,8 +14,8 @@
    <string>Demandes d'adhésion</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../User/icons.qrc">
-    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
+   <iconset resource="../icons.qrc">
+    <normaloff>:/icons/common/media/img/chator.png</normaloff>:/icons/common/media/img/chator.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -64,7 +64,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../User/icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

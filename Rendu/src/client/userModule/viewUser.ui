@@ -26,8 +26,8 @@
    <string>Connexion</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
-    <normaloff>:/icons/img/chator.png</normaloff>:/icons/img/chator.png</iconset>
+   <iconset resource="../icons.qrc">
+    <normaloff>:/icons/common/media/img/chator.png</normaloff>:/icons/common/media/img/chator.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -335,7 +335,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>
