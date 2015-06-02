@@ -20,7 +20,7 @@ http://slproweb.com/download/Win32OpenSSL-1_0_2a.exe
 http://www.qt.io/download/
 
 Une fois ceci fait, l'environnement Qt complet est disponible sur la machine, incluant le compilateur.
-La compilation s'effectue dans les dossiers src/client respectivement src/server. Il faut d'ouvrir les fichiers chator.pro et chatorServer.pro qui s'y trouvent avec QtCreator qui va se charger de la compilation. Une fois celle-ci effectuée, un exécutable a été généré dans le dossier choisi à la configuration du projet dans l'interface. Cet exécutable doit être déplacé dans le dossier bin/serveur/Windows/ où se trouvent ses autres dépendances (DLL, images, script SQL). Il peut alors être exécuté normalement.
+La compilation s'effectue dans les dossiers src/client respectivement src/server. Il faut d'ouvrir les fichiers chator.pro et chatorServer.pro qui s'y trouvent avec QtCreator qui va se charger de la compilation. Une fois celle-ci effectuée, un exécutable a été généré dans le dossier choisi à la configuration du projet dans l'interface. Cet exécutable doit être déplacé dans le dossier bin/serveur/Windows/ (déplacé dans un dossier accessible en lecture) où se trouvent ses autres dépendances (DLL, images, script SQL). Il peut alors être exécuté normalement.
 
 
 
