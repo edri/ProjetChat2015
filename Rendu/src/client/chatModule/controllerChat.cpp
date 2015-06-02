@@ -106,6 +106,13 @@ void ControllerChat::loadRoom(ModelRoom& room) const
         // Add the given room to the model.
         _model->addRoom(room);
     }
+    else
+    {
+        for (quint32 userId : room.getUsers())
+        {
+            _model->getRoom(room.getIdRoom()).addUser(userId);
+        }
+    }
 }
 
 void ControllerChat::editRoom(const ModelRoom& room)
