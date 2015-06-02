@@ -5,7 +5,7 @@ La compilation nécessite un compilateur c++ ainsi qu'une installation de la bib
 Directives de compilation pour Linux:
 Sur une distribution basée sur Debian, cela implique d'installer les paquets suivants:
 
-g++ make libcrypto++-dev qt5-qmake libqt5core5a libqt5gui5 libqt5sql5-sqlite libqt5websockets5-dev
+g++ make libssl-dev libcrypto++-dev qt5-qmake libqt5core5a libqt5gui5 libqt5sql5-sqlite libqt5websockets5-dev
 
 La compilation s'effectue dans les dossiers src/client respectivement src/server. Il est possible d'ouvrir les fichiers chator.pro et chatorServer.pro qui s'y trouvent avec QtCreator qui va se charger de la compilation ou d'y exécuter les commandes suivantes:
 
