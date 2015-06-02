@@ -232,7 +232,7 @@ void ControllerChat::sendMessage() const
     if (room.isPrivate())
     {
         CypherText cypher(_cryptor->encryptWithAES(_view->getMessageText().toStdString(), room.getSecretKey()));
-        messageContent = QByteArray((char*)cypher.data(), cypher.size());
+        messageContent = QByteArray((char*)cypher.data(), (int)cypher.size());
     }
     // Else we just need to convert the message's content to binary.
     else
@@ -255,7 +255,7 @@ void ControllerChat::editMessage(const QTreeWidgetItem* item) const
     if (room.isPrivate())
     {
         CypherText cypher(_cryptor->encryptWithAES(item->text(1).toStdString(), room.getSecretKey()));
-        messageContent = QByteArray((char*)cypher.data(), cypher.size());
+        messageContent = QByteArray((char*)cypher.data(), (int)cypher.size());
     }
     // Else we just need to convert the message's content to binary.
     else
@@ -359,7 +359,7 @@ void ControllerChat::processRequest(const bool accepted)
 
         // Put the encrypted room's secret key in a QByteArray, for sending it to the server.
         QDataStream stream(&aesKey, QIODevice::WriteOnly);
-        stream << QByteArray((char*)roomSecretKey.key.data(), roomSecretKey.key.size()) << QByteArray((char*)roomSecretKey.initializationVector.data(), roomSecretKey.initializationVector.size());
+        stream << QByteArray((char*)roomSecretKey.key.data(), (int)roomSecretKey.key.size()) << QByteArray((char*)roomSecretKey.initializationVector.data(), (int)roomSecretKey.initializationVector.size());
     }
 
     // Send to the server the request status.

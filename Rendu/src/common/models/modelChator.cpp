@@ -88,7 +88,7 @@ ModelUser::ModelUser(const quint32 idUser, const QString& userName, const QStrin
                      const QImage& image, const QSet<quint32> roomsIds) :
     _idUser(idUser), _userName(userName), _firstName(firstName),_lastName(lastName), _isConnected(isConnected),
     _lastConnection(lastConnection), _image(image), _roomsIds(roomsIds) {}
-ModelUser::~ModelUser(){};
+ModelUser::~ModelUser(){}
 
 QDataStream& operator << (QDataStream& ds, const ModelRoom& r)
 {
@@ -441,7 +441,7 @@ void ModelRoom::setIdRoom(const quint32 id)
 
 QDataStream& operator<< (QDataStream& ds, const vector<unsigned char>& v)
 {
-    QByteArray ba((char*)v.data(), v.size());
+    QByteArray ba((char*)v.data(), (int)v.size());
     return ds << ba;
 }
 
@@ -456,7 +456,7 @@ QDataStream& operator>> (QDataStream& ds, vector<unsigned char>& v)
 
 QDataStream& operator<< (QDataStream& ds, const vector<char>& v)
 {
-    QByteArray ba((char*)v.data(), v.size());
+    QByteArray ba((char*)v.data(), (int)v.size());
     return ds << ba;
 }
 

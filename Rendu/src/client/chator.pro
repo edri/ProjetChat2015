@@ -6,7 +6,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Chator
 TEMPLATE = app
 
-CONFIG += c++11          
+CONFIG += c++11
+
+QMAKE_CXXFLAGS += -Wall -Wextra -Wconversion -pedantic
 
 SOURCES += chator.cpp roomModule/controllerRoom.cpp roomModule/viewRoom.cpp roomModule/viewJoin.cpp ../common/cryptor/cryptor.cpp userModule/controllerUser.cpp userModule/viewInscription.cpp userModule/viewUser.cpp connectionModule/controllerOutput.cpp connectionModule/connector.cpp connectionModule/clientControllerInput.cpp chatModule/controllerChat.cpp chatModule/viewabout.cpp chatModule/viewChat.cpp chatModule/viewmembershiprequests.cpp ../common/interpretor/interpretor.cpp ../common/models/modelChator.cpp
 

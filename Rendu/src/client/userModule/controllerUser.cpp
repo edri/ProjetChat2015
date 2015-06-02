@@ -91,9 +91,6 @@ void ControllerUser::auth()
 
 void ControllerUser::receiveSalt(const Salt& salt) const
 {
-    //Create a temporal QByteArray to store the salt
-    QByteArray tmp((const char*) salt.data(), salt.size());
-
     // Hash's generation from the password
     Hash hashPassword = _cryptor->generateHash(_view->getPassword().toStdString(), salt);
 
@@ -155,8 +152,6 @@ void ControllerUser::inscriptionToServer() const
     Hash hashPassword = _cryptor->generateHash(password, passwordSalt);
     RSAPair keyPair = _cryptor->generateRSAPair();
     Salt keySalt = _cryptor->generateSalt();
-
-    QByteArray tmp((const char*) keyPair.publicKey.data(), keyPair.publicKey.size());
 
     // Encrypt private key in order to store in the server's database
     _cryptor->encryptWithAES(keyPair, _cryptor->generateAESKeyFromHash(_cryptor->generateHash(password, keySalt)));
