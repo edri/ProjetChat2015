@@ -1,7 +1,5 @@
 CONFIG += c++11 console
 
-QMAKE_CXXFLAGS += -Wextra -Wconversion -pedantic
-
 QT += core websockets sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -16,6 +14,7 @@ win32 {
 }
 
 linux-g++* {
+    QMAKE_CXXFLAGS += -Wextra -Wconversion -pedantic
     TARGET = ../../bin/server/Linux/chatorServer
     LIBS += -lcrypto
 }

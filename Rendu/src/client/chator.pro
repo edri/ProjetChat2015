@@ -8,6 +8,7 @@ CONFIG += c++11
 linux-g++* {
     TARGET = ../../bin/client/Linux/Chator
     LIBS += -lcrypto
+    QMAKE_CXXFLAGS += -Wextra -Wconversion -pedantic
 }
 
 win32 {
@@ -15,8 +16,6 @@ win32 {
     LIBS += -LC:/OpenSSL-Win32/lib -llibeay32
     INCLUDEPATH += C:/OpenSSL-Win32/include
 }
-
-QMAKE_CXXFLAGS += -Wextra -Wconversion -pedantic
 
 SOURCES += chator.cpp roomModule/controllerRoom.cpp roomModule/viewRoom.cpp roomModule/viewJoin.cpp ../common/cryptor/cryptor.cpp userModule/controllerUser.cpp userModule/viewInscription.cpp userModule/viewUser.cpp connectionModule/controllerOutput.cpp connectionModule/connector.cpp connectionModule/clientControllerInput.cpp chatModule/controllerChat.cpp chatModule/viewabout.cpp chatModule/viewChat.cpp chatModule/viewmembershiprequests.cpp ../common/interpretor/interpretor.cpp ../common/models/modelChator.cpp
 
