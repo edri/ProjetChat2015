@@ -3,12 +3,21 @@
 QT       += core gui websockets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Chator
-TEMPLATE = app
-
 CONFIG += c++11
 
-QMAKE_CXXFLAGS += -Wall -Wextra -Wconversion -pedantic
+
+linux-g++* {
+    TARGET = ../../bin/client/Linux/Chator
+    LIBS += -lcrypto
+}
+
+win32 {
+    TARGET = ../../bin/client/Windows/Chator
+    LIBS += -LC:/OpenSSL-Win32/lib -llibeay32
+    INCLUDEPATH += C:/OpenSSL-Win32/include
+}
+
+QMAKE_CXXFLAGS += -Wextra -Wconversion -pedantic
 
 SOURCES += chator.cpp roomModule/controllerRoom.cpp roomModule/viewRoom.cpp roomModule/viewJoin.cpp ../common/cryptor/cryptor.cpp userModule/controllerUser.cpp userModule/viewInscription.cpp userModule/viewUser.cpp connectionModule/controllerOutput.cpp connectionModule/connector.cpp connectionModule/clientControllerInput.cpp chatModule/controllerChat.cpp chatModule/viewabout.cpp chatModule/viewChat.cpp chatModule/viewmembershiprequests.cpp ../common/interpretor/interpretor.cpp ../common/models/modelChator.cpp
 
@@ -17,12 +26,3 @@ HEADERS  += roomModule/controllerRoom.h roomModule/viewRoom.h roomModule/viewJoi
 FORMS    += userModule/viewInscription.ui userModule/viewUser.ui chatModule/viewabout.ui chatModule/viewChat.ui chatModule/viewmembershiprequests.ui
 
 RESOURCES += icons.qrc
-
-win32 {
-    LIBS += -LC:/OpenSSL-Win32/lib -llibeay32
-    INCLUDEPATH += C:/OpenSSL-Win32/include
-}
-
-linux-g++* {
-    LIBS += -lcrypto
-}
