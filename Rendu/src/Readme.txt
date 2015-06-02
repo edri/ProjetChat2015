@@ -1,4 +1,4 @@
-La compilation nécessite un compilateur c++ ainsi qu'une installation de la bibliothèque openssl et Qt en version 5 avec les modles supplémentaires gérant SQLite et les Websockets.
+La compilation nécessite un compilateur c++ ainsi qu'une installation de la bibliothèque OpenSSL et Qt en version 5 avec les modles supplémentaires gérant SQLite et les Websockets.
 
 
 
@@ -21,3 +21,7 @@ http://www.qt.io/download/
 
 Une fois ceci fait, l'environnement Qt complet est disponible sur la machine, incluant le compilateur.
 La compilation s'effectue dans les dossiers src/client respectivement src/server. Il faut d'ouvrir les fichiers chator.pro et chatorServer.pro qui s'y trouvent avec QtCreator qui va se charger de la compilation.
+
+
+
+Les exécutables résultants seront automatiquement placés dans l'arborescence des dossiers bin/ (voir bin/Readme.txt pour plus d'informations pour l'exécution).
