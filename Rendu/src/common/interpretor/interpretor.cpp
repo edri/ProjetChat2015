@@ -7,7 +7,7 @@
 #include <QDataStream>
 
 // The constructor sets the reference to the controllerInput
-Interpretor::Interpretor(ControllerInput& dispatcher) : _dispatcher(dispatcher){};
+Interpretor::Interpretor(ControllerInput& dispatcher) : _dispatcher(dispatcher){}
 
 
 // Every following method serializes the packet identifier and the parameters.

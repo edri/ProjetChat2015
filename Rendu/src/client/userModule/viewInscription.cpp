@@ -24,10 +24,10 @@ ViewInscription::ViewInscription(QWidget *parent, ModelUser* currentUser) :
     QMainWindow(parent),
     _ui(new Ui::viewInscription)
 {
+    Q_UNUSED(currentUser);
     //We modify the original View and interface in order to have the view for the account's details
     _edition = true;
     _ui->setupUi(this);
-
     this->setWindowTitle("Compte");
 
     _ui->btn_question->setVisible(false);

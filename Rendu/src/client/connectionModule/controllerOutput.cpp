@@ -11,7 +11,7 @@
 #include "../../common/models/modelChator.h"
 
 // The constructor initializes the references to the Interpretor and the output socket system
-ControllerOutput::ControllerOutput(Connector& connector, Interpretor& interpretor) : _connector(connector), _interpretor(interpretor) {};
+ControllerOutput::ControllerOutput(Connector& connector, Interpretor& interpretor) : _connector(connector), _interpretor(interpretor){}
 
 // Every following method simply call the interpretor and send the result into the socket.
 

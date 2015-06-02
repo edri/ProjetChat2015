@@ -245,7 +245,7 @@ void ControllerRoom::createRoom(QList<QPair<quint32, QByteArray>>& idsAndKeys)
             _cryptor->encryptWithRSA(cryptedKey, rsaKeys);
             
             // Write the encrypted key and IV into a byte array.
-            stream << QByteArray((char*)cryptedKey.key.data(), cryptedKey.key.size()) << QByteArray((char*)cryptedKey.initializationVector.data(), cryptedKey.initializationVector.size());
+            stream << QByteArray((char*)cryptedKey.key.data(), (int)cryptedKey.key.size()) << QByteArray((char*)cryptedKey.initializationVector.data(), (int)cryptedKey.initializationVector.size());
             usersAndKeys.insert(pair.first, aesKey);
         
         }
