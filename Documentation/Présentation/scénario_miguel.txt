@@ -1,0 +1,23 @@
+1.  Créer un compte "licorne" sur "la-cave.ch".
+2.  Rejoindre "La salle de Jérôme".
+3.  Ecrire "T... Tout à fait !".
+4.  Créer la salle privée "LA DREAM-TEAM" avec le drapeau du Valais, en y ajoutant :
+		bastien
+		berthouz
+		jerome
+		mario
+		miguel
+		thibduch
+4.  Ecrire "Quel sacré gaillard, ce Constantin".
+5.  Editer le message, en y ajoutant un "!".
+5.  Editer la salle, en ajoutant un "!".
+6.  Valider la demande d'adhésion de janP.
+7.  Le kick après son message sur le Valais.
+8.  "C'était un espion, je l'ai reconnu".
+9.  "D'façon, toujours critiquay, jamais égalay...".
+9. 	Remarquer que janP n'est plus en gras car il a ragequit.
+10. Ecrire "a+" dans "La salle de Jérôme".
+10. Quitter "La salle de Jérome".
+11. Afficher les informations utilisateur.
+12. Afficher la fenêtre d'à-propos.
+13. Quitter.
